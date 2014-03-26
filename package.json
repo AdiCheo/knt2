@@ -1,17 +1,15 @@
 {
-    "name": "KandT",
-    "version": "0.0.0",
-    "description": "KandT\r ==========",
-    "main": "KandT_server.js",
-    "dependencies": {
-        "socket.io": "~0.9.16",
-        "hat": "0.0.3"
-    },
-    "devDependencies": {},
-    "engines": {
-        "node": ">0.10.25"
-    },
+    "name": "Kings-N-Things",
+    "version": "0.0.1",
+    "private": true,
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "express": "3.5.1",
+        "socket.io": "latest",
+        "ejs": "latest",
+        "jade": "*",
+        "hat": "latest"
     }
 }
