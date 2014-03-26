@@ -1,0 +1,17 @@
+{
+    "name": "KandT",
+    "version": "0.0.0",
+    "description": "KandT\r ==========",
+    "main": "KandT_server.js",
+    "dependencies": {
+        "socket.io": "~0.9.16",
+        "hat": "0.0.3"
+    },
+    "devDependencies": {},
+    "engines": {
+        "node": ">0.10.25"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
+}
