@@ -3,6 +3,7 @@
  */
 
 var express = require('express');
+var socket = require('socket.io');
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
@@ -10,6 +11,8 @@ var path = require('path');
 
 var app = express();
 
+/** Models **/
+var Game = require('./models/game.js');
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -37,7 +40,7 @@ var server = http.createServer(app).listen(app.get('port'), function() {
 });
 
 // this tells socket.io to use our express server
-var io = require('socket.io').listen(server);
+var io = socket.listen(server);
 
 io.sockets.on('connection', function(socket) {
     socket.emit('news', {
