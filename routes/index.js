@@ -3,7 +3,9 @@
  */
 
 exports.index = function(req, res) {
-    res.render('game.html', {
-        title: 'Express'
-    });
+    res.render('login.html');
+};
+
+exports.game = function(req, res) {
+    res.render('game.html');
 };
