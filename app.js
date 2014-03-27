@@ -13,6 +13,7 @@ var app = express();
 
 /** Models **/
 var Game = require('./models/game.js');
+var Game = require('./models/army.js');
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -33,6 +34,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/game', routes.game);
 app.get('/users', user.list);
 
 var server = http.createServer(app).listen(app.get('port'), function() {
