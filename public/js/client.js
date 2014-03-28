@@ -1,3 +1,9 @@
+/**
+ * Socket events
+ **/
+var EVENT_CONNECT = "connect";
+var EVENT_DISCONNECT = "disconnect";
+
 $(function() {
 	register();
 });
@@ -11,18 +17,27 @@ function register() {
         nickname = $("#txtNickname").val().trim();
         if (nickname == "")
             nickname = randomName();
-
+          window.location.replace('/game');
         initConnection();
     });
 }
 
 function initConnection() {
-  window.location.replace('/game');
-  var socket = io.connect();
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
-  });
+  
+    iosocket = io.connect();
+    iosocket.on('connection', function() {
+      
+      iosocket.emit('adduser', nickname);
+      var userList = [];
+
+      iosocket.on('update', function (users){
+        userList = users;
+        $('#user').empty();
+        for(var i=0; i<userList.length; i++) {
+            $('#user').append("<h1>" + userList[i] + "</h1>"); 
+        }
+      });
+    });
 }
 
 function randomName() {

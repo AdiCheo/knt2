@@ -14,6 +14,7 @@ var app = express();
 /** Models **/
 var Game = require('./models/game.js');
 var Game = require('./models/army.js');
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -44,11 +45,19 @@ var server = http.createServer(app).listen(app.get('port'), function() {
 // this tells socket.io to use our express server
 var io = socket.listen(server);
 
+// List of connected users
+var users = [];
+
 io.sockets.on('connection', function(socket) {
-    socket.emit('news', {
-        hello: 'world'
-    });
-    socket.on('my other event', function(data) {
-        console.log(data);
-    });
+  socket.on('adduser', function (user) {
+    console.log("Adding a User");
+          socket.user = user;
+          users.push(user);
+          updateClients();
+      });
+
+  function updateClients() {
+    console.log(users);
+    io.sockets.emit('update', users);
+  }
 });
