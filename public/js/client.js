@@ -5,7 +5,8 @@ var EVENT_CONNECT = "connect";
 var EVENT_DISCONNECT = "disconnect";
 
 $(function() {
-	register();
+	// register();
+  initConnection();
 });
 
 /**
@@ -25,9 +26,10 @@ function register() {
 function initConnection() {
   
     iosocket = io.connect();
-    iosocket.on('connection', function() {
+    iosocket.on('connect', function() {
       
-      iosocket.emit('adduser', nickname);
+      iosocket.emit('adduser', randomName());
+      
       var userList = [];
 
       iosocket.on('update', function (users){
@@ -36,6 +38,10 @@ function initConnection() {
         for(var i=0; i<userList.length; i++) {
             $('#user').append("<h1>" + userList[i] + "</h1>"); 
         }
+      });
+
+      iosocket.on('Princess', function (){
+        console.log("The fat princess is here!");
       });
     });
 }

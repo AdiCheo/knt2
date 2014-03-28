@@ -252,6 +252,8 @@ window.addEventListener('keydown', function(e) {
 //Handle all the clicks
 boardLayer.on('click tap', function(e) {
 
+    iosocket.emit('HelloWorldClick', 'This is a test');
+
     currentPlayer = game.getCurrentPlayer();
     var shape = e.targetNode;
     console.log("Selected " + shape.getName());

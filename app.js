@@ -54,7 +54,12 @@ io.sockets.on('connection', function(socket) {
           socket.user = user;
           users.push(user);
           updateClients();
-      });
+    });
+
+  socket.on('HelloWorldClick', function () {
+    console.log("Alexandra wants clicked");
+    io.sockets.emit('Princess', 'Fatso');
+  });
 
   function updateClients() {
     console.log(users);
