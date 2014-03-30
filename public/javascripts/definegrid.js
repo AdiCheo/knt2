@@ -401,20 +401,20 @@ boardLayer.on('click tap', function(e) {
 
         // Types of shapes: defenders, heroes, markers, dice, tower, TODO: More maybe
         if (shape.getName() == "placeMarkerButton") {
-            iosocket.emit('placeMarkerButton', currentPlayer);
+            iosocket.emit('placeMarkerButton');
             if (army[currentPlayer].getNumOfHexes() < 3 && !army[currentPlayer].canEndTurn) {
-                army[currentPlayer].canChooseHex = 1;
+                // army[currentPlayer].canChooseHex = 1;
 
-                highlightButtonOnClick(shape);
+                // highlightButtonOnClick(shape);
 
                 // alert("Choose start location");
 
-                highlightHex(boardLayer.get("#-2,-1")[0]);
-                highlightHex(boardLayer.get("#2,-3")[0]);
-                highlightHex(boardLayer.get("#-2,3")[0]);
-                highlightHex(boardLayer.get("#2,1")[0]);
+                // highlightHex(boardLayer.get("#-2,-1")[0]);
+                // highlightHex(boardLayer.get("#2,-3")[0]);
+                // highlightHex(boardLayer.get("#-2,3")[0]);
+                // highlightHex(boardLayer.get("#2,1")[0]);
 
-                army[currentPlayer].isPlacingStartPosition = true;
+                // army[currentPlayer].isPlacingStartPosition = true;
             } else {
                 alert("Cannot do this - try ending your turn!");
             }

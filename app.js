@@ -3,22 +3,21 @@
 var EVENT_DISCONNECT = "disconnect";
 var EVENT_PLAYERS_UPDATE = "players.update";
 
-/**
- * Module dependencies.
- */
+/* Module dependencies. */
 
- var express = require('express');
- var socket = require('socket.io');
- var routes = require('./routes');
- var user = require('./routes/user');
- var http = require('http');
- var path = require('path');
+var express = require('express');
+var socket = require('socket.io');
+var routes = require('./routes');
+var user = require('./routes/user');
+var http = require('http');
+var path = require('path');
 
- var app = express();
+var app = express();
 
- /** Models **/
- var Game = require('./models/game.js');
- var Army = require('./models/army.js');
+/** Models **/
+var Game      = require('./models/game.js');
+var Army      = require('./models/army.js');
+var HexTile   = require('./models/hextile.js');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -72,8 +71,8 @@ io.sockets.on('connection', function(socket) {
     });
 
     // Initial gameplay listener
-    socket.on('placeMarkerButton', function(user) {
-      eventPlaceMarkerButton(socket, user);
+    socket.on('placeMarkerButton', function() {
+      eventPlaceMarkerButton(socket);
     });
   }
 });
@@ -97,11 +96,20 @@ function updateClients(socket) {
 
 }
 
-function eventPlaceMarkerButton(socket, user) {
-    console.log("Player " + user + " pressed on Marker Button");
-    if (game.currentTurn == user) {
+function eventPlaceMarkerButton(socket) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " pressed on Marker Button");
 
-    };
+  if(game.currentPhase == -1) {
+    if (game.currentPlayerTurn == currentArmy.affinity) {
+      if (currentArmy.getNumOfHexes() < 3 && !currentArmy.canEndTurn) {
+        currentArmy.canChooseHex = true;
+        currentArmy.isPlacingStartPosition = true;
+        socket.emit('allowMarkerPlacement', publicGameData(socket.id));
+      }
+    }
+  }
 }
 
 function publicGameData(playerId) {
