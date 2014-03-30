@@ -42,6 +42,10 @@ function initConnection() {
       updateUsers(users);
     });
 
+    iosocket.on('createHexes', function(hexes) {
+      createHexes(hexes);
+    });
+
     iosocket.on('allowMarkerPlacement', function(gameData) {
       console.log("Allowed Marker Placemenent");
       highlightHex(boardLayer.get("#-2,-1")[0]);
@@ -65,6 +69,11 @@ function updateUsers(users) {
   }
 }
 
+function createHexes(hexes) {
+  for (index = 0; index < hexes.length; ++index) {
+    boardLayer.add(hexes[index]);
+  }
+}
 
 function indexByKey(array, key, value) {
   for (var i = 0; i < array.length; i++) {

@@ -128,6 +128,8 @@ function eventStateInit(socket, user) {
   game.users.push(user);
   game.armies.push(army);
   io.sockets.emit('updateUsers', game.users);
+  createHexTiles();
+  socket.emit('createHexes', game.hexes);
   socket.emit('map', populateHexTiles());
   socket.emit('state.init', publicGameData(socket.id));
 }
@@ -162,6 +164,63 @@ function publicGameData(playerId) {
     game: game,
     playerId: playerId
   };
+}
+
+function createHexTiles() {
+  var rows = rows || 8;
+  var cols = cols || 7;
+  var rowIdx;
+  var colIdx;
+  var hexRadius = 75;
+  var strokeColor = "#000";
+  var x;
+  var y;
+
+  for (colIdx = 0; colIdx < cols; colIdx++) {
+    for (rowIdx = 1; rowIdx < rows; rowIdx++) {
+      if ((colIdx == 0 && rowIdx == 1) ||
+        (colIdx == 0 && rowIdx == 2) ||
+        (colIdx == 0 && rowIdx == 3) ||
+        (colIdx == 0 && rowIdx == 5) ||
+        (colIdx == 0 && rowIdx == 6) ||
+        (colIdx == 0 && rowIdx == 7) ||
+        (colIdx == 1 && rowIdx == 7) ||
+        (colIdx == 1 && rowIdx == 1) ||
+        (colIdx == 6 && rowIdx == 7) ||
+        (colIdx == 6 && rowIdx == 6) ||
+        (colIdx == 6 && rowIdx == 2) ||
+        (colIdx == 6 && rowIdx == 1))
+        continue;
+
+      //compute x coordinate of hex tile
+      //I did my best to reduce the magic numbers ;)
+      x = hexRadius + rowIdx * hexRadius * 2 - hexRadius / 8;
+      if (rowIdx != 0) {
+        x = x - rowIdx * hexRadius / 2;
+      }
+
+      //compute y coordinate of hex tile
+      y = (rowIdx % 2) ? hexRadius + colIdx * hexRadius * 2 - hexRadius + hexRadius / 8 : hexRadius + colIdx * hexRadius * 2;
+      if (colIdx != 0) {
+        y = y - colIdx * hexRadius / 4;
+      }
+
+      var x1;
+      var y1;
+
+      if (rowIdx % 2 == 0) {
+        x1 = rowIdx - 4; - colIdx / 2;
+        y1 = colIdx - 1 - rowIdx / 2;
+      } else {
+        x1 = rowIdx - 4; - (colIdx - 1) / 2;
+        y1 = colIdx - 1 - (rowIdx + 1) / 2;
+      }
+
+      var hexagon = HexTile(x, y, hexRadius, strokeColor, x1, y1);
+
+      game.hexes.push(hexagon);
+    }
+  }
 }
 
 function indexByKey(array, key, value) {

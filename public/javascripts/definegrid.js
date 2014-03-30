@@ -872,25 +872,6 @@ function createBoardLayer(rows, cols) {
 
       var hexagon = HexTile(x, y, hexRadius, strokeColor, x1, y1);
 
-      // hexagon.setId(x1 + "," + y1);
-
-      // // Grid numbering. Uncomment this to see x,y,z indexing
-      // var complexText = new Kinetic.Text({
-      //     x: x - 10,
-      //     y: y - 10,
-      //     // text: rowIdx + "," +colIdx ,
-      //     fontSize: 15,
-      //     fontFamily: 'Calibri',
-      //     fill: '#FFF',
-      //     width: 30,
-      //     padding: 0,
-      //     align: 'center'
-      // });
-
-      // complexText.setText(x1 + "," + y1);
-
-      // boardLayer.add(complexText);
-
       hexagon.moveToBottom();
       boardLayer.add(hexagon);
     }
