@@ -401,6 +401,7 @@ boardLayer.on('click tap', function(e) {
 
         // Types of shapes: defenders, heroes, markers, dice, tower, TODO: More maybe
         if (shape.getName() == "placeMarkerButton") {
+            iosocket.emit('placeMarkerButton', currentPlayer);
             if (army[currentPlayer].getNumOfHexes() < 3 && !army[currentPlayer].canEndTurn) {
                 army[currentPlayer].canChooseHex = 1;
 

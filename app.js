@@ -1,3 +1,7 @@
+/* Globals */
+
+var EVENT_DISCONNECT = "disconnect";
+
 /**
  * Module dependencies.
  */
@@ -13,7 +17,7 @@ var app = express();
 
 /** Models **/
 var Game = require('./models/game.js');
-var Game = require('./models/army.js');
+var Army = require('./models/army.js');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -45,24 +49,82 @@ var server = http.createServer(app).listen(app.get('port'), function() {
 // this tells socket.io to use our express server
 var io = socket.listen(server);
 
-// List of connected users
-var users = [];
+// The game model that holds all game data
+// Includes users, armies, units, tiles, turns, phases
+var game = new Game();
 
+
+// Below is when a new connection with a client is established
 io.sockets.on('connection', function(socket) {
-  socket.on('adduser', function (user) {
-    console.log("Adding a User");
-          socket.user = user;
-          users.push(user);
-          updateClients();
-    });
-
-  socket.on('HelloWorldClick', function () {
-    console.log("Alexandra wants clicked");
-    io.sockets.emit('Princess', 'Fatso');
+  // If the number of players is more than 4, don't do anything
+  // We will only allow 4 players to join for now
+  // Extra: Create game rooms of 4 players each
+  if(game.users.length <= 3) {
+  
+  socket.on(EVENT_DISCONNECT, function() {
+    eventDisconnect(socket);
   });
 
-  function updateClients() {
-    console.log(users);
-    io.sockets.emit('update', users);
+  socket.on('adduser', function (user) {
+    eventStateInit(socket, user);
+  });
+
+  socket.on('disconnect', function () {
+    for(var i = 0; i < game.users.length; i++) {
+      if(game.users[i] == socket.user) {
+        delete game.users[game.users[i]];
+      }
+    }
+    updateClients(); 
+  });
+
+  socket.on('placeMarkerButton', function(currentPlayer) {
+    console.log("Player" + currentPlayer + "Pressed on Marker Button");
+    if (game.currentTurn == currentPlayer) {
+
+    };
+    io.sockets.emit('Princess', 'Fatso');
+  });
+  
   }
 });
+
+function eventStateInit(socket, user) {
+    console.log("Adding a User");
+    army = new Army(game.users.length, user, 0, 10, game.users.length, socket.id);
+    game.numberOfPlayers++;
+    game.users.push(user);
+    game.armies.push(army);
+    io.sockets.emit('updateUsers', game.users);
+    socket.emit('state.init', publicGameData(socket.id));
+}
+
+function eventDisconnect(socket) {
+    game.users.splice(indexById(game.users, socket.id), 1);
+    io.sockets.emit(EVENT_PLAYERS_UPDATE, game.players);
+}
+
+function updateClients(socket) {
+    
+}
+
+function publicGameData(playerId) {
+    return {
+        game: game,
+        playerId: playerId
+    };
+}
+
+function indexByKey(array, key, value) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][key] == value) {
+            return i;
+        }
+    }
+    return null;
+}
+
+function indexById(array, value) {
+    return indexByKey(array, "id", value);
+}
+

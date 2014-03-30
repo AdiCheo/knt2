@@ -4,13 +4,16 @@
 var EVENT_CONNECT = "connect";
 var EVENT_DISCONNECT = "disconnect";
 
+var iosocket;
+var playerId;
+
 $(function() {
 	// register();
   initConnection();
 });
 
 /**
-* Register player and start gamee
+* Register player and start game
 **/
 function register() {
     $("#txtNickname").val(randomName());
@@ -28,11 +31,18 @@ function initConnection() {
     iosocket = io.connect();
     iosocket.on('connect', function() {
       
-      iosocket.emit('adduser', randomName());
+      iosocket.on(EVENT_DISCONNECT, function() {
+        $("#phasetext").append("<li>Disconnected</li>");
+      });
+
+      var user = randomName();
+
+      iosocket.emit('adduser', user);
       
+
       var userList = [];
 
-      iosocket.on('update', function (users){
+      iosocket.on('updateUsers', function (users){
         userList = users;
         $('#user').empty();
         for(var i=0; i<userList.length; i++) {
@@ -40,10 +50,27 @@ function initConnection() {
         }
       });
 
+      iosocket.on('state.init', function(gameData){
+        playerId = gameData.playerId;
+      });
+
       iosocket.on('Princess', function (){
         console.log("The fat princess is here!");
       });
     });
+}
+
+function indexByKey(array, key, value) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][key] == value) {
+            return i;
+        }
+    }
+    return null;
+}
+
+function indexById(array, value) {
+    return indexByKey(array, "id", value);
 }
 
 function randomName() {
