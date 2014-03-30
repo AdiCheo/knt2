@@ -71,7 +71,7 @@ function updateUsers(users) {
 
 function createHexes(hexes) {
   for (index = 0; index < hexes.length; ++index) {
-    boardLayer.add(hexes[index]);
+    // boardLayer.add(hexes[index]);
   }
 }
 
