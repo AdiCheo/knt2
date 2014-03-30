@@ -124,5 +124,4 @@ function updateMapData(mapData) {
   boardLayer.get("#1,-1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
   boardLayer.get("#0,-1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
   boardLayer.get("#0,0")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  // boardLayer.get("#-1,-2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
 }
