@@ -402,7 +402,7 @@ boardLayer.on('click tap', function(e) {
         // Types of shapes: defenders, heroes, markers, dice, tower, TODO: More maybe
         if (shape.getName() == "placeMarkerButton") {
             iosocket.emit('placeMarkerButton');
-            if (army[currentPlayer].getNumOfHexes() < 3 && !army[currentPlayer].canEndTurn) {
+            // if (army[currentPlayer].getNumOfHexes() < 3 && !army[currentPlayer].canEndTurn) {
                 // army[currentPlayer].canChooseHex = 1;
 
                 // highlightButtonOnClick(shape);
@@ -415,9 +415,9 @@ boardLayer.on('click tap', function(e) {
                 // highlightHex(boardLayer.get("#2,1")[0]);
 
                 // army[currentPlayer].isPlacingStartPosition = true;
-            } else {
-                alert("Cannot do this - try ending your turn!");
-            }
+            // } else {
+                // alert("Cannot do this - try ending your turn!");
+            // }
         }
 
         if (shape.getName() == "hex") {
