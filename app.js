@@ -15,9 +15,9 @@ var path = require('path');
 var app = express();
 
 /** Models **/
-var Game      = require('./models/game.js');
-var Army      = require('./models/army.js');
-var HexTile   = require('./models/hextile.js');
+var Game = require('./models/game.js');
+var Army = require('./models/army.js');
+var HexTile = require('./models/hextile.js');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -59,10 +59,10 @@ io.sockets.on('connection', function(socket) {
   // If the number of players is more than 4, don't do anything
   // We will only allow 4 players to join for now
   // Extra: Create game rooms of 4 players each
-  if(game.users.length <= 3) {
+  if (game.users.length <= 3) {
 
-    // Player connection event 
-    socket.on('adduser', function (user) {
+    // Player connection event
+    socket.on('adduser', function(user) {
       eventStateInit(socket, user);
     });
 
@@ -77,6 +77,50 @@ io.sockets.on('connection', function(socket) {
   }
 });
 
+function populateHexTiles() {
+  var mapData = [];
+
+  mapData.push("frozenWaste");
+  mapData.push("forest");
+  mapData.push("jungle");
+  mapData.push("plains");
+  mapData.push("sea");
+  mapData.push("forest");
+  mapData.push("swamp");
+  mapData.push("frozenWaste");
+  mapData.push("mountain");
+  mapData.push("frozenWaste");
+  mapData.push("swamp");
+  mapData.push("desert");
+  mapData.push("swamp");
+  mapData.push("forest");
+  mapData.push("desert");
+  mapData.push("plains");
+  mapData.push("mountain");
+  mapData.push("jungle");
+  mapData.push("plains");
+  mapData.push("jungle");
+  mapData.push("swamp");
+  mapData.push("desert");
+  mapData.push("forest");
+  mapData.push("plains");
+  mapData.push("forest");
+  mapData.push("frozenWaste");
+  mapData.push("jungle");
+  mapData.push("mountain");
+  mapData.push("desert");
+  mapData.push("plains");
+  mapData.push("jungle");
+  mapData.push("mountain");
+  mapData.push("forest");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
+  mapData.push("swamp");
+  mapData.push("mountain");
+
+  return mapData;
+}
+
 function eventStateInit(socket, user) {
   console.log("Adding a User");
   army = new Army(game.users.length, user, 0, 10, game.users.length, socket.id);
@@ -84,6 +128,7 @@ function eventStateInit(socket, user) {
   game.users.push(user);
   game.armies.push(army);
   io.sockets.emit('updateUsers', game.users);
+  socket.emit('map', populateHexTiles());
   socket.emit('state.init', publicGameData(socket.id));
 }
 
@@ -101,7 +146,7 @@ function eventPlaceMarkerButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " pressed on Marker Button");
 
-  if(game.currentPhase == -1) {
+  if (game.currentPhase == -1) {
     if (game.currentPlayerTurn == currentArmy.affinity) {
       if (currentArmy.getNumOfHexes() < 3 && !currentArmy.canEndTurn) {
         currentArmy.canChooseHex = true;
@@ -131,4 +176,3 @@ function indexByKey(array, key, value) {
 function indexById(array, value) {
   return indexByKey(array, "id", value);
 }
-
