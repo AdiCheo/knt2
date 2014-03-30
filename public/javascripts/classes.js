@@ -128,7 +128,7 @@ function Defender(source, defenderName, combatValue, canCharge, terrainType, isR
     // defender.hide();
     defender.combatValue = combatValue;
     boardLayer.add(defender);
-    defender.moveToBottom();
+    // defender.moveToBottom();
 
     return defender;
 }

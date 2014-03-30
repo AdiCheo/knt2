@@ -3,7 +3,7 @@
  */
 
 exports.index = function(req, res) {
-    res.render('login.html');
+    res.render('game.html');
 };
 
 exports.game = function(req, res) {
