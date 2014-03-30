@@ -1,6 +1,7 @@
 /* Globals */
 
 var EVENT_DISCONNECT = "disconnect";
+var EVENT_PLAYERS_UPDATE = "players.update";
 
 /**
  * Module dependencies.
