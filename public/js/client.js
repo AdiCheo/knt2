@@ -55,13 +55,13 @@ function initConnection() {
     });
 
     // TODO Merge conflict was here
-    // iosocket.on('endedTurn', function(game) {
-    //   endedTurn();
-    // });
+    iosocket.on('endedTurn', function(game) {
+      endedTurn();
+    });
 
-    // iosocket.on('nextPlayerTurn', function(game) {
-    //   nextPlayerTurn(game);
-    // });
+    iosocket.on('nextPlayerTurn', function(game) {
+      nextPlayerTurn(game);
+    });
 
     iosocket.on('error', function(msg) {
       console.log("ERROR:" + msg);
@@ -107,18 +107,19 @@ function newTurn(affinity) {
 }
 
 // TODO Merged here
-// function endedTurn() {
-//   alert('You have ended your turn');
-// }
+function endedTurn() {
+  console.log('You have ended your turn');
+}
 
-// function nextPlayerTurn(game) {
-//   console.log(game.armies);
-//   console.log(game.currentPlayerTurn);
-//   console.log(game.armies[game.currentPlayerTurn].id);
-//   console.log(playerId);
-//   if (playerId == game.armies[game.currentPlayerTurn].id) {
-//     alert("It is your turn to play now");
-//   }
+function nextPlayerTurn(game) {
+  console.log(game.armies);
+  console.log(game.currentPlayerTurn);
+  console.log(game.armies[game.currentPlayerTurn].id);
+  console.log(playerId);
+  if (playerId == game.armies[game.currentPlayerTurn].id) {
+    alert("It is your turn to play now");
+  }
+}
 
 function indexByKey(array, key, value) {
   for (var i = 0; i < array.length; i++) {

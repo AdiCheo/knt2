@@ -112,9 +112,9 @@ function eventEndTurnClicked(socket) {
   if (currentArmy.canEndTurn) {
     game.nextPlayerTurn(currentArmy);
     currentArmy.canEndTurn = false;
-    socket.emit('endTurn', "New turn + num (TODO)");
-    // io.sockets.emit('nextPlayerTurn', game);
-    // socket.emit('endedTurn');
+    // socket.emit('endTurn', "New turn + num (TODO)");
+    socket.emit('endedTurn');
+    io.sockets.emit('nextPlayerTurn', game);
   } else {
     socket.emit('error', "You cannot end your turn yet.");
   }
