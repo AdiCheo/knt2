@@ -81,6 +81,16 @@ io.sockets.on('connection', function(socket) {
     socket.on('hexClicked', function(hexId) {
       eventClickedOnHex(socket, hexId);
     });
+
+    // Dice roll (random) listener
+    socket.on('diceRollPressed', function() {
+      handleDice(randomDiceRoll());
+    });
+
+    // Dice roll (preset) listener
+    socket.on('diceRollDefined', function(diceValue) {
+      handleDice(diceValue);
+    });
   }
 });
 
@@ -124,6 +134,7 @@ function eventEndTurnClicked(socket) {
     game.nextPlayerTurn(currentArmy);
     currentArmy.canEndTurn = false;
     // socket.emit('endTurn', "New turn + num (TODO)");
+
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', game);
 
