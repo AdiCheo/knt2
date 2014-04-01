@@ -31,7 +31,6 @@ function Game() {
       return false;
     }
     // hex is owned
-    console.log("Owned hex: " + this.hexes[i].id);
     return true;
   };
 

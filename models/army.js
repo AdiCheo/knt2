@@ -23,7 +23,7 @@ function Army(affinity, name, income, gold, currentGameTurn, id) {
       console.log("Owned hexes: " + this.ownedHexes);
       return true;
     } else {
-      alert("Cannot own hex!");
+      console.log("Cannot own hex!");
       return false;
     }
   };
