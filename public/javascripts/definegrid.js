@@ -768,6 +768,7 @@ boardLayer.on('click tap', function(e) {
   // we should have extensive conditionals that limit what the player is doing.
 
   if (shape.getName() == "endturn") {
+    iosocket.emit(endTurnButton);
     highlightButtonOnClick(shape);
 
     // removeRadius("tan", boardLayer);
@@ -786,7 +787,7 @@ boardLayer.on('click tap', function(e) {
     //Give the armies some cash
     // army[game.currentTurn].gold += army[game.currentTurn].income;
 
-    game.incrementTurn(army[currentPlayer]);
+    // game.incrementTurn(army[currentPlayer]);
 
   }
 });

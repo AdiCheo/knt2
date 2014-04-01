@@ -72,56 +72,17 @@ io.sockets.on('connection', function(socket) {
       eventPlaceMarkerButton(socket);
     });
 
+    // End Turn button listener
+    socket.on('endTurnButton', function() {
+      eventEndTurnbutton(socket);
+    });
+
     // Hex click listener
     socket.on('hexClicked', function(hexId) {
       eventClickedOnHex(socket, hexId);
     });
   }
 });
-
-function populateHexTiles() {
-  var mapData = [];
-
-  mapData.push("frozenWaste");
-  mapData.push("forest");
-  mapData.push("jungle");
-  mapData.push("plains");
-  mapData.push("sea");
-  mapData.push("forest");
-  mapData.push("swamp");
-  mapData.push("frozenWaste");
-  mapData.push("mountain");
-  mapData.push("frozenWaste");
-  mapData.push("swamp");
-  mapData.push("desert");
-  mapData.push("swamp");
-  mapData.push("forest");
-  mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("mountain");
-  mapData.push("jungle");
-  mapData.push("plains");
-  mapData.push("jungle");
-  mapData.push("swamp");
-  mapData.push("desert");
-  mapData.push("forest");
-  mapData.push("plains");
-  mapData.push("forest");
-  mapData.push("frozenWaste");
-  mapData.push("jungle");
-  mapData.push("mountain");
-  mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("jungle");
-  mapData.push("mountain");
-  mapData.push("forest");
-  mapData.push("frozenWaste");
-  mapData.push("desert");
-  mapData.push("swamp");
-  mapData.push("mountain");
-
-  return mapData;
-}
 
 function eventStateInit(socket, user) {
   console.log("Adding a User");
@@ -142,6 +103,15 @@ function eventDisconnect(socket) {
 }
 
 function updateClients(socket) {
+
+}
+
+function eventEndTurnbutton(socket) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  if (currentArmy.canEndTurn) {
+
+    currentArmy.canEndTurn = false;
+  }
 
 }
 
@@ -196,7 +166,7 @@ function eventClickedOnHex(socket, hexId) {
     socket.emit('error', 'Select available action item first!');
 
   }
-
+  currentArmy.canEndTurn = true;
   currentArmy.canChooseHex = false;
   currentArmy.isPlacingStartPosition = false;
 }
@@ -263,6 +233,50 @@ function createHexTiles() {
       game.hexes.push(hexagon);
     }
   }
+}
+
+function populateHexTiles() {
+  var mapData = [];
+
+  mapData.push("frozenWaste");
+  mapData.push("forest");
+  mapData.push("jungle");
+  mapData.push("plains");
+  mapData.push("sea");
+  mapData.push("forest");
+  mapData.push("swamp");
+  mapData.push("frozenWaste");
+  mapData.push("mountain");
+  mapData.push("frozenWaste");
+  mapData.push("swamp");
+  mapData.push("desert");
+  mapData.push("swamp");
+  mapData.push("forest");
+  mapData.push("desert");
+  mapData.push("plains");
+  mapData.push("mountain");
+  mapData.push("jungle");
+  mapData.push("plains");
+  mapData.push("jungle");
+  mapData.push("swamp");
+  mapData.push("desert");
+  mapData.push("forest");
+  mapData.push("plains");
+  mapData.push("forest");
+  mapData.push("frozenWaste");
+  mapData.push("jungle");
+  mapData.push("mountain");
+  mapData.push("desert");
+  mapData.push("plains");
+  mapData.push("jungle");
+  mapData.push("mountain");
+  mapData.push("forest");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
+  mapData.push("swamp");
+  mapData.push("mountain");
+
+  return mapData;
 }
 
 function indexByKey(array, key, value) {
