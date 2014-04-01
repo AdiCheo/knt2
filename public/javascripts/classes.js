@@ -36,6 +36,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     console.log("Generating icon for hex " + this.id + " for army: " + (affinity + 1));
 
     boardLayer.add(icon);
+
     icon.setX(this.getX() + posx);
     icon.setY(this.getY() + posy);
     icon.moveToTop();
