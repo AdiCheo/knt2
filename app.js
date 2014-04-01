@@ -73,8 +73,8 @@ io.sockets.on('connection', function(socket) {
     });
 
     // End Turn button listener
-    socket.on('endTurnButton', function() {
-      eventEndTurnbutton(socket);
+    socket.on('endTurnClicked', function() {
+      eventEndTurnClicked(socket);
     });
 
     // Hex click listener
@@ -106,7 +106,7 @@ function updateClients(socket) {
 
 }
 
-function eventEndTurnbutton(socket) {
+function eventEndTurnClicked(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   if (currentArmy.canEndTurn) {
 

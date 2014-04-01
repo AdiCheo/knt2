@@ -41,13 +41,11 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     icon.show();
 
     boardLayer.add(icon);
-    console.log(this.getId());
     currentHexId = boardLayer.get("#" + this.getId())[0];
     currentHexId.affinity = affinity;
-    console.log(currentHexId.affinity);
-    console.log("Hello" + affinity);
-
     boardLayer.draw();
+
+    console.log("New affinity: " + affinity + " for hex: " + this.getId());
   };
 
   // hexagon.getH = function(x, y) {};
