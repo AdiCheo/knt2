@@ -81,6 +81,16 @@ io.sockets.on('connection', function(socket) {
     socket.on('hexClicked', function(hexId) {
       eventClickedOnHex(socket, hexId);
     });
+
+    // Dice roll (random) listener
+    socket.on('diceRollPressed', function() {
+      handleDice(randomDiceRoll());
+    });
+
+    // Dice roll (preset) listener
+    socket.on('diceRollDefined', function(diceValue) {
+      handleDice(diceValue);
+    });
   }
 });
 

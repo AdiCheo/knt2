@@ -54,6 +54,10 @@ function initConnection() {
       newTurn(affinity);
     });
 
+    iosocket.on('diceRollResult', function(diceValue) {
+      handleDiceResult(diceValue);
+    });
+
     // TODO Merge conflict was here
     iosocket.on('endedTurn', function(game) {
       endedTurn();
@@ -114,11 +118,11 @@ function endedTurn() {
 function nextPlayerTurn(game) {
   console.log(game.armies);
   console.log(game.currentPlayerTurn);
-  console.log(game.armies[game.currentPlayerTurn].id);
+  // console.log(game.armies[game.currentPlayerTurn].id);
   console.log(playerId);
-  if (playerId == game.armies[game.currentPlayerTurn].id) {
-    alert("It is your turn to play now");
-  }
+  // if (playerId == game.armies[game.currentPlayerTurn].id) {
+  //   alert("It is your turn to play now");
+  // }
 }
 
 function indexByKey(array, key, value) {

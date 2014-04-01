@@ -16,7 +16,7 @@ var dice1button = new Kinetic.Rect({
   x: 15, //stage.getWidth() - 350
   y: 15,
   name: "dicebutton",
-  dice_value: 0,
+  value: -1,
   id: "control",
   width: 75,
   height: 75,
@@ -30,7 +30,7 @@ var dice1button = new Kinetic.Rect({
 //     x: 15 + 75, //stage.getWidth() - 350
 //     y: 15,
 //     name: "dicebutton",
-//     dice_value: 0,
+//     value: 0,
 //     id: "control",
 //     width: 75,
 //     height: 75,
@@ -45,7 +45,7 @@ var cheatDice1 = new Kinetic.Rect({ //dice2 button
   x: 15,
   y: 15,
   name: "dicebutton",
-  dice_value: 1,
+  value: 1,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -59,7 +59,7 @@ var cheatDice2 = new Kinetic.Rect({
   x: 15 + 37.5,
   y: 15,
   name: "dicebutton",
-  dice_value: 2,
+  value: 2,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -73,7 +73,7 @@ var cheatDice3 = new Kinetic.Rect({ //dice2 button
   x: 15 + 2 * 37.5,
   y: 15,
   name: "dicebutton",
-  dice_value: 3,
+  value: 3,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -87,7 +87,7 @@ var cheatDice4 = new Kinetic.Rect({
   x: 15,
   y: 15 + 37.5,
   name: "dicebutton",
-  dice_value: 4,
+  value: 4,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -101,7 +101,7 @@ var cheatDice5 = new Kinetic.Rect({ //dice2 button
   x: 15 + 37.5,
   y: 15 + 37.5,
   name: "dicebutton",
-  dice_value: 5,
+  value: 5,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -115,7 +115,7 @@ var cheatDice6 = new Kinetic.Rect({
   x: 15 + 2 * 37.5,
   y: 15 + 37.5,
   name: "dicebutton",
-  dice_value: 6,
+  value: 6,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -243,6 +243,19 @@ boardLayer.on('click tap', function(e) {
   } else if (shape.getName() == "hex") {
     console.log("emit:hexClicked," + shape.getId());
     iosocket.emit('hexClicked', shape.getId());
+
+  } else if (shape.getName() == "dicebutton") {
+    console.log(shape);
+    console.log(shape.getName());
+
+    if (shape.value == -1) {
+      console.log("emit:diceRollPressed,");
+      iosocket.emit('diceRollPressed');
+
+    } else {
+      console.log("emit:diceRollDefined," + shape.value);
+      iosocket.emit('diceRollDefined', shape.value);
+    }
 
   } else if (shape.getName() == "endturn") {
     console.log("emit:endTurnButton");
