@@ -20,19 +20,23 @@ function Game() {
       }
     }
     return false;
-  }
+  };
 
   this.isHexOwned = function(hexId) {
-     hex = this.getHexById(hexId);
+    hex = this.getHexById(hexId);
     console.log(hex);
 
     if (hex.affinity == -1) {
       return false;
     }
     // hex is owned
-    console.log("Owned hex: " + hexes[i].id);
+    console.log("Owned hex: " + this.hexes[i].id);
     return true;
-  }
+  };
+
+  this.nextPlayerTurn = function(currentArmy) {
+
+  };
 }
 
 module.exports = Game;
