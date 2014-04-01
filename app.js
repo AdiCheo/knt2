@@ -88,6 +88,7 @@ function eventStateInit(socket, user) {
   console.log("Adding a User");
   army = new Army(game.users.length, user, 0, 10, game.users.length, socket.id);
   game.numberOfPlayers++;
+  user.id = socket.id;
   game.users.push(user);
   game.armies.push(army);
   io.sockets.emit('updateUsers', game.users);
@@ -103,14 +104,16 @@ function eventDisconnect(socket) {
 }
 
 function updateClients(socket) {
-
+  io.sockets.emit('updateUsers', game.users);
 }
 
 function eventEndTurnClicked(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   if (currentArmy.canEndTurn) {
-
+    game.nextPlayerTurn(currentArmy);
     currentArmy.canEndTurn = false;
+    socket.emit('endedTurn');
+    io.sockets.emit('nextPlayerTurn', game);
   }
 
 }

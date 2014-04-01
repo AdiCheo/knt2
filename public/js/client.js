@@ -50,6 +50,13 @@ function initConnection() {
       updateHex(hexId, affinity);
     });
 
+    iosocket.on('endedTurn', function(game) {
+      endedTurn();
+    });
+
+    iosocket.on('nextPlayerTurn', function(game) {
+      nextPlayerTurn(game);
+    });
 
     iosocket.on('error', function(msg) {
       console.log("ERROR:" + msg);
@@ -87,6 +94,20 @@ function createHexes(hexes) {
 function updateHex(hexId, affinity) {
   console.log("Army " + affinity + "owning " + hexId);
   boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
+}
+
+function endedTurn() {
+  alert('You have ended your turn');
+}
+
+function nextPlayerTurn(game) {
+  console.log(game.armies);
+  console.log(game.currentPlayerTurn);
+  console.log(game.armies[game.currentPlayerTurn].id);
+  console.log(playerId);
+  if (playerId == game.armies[game.currentPlayerTurn].id) {
+    alert("It is your turn to play now");
+  }
 }
 
 function indexByKey(array, key, value) {
