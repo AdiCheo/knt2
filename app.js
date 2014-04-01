@@ -1,8 +1,5 @@
 /* Globals */
 
-var EVENT_DISCONNECT = "disconnect";
-var EVENT_PLAYERS_UPDATE = "players.update";
-
 /* Module dependencies. */
 
 var express = require('express');
@@ -153,13 +150,21 @@ function eventPlaceMarkerButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " pressed on Marker Button");
 
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
   if (game.currentPhase == -1) {
-    if (game.currentPlayerTurn == currentArmy.affinity) {
-      if (currentArmy.getNumOfHexes() < 3 && !currentArmy.canEndTurn) {
-        currentArmy.canChooseHex = true;
-        currentArmy.isPlacingStartPosition = true;
-        socket.emit('allowMarkerPlacement', publicGameData(socket.id));
-      }
+    if (currentArmy.getNumOfHexes() < 3) {
+      currentArmy.canChooseHex = true;
+      currentArmy.isPlacingStartPosition = true;
+      socket.emit('allowMarkerPlacement', publicGameData(socket.id));
     }
   }
 }
