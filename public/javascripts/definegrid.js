@@ -364,8 +364,12 @@ bowlbutton.moveToBottom();
 // document.getElementById("endturntext").style.top = endturnbutton.getY() + 32 + "px";
 // document.getElementById("endturntext").style.position = "fixed";
 
-document.getElementById("phasetext").style.left = 300 + "px";
+document.getElementById("phasetext").style.left = 260 + "px";
 document.getElementById("phasetext").style.top = 0 + "px";
+
+//current player turn 
+document.getElementById("playerturntext").style.left = 100 + "px";
+document.getElementById("playerturntext").style.top = 15 + "px";
 
 //Set unit stats to the left
 document.getElementById("unitstats").style.left = (stage.getX() + 700) + "px";
