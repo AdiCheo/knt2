@@ -121,6 +121,13 @@ function nextPlayerTurn(game) {
   console.log(game.armies);
   console.log(game.currentPlayerTurn);
   console.log(game.armies[game.currentPlayerTurn].id);
+
+  //output the current phase the game is in 
+  document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
+
+  //output the current player turn 
+  document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + game.currentPlayerTurn;
+
   console.log(playerId);
   if (playerId == game.armies[game.currentPlayerTurn].id) {
     alert("It is your turn to play now");
