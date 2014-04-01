@@ -188,15 +188,15 @@ console.log(game.currentTurn);
 // Add Buttons
 buildFortButton(fortImage, boardLayer);
 
-//var colorholder;
-var icon = new Kinetic.Image({
-  name: "icon",
-  width: 25,
-  height: 25,
-  image: moveIconImage
-});
-boardLayer.add(icon);
-icon.hide();
+// //var colorholder;
+// var icon = new Kinetic.Image({
+//   name: "icon",
+//   width: 25,
+//   height: 25,
+//   image: moveIconImage
+// });
+// boardLayer.add(icon);
+// icon.hide();
 
 addAllPiecesToBoard();
 var selectedObject;

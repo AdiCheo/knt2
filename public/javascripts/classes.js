@@ -30,9 +30,10 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
     iconImg = markerIcons[this.affinity];
     // TODO fix one icon limit
+
+    // var icon = createIcon(iconImg, 25, marker);
     icon = playerIcons[affinity][0];
     console.log("Generating icon for hex " + this.id + " for army: " + (affinity + 1));
-
     icon.setImage(iconImg);
     icon.setX(this.getX() + posx);
     icon.setY(this.getY() + posy);
