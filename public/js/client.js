@@ -85,9 +85,8 @@ function createHexes(hexes) {
 }
 
 function updateHex(hexId, affinity) {
-  alert("Owning " + hexId + " motherfucker! " + affinity);
+  console.log("Army " + affinity + "owning " + hexId);
   boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
-
 }
 
 function indexByKey(array, key, value) {

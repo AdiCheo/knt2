@@ -246,7 +246,7 @@ boardLayer.on('click tap', function(e) {
 
   } else if (shape.getName() == "endturn") {
     console.log("emit:endTurnButton");
-    iosocket.emit(endTurnButton);
+    iosocket.emit('endTurnClicked');
     highlightButtonOnClick(shape);
   }
 });
