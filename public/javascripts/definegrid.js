@@ -423,38 +423,9 @@ boardLayer.on('click tap', function(e) {
     }
 
     if (shape.getName() == "hex") {
-      initial = army[currentPlayer].getNumOfHexes();
-      console.log(army[currentPlayer].getOwnedHexes());
-      // TODO: REMOVE?
-      if (false && initial > 2 &&
-        (__indexOf.call(army[currentPlayer].getOwnedHexes(), shape) == -1)) {
-        alert("Starting phase complete");
-        army[currentPlayer].canChooseHex = 0;
-        army[currentPlayer].canEndTurn = true;
-        return;
-      }
-      if (army[currentPlayer].canChooseHex > 0) {
-        if (army[currentPlayer].isPlacingStartPosition) {
-          console.log("Choosing start location at: " + shape.getId());
-          army[currentPlayer].ownHex(shape,
-            markerIcons[currentPlayer],
-            playerIcons[currentPlayer][army[currentPlayer].indexPlayerIcons++], boardLayer, 10, -60);
-        }
-      } else if (army[currentPlayer].canBuildFort &&
-        __indexOf.call(army[currentPlayer].getOwnedHexes(), shape) >= 0) {
-        console.log("Placing fort location at: " + shape.getId());
-        army[currentPlayer].buildFortHex(shape, fortImage, boardLayer);
-        army[currentPlayer].canBuildFort = false;
-        army[currentPlayer].canEndTurn = true;
-      } else {
-        console.log("Select available action item first!");
-      }
-      if (initial < army[currentPlayer].getNumOfHexes()) {
-        army[currentPlayer].canChooseHex--;
-        army[currentPlayer].canEndTurn = true;
-      }
-
+      iosocket.emit('hexClicked', shape.getId());
     }
+
   } else if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {
     // choose 10 defenders 1 by 1
     if (shape.getId() == "defender") {
