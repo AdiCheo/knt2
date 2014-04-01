@@ -1,3 +1,36 @@
+window.addEventListener('keydown', function(e) {
+    currentPlayer = game.getCurrentPlayer();
+    if (e.keyCode == 72) { //h Key
+      // alert("h key");
+      toggle_help();
+    } else if (e.keyCode == 68) { //d Key for testing
+      game.toggleDice();
+    }
+    // TODO Shortcuts
+    // else if (e.keyCode == 69) { //e Key
+    //   game.incrementTurn(army[currentPlayer]);
+    // }  else if (e.keyCode == 83) { //s Key
+    //   if (army[currentPlayer].getNumOfHexes() < 3 && !army[currentPlayer].canEndTurn) {
+    //     army[currentPlayer].canChooseHex = 1;
+    //     army[currentPlayer].isPlacingStartPosition = true;
+    //   }
+    // } else if (e.keyCode == 70) { //f Key
+
+    //   // We now want the user to click on a hex tile, it needs to be owned by him, and place that thing on the hex
+    //   if (army[currentPlayer].getNumOfFortHexes() === 0 &&
+    //     army[currentPlayer].getNumOfHexes() == 3) {
+    //     console.log("Selected build fort. Choose an owned hex.");
+    //     army[currentPlayer].canBuildFort = true;
+    //   } else {
+    //     if (army[currentPlayer].getNumOfFortHexes() !== 0)
+    //       alert("You already built a fort!");
+    //     else
+    //       alert("You cannot build a fort!");
+
+    //   }
+  }
+});
+
 boardLayer.on('click tap', function(e) {
 
   // TODO Remove below
