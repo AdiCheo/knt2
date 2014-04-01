@@ -33,6 +33,8 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     // TODO fix one icon limit
     var icon = createIcon(iconImg, 25, "marker");
 
+    var icon = createIcon(iconImg, 25, "marker");
+    boardLayer.add(icon);
     console.log("Generating icon for hex " + this.id + " for army: " + (affinity + 1));
 
     boardLayer.add(icon);
