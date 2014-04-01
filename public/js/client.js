@@ -50,18 +50,18 @@ function initConnection() {
       updateHex(hexId, affinity);
     });
 
-    iosocket.on('endTurn', function(affinity) {
-      newTurn(affinity);
-    });
+    // iosocket.on('endTurn', function(affinity) {
+    //   newTurn(affinity);
+    // });
 
     // TODO Merge conflict was here
-    // iosocket.on('endedTurn', function(game) {
-    //   endedTurn();
-    // });
+    iosocket.on('endedTurn', function(game) {
+      endedTurn();
+    });
 
-    // iosocket.on('nextPlayerTurn', function(game) {
-    //   nextPlayerTurn(game);
-    // });
+    iosocket.on('nextPlayerTurn', function(game) {
+      nextPlayerTurn(game);
+    });
 
     iosocket.on('error', function(msg) {
       console.log("ERROR:" + msg);
@@ -101,24 +101,25 @@ function updateHex(hexId, affinity) {
   boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
 }
 
-function newTurn(affinity) {
-  console.log("New turn. Army " + affinity + " must play.");
-  // TODO if client == affinity use an alert
-}
-
-// TODO Merged here
-// function endedTurn() {
-//   alert('You have ended your turn');
+// function newTurn(affinity) {
+//   console.log("New turn. Army " + affinity + " must play.");
+//   // TODO if client == affinity use an alert
 // }
 
-// function nextPlayerTurn(game) {
-//   console.log(game.armies);
-//   console.log(game.currentPlayerTurn);
-//   console.log(game.armies[game.currentPlayerTurn].id);
-//   console.log(playerId);
-//   if (playerId == game.armies[game.currentPlayerTurn].id) {
-//     alert("It is your turn to play now");
-//   }
+// TODO Merged here
+function endedTurn() {
+  alert('You have ended your turn');
+}
+
+function nextPlayerTurn(game) {
+  console.log(game.armies);
+  console.log(game.currentPlayerTurn);
+  console.log(game.armies[game.currentPlayerTurn].id);
+  console.log(playerId);
+  if (playerId == game.armies[game.currentPlayerTurn].id) {
+    alert("It is your turn to play now");
+  }
+}
 
 function indexByKey(array, key, value) {
   for (var i = 0; i < array.length; i++) {

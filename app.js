@@ -109,12 +109,26 @@ function updateClients(socket) {
 
 function eventEndTurnClicked(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canEndTurn) {
+    socket.emit('error', "You cannot end your turn yet!");
+    return;
+  }
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
   if (currentArmy.canEndTurn) {
     game.nextPlayerTurn(currentArmy);
     currentArmy.canEndTurn = false;
-    socket.emit('endTurn', "New turn + num (TODO)");
-    // io.sockets.emit('nextPlayerTurn', game);
-    // socket.emit('endedTurn');
+    // socket.emit('endTurn', "New turn + num (TODO)");
+    // Send message to all clients that a player turn ended
+    io.sockets.emit('nextPlayerTurn', game);
+
+    // Send message to current player that he ended his turn
+    socket.emit('endedTurn');
   } else {
     socket.emit('error', "You cannot end your turn yet.");
   }
@@ -149,6 +163,16 @@ function eventClickedOnHex(socket, hexId) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked hex " + hexId);
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
 
   if (currentArmy.canChooseHex && currentArmy.isPlacingStartPosition) {
     if (currentArmy.ownHex(hexId, game)) {
