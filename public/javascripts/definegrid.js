@@ -231,9 +231,10 @@ window.addEventListener('keydown', function(e) {
 //Handle all the clicks
 boardLayer.on('click tap', function(e) {
 
-  console.log("Selected " + shape.getName());
-  currentPlayer = game.getCurrentPlayer();
   var shape = e.targetNode;
+  console.log("Selected " + shape.getName());
+
+  currentPlayer = game.getCurrentPlayer();
 
   if (shape.getName() == "placeMarkerButton") {
     console.log("emit:placeMarkerButton");
