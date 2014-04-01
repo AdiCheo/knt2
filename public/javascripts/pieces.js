@@ -196,9 +196,6 @@ function addAllPiecesToBoard() {
   // Will_O_WispDefender = Defender(Will_O_WispImage, "Will_O_Wisp", 0, 0, 0, 0, 0, 0, 0);
   // WingedPirhanaDefender = Defender(WingedPirhanaImage, "WingedPirhana", 0, 0, 0, 0, 0, 0, 0);
 
-  addPerPlayerPiecesToBoard(playerIcons);
-  addPerPlayerPiecesToBoard(StackIcons);
-
   addPiecesToBoard(fortIcons);
 
   //---------------Player 1------------------------
