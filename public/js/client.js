@@ -7,6 +7,7 @@ var EVENT_DISCONNECT = "disconnect";
 var iosocket;
 var playerId;
 var nickname;
+var localAffinity;
 
 $(function() {
   // register();
@@ -39,6 +40,10 @@ function initConnection() {
       playerId = gameData.playerId;
     });
 
+    iosocket.on('disconnect', function(gameData) {
+      iosocket.emit('disconnect');
+    });
+
     iosocket.on('updateUsers', function(users) {
       updateUsers(users);
     });
@@ -50,10 +55,6 @@ function initConnection() {
     iosocket.on('updateOwnedHex', function(hexId, affinity) {
       updateHex(hexId, affinity);
     });
-
-    // iosocket.on('endTurn', function(affinity) {
-    //   newTurn(affinity);
-    // });
 
     iosocket.on('diceRollResult', function(diceValue) {
       handleDiceResult(diceValue);
