@@ -71,6 +71,11 @@ io.sockets.on('connection', function(socket) {
     socket.on('placeMarkerButton', function() {
       eventPlaceMarkerButton(socket);
     });
+
+    // Hex click listener
+    socket.on('hexClicked', function(hexId) {
+      eventClickedOnHex(socket, hexId);
+    });
   }
 });
 
@@ -154,6 +159,38 @@ function eventPlaceMarkerButton(socket) {
       }
     }
   }
+}
+
+// TODO
+function eventClickedOnHex(socket, hexId) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked hex " + hexId);
+
+  if (currentArmy.canChooseHex && currentArmy.isPlacingStartPosition) {
+    if (currentArmy.ownHex(hexId, game)) {
+      io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
+    } else {
+      socket.emit('error', 'This hex cannot be owned!');
+    }
+    console.log(currentArmy.getOwnedHexes());
+  }
+  // TODO
+  // else if (currentArmy.canBuildFort &&
+  //   __indexOf.call(currentArmy.getOwnedHexes(), shape) >= 0) {
+  //   console.log("Placing fort location at: " + shape.getId());
+  //   currentArmy.buildFortHex(shape, fortImage, boardLayer);
+  //   currentArmy.canBuildFort = false;
+  //   currentArmy.canEndTurn = true;
+  // }
+  else {
+    console.log("Select available action item first!");
+    socket.emit('error', 'Select available action item first!');
+
+  }
+
+  currentArmy.canChooseHex = false;
+  currentArmy.isPlacingStartPosition = false;
 }
 
 function publicGameData(playerId) {

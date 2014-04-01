@@ -46,6 +46,15 @@ function initConnection() {
       createHexes(hexes);
     });
 
+    iosocket.on('updateOwnedHex', function(hexId, affinity) {
+      updateHex(hexId, affinity);
+    });
+
+
+    iosocket.on('error', function(msg) {
+      console.log("ERROR:" + msg);
+    });
+
     iosocket.on('allowMarkerPlacement', function(gameData) {
       console.log("Allowed Marker Placemenent");
       highlightHex(boardLayer.get("#-2,-1")[0]);
@@ -73,6 +82,11 @@ function createHexes(hexes) {
   for (index = 0; index < hexes.length; ++index) {
     // boardLayer.add(hexes[index]);
   }
+}
+
+function updateHex(hexId, affinity) {
+  alert("Owning " + hexId + " motherfucker! " + affinity);
+
 }
 
 function indexByKey(array, key, value) {
