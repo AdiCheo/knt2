@@ -86,6 +86,7 @@ function createHexes(hexes) {
 
 function updateHex(hexId, affinity) {
   alert("Owning " + hexId + " motherfucker! " + affinity);
+  boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
 
 }
 
