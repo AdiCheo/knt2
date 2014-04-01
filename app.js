@@ -200,10 +200,10 @@ function eventClickedOnHex(socket, hexId) {
   currentArmy.isPlacingStartPosition = false;
 }
 
-function publicGameData(playerId) {
+function publicGameData(socketId) {
   return {
     game: game,
-    playerId: playerId
+    playerId: socketId
   };
 }
 

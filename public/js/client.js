@@ -6,6 +6,7 @@ var EVENT_DISCONNECT = "disconnect";
 
 var iosocket;
 var playerId;
+var nickname;
 
 $(function() {
   // register();
@@ -31,8 +32,8 @@ function initConnection() {
   iosocket = io.connect();
   iosocket.on('connect', function() {
 
-    var user = randomName();
-    iosocket.emit('adduser', user);
+    nickname = randomName();
+    iosocket.emit('adduser', nickname);
 
     iosocket.on('state.init', function(gameData) {
       playerId = gameData.playerId;
