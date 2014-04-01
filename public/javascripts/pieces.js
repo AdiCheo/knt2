@@ -196,8 +196,6 @@ function addAllPiecesToBoard() {
   // Will_O_WispDefender = Defender(Will_O_WispImage, "Will_O_Wisp", 0, 0, 0, 0, 0, 0, 0);
   // WingedPirhanaDefender = Defender(WingedPirhanaImage, "WingedPirhana", 0, 0, 0, 0, 0, 0, 0);
 
-  addPiecesToBoard(fortIcons);
-
   //---------------Player 1------------------------
   //stack 1
   addPiecesToBoard(OldDragonIcon); //desert
@@ -388,8 +386,6 @@ function addAllPiecesToBoard() {
 var fortIcons = {};
 var fortImage = new Image();
 fortImage.src = 'images/Building/-n Tower -a 1.jpg';
-fortIcons = loadNumIcons(fortImage, 40, 40, "fort");
-indexFortIcons = 0;
 
 // Dice Images
 var dice = {};
