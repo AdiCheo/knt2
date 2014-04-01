@@ -109,10 +109,12 @@ function updateClients(socket) {
 function eventEndTurnClicked(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   if (currentArmy.canEndTurn) {
-
+    game.nextPlayerTurn(currentArmy);
     currentArmy.canEndTurn = false;
+    socket.emit('endTurn', "New turn + num (TODO)");
+  } else {
+    socket.emit('error', "You cannot end your turn yet.");
   }
-
 }
 
 function eventPlaceMarkerButton(socket) {

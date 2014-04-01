@@ -50,6 +50,10 @@ function initConnection() {
       updateHex(hexId, affinity);
     });
 
+    iosocket.on('endTurn', function(affinity) {
+      newTurn(affinity);
+    });
+
 
     iosocket.on('error', function(msg) {
       console.log("ERROR:" + msg);
@@ -85,8 +89,13 @@ function createHexes(hexes) {
 }
 
 function updateHex(hexId, affinity) {
-  console.log("Army " + affinity + "owning " + hexId);
+  console.log("Army " + affinity + " owning " + hexId);
   boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
+}
+
+function newTurn(affinity) {
+  console.log("New turn. Army " + affinity + " must play.");
+  // TODO if client == affinity use an alert
 }
 
 function indexByKey(array, key, value) {
