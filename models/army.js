@@ -24,7 +24,7 @@ function Army(affinity, name, income, gold, currentGameTurn, id) {
       return true;
     } else {
       alert("Cannot own hex!");
-      socket.emit('error', 'This hex cannot be owned!');
+      return false;
     }
   };
 
