@@ -59,19 +59,6 @@ function loadNumIcons(source, num, size, itemName) {
   return array;
 }
 
-function loadArrayIcons(source, size, itemName) {
-  var array = {};
-  // done for 4 players
-  for (var eachPlayer = 0; eachPlayer < 4; eachPlayer++) {
-    var subarray = {};
-    for (var i = 0; i < 20; i++) {
-      subarray[i] = createIcon(source[eachPlayer], size, itemName)
-    }
-    array[eachPlayer] = subarray;
-  }
-  return array;
-}
-
 function addPiecesToBoard(array) {
   for (var i in array) {
     boardLayer.add(array[i]);

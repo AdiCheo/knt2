@@ -28,18 +28,19 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     posx = 10;
     posy = -60;
 
-    iconImg = markerIcons[this.affinity];
+    var iconImg = markerIcons[affinity];
+
     // TODO fix one icon limit
-    icon = playerIcons[affinity][0];
+    var icon = createIcon(iconImg, 25, "marker");
+
     console.log("Generating icon for hex " + this.id + " for army: " + (affinity + 1));
 
-    icon.setImage(iconImg);
+    boardLayer.add(icon);
     icon.setX(this.getX() + posx);
     icon.setY(this.getY() + posy);
     icon.moveToTop();
     icon.show();
 
-    boardLayer.add(icon);
     currentHexId = boardLayer.get("#" + this.getId())[0];
     currentHexId.affinity = affinity;
     boardLayer.draw();

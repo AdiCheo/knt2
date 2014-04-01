@@ -553,23 +553,23 @@ boardLayer.on('click tap', function(e) {
     iosocket.emit(endTurnButton);
     highlightButtonOnClick(shape);
 
-    // removeRadius("tan", boardLayer);
-    // removeRadius("crimson", boardLayer);
-    // if (icon !== undefined) {
-    //     icon.hide(); //Remove icon
-    // }
+    removeRadius("tan", boardLayer);
+    removeRadius("crimson", boardLayer);
+    if (icon !== undefined) {
+      icon.hide(); //Remove icon
+    }
 
-    //Reset AP for all units on map
-    // var units = boardLayer.get('.sol');
-    // for (var i = 0; i < units.length; i++) {
-    //     units[i].AP = 3;
-    //     units[i].showAPBar();
-    // }
+    // Reset AP for all units on map
+    var units = boardLayer.get('.sol');
+    for (var i = 0; i < units.length; i++) {
+      units[i].AP = 3;
+      units[i].showAPBar();
+    }
 
-    //Give the armies some cash
-    // army[game.currentTurn].gold += army[game.currentTurn].income;
+    // Give the armies some cash
+    army[game.currentTurn].gold += army[game.currentTurn].income;
 
-    // game.incrementTurn(army[currentPlayer]);
+    game.incrementTurn(army[currentPlayer]);
 
   }
 });

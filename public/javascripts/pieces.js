@@ -1,391 +1,391 @@
 function addAllPiecesToBoard() {
 
-    //---------------Player 1------------------------
-    //stack 1
-    OldDragonDefender = Defender(OldDragonImage, "OldDragon", 4, 0, 0, 0, 0, 0, 0); //desert
-    GiantSpiderDefender = Defender(GiantSpiderImage, "GiantSpider", 1, 0, 0, 0, 0, 0, 0); //desert
-    ElephantDefender = Defender(ElephantImage, "Elephant", 4, 0, 0, 0, 0, 0, 0); //jungle
-    BrownKnightDefender = Defender(BrownKnightImage, "BrownKnight", 4, 0, 0, 0, 0, 0, 0); //mountain
-    GiantDefender = Defender(GiantImage, "Giant", 4, 0, 0, 0, 0, 0, 0); //mountain
-    Dwarves1Defender = Defender(Dwarves1Image, "Dwarves1", 2, 0, 0, 0, 0, 0, 0); //mountain
+  //---------------Player 1------------------------
+  //stack 1
+  OldDragonDefender = Defender(OldDragonImage, "OldDragon", 4, 0, 0, 0, 0, 0, 0); //desert
+  GiantSpiderDefender = Defender(GiantSpiderImage, "GiantSpider", 1, 0, 0, 0, 0, 0, 0); //desert
+  ElephantDefender = Defender(ElephantImage, "Elephant", 4, 0, 0, 0, 0, 0, 0); //jungle
+  BrownKnightDefender = Defender(BrownKnightImage, "BrownKnight", 4, 0, 0, 0, 0, 0, 0); //mountain
+  GiantDefender = Defender(GiantImage, "Giant", 4, 0, 0, 0, 0, 0, 0); //mountain
+  Dwarves1Defender = Defender(Dwarves1Image, "Dwarves1", 2, 0, 0, 0, 0, 0, 0); //mountain
 
-    //stack 2
-    Skletons1Defender = Defender(Skletons1Image, "Skletons1", 1, 0, 0, 0, 0, 0, 0); //desert
-    WatusiDefender = Defender(WatusiImage, "Watusi", 2, 0, 0, 0, 0, 0, 0); //jungle
-    Goblins1Defender = Defender(Goblins1Image, "Goblins1", 1, 0, 0, 0, 0, 0, 0); //mountain
-    OgreDefender = Defender(OgreImage, "Ogre", 2, 0, 0, 0, 0, 0, 0); //mountain
+  //stack 2
+  Skletons1Defender = Defender(Skletons1Image, "Skletons1", 1, 0, 0, 0, 0, 0, 0); //desert
+  WatusiDefender = Defender(WatusiImage, "Watusi", 2, 0, 0, 0, 0, 0, 0); //jungle
+  Goblins1Defender = Defender(Goblins1Image, "Goblins1", 1, 0, 0, 0, 0, 0, 0); //mountain
+  OgreDefender = Defender(OgreImage, "Ogre", 2, 0, 0, 0, 0, 0, 0); //mountain
 
-    //---------------Player 2------------------------
-    //stack 1
-    PterodactylWarriorsDefender = Defender(PterodactylWarriorsImage, "PterodactylWarriors", 2, 0, 0, 0, 0, 0, 0); //jungle
-    SandwormDefender = Defender(SandwormImage, "Sandworm", 3, 0, 0, 0, 0, 0, 0); //desert
-    GreenKnightDefender = Defender(GreenKnightImage, "GreenKnight", 4, 0, 0, 0, 0, 0, 0); //forest
-    DervishDefender = Defender(DervishImage, "Dervish", 2, 0, 0, 0, 0, 0, 0); //desert
-    CrocodilesDefender = Defender(CrocodilesImage, "Crocodiles", 2, 0, 0, 0, 0, 0, 0); //jungle
-    Nomads1Defender = Defender(Nomads1Image, "Nomads1", 1, 0, 0, 0, 0, 0, 0); //Desert
-    DruidDefender = Defender(DruidImage, "Druid", 3, 0, 0, 0, 0, 0, 0); //forest
-    WalkingTreeDefender = Defender(WalkingTreeImage, "WalkingTree", 5, 0, 0, 0, 0, 0, 0); //forest
-    CrawlingVinesDefender = Defender(CrawlingVinesImage, "CrawlingVines", 6, 0, 0, 0, 0, 0, 0); //jungle
-    BanditsDefender = Defender(BanditsImage, "Bandits", 2, 0, 0, 0, 0, 0, 0); //forest
-
-
-    //---------------Player 3------------------------
-    //stack 1
-    CentaurDefender = Defender(CentaurImage, "Centaur", 2, 0, 0, 0, 0, 0, 0); //plains
-    CamelCorpsDefender = Defender(CamelCorpsImage, "CamelCorps", 3, 0, 0, 0, 0, 0, 0); //Desert
-    Farmers1Defender = Defender(Farmers1Image, "Farmers1", 1, 0, 0, 0, 0, 0, 0); //Plains
-    Farmers2Defender = Defender(Farmers2Image, "Farmers2", 1, 0, 0, 0, 0, 0, 0); //Plains
-    //stack 2
-    GenieDefender = Defender(GenieImage, "Genie", 4, 0, 0, 0, 0, 0, 0); //Desert
-    Skletons2Defender = Defender(Skletons2Image, "Skletons2", 1, 0, 0, 0, 0, 0, 0); //Desert
-    PygmiesDefender = Defender(PygmiesImage, "Pygmies", 2, 0, 0, 0, 0, 0, 0); //Jungle
-    //stack 3
-
-    GreathunterDefender = Defender(GreathunterImage, "Greathunter", 4, 0, 0, 0, 0, 0, 0); //Plains
-    Nomads2Defender = Defender(Nomads2Image, "Nomads2", 1, 0, 0, 0, 0, 0, 0); //Desert
-    WitchDoctorDefender = Defender(WitchDoctorImage, "WitchDoctor", 2, 0, 0, 0, 0, 0, 0); //Jungle
-
-    //---------------Player 4------------------------
-    //stack 1
-    Tribesmen1Defender = Defender(Tribesmen1Image, "Tribesmen1", 2, 0, 0, 0, 0, 0, 0); //Plains
-    GiantLizardDefender = Defender(GiantLizardImage, "GiantLizard", 2, 0, 0, 0, 0, 0, 0); //Swamp
-    VillainsDefender = Defender(VillainsImage, "Villains", 2, 0, 0, 0, 0, 0, 0); //Plains
-    TigersDefender = Defender(TigersImage, "Tigers", 3, 0, 0, 0, 0, 0, 0); //Jungle
-    //stack 2
-    VampireBatDefender = Defender(VampireBatImage, "VampireBat", 4, 0, 0, 0, 0, 0, 0); //swamp
-    Tribesmen2Defender = Defender(Tribesmen2Image, "Tribesmen2", 2, 0, 0, 0, 0, 0, 0); //Plains
-    DarkWizardDefender = Defender(DarkWizardImage, "DarkWizard", 1, 0, 0, 0, 0, 0, 0); //Swamp
-    BlackKnightDefender = Defender(BlackKnightImage, "BlackKnight", 3, 0, 0, 0, 0, 0, 0); //Swamp
-    //stack 3
-    GiantApeDefender = Defender(GiantApeImage, "GiantApe", 5, 0, 0, 0, 0, 0, 0); //Jungle
-    BuffaloHerd1Defender = Defender(BuffaloHerd1Image, "BuffaloHerd1", 3, 0, 0, 0, 0, 0, 0); //Plains
-
-    //player to buy
-    CyclopsDefender = Defender(CyclopsImage, "Cyclops", 5, 0, 0, 0, 0, 0, 0);
-    MountainMenDefender = Defender(MountainMenImage, "MountainMen", 1, 0, 0, 0, 0, 0, 0);
-    Goblins2Defender = Defender(Goblins2Image, "Goblins2", 1, 0, 0, 0, 0, 0, 0);
+  //---------------Player 2------------------------
+  //stack 1
+  PterodactylWarriorsDefender = Defender(PterodactylWarriorsImage, "PterodactylWarriors", 2, 0, 0, 0, 0, 0, 0); //jungle
+  SandwormDefender = Defender(SandwormImage, "Sandworm", 3, 0, 0, 0, 0, 0, 0); //desert
+  GreenKnightDefender = Defender(GreenKnightImage, "GreenKnight", 4, 0, 0, 0, 0, 0, 0); //forest
+  DervishDefender = Defender(DervishImage, "Dervish", 2, 0, 0, 0, 0, 0, 0); //desert
+  CrocodilesDefender = Defender(CrocodilesImage, "Crocodiles", 2, 0, 0, 0, 0, 0, 0); //jungle
+  Nomads1Defender = Defender(Nomads1Image, "Nomads1", 1, 0, 0, 0, 0, 0, 0); //Desert
+  DruidDefender = Defender(DruidImage, "Druid", 3, 0, 0, 0, 0, 0, 0); //forest
+  WalkingTreeDefender = Defender(WalkingTreeImage, "WalkingTree", 5, 0, 0, 0, 0, 0, 0); //forest
+  CrawlingVinesDefender = Defender(CrawlingVinesImage, "CrawlingVines", 6, 0, 0, 0, 0, 0, 0); //jungle
+  BanditsDefender = Defender(BanditsImage, "Bandits", 2, 0, 0, 0, 0, 0, 0); //forest
 
 
+  //---------------Player 3------------------------
+  //stack 1
+  CentaurDefender = Defender(CentaurImage, "Centaur", 2, 0, 0, 0, 0, 0, 0); //plains
+  CamelCorpsDefender = Defender(CamelCorpsImage, "CamelCorps", 3, 0, 0, 0, 0, 0, 0); //Desert
+  Farmers1Defender = Defender(Farmers1Image, "Farmers1", 1, 0, 0, 0, 0, 0, 0); //Plains
+  Farmers2Defender = Defender(Farmers2Image, "Farmers2", 1, 0, 0, 0, 0, 0, 0); //Plains
+  //stack 2
+  GenieDefender = Defender(GenieImage, "Genie", 4, 0, 0, 0, 0, 0, 0); //Desert
+  Skletons2Defender = Defender(Skletons2Image, "Skletons2", 1, 0, 0, 0, 0, 0, 0); //Desert
+  PygmiesDefender = Defender(PygmiesImage, "Pygmies", 2, 0, 0, 0, 0, 0, 0); //Jungle
+  //stack 3
 
-    // OldDragonDefender = Defender(OldDragonImage, "OldDragon", 0, 0, 0, 0, 0, 0, 0);
-    // GiantSpiderDefender = Defender(GiantSpiderImage, "GiantSpider", 0, 0, 0, 0, 0, 0, 0);
-    // ElephantDefender = Defender(ElephantImage, "Elephant", 0, 0, 0, 0, 0, 0, 0);
-    // BrownKnightDefender = Defender(BrownKnightImage, "BrownKnight", 0, 0, 0, 0, 0, 0, 0);
-    // // BabyDragonDefender = Defender(BabyDragonImage, "BabyDragon", 0, 0, 0, 0, 0, 0, 0)
-    // // CamelCorpsDefender = Defender(CamelCorpsImage, "CamelCorps", 0, 0, 0, 0, 0, 0, 0);
-    // // DervishDefender = Defender(DervishImage, "Dervish", 0, 0, 0, 0, 0, 0, 0);
-    // // DesertBatDefender = Defender(DesertBatImage, "DesertBat", 0, 0, 0, 0, 0, 0, 0);
-    // // DustDevilDefender = Defender(DustDevilImage, "DustDevil", 0, 0, 0, 0, 0, 0, 0);
-    // // GenieDefender = Defender(GenieImage, "Genie", 0, 0, 0, 0, 0, 0, 0);
-    // GiantWaspDefender = Defender(GiantWaspImage, "GiantWasp", 0, 0, 0, 0, 0, 0, 0);
-    // GiantWaspDefender = Defender(GiantWaspImage, "GiantWasp", 0, 0, 0, 0, 0, 0, 0);
-    // GriffonDefender = Defender(GriffonImage, "Griffon", 0, 0, 0, 0, 0, 0, 0);
-    // Nomads1Defender = Defender(Nomads1Image, "Nomads1", 0, 0, 0, 0, 0, 0, 0);
-    // Nomads2Defender = Defender(Nomads2Image, "Nomads2", 0, 0, 0, 0, 0, 0, 0);
-    // SandwormDefender = Defender(SandwormImage, "Sandworm", 0, 0, 0, 0, 0, 0, 0);
-    // Skletons1Defender = Defender(Skletons1Image, "Skletons1", 0, 0, 0, 0, 0, 0, 0);
-    // Skletons2Defender = Defender(Skletons2Image, "Skletons2", 0, 0, 0, 0, 0, 0, 0);
-    // SphinxDefender = Defender(SphinxImage, "Sphinx", 0, 0, 0, 0, 0, 0, 0);
-    // VulturesDefender = Defender(VulturesImage, "Vultures", 0, 0, 0, 0, 0, 0, 0);
-    // YellowKnightDefender = Defender(YellowKnightImage, "YellowKnight", 0, 0, 0, 0, 0, 0, 0);
-    // BanditsDefender = Defender(BanditsImage, "Bandits", 0, 0, 0, 0, 0, 0, 0);
-    // BearsDefender = Defender(BearsImage, "Bears", 0, 0, 0, 0, 0, 0, 0);
-    // BigFootDefender = Defender(BigFootImage, "BigFoot", 0, 0, 0, 0, 0, 0, 0);
-    // DruidDefender = Defender(DruidImage, "Druid", 0, 0, 0, 0, 0, 0, 0);
-    // DryadDefender = Defender(DryadImage, "Dryad", 0, 0, 0, 0, 0, 0, 0);
-    // ElfMageDefender = Defender(ElfMageImage, "ElfMage", 0, 0, 0, 0, 0, 0, 0);
-    // Elves0Defender = Defender(Elves0Image, "Elves0", 0, 0, 0, 0, 0, 0, 0);
-    // Elves1Defender = Defender(Elves1Image, "Elves1", 0, 0, 0, 0, 0, 0, 0);
-    // FlyingSquirrel0Defender = Defender(FlyingSquirrel0Image, "FlyingSquirrel0", 0, 0, 0, 0, 0, 0, 0);
-    // FlyingSquirrel1Defender = Defender(FlyingSquirrel1Image, "FlyingSquirrel1", 0, 0, 0, 0, 0, 0, 0);
-    // ForesterDefender = Defender(ForesterImage, "Forester", 0, 0, 0, 0, 0, 0, 0);
-    // GreatOwlDefender = Defender(GreatOwlImage, "GreatOwl", 0, 0, 0, 0, 0, 0, 0);
-    // GreenKnightDefender = Defender(GreenKnightImage, "GreenKnight", 0, 0, 0, 0, 0, 0, 0);
-    // KillerRacoonDefender = Defender(KillerRacoonImage, "KillerRacoon", 0, 0, 0, 0, 0, 0, 0);
-    // PixiesDefender = Defender(PixiesImage, "Pixies", 0, 0, 0, 0, 0, 0, 0);
-    // UnicornDefender = Defender(UnicornImage, "Unicorn", 0, 0, 0, 0, 0, 0, 0);
-    // WalkingTreeDefender = Defender(WalkingTreeImage, "WalkingTree", 0, 0, 0, 0, 0, 0, 0);
-    // WildCatDefender = Defender(WildCatImage, "WildCat", 0, 0, 0, 0, 0, 0, 0);
-    // WyvernDefender = Defender(WyvernImage, "Wyvern", 0, 0, 0, 0, 0, 0, 0);
-    // DragonRiderDefender = Defender(DragonRiderImage, "DragonRider", 0, 0, 0, 0, 0, 0, 0);
-    // ElkHerdDefender = Defender(ElkHerdImage, "ElkHerd", 0, 0, 0, 0, 0, 0, 0);
-    // EskimosDefender = Defender(EskimosImage, "Eskimos", 0, 0, 0, 0, 0, 0, 0);
-    // IceBatsDefender = Defender(IceBatsImage, "IceBats", 0, 0, 0, 0, 0, 0, 0);
-    // IceGiantDefender = Defender(IceGiantImage, "IceGiant", 0, 0, 0, 0, 0, 0, 0);
-    // IcewormDefender = Defender(IcewormImage, "Iceworm", 0, 0, 0, 0, 0, 0, 0);
-    // KillerPenguinsDefender = Defender(KillerPenguinsImage, "KillerPenguins", 0, 0, 0, 0, 0, 0, 0);
-    // KillerPuffinsDefender = Defender(KillerPuffinsImage, "KillerPuffins", 0, 0, 0, 0, 0, 0, 0);
-    // MammothDefender = Defender(MammothImage, "Mammoth", 0, 0, 0, 0, 0, 0, 0);
-    // NorthWindDefender = Defender(NorthWindImage, "NorthWind", 0, 0, 0, 0, 0, 0, 0);
-    // WalrusDefender = Defender(WalrusImage, "Walrus", 0, 0, 0, 0, 0, 0, 0);
-    // WhiteBreaDefender = Defender(WhiteBreaImage, "WhiteBrea", 0, 0, 0, 0, 0, 0, 0);
-    // WhiteDragonDefender = Defender(WhiteDragonImage, "WhiteDragon", 0, 0, 0, 0, 0, 0, 0);
-    // WolvesDefender = Defender(WolvesImage, "Wolves", 0, 0, 0, 0, 0, 0, 0);
-    // BirdOfParadiseDefender = Defender(BirdOfParadiseImage, "BirdOfParadise", 0, 0, 0, 0, 0, 0, 0);
-    // CrawlingVinesDefender = Defender(CrawlingVinesImage, "CrawlingVines", 0, 0, 0, 0, 0, 0, 0);
-    // CrocodilesDefender = Defender(CrocodilesImage, "Crocodiles", 0, 0, 0, 0, 0, 0, 0);
-    // DinasaurDefender = Defender(DinasaurImage, "Dinasaur", 0, 0, 0, 0, 0, 0, 0);
-    // GiantApeDefender = Defender(GiantApeImage, "GiantApe", 0, 0, 0, 0, 0, 0, 0);
-    // GiantSnakeDefender = Defender(GiantSnakeImage, "GiantSnake", 0, 0, 0, 0, 0, 0, 0);
-    // HeadHunterDefender = Defender(HeadHunterImage, "HeadHunter", 0, 0, 0, 0, 0, 0, 0);
+  GreathunterDefender = Defender(GreathunterImage, "Greathunter", 4, 0, 0, 0, 0, 0, 0); //Plains
+  Nomads2Defender = Defender(Nomads2Image, "Nomads2", 1, 0, 0, 0, 0, 0, 0); //Desert
+  WitchDoctorDefender = Defender(WitchDoctorImage, "WitchDoctor", 2, 0, 0, 0, 0, 0, 0); //Jungle
 
-    // PterodactylWarriorsDefender = Defender(PterodactylWarriorsImage, "PterodactylWarriors", 0, 0, 0, 0, 0, 0, 0);
-    // PygmiesDefender = Defender(PygmiesImage, "Pygmies", 0, 0, 0, 0, 0, 0, 0);
-    // TigersDefender = Defender(TigersImage, "Tigers", 0, 0, 0, 0, 0, 0, 0);
-    // WatusiDefender = Defender(WatusiImage, "Watusi", 0, 0, 0, 0, 0, 0, 0);
-    // WitchDoctorDefender = Defender(WitchDoctorImage, "WitchDoctor", 0, 0, 0, 0, 0, 0, 0);
-    // BrownDragonDefender = Defender(BrownDragonImage, "BrownDragon", 0, 0, 0, 0, 0, 0, 0);
-    // CyclopsDefender = Defender(CyclopsImage, "Cyclops", 0, 0, 0, 0, 0, 0, 0);
-    // Dwarves1Defender = Defender(Dwarves1Image, "Dwarves1", 0, 0, 0, 0, 0, 0, 0);
-    // Dwarves2Defender = Defender(Dwarves2Image, "Dwarves2", 0, 0, 0, 0, 0, 0, 0);
-    // Dwarves3Defender = Defender(Dwarves3Image, "Dwarves3", 0, 0, 0, 0, 0, 0, 0);
-    // GaintRocDefender = Defender(GaintRocImage, "GaintRoc", 0, 0, 0, 0, 0, 0, 0);
-    // GiantDefender = Defender(GiantImage, "Giant", 0, 0, 0, 0, 0, 0, 0);
-    // GiantCondorDefender = Defender(GiantCondorImage, "GiantCondor", 0, 0, 0, 0, 0, 0, 0);
-    // Goblins1Defender = Defender(Goblins1Image, "Goblins1", 0, 0, 0, 0, 0, 0, 0);
-    // Goblins2Defender = Defender(Goblins2Image, "Goblins2", 0, 0, 0, 0, 0, 0, 0);
-    // GreatEagleDefender = Defender(GreatEagleImage, "GreatEagle", 0, 0, 0, 0, 0, 0, 0);
-    // GreatHawkDefender = Defender(GreatHawkImage, "GreatHawk", 0, 0, 0, 0, 0, 0, 0);
-    // LittleRocDefender = Defender(LittleRocImage, "LittleRoc", 0, 0, 0, 0, 0, 0, 0);
-    // MountainLionDefender = Defender(MountainLionImage, "MountainLion", 0, 0, 0, 0, 0, 0, 0);
-    // MountainMenDefender = Defender(MountainMenImage, "MountainMen", 0, 0, 0, 0, 0, 0, 0);
-    // OgreDefender = Defender(OgreImage, "Ogre", 0, 0, 0, 0, 0, 0, 0);
-    // TrollDefender = Defender(TrollImage, "Troll", 0, 0, 0, 0, 0, 0, 0);
-    // BuffaloHerd1Defender = Defender(BuffaloHerd1Image, "BuffaloHerd1", 0, 0, 0, 0, 0, 0, 0);
-    // BuffaloHerd2Defender = Defender(BuffaloHerd2Image, "BuffaloHerd2", 0, 0, 0, 0, 0, 0, 0);
-    // CentaurDefender = Defender(CentaurImage, "Centaur", 0, 0, 0, 0, 0, 0, 0);
-    // DragonflyDefender = Defender(DragonflyImage, "Dragonfly", 0, 0, 0, 0, 0, 0, 0);
-    // EaglesDefender = Defender(EaglesImage, "Eagles", 0, 0, 0, 0, 0, 0, 0);
-    // Farmers1Defender = Defender(Farmers1Image, "Farmers1", 0, 0, 0, 0, 0, 0, 0);
-    // Farmers2Defender = Defender(Farmers2Image, "Farmers2", 0, 0, 0, 0, 0, 0, 0);
-    // FlyingBuffaloDefender = Defender(FlyingBuffaloImage, "FlyingBuffalo", 0, 0, 0, 0, 0, 0, 0);
-    // GiantBeetleDefender = Defender(GiantBeetleImage, "GiantBeetle", 0, 0, 0, 0, 0, 0, 0);
-    // GreatHawkDefender = Defender(GreatHawkImage, "GreatHawk", 0, 0, 0, 0, 0, 0, 0);
-    // GreathunterDefender = Defender(GreathunterImage, "Greathunter", 0, 0, 0, 0, 0, 0, 0);
-    // Gypsies1Defender = Defender(Gypsies1Image, "Gypsies1", 0, 0, 0, 0, 0, 0, 0);
-    // Gypsies2Defender = Defender(Gypsies2Image, "Gypsies2", 0, 0, 0, 0, 0, 0, 0);
-    // HunterDefender = Defender(HunterImage, "Hunter", 0, 0, 0, 0, 0, 0, 0);
-    // LionRideDefender = Defender(LionRideImage, "LionRide", 0, 0, 0, 0, 0, 0, 0);
-    // PegasusDefender = Defender(PegasusImage, "Pegasus", 0, 0, 0, 0, 0, 0, 0);
-    // PterodactylDefender = Defender(PterodactylImage, "Pterodactyl", 0, 0, 0, 0, 0, 0, 0);
-    // Tribesmen1Defender = Defender(Tribesmen1Image, "Tribesmen1", 0, 0, 0, 0, 0, 0, 0);
-    // Tribesmen2Defender = Defender(Tribesmen2Image, "Tribesmen2", 0, 0, 0, 0, 0, 0, 0);
-    // VillainsDefender = Defender(VillainsImage, "Villains", 0, 0, 0, 0, 0, 0, 0);
-    // WhiteKnightDefender = Defender(WhiteKnightImage, "WhiteKnight", 0, 0, 0, 0, 0, 0, 0);
-    // WolfPackDefender = Defender(WolfPackImage, "WolfPack", 0, 0, 0, 0, 0, 0, 0);
-    // TribesmenDefender = Defender(TribesmenImage, "Tribesmen", 0, 0, 0, 0, 0, 0, 0);
-    // BasiliskDefender = Defender(BasiliskImage, "Basilisk", 0, 0, 0, 0, 0, 0, 0);
-    // BlackKnightDefender = Defender(BlackKnightImage, "BlackKnight", 0, 0, 0, 0, 0, 0, 0);
-    // CrocodilesDefender = Defender(CrocodilesImage, "Crocodiles", 0, 0, 0, 0, 0, 0, 0);
-    // DarkWizardDefender = Defender(DarkWizardImage, "DarkWizard", 0, 0, 0, 0, 0, 0, 0);
-    GhostDefender = Defender(GhostImage, "Ghost", 0, 0, 0, 0, 0, 0, 0);
-    // GiantLizardDefender = Defender(GiantLizardImage, "GiantLizard", 0, 0, 0, 0, 0, 0, 0);
-    GiantMosquitoDefender = Defender(GiantMosquitoImage, "GiantMosquito", 0, 0, 0, 0, 0, 0, 0);
-    GiantSnakeDefender = Defender(GiantSnakeImage, "GiantSnake", 0, 0, 0, 0, 0, 0, 0);
-    HugeLeechDefender = Defender(HugeLeechImage, "HugeLeech", 0, 0, 0, 0, 0, 0, 0);
-    PiratesDefender = Defender(PiratesImage, "Pirates", 0, 0, 0, 0, 0, 0, 0);
-    PoisonFrogDefender = Defender(PoisonFrogImage, "PoisonFrog", 0, 0, 0, 0, 0, 0, 0);
-    // SpiritDefender = Defender(SpiritImage, "Spirit", 0, 0, 0, 0, 0, 0, 0);
-    // SproteDefender = Defender(SproteImage, "Sprote", 0, 0, 0, 0, 0, 0, 0);
-    // SwampBeastDefender = Defender(SwampBeastImage, "SwampBeast", 0, 0, 0, 0, 0, 0, 0);
-    // SwampGasDefender = Defender(SwampGasImage, "SwampGas", 0, 0, 0, 0, 0, 0, 0);
-    // SwampRatDefender = Defender(SwampRatImage, "SwampRat", 0, 0, 0, 0, 0, 0, 0);
-    // ThingDefender = Defender(ThingImage, "Thing", 0, 0, 0, 0, 0, 0, 0);
-    // VampireBatDefender = Defender(VampireBatImage, "VampireBat", 0, 0, 0, 0, 0, 0, 0);
-    // WatersankeDefender = Defender(WatersankeImage, "Watersanke", 0, 0, 0, 0, 0, 0, 0);
-    // Will_O_WispDefender = Defender(Will_O_WispImage, "Will_O_Wisp", 0, 0, 0, 0, 0, 0, 0);
-    // WingedPirhanaDefender = Defender(WingedPirhanaImage, "WingedPirhana", 0, 0, 0, 0, 0, 0, 0);
+  //---------------Player 4------------------------
+  //stack 1
+  Tribesmen1Defender = Defender(Tribesmen1Image, "Tribesmen1", 2, 0, 0, 0, 0, 0, 0); //Plains
+  GiantLizardDefender = Defender(GiantLizardImage, "GiantLizard", 2, 0, 0, 0, 0, 0, 0); //Swamp
+  VillainsDefender = Defender(VillainsImage, "Villains", 2, 0, 0, 0, 0, 0, 0); //Plains
+  TigersDefender = Defender(TigersImage, "Tigers", 3, 0, 0, 0, 0, 0, 0); //Jungle
+  //stack 2
+  VampireBatDefender = Defender(VampireBatImage, "VampireBat", 4, 0, 0, 0, 0, 0, 0); //swamp
+  Tribesmen2Defender = Defender(Tribesmen2Image, "Tribesmen2", 2, 0, 0, 0, 0, 0, 0); //Plains
+  DarkWizardDefender = Defender(DarkWizardImage, "DarkWizard", 1, 0, 0, 0, 0, 0, 0); //Swamp
+  BlackKnightDefender = Defender(BlackKnightImage, "BlackKnight", 3, 0, 0, 0, 0, 0, 0); //Swamp
+  //stack 3
+  GiantApeDefender = Defender(GiantApeImage, "GiantApe", 5, 0, 0, 0, 0, 0, 0); //Jungle
+  BuffaloHerd1Defender = Defender(BuffaloHerd1Image, "BuffaloHerd1", 3, 0, 0, 0, 0, 0, 0); //Plains
 
-    addPerPlayerPiecesToBoard(playerIcons);
-    addPerPlayerPiecesToBoard(StackIcons);
-
-    addPiecesToBoard(fortIcons);
-
-    //---------------Player 1------------------------
-    //stack 1
-    addPiecesToBoard(OldDragonIcon); //desert
-    addPiecesToBoard(GiantSpiderIcon); //desert
-    addPiecesToBoard(ElephantIcon); //jungle
-    addPiecesToBoard(BrownKnightIcon); //mountain
-    addPiecesToBoard(GiantIcon); //mountain
-    addPiecesToBoard(Dwarves1Icon); //mountain
-
-    //stack 2
-    addPiecesToBoard(Skletons1Icon); //desert
-    addPiecesToBoard(WatusiIcon); //jungle
-    addPiecesToBoard(Goblins1Icon); //mountain
-    addPiecesToBoard(OgreIcon); //mountain
-
-    //---------------Player 2------------------------
-    //stack 1
-    addPiecesToBoard(PterodactylWarriorsIcon); //jungle
-    addPiecesToBoard(SandwormIcon); //desert
-    addPiecesToBoard(GreenKnightIcon); //forest
-    addPiecesToBoard(DervishIcon); //desert
-    addPiecesToBoard(CrocodilesIcon); //jungle
-    addPiecesToBoard(Nomads1Icon); //Desert
-    addPiecesToBoard(DruidIcon); //forest
-    addPiecesToBoard(WalkingTreeIcon); //forest
-    addPiecesToBoard(CrawlingVinesIcon); //jungle
-    addPiecesToBoard(BanditsIcon); //forest
+  //player to buy
+  CyclopsDefender = Defender(CyclopsImage, "Cyclops", 5, 0, 0, 0, 0, 0, 0);
+  MountainMenDefender = Defender(MountainMenImage, "MountainMen", 1, 0, 0, 0, 0, 0, 0);
+  Goblins2Defender = Defender(Goblins2Image, "Goblins2", 1, 0, 0, 0, 0, 0, 0);
 
 
-    //---------------Player 3------------------------
-    //stack 1
-    addPiecesToBoard(CentaurIcon); //plains
-    addPiecesToBoard(CamelCorpsIcon); //Desert
-    addPiecesToBoard(Farmers1Icon); //Plains
-    addPiecesToBoard(Farmers2Icon); //Plains
-    //stack 2
-    addPiecesToBoard(GenieIcon); //Desert
-    addPiecesToBoard(Skletons2Icon); //Desert
-    addPiecesToBoard(PygmiesIcon); //Jungle
-    //stack 3
 
-    addPiecesToBoard(GreathunterIcon); //Plains
-    addPiecesToBoard(Nomads2Icon); //Desert
-    addPiecesToBoard(WitchDoctorIcon); //Jungle
+  // OldDragonDefender = Defender(OldDragonImage, "OldDragon", 0, 0, 0, 0, 0, 0, 0);
+  // GiantSpiderDefender = Defender(GiantSpiderImage, "GiantSpider", 0, 0, 0, 0, 0, 0, 0);
+  // ElephantDefender = Defender(ElephantImage, "Elephant", 0, 0, 0, 0, 0, 0, 0);
+  // BrownKnightDefender = Defender(BrownKnightImage, "BrownKnight", 0, 0, 0, 0, 0, 0, 0);
+  // // BabyDragonDefender = Defender(BabyDragonImage, "BabyDragon", 0, 0, 0, 0, 0, 0, 0)
+  // // CamelCorpsDefender = Defender(CamelCorpsImage, "CamelCorps", 0, 0, 0, 0, 0, 0, 0);
+  // // DervishDefender = Defender(DervishImage, "Dervish", 0, 0, 0, 0, 0, 0, 0);
+  // // DesertBatDefender = Defender(DesertBatImage, "DesertBat", 0, 0, 0, 0, 0, 0, 0);
+  // // DustDevilDefender = Defender(DustDevilImage, "DustDevil", 0, 0, 0, 0, 0, 0, 0);
+  // // GenieDefender = Defender(GenieImage, "Genie", 0, 0, 0, 0, 0, 0, 0);
+  // GiantWaspDefender = Defender(GiantWaspImage, "GiantWasp", 0, 0, 0, 0, 0, 0, 0);
+  // GiantWaspDefender = Defender(GiantWaspImage, "GiantWasp", 0, 0, 0, 0, 0, 0, 0);
+  // GriffonDefender = Defender(GriffonImage, "Griffon", 0, 0, 0, 0, 0, 0, 0);
+  // Nomads1Defender = Defender(Nomads1Image, "Nomads1", 0, 0, 0, 0, 0, 0, 0);
+  // Nomads2Defender = Defender(Nomads2Image, "Nomads2", 0, 0, 0, 0, 0, 0, 0);
+  // SandwormDefender = Defender(SandwormImage, "Sandworm", 0, 0, 0, 0, 0, 0, 0);
+  // Skletons1Defender = Defender(Skletons1Image, "Skletons1", 0, 0, 0, 0, 0, 0, 0);
+  // Skletons2Defender = Defender(Skletons2Image, "Skletons2", 0, 0, 0, 0, 0, 0, 0);
+  // SphinxDefender = Defender(SphinxImage, "Sphinx", 0, 0, 0, 0, 0, 0, 0);
+  // VulturesDefender = Defender(VulturesImage, "Vultures", 0, 0, 0, 0, 0, 0, 0);
+  // YellowKnightDefender = Defender(YellowKnightImage, "YellowKnight", 0, 0, 0, 0, 0, 0, 0);
+  // BanditsDefender = Defender(BanditsImage, "Bandits", 0, 0, 0, 0, 0, 0, 0);
+  // BearsDefender = Defender(BearsImage, "Bears", 0, 0, 0, 0, 0, 0, 0);
+  // BigFootDefender = Defender(BigFootImage, "BigFoot", 0, 0, 0, 0, 0, 0, 0);
+  // DruidDefender = Defender(DruidImage, "Druid", 0, 0, 0, 0, 0, 0, 0);
+  // DryadDefender = Defender(DryadImage, "Dryad", 0, 0, 0, 0, 0, 0, 0);
+  // ElfMageDefender = Defender(ElfMageImage, "ElfMage", 0, 0, 0, 0, 0, 0, 0);
+  // Elves0Defender = Defender(Elves0Image, "Elves0", 0, 0, 0, 0, 0, 0, 0);
+  // Elves1Defender = Defender(Elves1Image, "Elves1", 0, 0, 0, 0, 0, 0, 0);
+  // FlyingSquirrel0Defender = Defender(FlyingSquirrel0Image, "FlyingSquirrel0", 0, 0, 0, 0, 0, 0, 0);
+  // FlyingSquirrel1Defender = Defender(FlyingSquirrel1Image, "FlyingSquirrel1", 0, 0, 0, 0, 0, 0, 0);
+  // ForesterDefender = Defender(ForesterImage, "Forester", 0, 0, 0, 0, 0, 0, 0);
+  // GreatOwlDefender = Defender(GreatOwlImage, "GreatOwl", 0, 0, 0, 0, 0, 0, 0);
+  // GreenKnightDefender = Defender(GreenKnightImage, "GreenKnight", 0, 0, 0, 0, 0, 0, 0);
+  // KillerRacoonDefender = Defender(KillerRacoonImage, "KillerRacoon", 0, 0, 0, 0, 0, 0, 0);
+  // PixiesDefender = Defender(PixiesImage, "Pixies", 0, 0, 0, 0, 0, 0, 0);
+  // UnicornDefender = Defender(UnicornImage, "Unicorn", 0, 0, 0, 0, 0, 0, 0);
+  // WalkingTreeDefender = Defender(WalkingTreeImage, "WalkingTree", 0, 0, 0, 0, 0, 0, 0);
+  // WildCatDefender = Defender(WildCatImage, "WildCat", 0, 0, 0, 0, 0, 0, 0);
+  // WyvernDefender = Defender(WyvernImage, "Wyvern", 0, 0, 0, 0, 0, 0, 0);
+  // DragonRiderDefender = Defender(DragonRiderImage, "DragonRider", 0, 0, 0, 0, 0, 0, 0);
+  // ElkHerdDefender = Defender(ElkHerdImage, "ElkHerd", 0, 0, 0, 0, 0, 0, 0);
+  // EskimosDefender = Defender(EskimosImage, "Eskimos", 0, 0, 0, 0, 0, 0, 0);
+  // IceBatsDefender = Defender(IceBatsImage, "IceBats", 0, 0, 0, 0, 0, 0, 0);
+  // IceGiantDefender = Defender(IceGiantImage, "IceGiant", 0, 0, 0, 0, 0, 0, 0);
+  // IcewormDefender = Defender(IcewormImage, "Iceworm", 0, 0, 0, 0, 0, 0, 0);
+  // KillerPenguinsDefender = Defender(KillerPenguinsImage, "KillerPenguins", 0, 0, 0, 0, 0, 0, 0);
+  // KillerPuffinsDefender = Defender(KillerPuffinsImage, "KillerPuffins", 0, 0, 0, 0, 0, 0, 0);
+  // MammothDefender = Defender(MammothImage, "Mammoth", 0, 0, 0, 0, 0, 0, 0);
+  // NorthWindDefender = Defender(NorthWindImage, "NorthWind", 0, 0, 0, 0, 0, 0, 0);
+  // WalrusDefender = Defender(WalrusImage, "Walrus", 0, 0, 0, 0, 0, 0, 0);
+  // WhiteBreaDefender = Defender(WhiteBreaImage, "WhiteBrea", 0, 0, 0, 0, 0, 0, 0);
+  // WhiteDragonDefender = Defender(WhiteDragonImage, "WhiteDragon", 0, 0, 0, 0, 0, 0, 0);
+  // WolvesDefender = Defender(WolvesImage, "Wolves", 0, 0, 0, 0, 0, 0, 0);
+  // BirdOfParadiseDefender = Defender(BirdOfParadiseImage, "BirdOfParadise", 0, 0, 0, 0, 0, 0, 0);
+  // CrawlingVinesDefender = Defender(CrawlingVinesImage, "CrawlingVines", 0, 0, 0, 0, 0, 0, 0);
+  // CrocodilesDefender = Defender(CrocodilesImage, "Crocodiles", 0, 0, 0, 0, 0, 0, 0);
+  // DinasaurDefender = Defender(DinasaurImage, "Dinasaur", 0, 0, 0, 0, 0, 0, 0);
+  // GiantApeDefender = Defender(GiantApeImage, "GiantApe", 0, 0, 0, 0, 0, 0, 0);
+  // GiantSnakeDefender = Defender(GiantSnakeImage, "GiantSnake", 0, 0, 0, 0, 0, 0, 0);
+  // HeadHunterDefender = Defender(HeadHunterImage, "HeadHunter", 0, 0, 0, 0, 0, 0, 0);
 
-    //---------------Player 4------------------------
-    //stack 1
-    addPiecesToBoard(Tribesmen1Icon); //Plains
-    addPiecesToBoard(GiantLizardIcon); //Swamp
-    addPiecesToBoard(VillainsIcon); //Plains
-    addPiecesToBoard(TigersIcon); //Jungle
-    //stack 2
-    addPiecesToBoard(VampireBatIcon); //swamp
-    addPiecesToBoard(Tribesmen2Icon); //Plains
-    addPiecesToBoard(DarkWizardIcon); //Swamp
-    addPiecesToBoard(BlackKnightIcon); //Swamp
-    //stack 3
-    addPiecesToBoard(GiantApeIcon); //Jungle
-    addPiecesToBoard(BuffaloHerd1Icon); //Plains
+  // PterodactylWarriorsDefender = Defender(PterodactylWarriorsImage, "PterodactylWarriors", 0, 0, 0, 0, 0, 0, 0);
+  // PygmiesDefender = Defender(PygmiesImage, "Pygmies", 0, 0, 0, 0, 0, 0, 0);
+  // TigersDefender = Defender(TigersImage, "Tigers", 0, 0, 0, 0, 0, 0, 0);
+  // WatusiDefender = Defender(WatusiImage, "Watusi", 0, 0, 0, 0, 0, 0, 0);
+  // WitchDoctorDefender = Defender(WitchDoctorImage, "WitchDoctor", 0, 0, 0, 0, 0, 0, 0);
+  // BrownDragonDefender = Defender(BrownDragonImage, "BrownDragon", 0, 0, 0, 0, 0, 0, 0);
+  // CyclopsDefender = Defender(CyclopsImage, "Cyclops", 0, 0, 0, 0, 0, 0, 0);
+  // Dwarves1Defender = Defender(Dwarves1Image, "Dwarves1", 0, 0, 0, 0, 0, 0, 0);
+  // Dwarves2Defender = Defender(Dwarves2Image, "Dwarves2", 0, 0, 0, 0, 0, 0, 0);
+  // Dwarves3Defender = Defender(Dwarves3Image, "Dwarves3", 0, 0, 0, 0, 0, 0, 0);
+  // GaintRocDefender = Defender(GaintRocImage, "GaintRoc", 0, 0, 0, 0, 0, 0, 0);
+  // GiantDefender = Defender(GiantImage, "Giant", 0, 0, 0, 0, 0, 0, 0);
+  // GiantCondorDefender = Defender(GiantCondorImage, "GiantCondor", 0, 0, 0, 0, 0, 0, 0);
+  // Goblins1Defender = Defender(Goblins1Image, "Goblins1", 0, 0, 0, 0, 0, 0, 0);
+  // Goblins2Defender = Defender(Goblins2Image, "Goblins2", 0, 0, 0, 0, 0, 0, 0);
+  // GreatEagleDefender = Defender(GreatEagleImage, "GreatEagle", 0, 0, 0, 0, 0, 0, 0);
+  // GreatHawkDefender = Defender(GreatHawkImage, "GreatHawk", 0, 0, 0, 0, 0, 0, 0);
+  // LittleRocDefender = Defender(LittleRocImage, "LittleRoc", 0, 0, 0, 0, 0, 0, 0);
+  // MountainLionDefender = Defender(MountainLionImage, "MountainLion", 0, 0, 0, 0, 0, 0, 0);
+  // MountainMenDefender = Defender(MountainMenImage, "MountainMen", 0, 0, 0, 0, 0, 0, 0);
+  // OgreDefender = Defender(OgreImage, "Ogre", 0, 0, 0, 0, 0, 0, 0);
+  // TrollDefender = Defender(TrollImage, "Troll", 0, 0, 0, 0, 0, 0, 0);
+  // BuffaloHerd1Defender = Defender(BuffaloHerd1Image, "BuffaloHerd1", 0, 0, 0, 0, 0, 0, 0);
+  // BuffaloHerd2Defender = Defender(BuffaloHerd2Image, "BuffaloHerd2", 0, 0, 0, 0, 0, 0, 0);
+  // CentaurDefender = Defender(CentaurImage, "Centaur", 0, 0, 0, 0, 0, 0, 0);
+  // DragonflyDefender = Defender(DragonflyImage, "Dragonfly", 0, 0, 0, 0, 0, 0, 0);
+  // EaglesDefender = Defender(EaglesImage, "Eagles", 0, 0, 0, 0, 0, 0, 0);
+  // Farmers1Defender = Defender(Farmers1Image, "Farmers1", 0, 0, 0, 0, 0, 0, 0);
+  // Farmers2Defender = Defender(Farmers2Image, "Farmers2", 0, 0, 0, 0, 0, 0, 0);
+  // FlyingBuffaloDefender = Defender(FlyingBuffaloImage, "FlyingBuffalo", 0, 0, 0, 0, 0, 0, 0);
+  // GiantBeetleDefender = Defender(GiantBeetleImage, "GiantBeetle", 0, 0, 0, 0, 0, 0, 0);
+  // GreatHawkDefender = Defender(GreatHawkImage, "GreatHawk", 0, 0, 0, 0, 0, 0, 0);
+  // GreathunterDefender = Defender(GreathunterImage, "Greathunter", 0, 0, 0, 0, 0, 0, 0);
+  // Gypsies1Defender = Defender(Gypsies1Image, "Gypsies1", 0, 0, 0, 0, 0, 0, 0);
+  // Gypsies2Defender = Defender(Gypsies2Image, "Gypsies2", 0, 0, 0, 0, 0, 0, 0);
+  // HunterDefender = Defender(HunterImage, "Hunter", 0, 0, 0, 0, 0, 0, 0);
+  // LionRideDefender = Defender(LionRideImage, "LionRide", 0, 0, 0, 0, 0, 0, 0);
+  // PegasusDefender = Defender(PegasusImage, "Pegasus", 0, 0, 0, 0, 0, 0, 0);
+  // PterodactylDefender = Defender(PterodactylImage, "Pterodactyl", 0, 0, 0, 0, 0, 0, 0);
+  // Tribesmen1Defender = Defender(Tribesmen1Image, "Tribesmen1", 0, 0, 0, 0, 0, 0, 0);
+  // Tribesmen2Defender = Defender(Tribesmen2Image, "Tribesmen2", 0, 0, 0, 0, 0, 0, 0);
+  // VillainsDefender = Defender(VillainsImage, "Villains", 0, 0, 0, 0, 0, 0, 0);
+  // WhiteKnightDefender = Defender(WhiteKnightImage, "WhiteKnight", 0, 0, 0, 0, 0, 0, 0);
+  // WolfPackDefender = Defender(WolfPackImage, "WolfPack", 0, 0, 0, 0, 0, 0, 0);
+  // TribesmenDefender = Defender(TribesmenImage, "Tribesmen", 0, 0, 0, 0, 0, 0, 0);
+  // BasiliskDefender = Defender(BasiliskImage, "Basilisk", 0, 0, 0, 0, 0, 0, 0);
+  // BlackKnightDefender = Defender(BlackKnightImage, "BlackKnight", 0, 0, 0, 0, 0, 0, 0);
+  // CrocodilesDefender = Defender(CrocodilesImage, "Crocodiles", 0, 0, 0, 0, 0, 0, 0);
+  // DarkWizardDefender = Defender(DarkWizardImage, "DarkWizard", 0, 0, 0, 0, 0, 0, 0);
+  GhostDefender = Defender(GhostImage, "Ghost", 0, 0, 0, 0, 0, 0, 0);
+  // GiantLizardDefender = Defender(GiantLizardImage, "GiantLizard", 0, 0, 0, 0, 0, 0, 0);
+  GiantMosquitoDefender = Defender(GiantMosquitoImage, "GiantMosquito", 0, 0, 0, 0, 0, 0, 0);
+  GiantSnakeDefender = Defender(GiantSnakeImage, "GiantSnake", 0, 0, 0, 0, 0, 0, 0);
+  HugeLeechDefender = Defender(HugeLeechImage, "HugeLeech", 0, 0, 0, 0, 0, 0, 0);
+  PiratesDefender = Defender(PiratesImage, "Pirates", 0, 0, 0, 0, 0, 0, 0);
+  PoisonFrogDefender = Defender(PoisonFrogImage, "PoisonFrog", 0, 0, 0, 0, 0, 0, 0);
+  // SpiritDefender = Defender(SpiritImage, "Spirit", 0, 0, 0, 0, 0, 0, 0);
+  // SproteDefender = Defender(SproteImage, "Sprote", 0, 0, 0, 0, 0, 0, 0);
+  // SwampBeastDefender = Defender(SwampBeastImage, "SwampBeast", 0, 0, 0, 0, 0, 0, 0);
+  // SwampGasDefender = Defender(SwampGasImage, "SwampGas", 0, 0, 0, 0, 0, 0, 0);
+  // SwampRatDefender = Defender(SwampRatImage, "SwampRat", 0, 0, 0, 0, 0, 0, 0);
+  // ThingDefender = Defender(ThingImage, "Thing", 0, 0, 0, 0, 0, 0, 0);
+  // VampireBatDefender = Defender(VampireBatImage, "VampireBat", 0, 0, 0, 0, 0, 0, 0);
+  // WatersankeDefender = Defender(WatersankeImage, "Watersanke", 0, 0, 0, 0, 0, 0, 0);
+  // Will_O_WispDefender = Defender(Will_O_WispImage, "Will_O_Wisp", 0, 0, 0, 0, 0, 0, 0);
+  // WingedPirhanaDefender = Defender(WingedPirhanaImage, "WingedPirhana", 0, 0, 0, 0, 0, 0, 0);
 
-    //player to buy
-    addPiecesToBoard(CyclopsIcon);
-    addPiecesToBoard(MountainMenIcon);
-    addPiecesToBoard(Goblins2Icon);
+  addPerPlayerPiecesToBoard(playerIcons);
+  addPerPlayerPiecesToBoard(StackIcons);
+
+  addPiecesToBoard(fortIcons);
+
+  //---------------Player 1------------------------
+  //stack 1
+  addPiecesToBoard(OldDragonIcon); //desert
+  addPiecesToBoard(GiantSpiderIcon); //desert
+  addPiecesToBoard(ElephantIcon); //jungle
+  addPiecesToBoard(BrownKnightIcon); //mountain
+  addPiecesToBoard(GiantIcon); //mountain
+  addPiecesToBoard(Dwarves1Icon); //mountain
+
+  //stack 2
+  addPiecesToBoard(Skletons1Icon); //desert
+  addPiecesToBoard(WatusiIcon); //jungle
+  addPiecesToBoard(Goblins1Icon); //mountain
+  addPiecesToBoard(OgreIcon); //mountain
+
+  //---------------Player 2------------------------
+  //stack 1
+  addPiecesToBoard(PterodactylWarriorsIcon); //jungle
+  addPiecesToBoard(SandwormIcon); //desert
+  addPiecesToBoard(GreenKnightIcon); //forest
+  addPiecesToBoard(DervishIcon); //desert
+  addPiecesToBoard(CrocodilesIcon); //jungle
+  addPiecesToBoard(Nomads1Icon); //Desert
+  addPiecesToBoard(DruidIcon); //forest
+  addPiecesToBoard(WalkingTreeIcon); //forest
+  addPiecesToBoard(CrawlingVinesIcon); //jungle
+  addPiecesToBoard(BanditsIcon); //forest
 
 
-    // addPiecesToBoard(BabyDragonIcon);
-    // addPiecesToBoard(DervishIcon);
-    // addPiecesToBoard(DesertBatIcon);
-    // addPiecesToBoard(DustDevilIcon);
-    // addPiecesToBoard(GenieIcon);
-    // addPiecesToBoard(GiantSpiderIcon);
-    // addPiecesToBoard(GiantWaspIcon);
-    // addPiecesToBoard(GiantWaspIcon);
-    // addPiecesToBoard(GriffonIcon);
-    // addPiecesToBoard(NomadsIcon);
-    // addPiecesToBoard(OldDragonIcon);
-    // addPiecesToBoard(SandwormIcon);
-    // addPiecesToBoard(SphinxIcon);
-    // addPiecesToBoard(VulturesIcon);
-    // addPiecesToBoard(YellowKnightIcon);
-    // addPiecesToBoard(BanditsIcon);
-    // addPiecesToBoard(BearsIcon);
-    // addPiecesToBoard(BigFootIcon);
-    // addPiecesToBoard(DruidIcon);
-    // addPiecesToBoard(DryadIcon);
-    // addPiecesToBoard(ElfMageIcon);
-    // addPiecesToBoard(Elves0Icon);
-    // addPiecesToBoard(Elves1Icon);
-    // addPiecesToBoard(FlyingSquirrel0Icon);
-    // addPiecesToBoard(FlyingSquirrel1Icon);
-    // addPiecesToBoard(ForesterIcon);
-    // addPiecesToBoard(GreatOwlIcon);
-    // addPiecesToBoard(GreenKnightIcon);
-    // addPiecesToBoard(KillerRacoonIcon);
-    // addPiecesToBoard(PixiesIcon);
-    // addPiecesToBoard(UnicornIcon);
-    // addPiecesToBoard(WalkingTreeIcon);
-    // addPiecesToBoard(WildCatIcon);
-    // addPiecesToBoard(WyvernIcon);
-    // addPiecesToBoard(DragonRiderIcon);
-    // addPiecesToBoard(ElkHerdIcon);
-    // addPiecesToBoard(EskimosIcon);
-    // addPiecesToBoard(IceBatsIcon);
-    // addPiecesToBoard(IceGiantIcon);
-    // addPiecesToBoard(IcewormIcon);
-    // addPiecesToBoard(KillerPenguinsIcon);
-    // addPiecesToBoard(KillerPuffinsIcon);
-    // addPiecesToBoard(MammothIcon);
-    // addPiecesToBoard(NorthWindIcon);
-    // addPiecesToBoard(WalrusIcon);
-    // addPiecesToBoard(WhiteBreaIcon);
-    // addPiecesToBoard(WhiteDragonIcon);
-    // addPiecesToBoard(WolvesIcon);
+  //---------------Player 3------------------------
+  //stack 1
+  addPiecesToBoard(CentaurIcon); //plains
+  addPiecesToBoard(CamelCorpsIcon); //Desert
+  addPiecesToBoard(Farmers1Icon); //Plains
+  addPiecesToBoard(Farmers2Icon); //Plains
+  //stack 2
+  addPiecesToBoard(GenieIcon); //Desert
+  addPiecesToBoard(Skletons2Icon); //Desert
+  addPiecesToBoard(PygmiesIcon); //Jungle
+  //stack 3
 
-    // addPiecesToBoard(BirdOfParadiseIcon);
-    // addPiecesToBoard(CrawlingVinesIcon);
-    // addPiecesToBoard(CrocodilesIcon);
-    // addPiecesToBoard(DinasaurIcon);
-    // addPiecesToBoard(ElephantIcon);
-    // addPiecesToBoard(GiantApeIcon);
-    // addPiecesToBoard(GiantSnakeIcon);
-    // addPiecesToBoard(HeadHunterIcon);
-    // addPiecesToBoard(PterodactylWarriorsIcon);
-    // addPiecesToBoard(PygmiesIcon);
-    // addPiecesToBoard(TigersIcon);
-    // addPiecesToBoard(WatusiIcon);
-    // addPiecesToBoard(WitchDoctorIcon);
-    // addPiecesToBoard(BrownDragonIcon);
-    // addPiecesToBoard(BrownKnightIcon);
-    // addPiecesToBoard(CyclopsIcon);
-    // addPiecesToBoard(Dwarves1Icon);
-    // addPiecesToBoard(Dwarves2Icon);
-    // addPiecesToBoard(Dwarves3Icon);
-    // addPiecesToBoard(GaintRocIcon);
-    // addPiecesToBoard(GiantIcon);
-    // addPiecesToBoard(GiantCondorIcon);
-    // addPiecesToBoard(GreatEagleIcon);
-    // addPiecesToBoard(GreatHawkIcon);
-    // addPiecesToBoard(LittleRocIcon);
-    // addPiecesToBoard(MountainLionIcon);
-    // addPiecesToBoard(MountainMenIcon);
-    // addPiecesToBoard(OgreIcon);
-    // addPiecesToBoard(TrollIcon);
-    // addPiecesToBoard(BuffaloHerd1Icon);
-    // addPiecesToBoard(BuffaloHerd2Icon);
-    // addPiecesToBoard(CentaurIcon);
-    // addPiecesToBoard(DragonflyIcon);
-    // addPiecesToBoard(EaglesIcon);
-    // addPiecesToBoard(FarmersIcon);
-    // addPiecesToBoard(FlyingBuffaloIcon);
-    // addPiecesToBoard(GiantBeetleIcon);
-    // addPiecesToBoard(GreatHawkIcon);
-    // addPiecesToBoard(Gypsies1Icon);
-    // addPiecesToBoard(Gypsies2Icon);
-    // addPiecesToBoard(HunterIcon);
-    // addPiecesToBoard(LionRideIcon);
-    // addPiecesToBoard(PegasusIcon);
-    // addPiecesToBoard(PterodactylIcon);
-    // addPiecesToBoard(TribesmenIcon);
-    // addPiecesToBoard(VillainsIcon);
-    // addPiecesToBoard(WhiteKnightIcon);
-    // addPiecesToBoard(WolfPackIcon);
-    // addPiecesToBoard(TribesmenIcon);
-    // addPiecesToBoard(BasiliskIcon);
-    // addPiecesToBoard(BlackKnightIcon);
-    // addPiecesToBoard(CrocodilesIcon);
-    // addPiecesToBoard(DarkWizardIcon);
-    // addPiecesToBoard(GhostIcon);
-    // addPiecesToBoard(GiantLizardIcon);
-    // addPiecesToBoard(GiantMosquitoIcon);
-    // addPiecesToBoard(GiantSnakeIcon);
-    // addPiecesToBoard(HugeLeechIcon);
-    // addPiecesToBoard(PiratesIcon);
-    // addPiecesToBoard(PoisonFrogIcon);
-    // addPiecesToBoard(SpiritIcon);
-    // addPiecesToBoard(SproteIcon);
-    // addPiecesToBoard(SwampBeastIcon);
-    // addPiecesToBoard(SwampGasIcon);
-    // addPiecesToBoard(SwampRatIcon);
-    // addPiecesToBoard(ThingIcon);
-    // addPiecesToBoard(VampireBatIcon);
-    // addPiecesToBoard(WatersankeIcon);
-    // addPiecesToBoard(Will_O_WispIcon);
-    // addPiecesToBoard(WingedPirhanaIcon);
+  addPiecesToBoard(GreathunterIcon); //Plains
+  addPiecesToBoard(Nomads2Icon); //Desert
+  addPiecesToBoard(WitchDoctorIcon); //Jungle
+
+  //---------------Player 4------------------------
+  //stack 1
+  addPiecesToBoard(Tribesmen1Icon); //Plains
+  addPiecesToBoard(GiantLizardIcon); //Swamp
+  addPiecesToBoard(VillainsIcon); //Plains
+  addPiecesToBoard(TigersIcon); //Jungle
+  //stack 2
+  addPiecesToBoard(VampireBatIcon); //swamp
+  addPiecesToBoard(Tribesmen2Icon); //Plains
+  addPiecesToBoard(DarkWizardIcon); //Swamp
+  addPiecesToBoard(BlackKnightIcon); //Swamp
+  //stack 3
+  addPiecesToBoard(GiantApeIcon); //Jungle
+  addPiecesToBoard(BuffaloHerd1Icon); //Plains
+
+  //player to buy
+  addPiecesToBoard(CyclopsIcon);
+  addPiecesToBoard(MountainMenIcon);
+  addPiecesToBoard(Goblins2Icon);
+
+
+  // addPiecesToBoard(BabyDragonIcon);
+  // addPiecesToBoard(DervishIcon);
+  // addPiecesToBoard(DesertBatIcon);
+  // addPiecesToBoard(DustDevilIcon);
+  // addPiecesToBoard(GenieIcon);
+  // addPiecesToBoard(GiantSpiderIcon);
+  // addPiecesToBoard(GiantWaspIcon);
+  // addPiecesToBoard(GiantWaspIcon);
+  // addPiecesToBoard(GriffonIcon);
+  // addPiecesToBoard(NomadsIcon);
+  // addPiecesToBoard(OldDragonIcon);
+  // addPiecesToBoard(SandwormIcon);
+  // addPiecesToBoard(SphinxIcon);
+  // addPiecesToBoard(VulturesIcon);
+  // addPiecesToBoard(YellowKnightIcon);
+  // addPiecesToBoard(BanditsIcon);
+  // addPiecesToBoard(BearsIcon);
+  // addPiecesToBoard(BigFootIcon);
+  // addPiecesToBoard(DruidIcon);
+  // addPiecesToBoard(DryadIcon);
+  // addPiecesToBoard(ElfMageIcon);
+  // addPiecesToBoard(Elves0Icon);
+  // addPiecesToBoard(Elves1Icon);
+  // addPiecesToBoard(FlyingSquirrel0Icon);
+  // addPiecesToBoard(FlyingSquirrel1Icon);
+  // addPiecesToBoard(ForesterIcon);
+  // addPiecesToBoard(GreatOwlIcon);
+  // addPiecesToBoard(GreenKnightIcon);
+  // addPiecesToBoard(KillerRacoonIcon);
+  // addPiecesToBoard(PixiesIcon);
+  // addPiecesToBoard(UnicornIcon);
+  // addPiecesToBoard(WalkingTreeIcon);
+  // addPiecesToBoard(WildCatIcon);
+  // addPiecesToBoard(WyvernIcon);
+  // addPiecesToBoard(DragonRiderIcon);
+  // addPiecesToBoard(ElkHerdIcon);
+  // addPiecesToBoard(EskimosIcon);
+  // addPiecesToBoard(IceBatsIcon);
+  // addPiecesToBoard(IceGiantIcon);
+  // addPiecesToBoard(IcewormIcon);
+  // addPiecesToBoard(KillerPenguinsIcon);
+  // addPiecesToBoard(KillerPuffinsIcon);
+  // addPiecesToBoard(MammothIcon);
+  // addPiecesToBoard(NorthWindIcon);
+  // addPiecesToBoard(WalrusIcon);
+  // addPiecesToBoard(WhiteBreaIcon);
+  // addPiecesToBoard(WhiteDragonIcon);
+  // addPiecesToBoard(WolvesIcon);
+
+  // addPiecesToBoard(BirdOfParadiseIcon);
+  // addPiecesToBoard(CrawlingVinesIcon);
+  // addPiecesToBoard(CrocodilesIcon);
+  // addPiecesToBoard(DinasaurIcon);
+  // addPiecesToBoard(ElephantIcon);
+  // addPiecesToBoard(GiantApeIcon);
+  // addPiecesToBoard(GiantSnakeIcon);
+  // addPiecesToBoard(HeadHunterIcon);
+  // addPiecesToBoard(PterodactylWarriorsIcon);
+  // addPiecesToBoard(PygmiesIcon);
+  // addPiecesToBoard(TigersIcon);
+  // addPiecesToBoard(WatusiIcon);
+  // addPiecesToBoard(WitchDoctorIcon);
+  // addPiecesToBoard(BrownDragonIcon);
+  // addPiecesToBoard(BrownKnightIcon);
+  // addPiecesToBoard(CyclopsIcon);
+  // addPiecesToBoard(Dwarves1Icon);
+  // addPiecesToBoard(Dwarves2Icon);
+  // addPiecesToBoard(Dwarves3Icon);
+  // addPiecesToBoard(GaintRocIcon);
+  // addPiecesToBoard(GiantIcon);
+  // addPiecesToBoard(GiantCondorIcon);
+  // addPiecesToBoard(GreatEagleIcon);
+  // addPiecesToBoard(GreatHawkIcon);
+  // addPiecesToBoard(LittleRocIcon);
+  // addPiecesToBoard(MountainLionIcon);
+  // addPiecesToBoard(MountainMenIcon);
+  // addPiecesToBoard(OgreIcon);
+  // addPiecesToBoard(TrollIcon);
+  // addPiecesToBoard(BuffaloHerd1Icon);
+  // addPiecesToBoard(BuffaloHerd2Icon);
+  // addPiecesToBoard(CentaurIcon);
+  // addPiecesToBoard(DragonflyIcon);
+  // addPiecesToBoard(EaglesIcon);
+  // addPiecesToBoard(FarmersIcon);
+  // addPiecesToBoard(FlyingBuffaloIcon);
+  // addPiecesToBoard(GiantBeetleIcon);
+  // addPiecesToBoard(GreatHawkIcon);
+  // addPiecesToBoard(Gypsies1Icon);
+  // addPiecesToBoard(Gypsies2Icon);
+  // addPiecesToBoard(HunterIcon);
+  // addPiecesToBoard(LionRideIcon);
+  // addPiecesToBoard(PegasusIcon);
+  // addPiecesToBoard(PterodactylIcon);
+  // addPiecesToBoard(TribesmenIcon);
+  // addPiecesToBoard(VillainsIcon);
+  // addPiecesToBoard(WhiteKnightIcon);
+  // addPiecesToBoard(WolfPackIcon);
+  // addPiecesToBoard(TribesmenIcon);
+  // addPiecesToBoard(BasiliskIcon);
+  // addPiecesToBoard(BlackKnightIcon);
+  // addPiecesToBoard(CrocodilesIcon);
+  // addPiecesToBoard(DarkWizardIcon);
+  // addPiecesToBoard(GhostIcon);
+  // addPiecesToBoard(GiantLizardIcon);
+  // addPiecesToBoard(GiantMosquitoIcon);
+  // addPiecesToBoard(GiantSnakeIcon);
+  // addPiecesToBoard(HugeLeechIcon);
+  // addPiecesToBoard(PiratesIcon);
+  // addPiecesToBoard(PoisonFrogIcon);
+  // addPiecesToBoard(SpiritIcon);
+  // addPiecesToBoard(SproteIcon);
+  // addPiecesToBoard(SwampBeastIcon);
+  // addPiecesToBoard(SwampGasIcon);
+  // addPiecesToBoard(SwampRatIcon);
+  // addPiecesToBoard(ThingIcon);
+  // addPiecesToBoard(VampireBatIcon);
+  // addPiecesToBoard(WatersankeIcon);
+  // addPiecesToBoard(Will_O_WispIcon);
+  // addPiecesToBoard(WingedPirhanaIcon);
 
 }
 
@@ -443,202 +443,202 @@ indexFortIcons = 0;
 // Dice Images
 var dice = {};
 var diceSources = {
-    0: 'images/Dice/dice-q.png',
-    1: 'images/Dice/dice-1.png',
-    2: 'images/Dice/dice-2.png',
-    3: 'images/Dice/dice-3.png',
-    4: 'images/Dice/dice-4.png',
-    5: 'images/Dice/dice-5.png',
-    6: 'images/Dice/dice-6.png'
+  0: 'images/Dice/dice-q.png',
+  1: 'images/Dice/dice-1.png',
+  2: 'images/Dice/dice-2.png',
+  3: 'images/Dice/dice-3.png',
+  4: 'images/Dice/dice-4.png',
+  5: 'images/Dice/dice-5.png',
+  6: 'images/Dice/dice-6.png'
 };
 
 // Hex Tiles
 var hexTiles = {};
 var hexTileSources = {
-    desert: 'images/Hex/-n-Desert.png',
-    forest: 'images/Hex/-n-Forest.png',
-    frozenWaste: 'images/Hex/-n-FrozenWaste.png',
-    jungle: 'images/Hex/-n-Jungle.png',
-    mountain: 'images/Hex/-n-Mountain.png',
-    plains: 'images/Hex/-n-Plains.png',
-    sea: 'images/Hex/-n-Sea.png',
-    swamp: 'images/Hex/-n-Swamp.png'
+  desert: 'images/Hex/-n-Desert.png',
+  forest: 'images/Hex/-n-Forest.png',
+  frozenWaste: 'images/Hex/-n-FrozenWaste.png',
+  jungle: 'images/Hex/-n-Jungle.png',
+  mountain: 'images/Hex/-n-Mountain.png',
+  plains: 'images/Hex/-n-Plains.png',
+  sea: 'images/Hex/-n-Sea.png',
+  swamp: 'images/Hex/-n-Swamp.png'
 };
 
 loadImages(hexTiles, hexTileSources);
 loadImages(dice, diceSources);
 
 var animations = {
-    idle: [{
-        x: 0,
-        y: 300,
-        width: 50,
-        height: 50
-    }],
-    move_right: [{
-        x: 0,
-        y: 0,
-        width: 50,
-        height: 50
-    }, {
-        x: 50,
-        y: 0,
-        width: 50,
-        height: 50
-    }, {
-        x: 100,
-        y: 0,
-        width: 50,
-        height: 50
-    }, {
-        x: 150,
-        y: 0,
-        width: 50,
-        height: 50
-    }, {
-        x: 200,
-        y: 0,
-        width: 50,
-        height: 50
-    }, {
-        x: 250,
-        y: 0,
-        width: 50,
-        height: 50
-    }, {
-        x: 300,
-        y: 0,
-        width: 50,
-        height: 50
-    }, {
-        x: 350,
-        y: 0,
-        width: 50,
-        height: 50
-    }],
-    move_left: [{
-        x: 0,
-        y: 50,
-        width: 50,
-        height: 50
-    }, {
-        x: 50,
-        y: 50,
-        width: 50,
-        height: 50
-    }, {
-        x: 100,
-        y: 50,
-        width: 50,
-        height: 50
-    }, {
-        x: 150,
-        y: 50,
-        width: 50,
-        height: 50
-    }, {
-        x: 200,
-        y: 50,
-        width: 50,
-        height: 50
-    }, {
-        x: 250,
-        y: 50,
-        width: 50,
-        height: 50
-    }, {
-        x: 300,
-        y: 50,
-        width: 50,
-        height: 50
-    }, {
-        x: 350,
-        y: 50,
-        width: 50,
-        height: 50
-    }],
-    attack_gun: [{
-        x: 0,
-        y: 100,
-        width: 50,
-        height: 50
-    }, {
-        x: 50,
-        y: 100,
-        width: 50,
-        height: 50
-    }, {
-        x: 100,
-        y: 100,
-        width: 50,
-        height: 50
-    }, {
-        x: 150,
-        y: 100,
-        width: 50,
-        height: 50
-    }, {
-        x: 200,
-        y: 100,
-        width: 50,
-        height: 50
-    }, {
-        x: 250,
-        y: 100,
-        width: 50,
-        height: 50
-    }, {
-        x: 300,
-        y: 100,
-        width: 50,
-        height: 50
-    }, {
-        x: 350,
-        y: 100,
-        width: 50,
-        height: 50
-    }],
-    attack_axe: [{
-        x: 0,
-        y: 200,
-        width: 50,
-        height: 50
-    }, {
-        x: 50,
-        y: 200,
-        width: 50,
-        height: 50
-    }, {
-        x: 100,
-        y: 200,
-        width: 50,
-        height: 50
-    }, {
-        x: 150,
-        y: 200,
-        width: 50,
-        height: 50
-    }, {
-        x: 200,
-        y: 200,
-        width: 50,
-        height: 50
-    }, {
-        x: 250,
-        y: 200,
-        width: 50,
-        height: 50
-    }, {
-        x: 300,
-        y: 200,
-        width: 50,
-        height: 50
-    }, {
-        x: 350,
-        y: 200,
-        width: 50,
-        height: 50
-    }]
+  idle: [{
+    x: 0,
+    y: 300,
+    width: 50,
+    height: 50
+  }],
+  move_right: [{
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50
+  }, {
+    x: 50,
+    y: 0,
+    width: 50,
+    height: 50
+  }, {
+    x: 100,
+    y: 0,
+    width: 50,
+    height: 50
+  }, {
+    x: 150,
+    y: 0,
+    width: 50,
+    height: 50
+  }, {
+    x: 200,
+    y: 0,
+    width: 50,
+    height: 50
+  }, {
+    x: 250,
+    y: 0,
+    width: 50,
+    height: 50
+  }, {
+    x: 300,
+    y: 0,
+    width: 50,
+    height: 50
+  }, {
+    x: 350,
+    y: 0,
+    width: 50,
+    height: 50
+  }],
+  move_left: [{
+    x: 0,
+    y: 50,
+    width: 50,
+    height: 50
+  }, {
+    x: 50,
+    y: 50,
+    width: 50,
+    height: 50
+  }, {
+    x: 100,
+    y: 50,
+    width: 50,
+    height: 50
+  }, {
+    x: 150,
+    y: 50,
+    width: 50,
+    height: 50
+  }, {
+    x: 200,
+    y: 50,
+    width: 50,
+    height: 50
+  }, {
+    x: 250,
+    y: 50,
+    width: 50,
+    height: 50
+  }, {
+    x: 300,
+    y: 50,
+    width: 50,
+    height: 50
+  }, {
+    x: 350,
+    y: 50,
+    width: 50,
+    height: 50
+  }],
+  attack_gun: [{
+    x: 0,
+    y: 100,
+    width: 50,
+    height: 50
+  }, {
+    x: 50,
+    y: 100,
+    width: 50,
+    height: 50
+  }, {
+    x: 100,
+    y: 100,
+    width: 50,
+    height: 50
+  }, {
+    x: 150,
+    y: 100,
+    width: 50,
+    height: 50
+  }, {
+    x: 200,
+    y: 100,
+    width: 50,
+    height: 50
+  }, {
+    x: 250,
+    y: 100,
+    width: 50,
+    height: 50
+  }, {
+    x: 300,
+    y: 100,
+    width: 50,
+    height: 50
+  }, {
+    x: 350,
+    y: 100,
+    width: 50,
+    height: 50
+  }],
+  attack_axe: [{
+    x: 0,
+    y: 200,
+    width: 50,
+    height: 50
+  }, {
+    x: 50,
+    y: 200,
+    width: 50,
+    height: 50
+  }, {
+    x: 100,
+    y: 200,
+    width: 50,
+    height: 50
+  }, {
+    x: 150,
+    y: 200,
+    width: 50,
+    height: 50
+  }, {
+    x: 200,
+    y: 200,
+    width: 50,
+    height: 50
+  }, {
+    x: 250,
+    y: 200,
+    width: 50,
+    height: 50
+  }, {
+    x: 300,
+    y: 200,
+    width: 50,
+    height: 50
+  }, {
+    x: 350,
+    y: 200,
+    width: 50,
+    height: 50
+  }]
 };
 
 
@@ -665,24 +665,22 @@ bowlButtonImg.src = 'images/Extra/-n Bowl.png';
 // markerIcons Images
 var markerIcons = new Array();
 var markerIconsSources = {
-    0: 'images/States/-n Player -s Yellow.jpg',
-    1: 'images/States/-n Player -s Gray.jpg',
-    2: 'images/States/-n Player -s Green.jpg',
-    3: 'images/States/-n Player -s Red.jpg',
+  0: 'images/States/-n Player -s Yellow.jpg',
+  1: 'images/States/-n Player -s Gray.jpg',
+  2: 'images/States/-n Player -s Green.jpg',
+  3: 'images/States/-n Player -s Red.jpg',
 }
 loadImages(markerIcons, markerIconsSources);
-playerIcons = loadArrayIcons(markerIcons, 25, "marker");
 
 // Stack Icons
 var StackIconArray = new Array();
 var StackImageSources = {
-    0: 'images/States/Yellow Stack.jpg',
-    1: 'images/States/Gray Stack.jpg',
-    2: 'images/States/Green Stack.jpg',
-    3: 'images/States/Red Stack.jpg',
+  0: 'images/States/Yellow Stack.jpg',
+  1: 'images/States/Gray Stack.jpg',
+  2: 'images/States/Green Stack.jpg',
+  3: 'images/States/Red Stack.jpg',
 }
 loadImages(StackIconArray, StackImageSources);
-StackIcons = loadArrayIcons(StackIconArray, 50, "stack");
 
 // Desert Defenders
 var BabyDragonIcon = {};
