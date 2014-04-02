@@ -143,6 +143,9 @@ function eventEndTurnClicked(socket) {
     socket.emit('endedTurn');
   } else {
     socket.emit('error', "You cannot end your turn yet.");
+    if(game.currentPhase == 1){
+      socket.emit('error', "You must collect your gold")
+    }
   }
 }
 
@@ -170,6 +173,7 @@ function eventPlaceMarkerButton(socket) {
   }
 }
 
+//function for collecting the gold 
 function collectGoldButton(socket){
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   
@@ -205,6 +209,30 @@ function collectGoldButton(socket){
     socket.emit('error', "You are not in the right phase!");
   }
 
+}
+
+//function for Movement Phase 
+function MovementPhase(socket, hexId) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+   if(game.currentPhase == MOVEMENT_PHASE){
+     // if (shape.getName() == "stack") 
+      if ((game.currentPlayerTurn == currentArmy.affinity)) {
+            socket.emit('highlightMovement', publicGameData(socket.id));
+
+        
+      }
+   }
 }
 
 // TODO
