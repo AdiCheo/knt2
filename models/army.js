@@ -9,8 +9,10 @@ function Army(affinity, name, income, gold, currentGameTurn, id) {
 
   this.canEndTurn = false;
   this.canChooseHex = false;
+  this.canBuildFort = false;
 
   this.ownedHexes = [];
+  this.forts = [];
 
   this.getOwnedHexes = function() {
     return this.ownedHexes;
@@ -27,6 +29,10 @@ function Army(affinity, name, income, gold, currentGameTurn, id) {
       return false;
     }
   };
+
+  this.buildFort = function(hexId, game) {
+    if (!)
+  }
 
   this.getNumOfHexes = function() {
     return this.ownedHexes.length;

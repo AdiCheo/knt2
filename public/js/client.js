@@ -99,6 +99,10 @@ function initConnection() {
       highlightHex(boardLayer.get("#2,1")[0]);
     });
 
+    iosocket.on('allowFortPlacement', function(gameData) {
+      alert("Place a fort.");
+    });
+
     iosocket.on('allowDefenderPlacement', function(gameData) {
       console.log("Place your defender on a hex you own");
     });
