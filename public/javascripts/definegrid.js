@@ -254,9 +254,9 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:hexClicked," + shape.getId());
     iosocket.emit('hexClicked', shape.getId());
 
-  } else if (shape.getId() == "generate") {
-    console.log("emit:generateDefenderClicked,");
-    iosocket.emit('generateDefenderClicked');
+  } else if (shape.getName() == "generate") {
+    console.log("emit:generateButtonClicked,");
+    iosocket.emit('generateButtonClicked');
 
   } else if (shape.getId() == "defender") {
     console.log("emit:defenderClicked," + shape.getName());

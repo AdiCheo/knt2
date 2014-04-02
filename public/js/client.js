@@ -70,7 +70,10 @@ function initConnection() {
       handleDiceResult(diceValue);
     });
 
-    // TODO Merge conflict was here
+    iosocket.on('allowDefenderPlacement', function(game) {
+      console.log("Place your defender!");
+    });
+
     iosocket.on('endedTurn', function(game) {
       endedTurn();
     });
@@ -104,7 +107,7 @@ function initConnection() {
 
 
     iosocket.on('allowFortPlacement', function(gameData) {
-      alert("Place a fort.");
+      console.log("Place a fort.");
     });
 
     iosocket.on('highlightMovement', function(hexId, game) {

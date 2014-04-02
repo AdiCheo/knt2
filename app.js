@@ -88,7 +88,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     // Defender click listener
-    socket.on('generateDefenderClicked', function() {
+    socket.on('generateButtonClicked', function() {
       eventGenerateClicked(socket);
     });
 
@@ -315,9 +315,33 @@ function eventDefenderClicked(socket, defenderName) {
     currentArmy.canPlaceDefender = true;
     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
   }
+}
 
+function eventGenerateClicked(socket) {
+  console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked generate button (cup)");
 
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if (game.currentPlayerTurn != currentArmy.affinity) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (game.currentPhase == 0) {
+    currentArmy.canPlaceDefender = true;
+    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
+    currentArmy.defenderInHand = game.newRandomDefender();
+  }
+
+  if (game.currentPhase == 1) {
+    currentArmy.canPlaceDefender = true;
+    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
+  }
 }
 
 // TODO
@@ -340,7 +364,7 @@ function eventClickedOnHex(socket, hexId) {
     if (currentArmy.canChooseHex) {
       if (currentArmy.ownHex(hexId, game)) {
         io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
-        // currentArmy.canEndTurn = true;
+        // currentArmy.canEndTurn = true; //TODO uncomment
         currentArmy.canChooseHex = false;
       } else {
         socket.emit('error', 'This hex cannot be owned!');
@@ -348,7 +372,7 @@ function eventClickedOnHex(socket, hexId) {
     } else if (currentArmy.canBuildFort) {
       if (currentArmy.buildFort(hexId, game)) {
         io.sockets.emit('updateForts', hexId, currentArmy.affinity);
-        currentArmy.canEndTurn = true;
+        // currentArmy.canEndTurn = true; //TODO uncomment
         currentArmy.canBuildFort = false;
       } else {
         socket.emit('error', "Cannot build fort here!");
@@ -356,10 +380,14 @@ function eventClickedOnHex(socket, hexId) {
     }
   }
 
+  // Each player collects 10 defenders in this faze
+  // create new defender
+  // place on the clicked hex if owned by player
+  if (game.currentPhase == 0) {
+    if (currentArmy.canPlaceDefender) {
 
-  // if (currentArmy.canPlaceDefender) {
-
-  // }
+    }
+  }
   // TODO
   // else if (currentArmy.canBuildFort &&
   //   __indexOf.call(currentArmy.getOwnedHexes(), shape) >= 0) {
