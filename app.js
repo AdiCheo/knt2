@@ -168,6 +168,9 @@ function eventEndTurnClicked(socket) {
 
   } else {
     socket.emit('error', "You cannot end your turn yet.");
+    if (game.currentPhase == 1) {
+      socket.emit('error', "You must collect your gold")
+    }
   }
 }
 
@@ -195,6 +198,7 @@ function eventPlaceMarkerButton(socket) {
   }
 }
 
+//function for collecting the gold
 function collectGoldButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
@@ -232,6 +236,28 @@ function collectGoldButton(socket) {
 
 }
 
+//function for Movement Phase
+function MovementPhase(socket, hexId) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (game.currentPhase == MOVEMENT_PHASE) {
+    // if (shape.getName() == "stack")
+    if ((game.currentPlayerTurn == currentArmy.affinity)) {
+      socket.emit('highlightMovement', publicGameData(socket.id));
+    }
+  }
+}
+
 function eventDefenderClicked(socket, defenderName) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -253,6 +279,7 @@ function eventDefenderClicked(socket, defenderName) {
   }
 
   currentArmy = game.armies[indexById(game.armies, socket.id)];
+
 }
 
 // TODO
@@ -368,13 +395,15 @@ function createHexTiles() {
 function populateHexTiles() {
   var mapData = [];
 
-  mapData.push("frozenWaste");
+  mapData.push("forest");
+
   mapData.push("forest");
   mapData.push("jungle");
   mapData.push("plains");
   mapData.push("sea");
   mapData.push("forest");
   mapData.push("swamp");
+
   mapData.push("frozenWaste");
   mapData.push("mountain");
   mapData.push("frozenWaste");
@@ -387,6 +416,7 @@ function populateHexTiles() {
   mapData.push("mountain");
   mapData.push("jungle");
   mapData.push("plains");
+
   mapData.push("jungle");
   mapData.push("swamp");
   mapData.push("desert");

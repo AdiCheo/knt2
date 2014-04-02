@@ -191,7 +191,7 @@ var COMBAT_PHASE = 6;
 // TODO: Add later, it's getting annoying
 window.addEventListener('keydown', function(e) {
   var key = e.keyCode;
-  console.log("Pressed key:" + key);
+  console.log("Pressed key:" + displayKeyCode(key) + ' (' + key + ')');
 
   currentPlayer = game.getCurrentPlayer();
   if (e.keyCode == 72 || e.keyCode == 27) { //h Key || esc

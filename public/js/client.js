@@ -80,7 +80,6 @@ function initConnection() {
       //army[currentPlayer].getNumOfFortHexes() + " Forts = " + fortTotalValue + " Gold");
       document.getElementById("gold_" + game.armies[temp].color).textContent = "Gold: " + game.armies[temp].gold;
 
-      army[currentPlayer].canEndTurn = true;
     });
 
     iosocket.on('nextPlayerTurn', function(game) {
@@ -97,6 +96,12 @@ function initConnection() {
       highlightHex(boardLayer.get("#2,-3")[0]);
       highlightHex(boardLayer.get("#-2,3")[0]);
       highlightHex(boardLayer.get("#2,1")[0]);
+    });
+
+
+    iosocket.on('highlightMovement', function(game) {
+      removeRadius(game.armies.color, boardLayer); //Remove movement radius
+      drawRadius(shape.currentHexId, 4, game.armies.color, boardLayer);
     });
 
     iosocket.on('allowDefenderPlacement', function(gameData) {
