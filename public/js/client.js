@@ -105,7 +105,6 @@ function initConnection() {
       highlightHex(boardLayer.get("#2,1")[0]);
     });
 
-
     iosocket.on('allowFortPlacement', function(gameData) {
       console.log("Place a fort.");
     });
@@ -117,6 +116,14 @@ function initConnection() {
     });
 
     iosocket.on('allowDefenderPlacement', function(gameData) {
+      console.log("Place your defender on a hex you own");
+    });
+
+    iosocket.on('updateStackAll', function(hexId, affinity) {
+      console.log("Stack from army " + affinity + " updated on hex " + hexId);
+    });
+
+    iosocket.on('updateStack', function(currentArmy) {
       console.log("Place your defender on a hex you own");
     });
 

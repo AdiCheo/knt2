@@ -385,21 +385,35 @@ function eventClickedOnHex(socket, hexId) {
   // place on the clicked hex if owned by player
   if (game.currentPhase == 0) {
     if (currentArmy.canPlaceDefender) {
+      if (indexOf(currentArmy.ownedHexes, hexId) !== null &&
+        indexOf(currentArmy.stacks, hexId) === null) {
+        var stack = new Stack(hexId, currentArmy.affinity);
+        stack.containDefenders.push(currentArmy.defenderInHand);
+        currentArmy.stacks.push(stack);
+
+      } else {
+        // Gets stack already on hexId and adds defender to it
+        currentArmy.stacks[indexOf(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.defenderInHand);
+      }
+      io.sockets.emit('updateStackAll', hexId, affinity);
+      socket.emit('updateStack', currentArmy);
 
     }
+    socket.emit('error', "Cannot place defender there!");
   }
-  // TODO
-  // else if (currentArmy.canBuildFort &&
-  //   __indexOf.call(currentArmy.getOwnedHexes(), shape) >= 0) {
-  //   console.log("Placing fort location at: " + shape.getId());
-  //   currentArmy.buildFortHex(shape, fortImage, boardLayer);
-  //   currentArmy.canBuildFort = false;
-  //   currentArmy.canEndTurn = true;
-  // }
-  // else {
-  //   console.log("Select available action item first!");
-  //   socket.emit('error', 'Select available action item first!');
-  // }
+}
+// TODO
+// else if (currentArmy.canBuildFort &&
+//   __indexOf.call(currentArmy.getOwnedHexes(), shape) >= 0) {
+//   console.log("Placing fort location at: " + shape.getId());
+//   currentArmy.buildFortHex(shape, fortImage, boardLayer);
+//   currentArmy.canBuildFort = false;
+//   currentArmy.canEndTurn = true;
+// }
+// else {
+//   console.log("Select available action item first!");
+//   socket.emit('error', 'Select available action item first!');
+// }
 }
 
 function publicGameData(socketId) {
