@@ -395,46 +395,46 @@ function createHexTiles() {
 function populateHexTiles() {
   var mapData = [];
 
-  mapData.push("forest");
+  mapData.push("swamp");
 
+  mapData.push("sea");
+  mapData.push("plains");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
   mapData.push("forest");
-  mapData.push("jungle");
+  mapData.push("mountain");
+
+  mapData.push("swamp");
+  mapData.push("mountain");
+  mapData.push("forest");
+  mapData.push("desert");
+  mapData.push("forest");
+  mapData.push("forest");
+  mapData.push("mountain");
   mapData.push("plains");
   mapData.push("sea");
-  mapData.push("forest");
-  mapData.push("swamp");
+  mapData.push("mountain");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
 
+  mapData.push("sea");
+  mapData.push("jungle");
   mapData.push("frozenWaste");
-  mapData.push("mountain");
+  mapData.push("plains");
   mapData.push("frozenWaste");
   mapData.push("swamp");
   mapData.push("desert");
-  mapData.push("swamp");
-  mapData.push("forest");
   mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("mountain");
-  mapData.push("jungle");
-  mapData.push("plains");
-
-  mapData.push("jungle");
-  mapData.push("swamp");
-  mapData.push("desert");
-  mapData.push("forest");
-  mapData.push("plains");
-  mapData.push("forest");
   mapData.push("frozenWaste");
-  mapData.push("jungle");
-  mapData.push("mountain");
-  mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("jungle");
   mapData.push("mountain");
   mapData.push("forest");
-  mapData.push("frozenWaste");
-  mapData.push("desert");
   mapData.push("swamp");
-  mapData.push("mountain");
+  mapData.push("sea");
+  mapData.push("swamp");
+  mapData.push("forest");
+  mapData.push("plains");
+  mapData.push("swamp");
+  mapData.push("plains");
 
   return mapData;
 }
