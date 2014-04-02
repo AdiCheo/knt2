@@ -190,12 +190,35 @@ var COMBAT_PHASE = 6;
 
 // TODO: Add later, it's getting annoying
 window.addEventListener('keydown', function(e) {
+  var key = e.keyCode;
+  console.log("Pressed key:" + key);
+
   currentPlayer = game.getCurrentPlayer();
-  if (e.keyCode == 72) { //h Key
-    // alert("h key");
+  if (e.keyCode == 72 || e.keyCode == 27) { //h Key || esc
     toggle_help();
-  } else if (e.keyCode == 68) { //d Key for testing
+
+  } else if (e.keyCode == 68) { //d Key
     game.toggleDice();
+
+  } else if (e.keyCode == 77) { //m Key
+    console.log("emit:placeMarkerButton");
+    iosocket.emit('placeMarkerButton');
+
+  } else if (e.keyCode == 82) { //r
+    console.log("emit:diceRollPressed,");
+    iosocket.emit('diceRollPressed');
+
+  } else if (e.keyCode == 69) { //e
+    console.log("emit:endTurnButton");
+    iosocket.emit('endTurnClicked');
+
+  } else if (e.keyCode == 81) { //q
+    console.log("emit:generateDefenderClicked,");
+    iosocket.emit('generateDefenderClicked');
+
+  } else if (e.keyCode == 67) { //c
+    console.log("emit:collectGoldButton");
+    iosocket.emit('collectGoldButtonClicked');
   }
 });
 
@@ -214,6 +237,10 @@ boardLayer.on('click tap', function(e) {
   } else if (shape.getName() == "hex") {
     console.log("emit:hexClicked," + shape.getId());
     iosocket.emit('hexClicked', shape.getId());
+
+  } else if (shape.getId() == "generate") {
+    console.log("emit:generateDefenderClicked,");
+    iosocket.emit('generateDefenderClicked');
 
   } else if (shape.getId() == "defender") {
     console.log("emit:defenderClicked," + shape.getName());
@@ -319,6 +346,12 @@ cheatDice3.setFillPatternImage(dice[3]);
 cheatDice4.setFillPatternImage(dice[4]);
 cheatDice5.setFillPatternImage(dice[5]);
 cheatDice6.setFillPatternImage(dice[6]);
+cheatDice1.hide();
+cheatDice2.hide();
+cheatDice3.hide();
+cheatDice4.hide();
+cheatDice5.hide();
+cheatDice6.hide();
 
 boardLayer.add(endturnbutton);
 boardLayer.add(placeMarkerButton);

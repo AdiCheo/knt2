@@ -30,6 +30,7 @@ body {
     z-index: 1000;
     display: none;
     border: 3px solid black;
+    font-family:Lucida Console;
 }
 
 

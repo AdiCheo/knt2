@@ -83,8 +83,13 @@ io.sockets.on('connection', function(socket) {
     });
 
     // Defender click listener
-    socket.on('defenderClicked', function() {
-      eventDefenderClicked(socket);
+    socket.on('generateDefenderClicked', function() {
+      eventGenerateClicked(socket);
+    });
+
+    // Defender click listener
+    socket.on('defenderClicked', function(defenderName) {
+      eventDefenderClicked(socket, defenderName);
     });
 
     // Dice roll (random) listener
@@ -227,10 +232,10 @@ function collectGoldButton(socket) {
 
 }
 
-function eventDefenderClicked(socket) {
+function eventDefenderClicked(socket, defenderName) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy + " clicked defender");
+  console.log("Player " + currentArmy + " clicked defender" + defenderName);
 
   if (currentArmy.canEndTurn) {
     socket.emit('error', "You must end your turn now!");
