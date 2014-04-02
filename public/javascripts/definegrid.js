@@ -5,11 +5,6 @@ var stage = new Kinetic.Stage({
 });
 
 var rack1 = initRack(700, 870);
-// var rack2 = initRack(300, 220);
-
-// var stack1 = initStack(220, 250);
-// var stack2 = initStack(220, 280);
-// var stack3 = initStack(220, 310);
 
 //dice1 button
 var dice1button = new Kinetic.Rect({
@@ -25,22 +20,9 @@ var dice1button = new Kinetic.Rect({
   strokeWidth: 0
 });
 dice1button.diceValue = -1;
-// var dice2button = new Kinetic.Rect({ //dice2 button
-//     x: 15 + 75, //stage.getWidth() - 350
-//     y: 15,
-//     name: "dicebutton",
-//     value: 0,
-//     id: "control",
-//     width: 75,
-//     height: 75,
-//     draggable: true,
-//     fillPatternOffset: [-8, -8],
-//     fillPatternScale: [1 / 4, 1 / 4],
-//     strokeWidth: 0
-// });
 
-//Cheat Dice
-var cheatDice1 = new Kinetic.Rect({ //dice2 button
+//Cheat Die
+var cheatDice1 = new Kinetic.Rect({
   x: 15,
   y: 15,
   name: "dicebutton",
@@ -68,7 +50,7 @@ var cheatDice2 = new Kinetic.Rect({
 });
 cheatDice2.diceValue = 2;
 
-var cheatDice3 = new Kinetic.Rect({ //dice2 button
+var cheatDice3 = new Kinetic.Rect({
   x: 15 + 2 * 37.5,
   y: 15,
   name: "dicebutton",
@@ -96,7 +78,7 @@ var cheatDice4 = new Kinetic.Rect({
 });
 cheatDice4.diceValue = 4;
 
-var cheatDice5 = new Kinetic.Rect({ //dice2 button
+var cheatDice5 = new Kinetic.Rect({
   x: 15 + 37.5,
   y: 15 + 37.5,
   name: "dicebutton",
@@ -187,16 +169,6 @@ console.log(game.currentTurn);
 // Add Buttons
 buildFortButton(fortImage, boardLayer);
 
-// //var colorholder;
-// var icon = new Kinetic.Image({
-//   name: "icon",
-//   width: 25,
-//   height: 25,
-//   image: moveIconImage
-// });
-// boardLayer.add(icon);
-// icon.hide();
-
 addAllPiecesToBoard();
 var selectedObject;
 var tmpPlayerStack;
@@ -243,6 +215,10 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:hexClicked," + shape.getId());
     iosocket.emit('hexClicked', shape.getId());
 
+  } else if (shape.getId() == "defender") {
+    console.log("emit:defenderClicked," + shape.getId());
+    iosocket.emit('defenderClicked', shape.getId());
+
   } else if (shape.getName() == "dicebutton") {
     console.log('Clicked ' + shape.getName() + ' ' + shape.diceValue);
 
@@ -268,7 +244,7 @@ function createBoardLayer(rows, cols) {
   var rowIdx;
   var colIdx;
   var hexRadius = 75;
-  var strokeColor = "#000";
+  var strokeColor = "#CCC";
   var x;
   var y;
 
@@ -321,10 +297,7 @@ function createBoardLayer(rows, cols) {
 }
 
 boardLayer.add(rack1);
-// boardLayer.add(rack2);
-
 boardLayer.add(dice1button);
-//boardLayer.add(dice2button);
 
 //Cheat dice
 boardLayer.add(cheatDice1);
@@ -335,8 +308,6 @@ boardLayer.add(cheatDice5);
 boardLayer.add(cheatDice6);
 
 dice1button.setFillPatternImage(dice[0]);
-//dice2button.setFillPatternImage(dice[0]);
-
 //Cheat dice
 cheatDice1.setFillPatternImage(dice[1]);
 cheatDice2.setFillPatternImage(dice[2]);
@@ -345,35 +316,11 @@ cheatDice4.setFillPatternImage(dice[4]);
 cheatDice5.setFillPatternImage(dice[5]);
 cheatDice6.setFillPatternImage(dice[6]);
 
-
 boardLayer.add(endturnbutton);
 boardLayer.add(placeMarkerButton);
 boardLayer.add(collectGoldButton);
 boardLayer.add(bowlbutton);
 bowlbutton.moveToBottom();
-
-//Set label
-// document.getElementById("choose_start_lbl").style.left = placeMarkerButton.getX() - 170 - 25 + "px";
-// document.getElementById("choose_start_lbl").style.top = placeMarkerButton.getY() + 32 + "px";
-// document.getElementById("choose_start_lbl").style.position = "fixed";
-
-// boardLayer.add(meleebutton);
-//Set label
-// document.getElementById("melee").style.left = meleebutton.getX() - 400 - 25 + "px";
-// document.getElementById("melee").style.top = meleebutton.getY() + 32 + "px";
-// document.getElementById("melee").style.position = "fixed";
-
-
-//Set generate button label
-// document.getElementById("createSoldiertext").style.left = generatebutton.getX() + 20 - 25 + "px";
-// document.getElementById("createSoldiertext").style.top = generatebutton.getY() + 32 + "px";
-// document.getElementById("createSoldiertext").style.position = "fixed";
-
-
-//Set end turn button label
-// document.getElementById("endturntext").style.left = endturnbutton.getX() + 110 - 25 + "px";
-// document.getElementById("endturntext").style.top = endturnbutton.getY() + 32 + "px";
-// document.getElementById("endturntext").style.position = "fixed";
 
 document.getElementById("phasetext").style.left = 260 + "px";
 document.getElementById("phasetext").style.top = 0 + "px";
@@ -402,48 +349,5 @@ document.getElementById("armystats3").style.position = "fixed";
 document.getElementById("armystats4").style.left = (stage.getX() + 1350) + "px";
 document.getElementById("armystats4").style.top = (stage.getY() + 25) + "px";
 document.getElementById("armystats4").style.position = "fixed";
-
-
-
-// boardLayer.get("#0,0")[0].setFillPatternImage(hexTiles.frozenWaste);
-// boardLayer.get("#0,-1")[0].setFillPatternImage(hexTiles.forest);
-// boardLayer.get("#1,-1")[0].setFillPatternImage(hexTiles.jungle);
-// boardLayer.get("#1,0")[0].setFillPatternImage(hexTiles.plains);
-// boardLayer.get("#0,1")[0].setFillPatternImage(hexTiles.sea);
-// boardLayer.get("#-1,1")[0].setFillPatternImage(hexTiles.forest);
-// boardLayer.get("#-1,0")[0].setFillPatternImage(hexTiles.swamp);
-
-// boardLayer.get("#0,-2")[0].setFillPatternImage(hexTiles.frozenWaste);
-// boardLayer.get("#1,-2")[0].setFillPatternImage(hexTiles.mountain);
-// boardLayer.get("#2,-2")[0].setFillPatternImage(hexTiles.frozenWaste);
-// boardLayer.get("#2,-1")[0].setFillPatternImage(hexTiles.swamp);
-// boardLayer.get("#2,0")[0].setFillPatternImage(hexTiles.desert);
-// boardLayer.get("#1,1")[0].setFillPatternImage(hexTiles.swamp);
-// boardLayer.get("#0,2")[0].setFillPatternImage(hexTiles.forest);
-// boardLayer.get("#-1,2")[0].setFillPatternImage(hexTiles.desert);
-// boardLayer.get("#-2,2")[0].setFillPatternImage(hexTiles.plains);
-// boardLayer.get("#-2,1")[0].setFillPatternImage(hexTiles.mountain);
-// boardLayer.get("#-2,0")[0].setFillPatternImage(hexTiles.jungle);
-// boardLayer.get("#-1,-1")[0].setFillPatternImage(hexTiles.plains);
-
-// boardLayer.get("#0,-3")[0].setFillPatternImage(hexTiles.jungle);
-// boardLayer.get("#1,-3")[0].setFillPatternImage(hexTiles.swamp);
-// boardLayer.get("#2,-3")[0].setFillPatternImage(hexTiles.desert);
-// boardLayer.get("#3,-3")[0].setFillPatternImage(hexTiles.forest);
-// boardLayer.get("#3,-2")[0].setFillPatternImage(hexTiles.plains);
-// boardLayer.get("#3,-1")[0].setFillPatternImage(hexTiles.forest);
-// boardLayer.get("#3,0")[0].setFillPatternImage(hexTiles.frozenWaste);
-// boardLayer.get("#2,1")[0].setFillPatternImage(hexTiles.jungle);
-// boardLayer.get("#1,2")[0].setFillPatternImage(hexTiles.mountain);
-// boardLayer.get("#0,3")[0].setFillPatternImage(hexTiles.desert);
-// boardLayer.get("#-1,3")[0].setFillPatternImage(hexTiles.plains);
-// boardLayer.get("#-2,3")[0].setFillPatternImage(hexTiles.jungle);
-// boardLayer.get("#-3,3")[0].setFillPatternImage(hexTiles.mountain);
-// boardLayer.get("#-3,2")[0].setFillPatternImage(hexTiles.forest);
-// boardLayer.get("#-3,1")[0].setFillPatternImage(hexTiles.frozenWaste);
-// boardLayer.get("#-3,0")[0].setFillPatternImage(hexTiles.desert);
-// boardLayer.get("#-2,-1")[0].setFillPatternImage(hexTiles.swamp);
-// boardLayer.get("#-1,-2")[0].setFillPatternImage(hexTiles.mountain);
-
 
 stage.add(boardLayer);
