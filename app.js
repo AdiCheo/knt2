@@ -396,8 +396,10 @@ function eventClickedOnHex(socket, hexId) {
       io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
       socket.emit('updateStack', currentArmy);
 
+    } else {
+      socket.emit('error', "Cannot place defender there!");
     }
-    socket.emit('error', "Cannot place defender there!");
+
   }
 }
 // TODO
