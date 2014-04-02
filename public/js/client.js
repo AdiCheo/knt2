@@ -39,11 +39,11 @@ function initConnection() {
     iosocket.on('state.init', function(gameData) {
       playerId = gameData.playerId;
 
-        //output the current phase the game is in 
-    document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
+      //output the current phase the game is in
+      document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
 
-    //output the current player turn 
-    document.getElementById("playerturntext").innerHTML = "Current Player Turn: 0";
+      //output the current player turn
+      document.getElementById("playerturntext").innerHTML = "Current Player Turn: 0";
     });
 
     iosocket.on('disconnect', function(gameData) {
@@ -71,13 +71,13 @@ function initConnection() {
       endedTurn();
     });
 
-    //update the gold 
+    //update the gold
     iosocket.on('collectGoldButton', function(game) {
 
-      var temp  = indexById(game.armies, playerId); 
+      var temp = indexById(game.armies, playerId);
       alert("You have the following: \n ----------- \n" +
         game.armies[temp].getOwnedHexes + " Hexes = " + game.armies.getNumOfHexes() + " Gold\n");
-        //army[currentPlayer].getNumOfFortHexes() + " Forts = " + fortTotalValue + " Gold");
+      //army[currentPlayer].getNumOfFortHexes() + " Forts = " + fortTotalValue + " Gold");
       document.getElementById("gold_" + game.armies[temp].color).textContent = "Gold: " + game.armies[temp].gold;
 
       army[currentPlayer].canEndTurn = true;
@@ -92,11 +92,15 @@ function initConnection() {
     });
 
     iosocket.on('allowMarkerPlacement', function(gameData) {
-      console.log("Allowed Marker Placemenent");
+      console.log("Place your marker on a hex");
       highlightHex(boardLayer.get("#-2,-1")[0]);
       highlightHex(boardLayer.get("#2,-3")[0]);
       highlightHex(boardLayer.get("#-2,3")[0]);
       highlightHex(boardLayer.get("#2,1")[0]);
+    });
+
+    iosocket.on('allowDefenderPlacement', function(gameData) {
+      console.log("Place your defender on a hex you own");
     });
 
     iosocket.on('map', function(mapData) {
@@ -140,10 +144,10 @@ function nextPlayerTurn(game) {
   console.log(game.currentPlayerTurn);
   console.log(game.armies[game.currentPlayerTurn].id);
 
-  //output the current phase the game is in 
+  //output the current phase the game is in
   document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
 
-  //output the current player turn 
+  //output the current player turn
   document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + game.currentPlayerTurn;
 
   console.log(playerId);
