@@ -1,6 +1,5 @@
 /* CONTAINS INDEPENDENT UTILITY FUNCTIONS USED FREQUENTLY */
 
-
 var dbl = 0;
 
 // isHexLegalToOwn() //TODO return boolean for choosing initial legal hexes
@@ -378,10 +377,10 @@ function highlightHex(hex) {
   console.log("Highlight hex: " + hex.getId());
   hex.setStroke("white");
   hex.setStrokeWidth(4);
-  // setTimeout(function() {
-  //     hex.setStroke("black");
-  //     hex.setStrokeWidth(1);
-  // }, 125);
+  setTimeout(function() {
+    hex.setStroke("black");
+    hex.setStrokeWidth(1);
+  }, 2500);
 
 }
 
@@ -611,6 +610,16 @@ function displayKeyCode(charCode) {
   if (charCode == 40) return "down arrow"; // down arrow
   if (charCode == 45) return "insert"; // insert
   if (charCode == 46) return "delete"; // delete
+  if (charCode == 48) return "0";
+  if (charCode == 49) return "1";
+  if (charCode == 50) return "2";
+  if (charCode == 51) return "3";
+  if (charCode == 52) return "4";
+  if (charCode == 53) return "5";
+  if (charCode == 54) return "6";
+  if (charCode == 55) return "7";
+  if (charCode == 56) return "8";
+  if (charCode == 57) return "9";
   if (charCode == 91) return "left window"; // left window
   if (charCode == 92) return "right window"; // right window
   if (charCode == 93) return "select key"; // select key
@@ -654,5 +663,4 @@ function displayKeyCode(charCode) {
   if (charCode == 220) return "\\"; // back slash
   if (charCode == 221) return "]"; // close bracket
   if (charCode == 222) return "'"; // single quote
-  return false;
 }
