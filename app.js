@@ -82,19 +82,25 @@ io.sockets.on('connection', function(socket) {
       eventClickedOnHex(socket, hexId);
     });
 
+    // Defender click listener
+    socket.on('defenderClicked', function(defenderId) {
+      eventDefenderClicked(socket, defenderId);
+    });
+
     // Dice roll (random) listener
     socket.on('diceRollPressed', function() {
-      handleDice(randomDiceRoll());
+      handleDice(socket, randomDiceRoll());
     });
 
     // Dice roll (preset) listener
     socket.on('diceRollDefined', function(diceValue) {
-      handleDice(diceValue);
+      handleDice(socket, diceValue);
     });
   }
 });
 
-function handleDice(dicevalue) {
+function handleDice(socket, dicevalue) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
   // TODO reply with dice
   if (true) {
     // valid dice roll handle here
@@ -105,7 +111,7 @@ function handleDice(dicevalue) {
 }
 
 function randomDiceRoll(dicevalue) {
-  Math.floor(Math.random() * 6 + 1);
+  return Math.floor(Math.random() * 6 + 1);
 }
 
 function eventStateInit(socket, user) {
@@ -154,6 +160,7 @@ function eventEndTurnClicked(socket) {
 
     // Send message to current player that he ended his turn
     socket.emit('endedTurn');
+
   } else {
     socket.emit('error', "You cannot end your turn yet.");
   }
@@ -184,6 +191,12 @@ function eventPlaceMarkerButton(socket) {
 }
 
 // TODO
+function eventDefenderClicked(socket, defenderId) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy.affinity + " clicked defender " + defenderId);
+}
+
+// TODO
 function eventClickedOnHex(socket, hexId) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -207,7 +220,6 @@ function eventClickedOnHex(socket, hexId) {
     }
     console.log(currentArmy.getOwnedHexes());
 
-
     currentArmy.canEndTurn = true;
     currentArmy.canChooseHex = false;
     currentArmy.isPlacingStartPosition = false;
@@ -223,7 +235,6 @@ function eventClickedOnHex(socket, hexId) {
   else {
     console.log("Select available action item first!");
     socket.emit('error', 'Select available action item first!');
-
   }
 }
 
