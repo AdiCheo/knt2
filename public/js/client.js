@@ -62,6 +62,10 @@ function initConnection() {
       updateHex(hexId, affinity);
     });
 
+    iosocket.on('updateForts', function(hexId, affinity) {
+      updateForts(hexId, affinity);
+    });
+
     iosocket.on('diceRollResult', function(diceValue) {
       handleDiceResult(diceValue);
     });
@@ -135,6 +139,11 @@ function createHexes(hexes) {
 }
 
 function updateHex(hexId, affinity) {
+  console.log("Army " + affinity + " owning " + hexId);
+  boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
+}
+
+function updateForts(hexId, affinity) {
   console.log("Army " + affinity + " owning " + hexId);
   boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
 }

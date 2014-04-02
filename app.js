@@ -195,13 +195,14 @@ function eventBuildFortButton(socket) {
   }
 
   if (game.currentPhase == -1) {
-    if (currentArmy.getNumOfHexes() == 3) {
-      currentArmy.canBuildFort = true;
-      socket.emit('allowFortPlacement', publicGameData(socket.id));
-    } else {
-      // Now it is time to place a fort
-      socket.emit('error', "You need to build a fort");
-    }
+    // if (currentArmy.getNumOfHexes() == 3) {
+    console.log("# of hexes" + currentArmy.getNumOfHexes);
+    currentArmy.canBuildFort = true;
+    socket.emit('allowFortPlacement', publicGameData(socket.id));
+    // } else {
+    // Now it is time to place a fort
+    // socket.emit('error', "You need to build a fort");
+    // }
   }
 }
 
@@ -352,9 +353,9 @@ function eventClickedOnHex(socket, hexId) {
   }
 
 
-  if (currentArmy.canPlaceDefender) {
+  // if (currentArmy.canPlaceDefender) {
 
-  }
+  // }
   // TODO
   // else if (currentArmy.canBuildFort &&
   //   __indexOf.call(currentArmy.getOwnedHexes(), shape) >= 0) {
@@ -363,10 +364,10 @@ function eventClickedOnHex(socket, hexId) {
   //   currentArmy.canBuildFort = false;
   //   currentArmy.canEndTurn = true;
   // }
-  else {
-    console.log("Select available action item first!");
-    socket.emit('error', 'Select available action item first!');
-  }
+  // else {
+  //   console.log("Select available action item first!");
+  //   socket.emit('error', 'Select available action item first!');
+  // }
 }
 
 function publicGameData(socketId) {

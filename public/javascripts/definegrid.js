@@ -119,6 +119,18 @@ var placeMarkerButton = new Kinetic.Image({
   strokeWidth: 5
 });
 
+var buildFortButton = new Kinetic.Image({
+  name: "BuildFortButton",
+  image: fortImage,
+  id: "control",
+  x: 5,
+  y: 200,
+  width: 60,
+  height: 60,
+  stroke: 'red',
+  strokeWidth: 5
+});
+
 var collectGoldButton = new Kinetic.Image({
   x: 5,
   y: 350,
@@ -167,7 +179,7 @@ game = new Game();
 console.log(game.currentTurn);
 
 // Add Buttons
-buildFortButton(fortImage, boardLayer);
+// buildFortButton(fortImage, boardLayer);
 
 addAllPiecesToBoard();
 var selectedObject;
@@ -360,6 +372,7 @@ cheatDice6.hide();
 boardLayer.add(endturnbutton);
 boardLayer.add(placeMarkerButton);
 boardLayer.add(collectGoldButton);
+boardLayer.add(buildFortButton);
 boardLayer.add(bowlbutton);
 bowlbutton.moveToBottom();
 

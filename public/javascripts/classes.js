@@ -51,13 +51,24 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     console.log("New affinity: " + affinity + " for hex: " + this.getId());
   };
 
-  // hexagon.getH = function(x, y) {};
-  // hexagon.getG = function() {};
-  // hexagon.getF = function(x, y) {};
+  hexagon.setFortIcon = function(affinity) {
 
-  // hexagon.parent = "";
-  // hexagon.wall = wall;
-  // hexagon.G = 10;
+    var fort = new Kinetic.Image({
+      x: 35,
+      y: 60,
+      id: this.id,
+      name: "fort" + affinity,
+      image: fortIcon,
+      width: 40,
+      height: 40
+    });
+
+    boardLayer.add(fort);
+    fort.moveToTop();
+    fort.show();
+    boardLayer.draw();
+
+  };
 
   return hexagon;
 }
