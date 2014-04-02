@@ -414,7 +414,6 @@ function eventClickedOnHex(socket, hexId) {
 //   console.log("Select available action item first!");
 //   socket.emit('error', 'Select available action item first!');
 // }
-}
 
 function publicGameData(socketId) {
   return {
