@@ -83,8 +83,8 @@ io.sockets.on('connection', function(socket) {
     });
 
     // Defender click listener
-    socket.on('defenderClicked', function(defenderId) {
-      eventDefenderClicked(socket, defenderId);
+    socket.on('defenderClicked', function() {
+      eventDefenderClicked(socket);
     });
 
     // Dice roll (random) listener
@@ -227,10 +227,27 @@ function collectGoldButton(socket) {
 
 }
 
-// TODO
-function eventDefenderClicked(socket, defenderId) {
+function eventDefenderClicked(socket) {
+  console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy.affinity + " clicked defender " + defenderId);
+  console.log("Player " + currentArmy + " clicked defender");
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if (game.currentPlayerTurn != currentArmy.affinity) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (game.currentPhase == 1) {
+    currentArmy.canPlaceDefender = true;
+    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
+  }
+
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
 }
 
 // TODO
@@ -255,10 +272,15 @@ function eventClickedOnHex(socket, hexId) {
       currentArmy.canEndTurn = true;
       currentArmy.canChooseHex = false;
       currentArmy.isPlacingStartPosition = false;
+
     } else {
       socket.emit('error', 'This hex cannot be owned!');
     }
     console.log(currentArmy.getOwnedHexes());
+  }
+
+  if (currentArmy.canPlaceDefender) {
+
   }
   // TODO
   // else if (currentArmy.canBuildFort &&
