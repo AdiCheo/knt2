@@ -36,9 +36,12 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   };
 
   this.buildFort = function(hexId, game) {
-    var index = indexById(game.hexes, hex);
+    var index = indexById(game.hexes, hexId);
     var currentHex = game.hexes[index];
 
+    console.log(this.getOwnedHexes);
+    console.log(indexById(this.getOwnedHexes, hexId));
+    console.log(indexById(this.forts, hexId));
     if (indexById(this.getOwnedHexes, hexId) !== null && indexById(this.forts, hexId) === null) {
       var fort = new Fort(hexId, game.currentPlayerTurn);
       this.forts.push(fort);

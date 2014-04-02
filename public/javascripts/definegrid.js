@@ -120,7 +120,7 @@ var placeMarkerButton = new Kinetic.Image({
 });
 
 var buildFortButton = new Kinetic.Image({
-  name: "BuildFortButton",
+  name: "buildFortButton",
   image: fortImage,
   id: "control",
   x: 5,
