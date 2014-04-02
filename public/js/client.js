@@ -107,9 +107,9 @@ function initConnection() {
       alert("Place a fort.");
     });
 
-    iosocket.on('highlightMovement', function(game) {
+    iosocket.on('highlightMovement', function(hexId,game) {
       removeRadius(game.armies.color, boardLayer); //Remove movement radius
-      drawRadius(shape.currentHexId, 4, game.armies.color, boardLayer);
+      drawRadius(hexId, 4, game.armies.color, boardLayer);
 
     });
 
