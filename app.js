@@ -319,13 +319,15 @@ function createHexTiles() {
 function populateHexTiles() {
   var mapData = [];
 
-  mapData.push("frozenWaste");
+  mapData.push("forest");
+
   mapData.push("forest");
   mapData.push("jungle");
   mapData.push("plains");
   mapData.push("sea");
   mapData.push("forest");
   mapData.push("swamp");
+
   mapData.push("frozenWaste");
   mapData.push("mountain");
   mapData.push("frozenWaste");
@@ -338,6 +340,7 @@ function populateHexTiles() {
   mapData.push("mountain");
   mapData.push("jungle");
   mapData.push("plains");
+
   mapData.push("jungle");
   mapData.push("swamp");
   mapData.push("desert");
