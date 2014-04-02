@@ -24,9 +24,12 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   };
 
   this.ownHex = function(hexId, game) {
+    var index = indexById(game.hexes, hexId);
+    var currentHex = game.hexes[index];
+
     if (!game.isHexOwned(hexId) && isHexLegalToOwn(hexId, this, game)) {
       game.getHexById(hexId).affinity = this.affinity;
-      this.ownedHexes.push(hexId);
+      this.ownedHexes.push(currentHex);
       console.log("Owned hexes: " + this.ownedHexes);
       return true;
     } else {
@@ -38,11 +41,12 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   this.buildFort = function(hexId, game) {
     var index = indexById(game.hexes, hexId);
     var currentHex = game.hexes[index];
-
-    console.log(this.getOwnedHexes);
-    console.log(indexById(this.getOwnedHexes, hexId));
-    console.log(indexById(this.forts, hexId));
-    if (indexById(this.getOwnedHexes, hexId) !== null && indexById(this.forts, hexId) === null) {
+    console.log("1 :" + hexId);
+    console.log("2 :" + this.ownedHexes);
+    console.log("3 :" + this.getOwnedHexes);
+    console.log("4 :" + indexById(this.ownedHexes, hexId));
+    console.log("5 :" + indexById(this.forts, hexId));
+    if (indexById(this.ownedHexes, hexId) !== null && indexById(this.forts, hexId) === null) {
       var fort = new Fort(hexId, game.currentPlayerTurn);
       this.forts.push(fort);
       return true;
@@ -70,7 +74,7 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
         return false;
       }
     } else if (
-      isOneHexAway(currentArmy.getOwnedHexes(), currentHex) && !isAdjacentToEnemyHex(currentHex, currentArmy, game) &&
+      isOneHexAway(currentArmy.ownedHexes, currentHex) && !isAdjacentToEnemyHex(currentHex, currentArmy, game) &&
       (currentHex.affinity == currentArmy.affinity || currentHex.affinity == -1)) {
       return true;
     } else {
@@ -136,7 +140,10 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   }
 
   function indexByKey(array, key, value) {
+    console.log("The Value: " + value);
     for (var i = 0; i < array.length; i++) {
+      console.log("Array Value" + array[i][key]);
+
       if (array[i][key] == value) {
         return i;
       }

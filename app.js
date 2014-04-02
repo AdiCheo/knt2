@@ -250,7 +250,7 @@ function collectGoldButton(socket) {
     currentArmy.income = 0;
 
     // Income from total number of hexes
-    currentArmy.income += currentArmy.getOwnedHexes();
+    currentArmy.income += currentArmy.ownedHexes;
 
     // // Income from value of forts
     // var fortTotalValue = 0;
@@ -286,13 +286,13 @@ function MovementPhase(socket, hexId) {
 
   if (game.currentPhase == MOVEMENT_PHASE) {
     // if (shape.getName() == "stack")
-      if ((game.currentPlayerTurn == currentArmy.affinity)) {
-        socket.emit('highlightMovement', hexId, game);
+    if ((game.currentPlayerTurn == currentArmy.affinity)) {
+      socket.emit('highlightMovement', hexId, game);
 
-        currentArmy.isMovingStack = true;
-      }else{
-        socket.emit('error', "This is not your stack"); 
-      }
+      currentArmy.isMovingStack = true;
+    } else {
+      socket.emit('error', "This is not your stack");
+    }
   }
 }
 
@@ -340,7 +340,7 @@ function eventClickedOnHex(socket, hexId) {
     if (currentArmy.canChooseHex) {
       if (currentArmy.ownHex(hexId, game)) {
         io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
-        currentArmy.canEndTurn = true;
+        // currentArmy.canEndTurn = true;
         currentArmy.canChooseHex = false;
       } else {
         socket.emit('error', 'This hex cannot be owned!');
