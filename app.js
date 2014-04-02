@@ -170,6 +170,43 @@ function eventPlaceMarkerButton(socket) {
   }
 }
 
+function collectGoldButton(socket){
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if(game.currentPhase == 1){
+    currentArmy.income = 0;
+
+    // Income from total number of hexes
+      currentArmy.income += currentArmy.getOwnedHexes();
+
+      // // Income from value of forts
+      // var fortTotalValue = 0;
+      // for (var fort in currentArmy.getFortHexes()) {
+      //   fortTotalValue += currentArmy.getFortHexes()[fort].value;
+      //   currentArmy.income += currentArmy.getFortHexes()[fort].value;
+
+      currentArmy.gold += currentArmy.income;
+
+      army[currentPlayer].canEndTurn = true;
+
+      io.sockets.emit('updateGold', publicGameData(socket.id));
+
+  }else{
+    socket.emit('error', "You are not in the right phase!");
+  }
+
+}
+
 // TODO
 function eventClickedOnHex(socket, hexId) {
   console.log(game.armies);
