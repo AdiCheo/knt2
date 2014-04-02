@@ -38,6 +38,12 @@ function initConnection() {
 
     iosocket.on('state.init', function(gameData) {
       playerId = gameData.playerId;
+
+        //output the current phase the game is in 
+    document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
+
+    //output the current player turn 
+    document.getElementById("playerturntext").innerHTML = "Current Player Turn: 0";
     });
 
     iosocket.on('disconnect', function(gameData) {
@@ -63,6 +69,18 @@ function initConnection() {
     // TODO Merge conflict was here
     iosocket.on('endedTurn', function(game) {
       endedTurn();
+    });
+
+    //update the gold 
+    iosocket.on('collectGoldButton', function(game) {
+
+      var temp  = indexById(game.armies, playerId); 
+      alert("You have the following: \n ----------- \n" +
+        game.armies[temp].getOwnedHexes + " Hexes = " + game.armies.getNumOfHexes() + " Gold\n");
+        //army[currentPlayer].getNumOfFortHexes() + " Forts = " + fortTotalValue + " Gold");
+      document.getElementById("gold_" + game.armies[temp].color).textContent = "Gold: " + game.armies[temp].gold;
+
+      army[currentPlayer].canEndTurn = true;
     });
 
     iosocket.on('nextPlayerTurn', function(game) {
@@ -121,6 +139,13 @@ function nextPlayerTurn(game) {
   console.log(game.armies);
   console.log(game.currentPlayerTurn);
   console.log(game.armies[game.currentPlayerTurn].id);
+
+  //output the current phase the game is in 
+  document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
+
+  //output the current player turn 
+  document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + game.currentPlayerTurn;
+
   console.log(playerId);
   if (playerId == game.armies[game.currentPlayerTurn].id) {
     alert("It is your turn to play now");
