@@ -124,7 +124,7 @@ function initConnection() {
     });
 
     iosocket.on('updateStack', function(currentArmy) {
-      console.log("Place your defender on a hex you own");
+      console.log("updateStack" + currentArmy);
     });
 
     iosocket.on('map', function(mapData) {

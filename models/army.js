@@ -18,6 +18,7 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   this.color = color[affinity];
   this.ownedHexes = [];
   this.forts = [];
+  this.stacks = [];
 
   this.getOwnedHexes = function() {
     return this.ownedHexes;

@@ -14,6 +14,8 @@ var app = express();
 /** Models **/
 var Game = require('./models/game.js');
 var Army = require('./models/army.js');
+var Stack = require('./models/stack.js');
+var Defender = require('./models/defender.js');
 var HexTile = require('./models/hextile.js');
 
 // all environments
@@ -311,7 +313,7 @@ function eventDefenderClicked(socket, defenderName) {
     return;
   }
 
-  if (game.currentPhase == 1) {
+  if (game.currentPhase == -1) { //TODO CHange to 0
     currentArmy.canPlaceDefender = true;
     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
   }
@@ -332,16 +334,12 @@ function eventGenerateClicked(socket) {
     return;
   }
 
-  if (game.currentPhase == 0) {
+  if (game.currentPhase == -1) { // TODO change to 0
     currentArmy.canPlaceDefender = true;
     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
     currentArmy.defenderInHand = game.newRandomDefender();
   }
 
-  if (game.currentPhase == 1) {
-    currentArmy.canPlaceDefender = true;
-    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
-  }
 }
 
 // TODO
@@ -383,19 +381,19 @@ function eventClickedOnHex(socket, hexId) {
   // Each player collects 10 defenders in this faze
   // create new defender
   // place on the clicked hex if owned by player
-  if (game.currentPhase == 0) {
+  if (game.currentPhase == -1) { // TODO pahse 0
     if (currentArmy.canPlaceDefender) {
-      if (indexOf(currentArmy.ownedHexes, hexId) !== null &&
-        indexOf(currentArmy.stacks, hexId) === null) {
+      if (indexById(currentArmy.ownedHexes, hexId) !== null &&
+        indexById(currentArmy.stacks, hexId) === null) {
         var stack = new Stack(hexId, currentArmy.affinity);
         stack.containDefenders.push(currentArmy.defenderInHand);
         currentArmy.stacks.push(stack);
 
       } else {
         // Gets stack already on hexId and adds defender to it
-        currentArmy.stacks[indexOf(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.defenderInHand);
+        currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.defenderInHand);
       }
-      io.sockets.emit('updateStackAll', hexId, affinity);
+      io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
       socket.emit('updateStack', currentArmy);
 
     }
