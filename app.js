@@ -82,17 +82,37 @@ io.sockets.on('connection', function(socket) {
       eventClickedOnHex(socket, hexId);
     });
 
+    // Defender click listener
+    socket.on('defenderClicked', function() {
+      eventDefenderClicked(socket);
+    });
+
     // Dice roll (random) listener
     socket.on('diceRollPressed', function() {
-      handleDice(randomDiceRoll());
+      handleDice(socket, randomDiceRoll());
     });
 
     // Dice roll (preset) listener
     socket.on('diceRollDefined', function(diceValue) {
-      handleDice(diceValue);
+      handleDice(socket, diceValue);
     });
   }
 });
+
+function handleDice(socket, dicevalue) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  // TODO reply with dice
+  if (true) {
+    // valid dice roll handle here
+    return;
+  }
+  // Dice roll is invalid
+  return false;
+}
+
+function randomDiceRoll(dicevalue) {
+  return Math.floor(Math.random() * 6 + 1);
+}
 
 function eventStateInit(socket, user) {
   console.log("Adding a User");
@@ -126,7 +146,7 @@ function eventEndTurnClicked(socket) {
     return;
   }
 
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+  if (game.currentPlayerTurn != currentArmy.affinity) {
     socket.emit('error', "It is not your turn yet!");
     return;
   }
@@ -135,12 +155,12 @@ function eventEndTurnClicked(socket) {
     game.nextPlayerTurn(currentArmy);
     currentArmy.canEndTurn = false;
     // socket.emit('endTurn', "New turn + num (TODO)");
-
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', game);
 
     // Send message to current player that he ended his turn
     socket.emit('endedTurn');
+
   } else {
     socket.emit('error', "You cannot end your turn yet.");
     if(game.currentPhase == 1){
@@ -176,7 +196,7 @@ function eventPlaceMarkerButton(socket) {
 //function for collecting the gold 
 function collectGoldButton(socket){
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  
+
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
     return;
@@ -187,25 +207,25 @@ function collectGoldButton(socket){
     return;
   }
 
-  if(game.currentPhase == 1){
+  if (game.currentPhase == 1) {
     currentArmy.income = 0;
 
     // Income from total number of hexes
-      currentArmy.income += currentArmy.getOwnedHexes();
+    currentArmy.income += currentArmy.getOwnedHexes();
 
-      // // Income from value of forts
-      // var fortTotalValue = 0;
-      // for (var fort in currentArmy.getFortHexes()) {
-      //   fortTotalValue += currentArmy.getFortHexes()[fort].value;
-      //   currentArmy.income += currentArmy.getFortHexes()[fort].value;
+    // // Income from value of forts
+    // var fortTotalValue = 0;
+    // for (var fort in currentArmy.getFortHexes()) {
+    //   fortTotalValue += currentArmy.getFortHexes()[fort].value;
+    //   currentArmy.income += currentArmy.getFortHexes()[fort].value;
 
-      currentArmy.gold += currentArmy.income;
+    currentArmy.gold += currentArmy.income;
 
-      army[currentPlayer].canEndTurn = true;
+    army[currentPlayer].canEndTurn = true;
 
-      io.sockets.emit('updateGold', publicGameData(socket.id));
+    io.sockets.emit('updateGold', publicGameData(socket.id));
 
-  }else{
+  } else {
     socket.emit('error', "You are not in the right phase!");
   }
 
@@ -215,24 +235,46 @@ function collectGoldButton(socket){
 function MovementPhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
     return;
   }
+
+  if(game.currentPhase == MOVEMENT_PHASE){
+     // if (shape.getName() == "stack") 
+      if ((game.currentPlayerTurn == currentArmy.affinity)) {
+            socket.emit('highlightMovement', publicGameData(socket.id));
+      }
+   }
+}
+
+function eventDefenderClicked(socket) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked defender");
 
   if (currentArmy.canEndTurn) {
     socket.emit('error', "You must end your turn now!");
     return;
   }
 
-   if(game.currentPhase == MOVEMENT_PHASE){
-     // if (shape.getName() == "stack") 
-      if ((game.currentPlayerTurn == currentArmy.affinity)) {
-            socket.emit('highlightMovement', publicGameData(socket.id));
+  if (game.currentPlayerTurn != currentArmy.affinity) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
 
-        
-      }
-   }
+  if (game.currentPhase == 1) {
+    currentArmy.canPlaceDefender = true;
+    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
+  }
+
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
 }
 
 // TODO
@@ -254,15 +296,18 @@ function eventClickedOnHex(socket, hexId) {
   if (currentArmy.canChooseHex && currentArmy.isPlacingStartPosition) {
     if (currentArmy.ownHex(hexId, game)) {
       io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
+      currentArmy.canEndTurn = true;
+      currentArmy.canChooseHex = false;
+      currentArmy.isPlacingStartPosition = false;
+
     } else {
       socket.emit('error', 'This hex cannot be owned!');
     }
     console.log(currentArmy.getOwnedHexes());
+  }
 
+  if (currentArmy.canPlaceDefender) {
 
-    currentArmy.canEndTurn = true;
-    currentArmy.canChooseHex = false;
-    currentArmy.isPlacingStartPosition = false;
   }
   // TODO
   // else if (currentArmy.canBuildFort &&
@@ -271,11 +316,10 @@ function eventClickedOnHex(socket, hexId) {
   //   currentArmy.buildFortHex(shape, fortImage, boardLayer);
   //   currentArmy.canBuildFort = false;
   //   currentArmy.canEndTurn = true;
-  // } 
+  // }
   else {
     console.log("Select available action item first!");
     socket.emit('error', 'Select available action item first!');
-
   }
 }
 
@@ -346,13 +390,15 @@ function createHexTiles() {
 function populateHexTiles() {
   var mapData = [];
 
-  mapData.push("frozenWaste");
+  mapData.push("forest");
+
   mapData.push("forest");
   mapData.push("jungle");
   mapData.push("plains");
   mapData.push("sea");
   mapData.push("forest");
   mapData.push("swamp");
+
   mapData.push("frozenWaste");
   mapData.push("mountain");
   mapData.push("frozenWaste");
@@ -365,6 +411,7 @@ function populateHexTiles() {
   mapData.push("mountain");
   mapData.push("jungle");
   mapData.push("plains");
+
   mapData.push("jungle");
   mapData.push("swamp");
   mapData.push("desert");

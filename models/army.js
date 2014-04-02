@@ -50,8 +50,8 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
         return false;
       }
     } else if (
-      isOneHexAway(currentArmy.getOwnedHexes(), currentHex) &&
-      (currentHex.affinity == currentArmy.affinity || currentHex.affinity == 4)) {
+      isOneHexAway(currentArmy.getOwnedHexes(), currentHex) && !isAdjacentToEnemyHex(currentHex, currentArmy, game) &&
+      (currentHex.affinity == currentArmy.affinity || currentHex.affinity == -1)) {
       return true;
     } else {
       console.log("Illegal hex");
@@ -73,14 +73,31 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
     return false;
   }
 
+  //Adjacency check
+  function isAdjacentToEnemyHex(target, currentArmy, game) {
+    var opponentHexes = [];
+    for (var i in game.hexes) {
+      if (game.hexes[i].affinity != -1 && game.hexes[i].affinity != currentArmy.affinity) {
+        opponentHexes.push(game.hexes[i]);
+      }
+    }
+    console.log(opponentHexes);
+    if (isOneHexAway(opponentHexes, target)) {
+      return true;
+    }
+
+    return false;
+  }
+
   //calculates distance between two hex tiles (NOT NEEDED, METHOD IS ADDED TO THE TILES)
   function calculateDistance(target, destination) {
+    console.log(target);
     if (target.name == "hex") {
       var x1 = parseInt(target.id.split(",")[0]);
       var y1 = parseInt(target.id.split(",")[1]);
     } else {
-      var x1 = parseInt(target.currentHexId.split(",")[0]);
-      var y1 = parseInt(target.currentHexId.split(",")[1]);
+      var x1 = parseInt(target.split(",")[0]);
+      var y1 = parseInt(target.split(",")[1]);
     }
 
     var z1 = -x1 - y1;
@@ -89,8 +106,8 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
       var x2 = parseInt(destination.id.split(",")[0]);
       var y2 = parseInt(destination.id.split(",")[1]);
     } else {
-      var x2 = parseInt(destination.currentHexId.split(",")[0]);
-      var y2 = parseInt(destination.currentHexId.split(",")[1]);
+      var x2 = parseInt(destination.split(",")[0]);
+      var y2 = parseInt(destination.split(",")[1]);
     }
 
     var z2 = -x2 - y2;
