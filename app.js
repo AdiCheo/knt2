@@ -146,7 +146,7 @@ function eventEndTurnClicked(socket) {
     return;
   }
 
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+  if (game.currentPlayerTurn != currentArmy.affinity) {
     socket.emit('error', "It is not your turn yet!");
     return;
   }
