@@ -1,6 +1,5 @@
 /* CONTAINS INDEPENDENT UTILITY FUNCTIONS USED FREQUENTLY */
 
-
 var dbl = 0;
 
 // isHexLegalToOwn() //TODO return boolean for choosing initial legal hexes
@@ -378,10 +377,10 @@ function highlightHex(hex) {
   console.log("Highlight hex: " + hex.getId());
   hex.setStroke("white");
   hex.setStrokeWidth(4);
-  // setTimeout(function() {
-  //     hex.setStroke("black");
-  //     hex.setStrokeWidth(1);
-  // }, 125);
+  setTimeout(function() {
+    hex.setStroke("black");
+    hex.setStrokeWidth(1);
+  }, 2500);
 
 }
 

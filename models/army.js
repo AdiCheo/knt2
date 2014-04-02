@@ -6,7 +6,7 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   this.gold = gold;
   this.currentGameTurn = currentGameTurn;
   this.id = id;
-  this.color = color; 
+  this.color = color;
 
   this.canEndTurn = false;
   this.canChooseHex = false;
@@ -34,7 +34,7 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   };
 
   this.buildFort = function(hexId, game) {
-    if (!)
+    // if (!)
   }
 
   this.getNumOfHexes = function() {
