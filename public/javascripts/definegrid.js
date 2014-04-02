@@ -16,7 +16,6 @@ var dice1button = new Kinetic.Rect({
   x: 15, //stage.getWidth() - 350
   y: 15,
   name: "dicebutton",
-  value: -1,
   id: "control",
   width: 75,
   height: 75,
@@ -25,7 +24,7 @@ var dice1button = new Kinetic.Rect({
   fillPatternScale: [1 / 4, 1 / 4],
   strokeWidth: 0
 });
-
+dice1button.diceValue = -1;
 // var dice2button = new Kinetic.Rect({ //dice2 button
 //     x: 15 + 75, //stage.getWidth() - 350
 //     y: 15,
@@ -45,7 +44,6 @@ var cheatDice1 = new Kinetic.Rect({ //dice2 button
   x: 15,
   y: 15,
   name: "dicebutton",
-  value: 1,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -54,12 +52,12 @@ var cheatDice1 = new Kinetic.Rect({ //dice2 button
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
 });
+cheatDice1.diceValue = 1;
 
 var cheatDice2 = new Kinetic.Rect({
   x: 15 + 37.5,
   y: 15,
   name: "dicebutton",
-  value: 2,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -68,12 +66,12 @@ var cheatDice2 = new Kinetic.Rect({
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
 });
+cheatDice2.diceValue = 2;
 
 var cheatDice3 = new Kinetic.Rect({ //dice2 button
   x: 15 + 2 * 37.5,
   y: 15,
   name: "dicebutton",
-  value: 3,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -82,12 +80,12 @@ var cheatDice3 = new Kinetic.Rect({ //dice2 button
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
 });
+cheatDice3.diceValue = 3;
 
 var cheatDice4 = new Kinetic.Rect({
   x: 15,
   y: 15 + 37.5,
   name: "dicebutton",
-  value: 4,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -96,12 +94,12 @@ var cheatDice4 = new Kinetic.Rect({
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
 });
+cheatDice4.diceValue = 4;
 
 var cheatDice5 = new Kinetic.Rect({ //dice2 button
   x: 15 + 37.5,
   y: 15 + 37.5,
   name: "dicebutton",
-  value: 5,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -110,12 +108,12 @@ var cheatDice5 = new Kinetic.Rect({ //dice2 button
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
 });
+cheatDice5.diceValue = 5;
 
 var cheatDice6 = new Kinetic.Rect({
   x: 15 + 2 * 37.5,
   y: 15 + 37.5,
   name: "dicebutton",
-  value: 6,
   id: "control",
   width: 37.5,
   height: 37.5,
@@ -124,6 +122,7 @@ var cheatDice6 = new Kinetic.Rect({
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
 });
+cheatDice6.diceValue = 6;
 
 var placeMarkerButton = new Kinetic.Image({
   x: 5,
@@ -245,16 +244,15 @@ boardLayer.on('click tap', function(e) {
     iosocket.emit('hexClicked', shape.getId());
 
   } else if (shape.getName() == "dicebutton") {
-    console.log(shape);
-    console.log(shape.getName());
+    console.log('Clicked ' + shape.getName() + ' ' + shape.diceValue);
 
-    if (shape.value == -1) {
+    if (shape.diceValue == -1) {
       console.log("emit:diceRollPressed,");
       iosocket.emit('diceRollPressed');
 
     } else {
-      console.log("emit:diceRollDefined," + shape.value);
-      iosocket.emit('diceRollDefined', shape.value);
+      console.log("emit:diceRollDefined," + shape.diceValue);
+      iosocket.emit('diceRollDefined', shape.diceValue);
     }
 
   } else if (shape.getName() == "endturn") {
@@ -380,7 +378,7 @@ bowlbutton.moveToBottom();
 document.getElementById("phasetext").style.left = 260 + "px";
 document.getElementById("phasetext").style.top = 0 + "px";
 
-//current player turn 
+//current player turn
 document.getElementById("playerturntext").style.left = 100 + "px";
 document.getElementById("playerturntext").style.top = 15 + "px";
 

@@ -94,6 +94,20 @@ io.sockets.on('connection', function(socket) {
   }
 });
 
+function handleDice(dicevalue) {
+  // TODO reply with dice
+  if (true) {
+    // valid dice roll handle here
+    return;
+  }
+  // Dice roll is invalid
+  return false;
+}
+
+function randomDiceRoll(dicevalue) {
+  Math.floor(Math.random() * 6 + 1);
+}
+
 function eventStateInit(socket, user) {
   console.log("Adding a User");
   army = new Army(game.users.length, user, 0, 10, game.users.length, socket.id);
