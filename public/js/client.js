@@ -107,7 +107,7 @@ function initConnection() {
       alert("Place a fort.");
     });
 
-    iosocket.on('highlightMovement', function(hexId,game) {
+    iosocket.on('highlightMovement', function(hexId, game) {
       removeRadius(game.armies.color, boardLayer); //Remove movement radius
       drawRadius(hexId, 4, game.armies.color, boardLayer);
 
@@ -145,7 +145,7 @@ function updateHex(hexId, affinity) {
 
 function updateForts(hexId, affinity) {
   console.log("Army " + affinity + " owning " + hexId);
-  boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
+  boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
 }
 
 // function newTurn(affinity) {
