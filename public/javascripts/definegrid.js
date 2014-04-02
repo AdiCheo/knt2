@@ -279,7 +279,7 @@ function createBoardLayer(rows, cols) {
   var rowIdx;
   var colIdx;
   var hexRadius = 75;
-  var strokeColor = "#CCC";
+  var strokeColor = "black";
   var x;
   var y;
 

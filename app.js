@@ -285,9 +285,14 @@ function MovementPhase(socket, hexId) {
 
   if (game.currentPhase == MOVEMENT_PHASE) {
     // if (shape.getName() == "stack")
-    if ((game.currentPlayerTurn == currentArmy.affinity)) {
-      socket.emit('highlightMovement', publicGameData(socket.id));
-    }
+    if(){}
+      if ((game.currentPlayerTurn == currentArmy.affinity)) {
+        socket.emit('highlightMovement', hexId, game);
+
+        currentArmy.isMovingStack = true;
+      }else{
+        socket.emit('error', "This is not your stack"); 
+      }
   }
 }
 

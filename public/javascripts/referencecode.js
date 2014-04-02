@@ -407,7 +407,6 @@ boardLayer.on('click tap', function(e) {
   } else if (game.currentPhase == MOVEMENT_PHASE) {
     //TODO: Movement - stacks can be moved
     //hardcode roll so that no combat takes place
-    //ALEX is working on this
     if (shape.getName() == "stack") {
       // We now want the user to click on a hex tile, it needs to be owned by him, and place that thing on the hex
       if (shape.affinity == game.currentTurn) {
