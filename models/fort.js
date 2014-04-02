@@ -1,13 +1,12 @@
-function fort(hex, affinity) {
+function Fort(hex, affinity) {
+  var index = indexById(game.hexes, hex);
+  var currentHex = game.hexes[index];
 
-  this.x = Math.round(hex.getAbsolutePosition().x - 35);
-  this.y = Math.round(hex.getAbsolutePosition().y - 60);
-
-  this.id = "fort" + affinity;
+  this.id = hex.id;
   this.name = "fort" + affinity;
 
   this.value = 1;
-  this.currentHexId = hex.getId();
+  this.currentHexId = currentHex;
   this.affinity = affinity;
   this.name = "fort" + affinity;
 

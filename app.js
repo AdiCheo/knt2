@@ -341,8 +341,13 @@ function eventClickedOnHex(socket, hexId) {
         socket.emit('error', 'This hex cannot be owned!');
       }
     } else if (currentArmy.canBuildFort) {
-      currentArmy.canEndTurn = true;
-      currentArmy.canBuildFort = false;
+      if (currentArmy.buildFort(hexId, game)) {
+        io.sockets.emit('updateForts', hexId, currentArmy.affinity);
+        currentArmy.canEndTurn = true;
+        currentArmy.canBuildFort = false;
+      } else {
+        socket.emit('error', "Cannot build fort here!");
+      }
     }
   }
 
