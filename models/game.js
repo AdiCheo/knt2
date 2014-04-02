@@ -30,7 +30,7 @@ function Game() {
     if (hex.affinity == -1) {
       return false;
     }
-    // hex is owned
+    // Hex is owned
     return true;
   };
 

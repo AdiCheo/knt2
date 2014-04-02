@@ -170,9 +170,9 @@ function eventPlaceMarkerButton(socket) {
   }
 }
 
-function collectGoldButton(socket){
+function collectGoldButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  
+
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
     return;
@@ -183,25 +183,25 @@ function collectGoldButton(socket){
     return;
   }
 
-  if(game.currentPhase == 1){
+  if (game.currentPhase == 1) {
     currentArmy.income = 0;
 
     // Income from total number of hexes
-      currentArmy.income += currentArmy.getOwnedHexes();
+    currentArmy.income += currentArmy.getOwnedHexes();
 
-      // // Income from value of forts
-      // var fortTotalValue = 0;
-      // for (var fort in currentArmy.getFortHexes()) {
-      //   fortTotalValue += currentArmy.getFortHexes()[fort].value;
-      //   currentArmy.income += currentArmy.getFortHexes()[fort].value;
+    // // Income from value of forts
+    // var fortTotalValue = 0;
+    // for (var fort in currentArmy.getFortHexes()) {
+    //   fortTotalValue += currentArmy.getFortHexes()[fort].value;
+    //   currentArmy.income += currentArmy.getFortHexes()[fort].value;
 
-      currentArmy.gold += currentArmy.income;
+    currentArmy.gold += currentArmy.income;
 
-      army[currentPlayer].canEndTurn = true;
+    army[currentPlayer].canEndTurn = true;
 
-      io.sockets.emit('updateGold', publicGameData(socket.id));
+    io.sockets.emit('updateGold', publicGameData(socket.id));
 
-  }else{
+  } else {
     socket.emit('error', "You are not in the right phase!");
   }
 
@@ -226,15 +226,16 @@ function eventClickedOnHex(socket, hexId) {
   if (currentArmy.canChooseHex && currentArmy.isPlacingStartPosition) {
     if (currentArmy.ownHex(hexId, game)) {
       io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
+      currentArmy.canEndTurn = true;
+      currentArmy.canChooseHex = false;
+      currentArmy.isPlacingStartPosition = false;
     } else {
       socket.emit('error', 'This hex cannot be owned!');
     }
     console.log(currentArmy.getOwnedHexes());
 
 
-    currentArmy.canEndTurn = true;
-    currentArmy.canChooseHex = false;
-    currentArmy.isPlacingStartPosition = false;
+
   }
   // TODO
   // else if (currentArmy.canBuildFort &&
