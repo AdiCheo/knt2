@@ -37,7 +37,7 @@ function initConnection() {
 
         iosocket.on('state.init', function(gameData) {
             playerId = gameData.playerId;
-
+            localAffinity = gameData.affinity;
             //output the current phase the game is in
             document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
 
@@ -108,10 +108,12 @@ function initConnection() {
 
         iosocket.on('updateStackAll', function(hexId, affinity) {
             console.log("Stack from army " + affinity + " updated on hex " + hexId);
+            updateStackAll(hexId, affinity);
         });
 
         iosocket.on('updateStack', function(currentArmy) {
             console.log("updateStack" + currentArmy);
+            updateStack(currentArmy);
         });
 
         iosocket.on('map', function(mapData) {
@@ -129,6 +131,7 @@ function collectGoldButton() {
     //army[currentPlayer].getNumOfFortHexes() + " Forts = " + fortTotalValue + " Gold");
     document.getElementById("gold_" + game.armies[temp].color).textContent = "Gold: " + game.armies[temp].gold;
 }
+
 
 
 function updateUsers(users) {
@@ -152,6 +155,17 @@ function allowMarkerPlacement() {
 function highlightMovement() {
     removeRadius(game.armies.color, boardLayer); //Remove movement radius
     drawRadius(hexId, 4, game.armies.color, boardLayer);
+}
+
+// TODO
+function updateStackAll(hexId, affinity) {
+    // place stack icon for particular army on hexId
+    // if (affinity == localAffinity)
+}
+
+// TODO
+function updateStack(currentArmy) {
+
 }
 
 function createHexes(hexes) {
