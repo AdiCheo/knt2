@@ -88,8 +88,13 @@ io.sockets.on('connection', function(socket) {
     });
 
     // Defender click listener
-    socket.on('defenderClicked', function() {
-      eventDefenderClicked(socket);
+    socket.on('generateDefenderClicked', function() {
+      eventGenerateClicked(socket);
+    });
+
+    // Defender click listener
+    socket.on('defenderClicked', function(defenderName) {
+      eventDefenderClicked(socket, defenderName);
     });
 
     // Dice roll (random) listener
@@ -168,6 +173,9 @@ function eventEndTurnClicked(socket) {
 
   } else {
     socket.emit('error', "You cannot end your turn yet.");
+    if (game.currentPhase == 1) {
+      socket.emit('error', "You must collect your gold")
+    }
   }
 }
 
@@ -223,6 +231,7 @@ function eventPlaceMarkerButton(socket) {
   }
 }
 
+//function for collecting the gold
 function collectGoldButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
@@ -260,10 +269,32 @@ function collectGoldButton(socket) {
 
 }
 
-function eventDefenderClicked(socket) {
+//function for Movement Phase
+function MovementPhase(socket, hexId) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (game.currentPhase == MOVEMENT_PHASE) {
+    // if (shape.getName() == "stack")
+    if ((game.currentPlayerTurn == currentArmy.affinity)) {
+      socket.emit('highlightMovement', publicGameData(socket.id));
+    }
+  }
+}
+
+function eventDefenderClicked(socket, defenderName) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy + " clicked defender");
+  console.log("Player " + currentArmy + " clicked defender" + defenderName);
 
   if (currentArmy.canEndTurn) {
     socket.emit('error', "You must end your turn now!");
@@ -281,6 +312,7 @@ function eventDefenderClicked(socket) {
   }
 
   currentArmy = game.armies[indexById(game.armies, socket.id)];
+
 }
 
 // TODO
@@ -399,46 +431,46 @@ function createHexTiles() {
 function populateHexTiles() {
   var mapData = [];
 
-  mapData.push("plains");
+  mapData.push("swamp");
 
+  mapData.push("sea");
+  mapData.push("plains");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
   mapData.push("forest");
-  mapData.push("jungle");
+  mapData.push("mountain");
+
+  mapData.push("swamp");
+  mapData.push("mountain");
+  mapData.push("forest");
+  mapData.push("desert");
+  mapData.push("forest");
+  mapData.push("forest");
+  mapData.push("mountain");
   mapData.push("plains");
   mapData.push("sea");
-  mapData.push("forest");
-  mapData.push("swamp");
+  mapData.push("mountain");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
 
+  mapData.push("sea");
+  mapData.push("jungle");
   mapData.push("frozenWaste");
-  mapData.push("mountain");
+  mapData.push("plains");
   mapData.push("frozenWaste");
   mapData.push("swamp");
   mapData.push("desert");
-  mapData.push("swamp");
-  mapData.push("forest");
   mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("mountain");
-  mapData.push("jungle");
-  mapData.push("plains");
-
-  mapData.push("jungle");
-  mapData.push("swamp");
-  mapData.push("desert");
-  mapData.push("forest");
-  mapData.push("plains");
-  mapData.push("forest");
   mapData.push("frozenWaste");
-  mapData.push("jungle");
-  mapData.push("mountain");
-  mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("jungle");
   mapData.push("mountain");
   mapData.push("forest");
-  mapData.push("frozenWaste");
-  mapData.push("desert");
   mapData.push("swamp");
-  mapData.push("mountain");
+  mapData.push("sea");
+  mapData.push("swamp");
+  mapData.push("forest");
+  mapData.push("plains");
+  mapData.push("swamp");
+  mapData.push("plains");
 
   return mapData;
 }

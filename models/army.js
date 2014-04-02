@@ -1,16 +1,19 @@
 //define army class
-function Army(affinity, name, income, gold, currentGameTurn, id) {
+function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   this.affinity = affinity;
   this.name = name;
   this.income = income;
   this.gold = gold;
   this.currentGameTurn = currentGameTurn;
   this.id = id;
+  this.color = color; 
 
   this.canEndTurn = false;
   this.canChooseHex = false;
   this.canBuildFort = false;
 
+  var color = ['yellow', 'grey', 'green', 'red'];
+  this.color = color[affinity];
   this.ownedHexes = [];
   this.forts = [];
 
