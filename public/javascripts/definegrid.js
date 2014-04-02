@@ -234,6 +234,10 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:placeMarkerButton");
     iosocket.emit('placeMarkerButton');
 
+  } else if (shape.getName() == "buildFortButton") {
+    console.log("emit:buildFortButton");
+    iosocket.emit('buildFortButton');
+
   } else if (shape.getName() == "hex") {
     console.log("emit:hexClicked," + shape.getId());
     iosocket.emit('hexClicked', shape.getId());

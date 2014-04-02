@@ -10,10 +10,12 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
 
   this.canEndTurn = false;
   this.canChooseHex = false;
+  this.canBuildFort = false;
 
   var color = ['yellow', 'grey', 'green', 'red'];
   this.color = color[affinity];
   this.ownedHexes = [];
+  this.forts = [];
 
   this.getOwnedHexes = function() {
     return this.ownedHexes;
@@ -30,6 +32,10 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
       return false;
     }
   };
+
+  this.buildFort = function(hexId, game) {
+    if (!)
+  }
 
   this.getNumOfHexes = function() {
     return this.ownedHexes.length;

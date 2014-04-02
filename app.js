@@ -67,9 +67,14 @@ io.sockets.on('connection', function(socket) {
       eventDisconnect(socket);
     });
 
-    // Initial gameplay listener
+    // Place Marker Button Listener
     socket.on('placeMarkerButton', function() {
       eventPlaceMarkerButton(socket);
+    });
+
+    // Build fort button listener
+    socket.on('buildFortButton', function() {
+      eventBuildFortButton(socket);
     });
 
     // End Turn button listener
@@ -174,6 +179,32 @@ function eventEndTurnClicked(socket) {
   }
 }
 
+function eventBuildFortButton(socket) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " pressed on Marker Button");
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (game.currentPhase == -1) {
+    if (currentArmy.getNumOfHexes() == 3) {
+      currentArmy.canBuildFort = true;
+      socket.emit('allowFortPlacement', publicGameData(socket.id));
+    } else {
+      // Now it is time to place a fort
+      socket.emit('error', "You need to build a fort");
+    }
+  }
+}
+
 function eventPlaceMarkerButton(socket) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -192,8 +223,10 @@ function eventPlaceMarkerButton(socket) {
   if (game.currentPhase == -1) {
     if (currentArmy.getNumOfHexes() < 3) {
       currentArmy.canChooseHex = true;
-      currentArmy.isPlacingStartPosition = true;
       socket.emit('allowMarkerPlacement', publicGameData(socket.id));
+    } else {
+      // Now it is time to place a fort
+      socket.emit('error', "You need to build a fort");
     }
   }
 }
@@ -298,18 +331,21 @@ function eventClickedOnHex(socket, hexId) {
     return;
   }
 
-  if (currentArmy.canChooseHex && currentArmy.isPlacingStartPosition) {
-    if (currentArmy.ownHex(hexId, game)) {
-      io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
+  if (game.currentPhase == -1) {
+    if (currentArmy.canChooseHex) {
+      if (currentArmy.ownHex(hexId, game)) {
+        io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
+        currentArmy.canEndTurn = true;
+        currentArmy.canChooseHex = false;
+      } else {
+        socket.emit('error', 'This hex cannot be owned!');
+      }
+    } else if (currentArmy.canBuildFort) {
       currentArmy.canEndTurn = true;
-      currentArmy.canChooseHex = false;
-      currentArmy.isPlacingStartPosition = false;
-
-    } else {
-      socket.emit('error', 'This hex cannot be owned!');
+      currentArmy.canBuildFort = false;
     }
-    console.log(currentArmy.getOwnedHexes());
   }
+
 
   if (currentArmy.canPlaceDefender) {
 
@@ -395,46 +431,46 @@ function createHexTiles() {
 function populateHexTiles() {
   var mapData = [];
 
-  mapData.push("forest");
+  mapData.push("swamp");
 
+  mapData.push("sea");
+  mapData.push("plains");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
   mapData.push("forest");
-  mapData.push("jungle");
+  mapData.push("mountain");
+
+  mapData.push("swamp");
+  mapData.push("mountain");
+  mapData.push("forest");
+  mapData.push("desert");
+  mapData.push("forest");
+  mapData.push("forest");
+  mapData.push("mountain");
   mapData.push("plains");
   mapData.push("sea");
-  mapData.push("forest");
-  mapData.push("swamp");
+  mapData.push("mountain");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
 
+  mapData.push("sea");
+  mapData.push("jungle");
   mapData.push("frozenWaste");
-  mapData.push("mountain");
+  mapData.push("plains");
   mapData.push("frozenWaste");
   mapData.push("swamp");
   mapData.push("desert");
-  mapData.push("swamp");
-  mapData.push("forest");
   mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("mountain");
-  mapData.push("jungle");
-  mapData.push("plains");
-
-  mapData.push("jungle");
-  mapData.push("swamp");
-  mapData.push("desert");
-  mapData.push("forest");
-  mapData.push("plains");
-  mapData.push("forest");
   mapData.push("frozenWaste");
-  mapData.push("jungle");
-  mapData.push("mountain");
-  mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("jungle");
   mapData.push("mountain");
   mapData.push("forest");
-  mapData.push("frozenWaste");
-  mapData.push("desert");
   mapData.push("swamp");
-  mapData.push("mountain");
+  mapData.push("sea");
+  mapData.push("swamp");
+  mapData.push("forest");
+  mapData.push("plains");
+  mapData.push("swamp");
+  mapData.push("plains");
 
   return mapData;
 }
