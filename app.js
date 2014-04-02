@@ -285,7 +285,6 @@ function MovementPhase(socket, hexId) {
 
   if (game.currentPhase == MOVEMENT_PHASE) {
     // if (shape.getName() == "stack")
-    if(){}
       if ((game.currentPlayerTurn == currentArmy.affinity)) {
         socket.emit('highlightMovement', hexId, game);
 
