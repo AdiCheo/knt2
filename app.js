@@ -416,7 +416,8 @@ function eventClickedOnHex(socket, hexId) {
 function publicGameData(socketId) {
   return {
     game: game,
-    playerId: socketId
+    playerId: socketId,
+    affinity: game.users.length
   };
 }
 

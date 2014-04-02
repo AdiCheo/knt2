@@ -38,6 +38,7 @@ function initConnection() {
 
     iosocket.on('state.init', function(gameData) {
       playerId = gameData.playerId;
+      localAffinity = gameData.affinity;
 
       //output the current phase the game is in
       document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
@@ -121,10 +122,12 @@ function initConnection() {
 
     iosocket.on('updateStackAll', function(hexId, affinity) {
       console.log("Stack from army " + affinity + " updated on hex " + hexId);
+      updateStackAll(hexId, affinity);
     });
 
     iosocket.on('updateStack', function(currentArmy) {
       console.log("updateStack" + currentArmy);
+      updateStack(currentArmy);
     });
 
     iosocket.on('map', function(mapData) {
@@ -140,6 +143,17 @@ function updateUsers(users) {
   for (var i = 0; i < users.length; i++) {
     $('#user').append("<h1>" + users[i] + "</h1>");
   }
+}
+
+// TODO
+function updateStackAll(hexId, affinity) {
+  // place stack icon for particular army on hexId
+  // if (affinity == localAffinity)
+}
+
+// TODO
+function updateStack(currentArmy) {
+
 }
 
 function createHexes(hexes) {
