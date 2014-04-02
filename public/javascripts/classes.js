@@ -168,10 +168,10 @@ function initRack(realX, realY) {
     y: realY,
     name: 'rack',
     width: 500,
-    height: 300,
+    height: 50,
     draggable: false,
     strokeWidth: 0,
-    fill: "black",
+    fill: "lightgrey",
     Id: "rack"
   });
 
@@ -405,7 +405,7 @@ function Game() {
         this.currentPhase++;
       }
 
-      document.getElementById("phasetext").value = "Current Phase: " + this.currentPhase;
+      // document.getElementById("phasetext").value = "Current Phase: " + this.currentPhase;
       console.log("Moving to phase: " + this.currentPhase);
 
     } else if (this.currentTurn == 2) {

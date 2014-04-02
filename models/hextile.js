@@ -5,9 +5,11 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     logX: logicalX,
     logY: logicalY,
     affinity: -1,
-    isExplored: false
+    isExplored: false,
+    name: "hex"
   };
-
 }
+
+
 
 module.exports = HexTile;

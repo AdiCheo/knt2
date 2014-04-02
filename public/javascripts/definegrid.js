@@ -1,10 +1,10 @@
 var stage = new Kinetic.Stage({
   container: 'container',
-  width: 1200,
+  width: 1600,
   height: 1200,
 });
 
-var rack1 = initRack(700, 870);
+var rack1 = initRack(1000, 300);
 
 //dice1 button
 var dice1button = new Kinetic.Rect({
@@ -235,6 +235,10 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:endTurnButton");
     iosocket.emit('endTurnClicked');
     highlightButtonOnClick(shape);
+  } else if (shape.getName() == "collectGoldButton") {
+    console.log("emit:collectGoldButton");
+    iosocket.emit('collectGoldButtonClicked');
+    highlightButtonOnClick(shape);
   }
 });
 
@@ -324,6 +328,9 @@ bowlbutton.moveToBottom();
 
 document.getElementById("phasetext").style.left = 260 + "px";
 document.getElementById("phasetext").style.top = 0 + "px";
+
+document.getElementById("racktext").style.left = 1000 + "px";
+document.getElementById("racktext").style.top = 300 + "px";
 
 //current player turn
 document.getElementById("playerturntext").style.left = 100 + "px";

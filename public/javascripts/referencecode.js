@@ -33,50 +33,24 @@ window.addEventListener('keydown', function(e) {
 
 boardLayer.on('click tap', function(e) {
 
-  // TODO Remove below
-  // iosocket.emit('HelloWorldClick', 'This is a test');
+    // TODO Remove below
+    // iosocket.emit('HelloWorldClick', 'This is a test');
 
-  console.log("Selected " + shape.getName());
-  currentPlayer = game.getCurrentPlayer();
-  var shape = e.targetNode;
+    console.log("Selected " + shape.getName());
+    currentPlayer = game.getCurrentPlayer();
+    var shape = e.targetNode;
 
-  // Must take care of these flags first
-  if (army[currentPlayer].mustRollDice) {
-    if (shape.getName() == "dicebutton") {
-      if (game.currentPhase == MOVEMENT_PHASE) {
-        console.log("Rolling Dice");
-
-        var die;
-        if (dice1button.dice_value == 1)
-          die = [6, 6];
-        else
-          die = [1, 1];
-
-        console.log("Dice Results: " + die[0] + ", " + die[1]);
-
-        dice1button.setFillPatternImage(dice[die[0]]);
-        //dice2button.setFillPatternImage(dice[die[1]]);
-
-        dice1button.dice_value = die[0];
-        //dice2button.dice_value = die[1];
-
-        boardLayer.draw();
-
-        if (dice1button.dice_value == 1 || dice1button.dice_value == 6) {
-          army[currentPlayer].contestedHex.isExplored = true;
-          army[currentPlayer].ownHex(army[currentPlayer].contestedHex,
-            markerIcons[currentPlayer],
-            playerIcons[currentPlayer][army[currentPlayer].indexPlayerIcons++], boardLayer, 10, -60);
-          army[currentPlayer].mustRollDice = false;
-        }
-      } else if (game.currentPhase == COMBAT_PHASE) {
-        var opposingAffinity = army[currentPlayer].opposingStack.affinity;
-        if (army[currentPlayer].currentStack.requiredRolls > 0) {
+    // Must take care of these flags first
+    if (army[currentPlayer].mustRollDice) {
+      if (shape.getName() == "dicebutton") {
+        if (game.currentPhase == MOVEMENT_PHASE) {
           console.log("Rolling Dice");
 
           var die;
-          die = rolldice();
-
+          if (dice1button.dice_value == 1)
+            die = [6, 6];
+          else
+            die = [1, 1];
 
           console.log("Dice Results: " + die[0] + ", " + die[1]);
 
@@ -85,127 +59,185 @@ boardLayer.on('click tap', function(e) {
 
           dice1button.dice_value = die[0];
           //dice2button.dice_value = die[1];
-          army[currentPlayer].rolls.push(dice1button.dice_value);
-          army[currentPlayer].currentStack.requiredRolls--;
+
           boardLayer.draw();
-        } else if (army[currentPlayer].opposingStack.requiredRolls > 0) {
-          console.log("Rolling Dice");
 
-          var die;
-          die = rolldice();
+          if (dice1button.dice_value == 1 || dice1button.dice_value == 6) {
+            army[currentPlayer].contestedHex.isExplored = true;
+            army[currentPlayer].ownHex(army[currentPlayer].contestedHex,
+              markerIcons[currentPlayer],
+              playerIcons[currentPlayer][army[currentPlayer].indexPlayerIcons++], boardLayer, 10, -60);
+            army[currentPlayer].mustRollDice = false;
+          }
+        } else if (game.currentPhase == COMBAT_PHASE) {
+          var opposingAffinity = army[currentPlayer].opposingStack.affinity;
+          if (army[currentPlayer].currentStack.requiredRolls > 0) {
+            console.log("Rolling Dice");
 
-          console.log("Dice Results: " + die[0] + ", " + die[1]);
+            var die;
+            die = rolldice();
 
 
-          dice1button.setFillPatternImage(dice[die[0]]);
-          //dice2button.setFillPatternImage(dice[die[1]]);
+            console.log("Dice Results: " + die[0] + ", " + die[1]);
 
-          dice1button.dice_value = die[0];
-          //dice2button.dice_value = die[1];
-          army[opposingAffinity].rolls.push(dice1button.dice_value);
-          army[currentPlayer].opposingStack.requiredRolls--;
-          boardLayer.draw();
+            dice1button.setFillPatternImage(dice[die[0]]);
+            //dice2button.setFillPatternImage(dice[die[1]]);
+
+            dice1button.dice_value = die[0];
+            //dice2button.dice_value = die[1];
+            army[currentPlayer].rolls.push(dice1button.dice_value);
+            army[currentPlayer].currentStack.requiredRolls--;
+            boardLayer.draw();
+          } else if (army[currentPlayer].opposingStack.requiredRolls > 0) {
+            console.log("Rolling Dice");
+
+            var die;
+            die = rolldice();
+
+            console.log("Dice Results: " + die[0] + ", " + die[1]);
+
+
+            dice1button.setFillPatternImage(dice[die[0]]);
+            //dice2button.setFillPatternImage(dice[die[1]]);
+
+            dice1button.dice_value = die[0];
+            //dice2button.dice_value = die[1];
+            army[opposingAffinity].rolls.push(dice1button.dice_value);
+            army[currentPlayer].opposingStack.requiredRolls--;
+            boardLayer.draw();
+          }
+          if (army[currentPlayer].currentStack.requiredRolls > 0) {
+            alert("Player " + army[currentPlayer].currentStack.affinity + " must roll dice");
+            return;
+          } else if (army[currentPlayer].opposingStack.requiredRolls > 0) {
+            alert("Player " + army[currentPlayer].opposingStack.affinity + " must roll dice");
+            return;
+          } else if (army[currentPlayer].mustRollDice) {
+
+            calculateHits(army[currentPlayer].rolls, army[currentPlayer].currentStack, army);
+            calculateHits(army[opposingAffinity].rolls, army[currentPlayer].opposingStack, army);
+
+            //Clean Up battle phase
+            army[currentPlayer].rolls = new Array();
+            army[opposingAffinity].rolls = new Array();
+
+            // army[currentPlayer].currentStack = undefined;
+            // army[currentPlayer].opposingStack = undefined;
+
+            army[currentPlayer].mustRollDice = false;
+            army[currentPlayer].evaluateBattle = true;
+          }
+
         }
-        if (army[currentPlayer].currentStack.requiredRolls > 0) {
-          alert("Player " + army[currentPlayer].currentStack.affinity + " must roll dice");
-          return;
-        } else if (army[currentPlayer].opposingStack.requiredRolls > 0) {
-          alert("Player " + army[currentPlayer].opposingStack.affinity + " must roll dice");
-          return;
-        } else if (army[currentPlayer].mustRollDice) {
-
-          calculateHits(army[currentPlayer].rolls, army[currentPlayer].currentStack, army);
-          calculateHits(army[opposingAffinity].rolls, army[currentPlayer].opposingStack, army);
-
-          //Clean Up battle phase
-          army[currentPlayer].rolls = new Array();
-          army[opposingAffinity].rolls = new Array();
-
-          // army[currentPlayer].currentStack = undefined;
-          // army[currentPlayer].opposingStack = undefined;
-
-          army[currentPlayer].mustRollDice = false;
-          army[currentPlayer].evaluateBattle = true;
-        }
-
-      }
-    } else {
-      return;
-    }
-  } else if (army[currentPlayer].evaluateBattle) {
-    var opposingAffinity = army[currentPlayer].opposingStack.affinity;
-
-    // each stack gets hit by opposing playesr's successfull hits
-    army[currentPlayer].currentStack.getHit(army[opposingAffinity].hits);
-    army[currentPlayer].opposingStack.getHit(army[currentPlayer].hits);
-  }
-
-  // Items that can be selected regardles of turn/phase
-  if (shape.getName() == "BuildFortButton") {
-    // We now want the user to click on a hex tile, it needs to be owned by him, and place that thing on the hex
-    if (army[currentPlayer].getNumOfFortHexes() === 0 &&
-      army[currentPlayer].getNumOfHexes() == 3) {
-      console.log("Selected build fort. Choose an owned hex.");
-      army[currentPlayer].canBuildFort = true;
-    } else {
-      if (army[currentPlayer].getNumOfFortHexes() !== 0)
-        alert("You already built a fort!");
-      else
-        alert("You cannot build a fort!");
-
-    }
-  } else if (shape.getName() == "dicebutton") {
-    console.log("Rolling Dice");
-
-    var die;
-    die = rolldice();
-    if (game.currentPhase == MOVEMENT_PHASE)
-      die = [1, 6];
-
-    console.log("Dice Results: " + die[0] + ", " + die[1]);
-
-    dice1button.setFillPatternImage(dice[die[0]]);
-    //dice2button.setFillPatternImage(dice[die[1]]);
-
-    dice1button.dice_value = die[0];
-    //dice2button.dice_value = die[1];
-
-    boardLayer.draw();
-  } else if (shape.getName() == "hex") {
-    console.log("Hex clicked " + shape.getId());
-  }
-
-
-  // The boardLayer listener events change depending on phase.
-  // This is the starting phase
-  if (game.currentPhase == SETUP_PHASE) {
-
-    // Each player needs to place 1 initial marker on their starting possition
-    // It needs to be limited to only 4 places.
-
-    // Types of shapes: defenders, heroes, markers, dice, tower, TODO: More maybe
-    if (shape.getName() == "placeMarkerButton") {
-      iosocket.emit('placeMarkerButton');
-      if (army[currentPlayer].getNumOfHexes() < 3 && !army[currentPlayer].canEndTurn) {
-        // army[currentPlayer].canChooseHex = 1;
-
-        // highlightButtonOnClick(shape);
-
-        // alert("Choose start location");
-
-        // highlightHex(boardLayer.get("#-2,-1")[0]);
-        // highlightHex(boardLayer.get("#2,-3")[0]);
-        // highlightHex(boardLayer.get("#-2,3")[0]);
-        // highlightHex(boardLayer.get("#2,1")[0]);
-
-        // army[currentPlayer].isPlacingStartPosition = true;
       } else {
-        alert("Cannot do this - try ending your turn!");
+        return;
       }
+    } else if (army[currentPlayer].evaluateBattle) {
+      var opposingAffinity = army[currentPlayer].opposingStack.affinity;
+
+      // each stack gets hit by opposing playesr's successfull hits
+      army[currentPlayer].currentStack.getHit(army[opposingAffinity].hits);
+      army[currentPlayer].opposingStack.getHit(army[currentPlayer].hits);
     }
 
-    if (shape.getName() == "hex") {
-      iosocket.emit('hexClicked', shape.getId());
+    // Items that can be selected regardles of turn/phase
+    if (shape.getName() == "BuildFortButton") {
+      // We now want the user to click on a hex tile, it needs to be owned by him, and place that thing on the hex
+      if (army[currentPlayer].getNumOfFortHexes() === 0 &&
+        army[currentPlayer].getNumOfHexes() == 3) {
+        console.log("Selected build fort. Choose an owned hex.");
+        army[currentPlayer].canBuildFort = true;
+      } else {
+        if (army[currentPlayer].getNumOfFortHexes() !== 0)
+          alert("You already built a fort!");
+        else
+          alert("You cannot build a fort!");
+
+      }
+    } else if (shape.getName() == "dicebutton") {
+      console.log("Rolling Dice");
+
+      var die;
+      die = rolldice();
+      if (game.currentPhase == MOVEMENT_PHASE)
+        die = [1, 6];
+
+      console.log("Dice Results: " + die[0] + ", " + die[1]);
+
+      dice1button.setFillPatternImage(dice[die[0]]);
+      //dice2button.setFillPatternImage(dice[die[1]]);
+
+      dice1button.dice_value = die[0];
+      //dice2button.dice_value = die[1];
+
+      boardLayer.draw();
+    } else if (shape.getName() == "hex") {
+      console.log("Hex clicked " + shape.getId());
+    }
+
+
+    // The boardLayer listener events change depending on phase.
+    // This is the starting phase
+    if (game.currentPhase == SETUP_PHASE) {
+
+      // Each player needs to place 1 initial marker on their starting possition
+      // It needs to be limited to only 4 places.
+
+      // Types of shapes: defenders, heroes, markers, dice, tower, TODO: More maybe
+      if (shape.getName() == "placeMarkerButton") {
+        iosocket.emit('placeMarkerButton');
+        if (army[currentPlayer].getNumOfHexes() < 3 && !army[currentPlayer].canEndTurn) {
+          // army[currentPlayer].canChooseHex = 1;
+
+          // highlightButtonOnClick(shape);
+
+          // alert("Choose start location");
+
+          // highlightHex(boardLayer.get("#-2,-1")[0]);
+          // highlightHex(boardLayer.get("#2,-3")[0]);
+          // highlightHex(boardLayer.get("#-2,3")[0]);
+          // highlightHex(boardLayer.get("#2,1")[0]);
+
+          // army[currentPlayer].isPlacingStartPosition = true;
+        } else {
+          alert("Cannot do this - try ending your turn!");
+        }
+      }
+
+      if (shape.getName() == "hex") {
+        iosocket.emit('hexClicked', shape.getId());
+        initial = army[currentPlayer].getNumOfHexes();
+        console.log(army[currentPlayer].getOwnedHexes());
+        // TODO: REMOVE?
+        if (false && initial > 2 &&
+          (__indexOf.call(army[currentPlayer].getOwnedHexes(), shape) == -1)) {
+          alert("Starting phase complete");
+          army[currentPlayer].canChooseHex = 0;
+          army[currentPlayer].canEndTurn = true;
+          return;
+        }
+        if (army[currentPlayer].canChooseHex > 0) {
+          if (army[currentPlayer].isPlacingStartPosition) {
+            console.log("Choosing start location at: " + shape.getId());
+            army[currentPlayer].ownHex(shape,
+              markerIcons[currentPlayer],
+              playerIcons[currentPlayer][army[currentPlayer].indexPlayerIcons++], boardLayer, 10, -60);
+          }
+        } else if (army[currentPlayer].canBuildFort &&
+          __indexOf.call(army[currentPlayer].getOwnedHexes(), shape) >= 0) {
+          console.log("Placing fort location at: " + shape.getId());
+          army[currentPlayer].buildFortHex(shape, fortImage, boardLayer);
+          army[currentPlayer].canBuildFort = false;
+          army[currentPlayer].canEndTurn = true;
+        } else {
+          console.log("Select available action item first!");
+        }
+        if (initial < army[currentPlayer].getNumOfHexes()) {
+          army[currentPlayer].canChooseHex--;
+          army[currentPlayer].canEndTurn = true;
+        }
+
+      }
     }
 
   } else if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {
