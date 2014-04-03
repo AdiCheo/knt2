@@ -298,26 +298,26 @@ function MovementPhase(socket, hexId) {
   }
 }
 
-function eventDefenderClicked(socket, defenderName) {
-  console.log(game.armies);
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy + " clicked defender" + defenderName);
+// function eventDefenderClicked(socket, defenderName) {
+//   console.log(game.armies);
+//   currentArmy = game.armies[indexById(game.armies, socket.id)];
+//   console.log("Player " + currentArmy + " clicked defender" + defenderName);
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+//   if (currentArmy.canEndTurn) {
+//     socket.emit('error', "You must end your turn now!");
+//     return;
+//   }
 
-  if (game.currentPlayerTurn != currentArmy.affinity) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
+//   if (game.currentPlayerTurn != currentArmy.affinity) {
+//     socket.emit('error', "It is not your turn yet!");
+//     return;
+//   }
 
-  if (game.currentPhase == -1) { //TODO CHange to 0
-    currentArmy.canPlaceDefender = true;
-    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
-  }
-}
+//   if (game.currentPhase == -1) { //TODO CHange to 0
+//     currentArmy.canPlaceDefender = true;
+//     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
+//   }
+// }
 
 function eventGenerateClicked(socket) {
   console.log(game.armies);
@@ -395,6 +395,7 @@ function eventClickedOnHex(socket, hexId) {
       }
       io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
       socket.emit('updateStack', currentArmy);
+      currentArmy.canPlaceDefender = false;
 
     } else {
       socket.emit('error', "Cannot place defender there!");
