@@ -58,7 +58,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
       y: this.getY() - 60,
       id: this.id,
       name: "fort" + affinity,
-      image: fortImage,
+      image: StackIconArray[affinity],
       width: 40,
       height: 40
     });
@@ -66,6 +66,25 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     boardLayer.add(fort);
     fort.moveToTop();
     fort.show();
+    boardLayer.draw();
+
+  };
+
+  hexagon.setStackIcon = function(affinity) {
+
+    var stack = new Kinetic.Image({
+      x: this.getX(),
+      y: this.getY(),
+      id: this.id,
+      name: "stack" + affinity,
+      image: stackImage,
+      width: 40,
+      height: 40
+    });
+
+    boardLayer.add(stack);
+    stack.moveToTop();
+    stack.show();
     boardLayer.draw();
 
   };

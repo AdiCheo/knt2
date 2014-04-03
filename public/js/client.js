@@ -148,7 +148,9 @@ function updateUsers(users) {
 // TODO
 function updateStackAll(hexId, affinity) {
   // place stack icon for particular army on hexId
+  console.log("Army " + affinity + " owning " + hexId);
   // if (affinity == localAffinity)
+  boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
 }
 
 // TODO
