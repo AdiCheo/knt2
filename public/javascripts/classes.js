@@ -58,7 +58,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
       y: this.getY() - 60,
       id: this.id,
       name: "fort" + affinity,
-      image: StackIconArray[affinity],
+      image: fortImage,
       width: 40,
       height: 40
     });
@@ -73,11 +73,11 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.setStackIcon = function(affinity) {
 
     var stack = new Kinetic.Image({
-      x: this.getX(),
-      y: this.getY(),
+      x: this.getX() - 20,
+      y: this.getY() - 20,
       id: this.id,
       name: "stack" + affinity,
-      image: stackImage,
+      image: StackIconArray[affinity],
       width: 40,
       height: 40
     });
