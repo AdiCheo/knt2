@@ -394,7 +394,7 @@ function eventClickedOnHex(socket, hexId) {
         currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.defenderInHand);
       }
       io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-      socket.emit('updateStack', currentArmy);
+      socket.emit('updateStack', hexId, currentArmy);
       currentArmy.canPlaceDefender = false;
 
     } else {
