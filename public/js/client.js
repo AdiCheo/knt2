@@ -32,19 +32,17 @@ function initConnection() {
 
   iosocket = io.connect();
   iosocket.on('connect', function() {
-
     nickname = randomName();
     iosocket.emit('adduser', nickname);
 
     iosocket.on('state.init', function(gameData) {
       playerId = gameData.playerId;
       localAffinity = gameData.affinity;
-
       //output the current phase the game is in
       document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
 
       //output the current player turn
-      document.getElementById("playerturntext").innerHTML = "Current Player Turn: 0";
+      document.getElementById("playerturntext").innerHTML = "Current Player Turn: 1";
     });
 
     iosocket.on('disconnect', function(gameData) {
@@ -81,13 +79,7 @@ function initConnection() {
 
     //update the gold
     iosocket.on('collectGoldButton', function(game) {
-
-      var temp = indexById(game.armies, playerId);
-      alert("You have the following: \n ----------- \n" +
-        game.armies[temp].getOwnedHexes + " Hexes = " + game.armies.getNumOfHexes() + " Gold\n");
-      //army[currentPlayer].getNumOfFortHexes() + " Forts = " + fortTotalValue + " Gold");
-      document.getElementById("gold_" + game.armies[temp].color).textContent = "Gold: " + game.armies[temp].gold;
-
+      collectGoldButton();
     });
 
     iosocket.on('nextPlayerTurn', function(game) {
@@ -99,11 +91,7 @@ function initConnection() {
     });
 
     iosocket.on('allowMarkerPlacement', function(gameData) {
-      console.log("Place your marker on a hex");
-      highlightHex(boardLayer.get("#-2,-1")[0]);
-      highlightHex(boardLayer.get("#2,-3")[0]);
-      highlightHex(boardLayer.get("#-2,3")[0]);
-      highlightHex(boardLayer.get("#2,1")[0]);
+      allowMarkerPlacement();
     });
 
     iosocket.on('allowFortPlacement', function(gameData) {
@@ -111,9 +99,7 @@ function initConnection() {
     });
 
     iosocket.on('highlightMovement', function(hexId, game) {
-      removeRadius(game.armies.color, boardLayer); //Remove movement radius
-      drawRadius(hexId, 4, game.armies.color, boardLayer);
-
+      highlightMovement();
     });
 
     iosocket.on('allowDefenderPlacement', function(gameData) {
@@ -133,9 +119,20 @@ function initConnection() {
     iosocket.on('map', function(mapData) {
       updateMapData(mapData);
     });
-
   });
 }
+
+
+function collectGoldButton() {
+  var temp = indexById(game.armies, playerId);
+  alert("You have the following: \n ----------- \n" +
+    game.armies[temp].getOwnedHexes + " Hexes = " + game.armies.getNumOfHexes() + " Gold\n");
+
+  //army[currentPlayer].getNumOfFortHexes() + " Forts = " + fortTotalValue + " Gold");
+  document.getElementById("gold_" + game.armies[temp].color).textContent = "Gold: " + game.armies[temp].gold;
+}
+
+
 
 function updateUsers(users) {
   userList = users;
@@ -143,6 +140,21 @@ function updateUsers(users) {
   for (var i = 0; i < users.length; i++) {
     $('#user').append("<h1>" + users[i] + "</h1>");
   }
+}
+
+function allowMarkerPlacement() {
+  console.log("Place your marker on a hex");
+
+  highlightHex(boardLayer.get("#-2,-1")[0]);
+  highlightHex(boardLayer.get("#2,-3")[0]);
+  highlightHex(boardLayer.get("#-2,3")[0]);
+  highlightHex(boardLayer.get("#2,1")[0]);
+}
+
+
+function highlightMovement() {
+  removeRadius(game.armies.color, boardLayer); //Remove movement radius
+  drawRadius(hexId, 4, game.armies.color, boardLayer);
 }
 
 // TODO

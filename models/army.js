@@ -1,14 +1,13 @@
 var Fort = require('./fort.js');
 
 //define army class
-function Army(affinity, name, income, gold, currentGameTurn, id, color) {
+function Army(affinity, name, income, gold, currentGameTurn, id) {
   this.affinity = affinity;
   this.name = name;
   this.income = income;
   this.gold = gold;
   this.currentGameTurn = currentGameTurn;
   this.id = id;
-  this.color = color;
 
   this.canEndTurn = false;
   this.canChooseHex = false;
@@ -42,7 +41,7 @@ function Army(affinity, name, income, gold, currentGameTurn, id, color) {
   this.buildFort = function(hexId, game) {
     var index = indexById(game.hexes, hexId);
     var currentHex = game.hexes[index];
-    
+
     if (indexById(this.ownedHexes, hexId) !== null && indexById(this.forts, hexId) === null) {
       var fort = new Fort(hexId, game.currentPlayerTurn);
       this.forts.push(fort);
