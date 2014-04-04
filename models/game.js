@@ -17,7 +17,7 @@ function Game() {
 
   // functions
   this.newRandomDefender = function() {
-    return this.defenders.pop(Math.floor(Math.random() * this.cup.length));
+    return this.cup.pop(Math.floor(Math.random() * this.cup.length));
   }
 
   this.createCupDefenders = function() {
@@ -337,6 +337,10 @@ function Game() {
       console.log("Army 1 turn ended. Army 2 to move");
     }
   };
+
+
+  this.createCupDefenders();
+  this.createDefenders();
 }
 
 module.exports = Game;

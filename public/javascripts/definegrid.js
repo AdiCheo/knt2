@@ -4,7 +4,7 @@ var stage = new Kinetic.Stage({
   height: 1200,
 });
 
-var rack1 = initRack(1000, 300);
+var rack = initRack(1000, 300);
 
 //dice1 button
 var dice1button = new Kinetic.Rect({
@@ -181,7 +181,7 @@ console.log(game.currentTurn);
 // Add Buttons
 // buildFortButton(fortImage, boardLayer);
 
-addAllPiecesToBoard();
+// addAllPiecesToBoard();
 var selectedObject;
 var tmpPlayerStack;
 var army = new Array();
@@ -343,7 +343,7 @@ function createBoardLayer(rows, cols) {
   }
 }
 
-boardLayer.add(rack1);
+boardLayer.add(rack);
 boardLayer.add(dice1button);
 
 //Cheat dice

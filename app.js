@@ -109,9 +109,8 @@ io.sockets.on('connection', function(socket) {
 
     // Magic Cup click listener
     socket.on('generateButtonClicked', function() {
-      if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {
-        eventGenerateClicked(socket);
-      }
+      eventGenerateClicked(socket);
+      if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {}
     });
 
     // Hex click listener
@@ -137,16 +136,14 @@ io.sockets.on('connection', function(socket) {
 
     // Magic Cup click listener
     socket.on('generateButtonClicked', function() {
-      if (game.currentPhase == RECRUIT_THINGS_PHASE) {
-        eventGenerateClicked(socket);
-      }
+      eventGenerateClicked(socket);
+      if (game.currentPhase == RECRUIT_THINGS_PHASE) {}
     });
 
     // Hex click listener
     socket.on('hexClicked', function(hexId) {
-      if (game.currentPhase == RECRUIT_THINGS_PHASE) {
-        eventClickedOnHex(socket, hexId);
-      }
+      eventClickedOnHex(socket, hexId);
+      if (game.currentPhase == RECRUIT_THINGS_PHASE) {}
     });
 
     if (game.currentPhase == RANDOM_EVENTS_PHASE) {
@@ -421,12 +418,14 @@ function eventGenerateClicked(socket) {
     return;
   }
 
+  currentArmy.thingInHand = game.newRandomDefender();
+  socket.emit('addThingToRack', currentArmy.thingInHand);
+
   if (game.currentPhase === 0) {
     currentArmy.canPlaceDefender = true;
     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
-    currentArmy.defenderInHand = game.newRandomDefender();
+    currentArmy.thingInHand = game.newRandomDefender();
   }
-
 }
 
 function eventClickedOnHexSetupPhase(socket, hexId) {
@@ -486,12 +485,12 @@ function eventClickedOnHex(socket, hexId) {
     if (indexById(currentArmy.ownedHexes, hexId) !== null &&
       indexById(currentArmy.stacks, hexId) === null) {
       var stack = new Stack(hexId, currentArmy.affinity);
-      stack.containDefenders.push(currentArmy.defenderInHand);
+      stack.containDefenders.push(currentArmy.thingInHand);
       currentArmy.stacks.push(stack);
 
     } else {
       // Gets stack already on hexId and adds defender to it
-      currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.defenderInHand);
+      currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
     }
     io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
     socket.emit('updateStack', hexId, currentArmy);

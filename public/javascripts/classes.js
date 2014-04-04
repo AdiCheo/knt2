@@ -89,6 +89,28 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   };
 
+  hexagon.setStackView = function(stacks, hexId) {
+    for (var i = stacks.length - 1; i >= 0; i--) {
+      console.log(stacks[i].id);
+    };
+
+    // var stack = new Kinetic.Image({
+    //   x: this.getX() - 20,
+    //   y: this.getY() - 20,
+    //   id: this.id,
+    //   name: "stack" + affinity,
+    //   image: StackIconArray[affinity],
+    //   width: 40,
+    //   height: 40
+    // });
+
+    // boardLayer.add(stack);
+    // stack.moveToTop();
+    // stack.show();
+    // boardLayer.draw();
+
+  };
+
   return hexagon;
 }
 
@@ -193,7 +215,7 @@ function Defender(source, defenderName, combatValue, canCharge, terrainType, isR
 
 
 function initRack(realX, realY) {
-  var rect1 = new Kinetic.Rect({
+  var rack = new Kinetic.Rect({
     x: realX,
     y: realY,
     name: 'rack',
@@ -201,11 +223,37 @@ function initRack(realX, realY) {
     height: 50,
     draggable: false,
     strokeWidth: 0,
-    fill: "lightgrey",
-    Id: "rack"
+    fill: "grey",
+    id: "rack"
   });
 
-  return rect1;
+  rack.containedThings = [];
+
+  // rack.rearrange = function(rack.containedThings) {}
+
+  rack.setThingIcon = function(thingName) {
+    console.log(thingName + "Image");
+    console.log(thingImagesArray[thingName + "Image"]);
+
+    var thing = new Kinetic.Image({
+      x: this.getX(),
+      y: this.getY(),
+      id: this.id,
+      name: "thing",
+      image: thingImagesArray[thingName + "Image"],
+      width: 50,
+      height: 50
+    });
+
+    boardLayer.add(thing);
+    thing.moveToTop();
+    thing.show();
+    boardLayer.draw();
+
+  };
+
+
+  return rack;
 }
 
 

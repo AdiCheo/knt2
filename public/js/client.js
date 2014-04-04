@@ -77,6 +77,10 @@ function initConnection() {
       endedTurn();
     });
 
+    iosocket.on('addThingToRack', function(thing) {
+      addThingToRack(thing);
+    });
+
     //update the gold
     iosocket.on('collectGoldButton', function(game) {
       collectGoldButton();
@@ -164,9 +168,9 @@ function updateStackAll(hexId, affinity) {
 }
 
 function updateStack(hexId, currentArmy) {
-  console.log("You stack at " + hexId + " has been updated");
+  console.log("Your stack at " + hexId + " has been updated");
   console.log(currentArmy.stacks);
-
+  boardLayer.get('#' + hexId)[0].setStackView(currentArmy.stacks, hexId);
 }
 
 function createHexes(hexes) {
@@ -185,6 +189,11 @@ function updateForts(hexId, affinity) {
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
 }
 
+function addThingToRack(thing) {
+  console.log(thing);
+  boardLayer.get('#rack')[0].setThingIcon(thing);
+}
+
 // function newTurn(affinity) {
 //   console.log("New turn. Army " + affinity + " must play.");
 //   // TODO if client == affinity use an alert
@@ -192,7 +201,7 @@ function updateForts(hexId, affinity) {
 
 // TODO Merged here
 function endedTurn() {
-  alert('You have ended your turn');
+  console.log('You have ended your turn');
 }
 
 function nextPlayerTurn(game) {
