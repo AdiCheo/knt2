@@ -259,7 +259,8 @@ function eventStateInit(socket, user) {
 
   // End Testing /////////////////////////////////////////////////////////////////////////////////
 
-  socket.emit('state.init', publicGameData(socket.id));
+  // socket.emit('state.init', publicGameData(socket.id));
+  socket.emit('state.init', initialGameData(socket.id));
 }
 
 function eventDisconnect(socket) {
@@ -290,7 +291,7 @@ function eventEndTurnClicked(socket) {
     currentArmy.canEndTurn = false;
     // socket.emit('endTurn', "New turn + num (TODO)");
     // Send message to all clients that a player turn ended
-    io.sockets.emit('nextPlayerTurn', game);
+    io.sockets.emit('nextPlayerTurn', publicGameData(socket.id));
 
     // Send message to current player that he ended his turn
     socket.emit('endedTurn');
@@ -318,15 +319,13 @@ function eventBuildFortButton(socket) {
   //   return;
   // }
 
-  if (game.currentPhase == -1) {
-    if (currentArmy.getNumOfHexes() == 3) {
-      console.log("# of hexes" + currentArmy.getNumOfHexes);
-      currentArmy.canBuildFort = true;
-      socket.emit('allowFortPlacement', publicGameData(socket.id));
-    } else {
-      // Now it is time to place a fort
-      socket.emit('error', "You need to build a fort");
-    }
+  if (currentArmy.getNumOfHexes() == 3) {
+    console.log("# of hexes" + currentArmy.getNumOfHexes);
+    currentArmy.canBuildFort = true;
+    socket.emit('allowFortPlacement', publicGameData(socket.id));
+  } else {
+    // Now it is time to place a fort
+    socket.emit('error', "You need to own 3 hexes first");
   }
 }
 
@@ -429,6 +428,7 @@ function eventDefenderClicked(socket, defenderName) {
 
   if (game.currentPhase == -1) { //TODO CHange to 0
     currentArmy.canPlaceDefender = true;
+    currentArmy.defenderInHand = game.newRandomDefender();
     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
   }
 }
@@ -472,10 +472,11 @@ function eventGenerateClicked(socket) {
 }
 
 function eventClickedOnHexSetupPhase(socket, hexId) {
-  // if (currentArmy.canEndTurn) {
-  //   socket.emit('error', "You must end your turn now!");
-  //   return;
-  // }
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+  }
 
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
@@ -525,23 +526,35 @@ function eventClickedOnHex(socket, hexId) {
     console.log("LOG" + indexById(currentArmy.stacks, hexId));
     console.log("LOG" + currentArmy.stacks);
     console.log("LOG" + currentArmy.ownedHexes);
-    if (indexById(currentArmy.ownedHexes, hexId) !== null &&
-      indexById(currentArmy.stacks, hexId) === null) {
+    // <<<<<<< HEAD
+    //     if (indexById(currentArmy.ownedHexes, hexId) !== null &&
+    //       indexById(currentArmy.stacks, hexId) === null) {
 
-      var stack = new Stack(hexId, currentArmy.affinity);
-      stack.containDefenders.push(currentArmy.thingInHand);
-      currentArmy.stacks.push(stack);
+    //       var stack = new Stack(hexId, currentArmy.affinity);
+    //       stack.containDefenders.push(currentArmy.thingInHand);
+    //       currentArmy.stacks.push(stack);
 
+    //     } else {
+    //       // Gets stack already on hexId and adds defender to it
+    //       currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
+    // =======
+    if (indexById(currentArmy.ownedHexes, hexId) !== null) {
+      if (indexById(currentArmy.stacks, hexId) === null) {
+        var stack = new Stack(hexId, currentArmy.affinity);
+        stack.containDefenders.push(currentArmy.defenderInHand);
+        currentArmy.stacks.push(stack);
+      } else {
+        // Gets stack already on hexId and adds defender to it
+        currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.defenderInHand);
+      }
+      io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+      socket.emit('updateStack', hexId, currentArmy);
+      currentArmy.canPlaceDefender = false;
     } else {
-      // Gets stack already on hexId and adds defender to it
-      currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
+      socket.emit('error', "You do not own this hex!");
     }
-    io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-    socket.emit('updateStack', hexId, currentArmy);
-    currentArmy.canPlaceDefender = false;
-
   } else {
-    socket.emit('error', "Cannot place defender there!");
+    socket.emit('error', "You need to pick from the cup!");
   }
 }
 // TODO
@@ -557,11 +570,18 @@ function eventClickedOnHex(socket, hexId) {
 //   socket.emit('error', 'Select available action item first!');
 // }
 
-function publicGameData(socketId) {
+function initialGameData(socketId) {
   return {
     game: game,
     playerId: socketId,
-    affinity: game.users.length
+    affinity: game.users.length - 1
+  };
+}
+
+function publicGameData(socketId) {
+  return {
+    game: game,
+    playerId: socketId
   };
 }
 

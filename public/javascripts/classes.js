@@ -23,7 +23,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.isExplored = false;
 
   hexagon.containedDefenders = [];
-  hexagon.defendersVisible = false;
+  hexagon.defendersVisible = true;
 
   hexagon.setOwnerIcon = function(affinity) {
 

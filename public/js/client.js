@@ -91,8 +91,8 @@ function initConnection() {
       collectGoldButton();
     });
 
-    iosocket.on('nextPlayerTurn', function(game) {
-      nextPlayerTurn(game);
+    iosocket.on('nextPlayerTurn', function(gameData) {
+      nextPlayerTurn(gameData);
     });
 
     iosocket.on('error', function(msg) {
@@ -252,20 +252,16 @@ function handleDiceResult(diceResult) {
   console.log('Dice result:' + diceResult);
 }
 
-function nextPlayerTurn(game) {
-  console.log(game.armies);
-  console.log(game.currentPlayerTurn);
-  console.log(game.armies[game.currentPlayerTurn].id);
-
+function nextPlayerTurn(gameData) {
   //output the current phase the game is in
-  document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
+  document.getElementById("phasetext").innerHTML = "Current Phase: " + gameData.game.currentPhase;
 
   //output the current player turn
-  document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + game.currentPlayerTurn;
+  document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + gameData.game.currentPlayerTurn;
 
   console.log(playerId);
-  if (playerId == game.armies[game.currentPlayerTurn].id) {
-    alert("It is your turn to play now");
+  if (localAffinity == gameData.game.currentPlayerTurn) {
+    console.log("It is your turn to play now");
   }
 }
 
