@@ -111,9 +111,9 @@ function initConnection() {
       updateStackAll(hexId, affinity);
     });
 
-    iosocket.on('updateStack', function(currentArmy) {
+    iosocket.on('updateStack', function(hexId, currentArmy) {
       console.log("updateStack" + currentArmy);
-      updateStack(currentArmy);
+      updateStack(hexId, currentArmy);
     });
 
     iosocket.on('map', function(mapData) {
@@ -157,16 +157,15 @@ function highlightMovement() {
   drawRadius(hexId, 4, game.armies.color, boardLayer);
 }
 
-// TODO
 function updateStackAll(hexId, affinity) {
   // place stack icon for particular army on hexId
   console.log("Army " + affinity + " placing stack at " + hexId);
-  // if (affinity == localAffinity)
   boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
 }
 
-// TODO
-function updateStack(currentArmy) {
+function updateStack(hexId, currentArmy) {
+  console.log("You stack at " + hexId + " has been updated");
+  console.log(currentArmy.stacks);
 
 }
 

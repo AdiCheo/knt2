@@ -103,7 +103,7 @@ io.sockets.on('connection', function(socket) {
       });
     }
 
-    if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
+    if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {
       // Magic Cup click listener
       socket.on('generateButtonClicked', function() {
         eventGenerateClicked(socket);
@@ -468,6 +468,7 @@ function eventClickedOnHex(socket, hexId) {
   // Each player collects 10 defenders in this faze
   // create new defender
   // place on the clicked hex if owned by player
+
   if (currentArmy.canPlaceDefender) {
     if (indexById(currentArmy.ownedHexes, hexId) !== null &&
       indexById(currentArmy.stacks, hexId) === null) {
@@ -480,7 +481,7 @@ function eventClickedOnHex(socket, hexId) {
       currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.defenderInHand);
     }
     io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-    socket.emit('updateStack', currentArmy);
+    socket.emit('updateStack', hexId, currentArmy);
     currentArmy.canPlaceDefender = false;
 
   } else {
