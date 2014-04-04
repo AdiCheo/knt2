@@ -165,7 +165,7 @@ io.sockets.on('connection', function(socket) {
     // Dice roll (random) listener
     socket.on('diceRollPressed', function() {
       if (game.currentPhase == COMBAT_PHASE) {
-        handleDice(socket, randomDiceRoll());
+        handleDice(socket);
       }
     });
 
@@ -208,18 +208,20 @@ io.sockets.on('connection', function(socket) {
   }
 });
 
-function handleDice(socket, dicevalue) {
+function handleDice(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   // TODO reply with dice
   if (true) {
     // valid dice roll handle here
+    socket.emit('diceRollResult', randomDiceRoll());
     return;
   }
   // Dice roll is invalid
+  socket.emit('error', 'Dice roll invalid at this time!');
   return false;
 }
 
-function randomDiceRoll(dicevalue) {
+function randomDiceRoll() {
   return Math.floor(Math.random() * 6 + 1);
 }
 
@@ -236,6 +238,12 @@ function eventStateInit(socket, user) {
   createHexTiles();
   socket.emit('createHexes', game.hexes);
   socket.emit('map', populateHexTiles());
+
+  // Testing only: (example setting rack and a stack)
+  socket.emit('updateRack', ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
+  socket.emit('updateStack', "0,0", ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'DustDevil']);
+  socket.emit('updateStack', "2,1", ['Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
+
   socket.emit('state.init', publicGameData(socket.id));
 }
 
@@ -290,10 +298,10 @@ function eventBuildFortButton(socket) {
     return;
   }
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
 
   if (game.currentPhase == -1) {
     if (currentArmy.getNumOfHexes() == 3) {
@@ -312,10 +320,10 @@ function eventPlaceMarkerButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " pressed on Marker Button");
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
 
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
@@ -340,10 +348,10 @@ function eventCollectGoldButton(socket) {
     return;
   }
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
 
   currentArmy.income = 0;
 
@@ -368,10 +376,10 @@ function eventCollectGoldButton(socket) {
 function MovementPhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
 
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
@@ -394,10 +402,10 @@ function eventDefenderClicked(socket, defenderName) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked defender" + defenderName);
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
 
   if (game.currentPlayerTurn != currentArmy.affinity) {
     socket.emit('error', "It is not your turn yet!");
@@ -416,10 +424,10 @@ function eventGenerateClicked(socket) {
   console.log("Player " + currentArmy + " clicked generate button (cup)");
   console.log(currentArmy.thingInHand);
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
 
   if (game.currentPlayerTurn != currentArmy.affinity) {
     socket.emit('error', "It is not your turn yet!");
@@ -440,7 +448,7 @@ function eventGenerateClicked(socket) {
     removeFromThingsArray(currentArmy.rack, prevThing);
 
     currentArmy.rack.push(currentArmy.thingInHand);
-    socket.emit('rackUpdate', currentArmy.rack);
+    socket.emit('updateRack', currentArmy.rack);
     currentArmy.thingInHand = false;
   }
   // socket.emit('allowDefenderPlacement', publicGameData(socket.id));
@@ -449,10 +457,10 @@ function eventGenerateClicked(socket) {
 }
 
 function eventClickedOnHexSetupPhase(socket, hexId) {
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
 
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
@@ -483,10 +491,10 @@ function eventClickedOnHex(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked hex " + hexId);
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
 
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
@@ -504,6 +512,7 @@ function eventClickedOnHex(socket, hexId) {
     console.log("LOG" + currentArmy.ownedHexes);
     if (indexById(currentArmy.ownedHexes, hexId) !== null &&
       indexById(currentArmy.stacks, hexId) === null) {
+
       var stack = new Stack(hexId, currentArmy.affinity);
       stack.containDefenders.push(currentArmy.thingInHand);
       currentArmy.stacks.push(stack);

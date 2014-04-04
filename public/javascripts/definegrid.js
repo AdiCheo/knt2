@@ -17,7 +17,7 @@ var dice1button = new Kinetic.Rect({
   id: "control",
   width: 75,
   height: 75,
-  draggable: true,
+  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 4, 1 / 4],
   strokeWidth: 0
@@ -32,7 +32,7 @@ var cheatDice1 = new Kinetic.Rect({
   id: "control",
   width: 37.5,
   height: 37.5,
-  draggable: true,
+  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
@@ -46,7 +46,7 @@ var cheatDice2 = new Kinetic.Rect({
   id: "control",
   width: 37.5,
   height: 37.5,
-  draggable: true,
+  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
@@ -60,7 +60,7 @@ var cheatDice3 = new Kinetic.Rect({
   id: "control",
   width: 37.5,
   height: 37.5,
-  draggable: true,
+  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
@@ -74,7 +74,7 @@ var cheatDice4 = new Kinetic.Rect({
   id: "control",
   width: 37.5,
   height: 37.5,
-  draggable: true,
+  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
@@ -88,7 +88,7 @@ var cheatDice5 = new Kinetic.Rect({
   id: "control",
   width: 37.5,
   height: 37.5,
-  draggable: true,
+  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
@@ -102,7 +102,7 @@ var cheatDice6 = new Kinetic.Rect({
   id: "control",
   width: 37.5,
   height: 37.5,
-  draggable: true,
+  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
@@ -241,7 +241,8 @@ window.addEventListener('keydown', function(e) {
 boardLayer.on('click tap', function(e) {
 
   var shape = e.targetNode;
-  console.log("Selected " + shape.getName());
+  console.log("Selected shape name:" + shape.getName());
+  console.log("\tId: " + shape.getId());
 
   currentPlayer = game.getCurrentPlayer();
 
@@ -256,6 +257,15 @@ boardLayer.on('click tap', function(e) {
   } else if (shape.getName() == "hex") {
     console.log("emit:hexClicked," + shape.getId());
     iosocket.emit('hexClicked', shape.getId());
+
+  } else if (shape.getName() == "stack0") {
+    // clicked twice same stack
+    console.log("Hex clicked " + shape.getId());
+    hex = shape.hex;
+    if (!hex.defendersVisible)
+      hex.showDefenders();
+    else
+      hex.hideDefenders();
 
   } else if (shape.getName() == "generate") {
     console.log("emit:generateButtonClicked,");

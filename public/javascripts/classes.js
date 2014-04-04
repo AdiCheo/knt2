@@ -22,6 +22,9 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.affinity = -1;
   hexagon.isExplored = false;
 
+  hexagon.containedDefenders = [];
+  hexagon.defendersVisible = false;
+
   hexagon.setOwnerIcon = function(affinity) {
 
     //relative position within hex
@@ -70,12 +73,12 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   };
 
-  hexagon.setStackIcon = function(affinity) {
+  hexagon.setStackIcon = function(affinity, hexId) {
 
     var stack = new Kinetic.Image({
       x: this.getX() - 20,
       y: this.getY() - 20,
-      id: this.id,
+      id: "stack" + hexId,
       name: "stack" + affinity,
       image: StackIconArray[affinity],
       width: 40,
@@ -87,29 +90,65 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     stack.show();
     boardLayer.draw();
 
+    stack.hex = hexagon;
   };
 
-  hexagon.setStackView = function(stacks, hexId) {
-    for (var i = stacks.length - 1; i >= 0; i--) {
-      console.log(stacks[i].id);
-    };
+  hexagon.addThingIcon = function(thingName, index) {
+    console.log(thingName + "Image");
+    console.log(thingImagesArray[thingName + "Image"]);
+    var thing = new Kinetic.Image({
+      x: this.getX() - 25, //500 + 300,
+      y: this.getY() + 25 + index * 50, //500 + index * 50,
+      id: "defender",
+      name: thingName,
+      image: thingImagesArray[thingName + "Image"],
+      draggable: true,
+      width: 50,
+      height: 50
+    });
 
-    // var stack = new Kinetic.Image({
-    //   x: this.getX() - 20,
-    //   y: this.getY() - 20,
-    //   id: this.id,
-    //   name: "stack" + affinity,
-    //   image: StackIconArray[affinity],
-    //   width: 40,
-    //   height: 40
-    // });
-
-    // boardLayer.add(stack);
-    // stack.moveToTop();
-    // stack.show();
-    // boardLayer.draw();
-
+    hexagon.containedDefenders.push(thing);
+    boardLayer.add(thing);
+    thing.moveToTop();
+    thing.show();
+    boardLayer.draw();
   };
+
+  hexagon.updateIcons = function(stackThings) {
+    // Remove old icons
+    for (var i in hexagon.containedDefenders) {
+      hexagon.containedDefenders[i].remove();
+      delete hexagon.containedDefenders[i]
+    }
+    hexagon.containedDefenders = [];
+
+    // Update Rack
+    cleanList = cleanArray(stackThings);
+    for (var i in cleanList) {
+      hexagon.addThingIcon(cleanList[i], i);
+    }
+  };
+
+  hexagon.showDefenders = function() {
+    var yO = 50;
+
+    for (var each in hexagon.containedDefenders) {
+      // hexagon.containedDefenders[each].setX(hexagon.getX() + 5);
+      // hexagon.containedDefenders[each].setY(hexagon.getY() + yO);
+      hexagon.containedDefenders[each].show();
+      hexagon.containedDefenders[each].moveToTop();
+      yO += 40;
+    }
+    hexagon.defendersVisible = true;
+  };
+
+  hexagon.hideDefenders = function() {
+    for (var each in hexagon.containedDefenders) {
+      hexagon.containedDefenders[each].hide();
+    }
+    hexagon.defendersVisible = false;
+  };
+
 
   return hexagon;
 }
@@ -229,11 +268,26 @@ function initRack(realX, realY) {
 
   // rack.rearrange = function(rack.containedThings) {}
 
-  rack.addThingIcon = function(thingName) {
+  rack.updateIcons = function(rackThings) {
+    // Remove old icons
+    for (var i in thingsInRack) {
+      thingsInRack[i].remove();
+      delete thingsInRack[i]
+    }
+    thingsInRack = [];
+
+    // Update Rack
+    cleanList = cleanArray(rackThings);
+    for (var i in cleanList) {
+      rack.addThingIcon(cleanList[i], i);
+    }
+  }
+
+  rack.addThingIcon = function(thingName, index) {
     console.log(thingName + "Image");
     console.log(thingImagesArray[thingName + "Image"]);
     var thing = new Kinetic.Image({
-      x: this.getX() + Math.max((thingsInRack.length - 1), 0) * 50,
+      x: this.getX() + index * 50,
       y: this.getY(),
       id: "defender",
       name: thingName,
@@ -250,7 +304,6 @@ function initRack(realX, realY) {
     thing.show();
     boardLayer.draw();
   };
-
 
   return rack;
 }

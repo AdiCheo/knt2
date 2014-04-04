@@ -66,6 +66,7 @@ function initConnection() {
     });
 
     iosocket.on('diceRollResult', function(diceValue) {
+      console.log('Dice result:' + diceResult);
       handleDiceResult(diceValue);
     });
 
@@ -119,9 +120,9 @@ function initConnection() {
       updateStackAll(hexId, affinity);
     });
 
-    iosocket.on('updateStack', function(hexId, currentArmy) {
-      console.log("updateStack" + currentArmy);
-      updateStack(hexId, currentArmy);
+    iosocket.on('updateStack', function(hexId, stackThings) {
+      console.log("updateStack" + stackThings);
+      updateStack(hexId, stackThings);
     });
 
     iosocket.on('map', function(mapData) {
@@ -166,13 +167,24 @@ function highlightMovement() {
 function updateStackAll(hexId, affinity) {
   // place stack icon for particular army on hexId
   console.log("Army " + affinity + " placing stack at " + hexId);
-  boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+  boardLayer.get('#' + hexId)[0].setStackIcon(affinity, hexId);
 }
 
-function updateStack(hexId, currentArmy) {
-  console.log("Your stack at " + hexId + " has been updated");
-  console.log(currentArmy.stacks);
-  boardLayer.get('#' + hexId)[0].setStackView(currentArmy.stacks, hexId);
+function updateStack(hexId, stackThings) {
+  console.log("Your stack at " + hexId + " has been updated with " + stackThings);
+  if (!boardLayer.get('#stack' + hexId)[0]) {
+    updateStackAll(hexId, 0);
+  }
+
+  // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);
+
+  // // Update rack
+  // boardLayer.get('#rack')[0].updateIcons(currentArmy.rack);
+
+  // Update stacks
+  boardLayer.get('#' + hexId)[0].updateIcons(stackThings, 0);
+  // boardLayer.get('#' + hexId)[0].setStackView(stackThings);
+
 }
 
 function createHexes(hexes) {
@@ -191,9 +203,9 @@ function updateForts(hexId, affinity) {
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
 }
 
-function updateRack(rack) {
-  console.log(rack);
-  // boardLayer.get('#rack')[0].addThingIcon(thing);
+function updateRack(rackThings) {
+  console.log(rackThings);
+  boardLayer.get('#rack')[0].updateIcons(rackThings);
 }
 
 // function addThingToRack(thing) {
@@ -234,6 +246,10 @@ function updateRack(rack) {
 // TODO Merged here
 function endedTurn() {
   console.log('You have ended your turn');
+}
+
+function handleDiceResult(diceResult) {
+  console.log('Dice result:' + diceResult);
 }
 
 function nextPlayerTurn(game) {
