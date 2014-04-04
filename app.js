@@ -86,59 +86,68 @@ io.sockets.on('connection', function(socket) {
       eventEndTurnClicked(socket);
     });
 
-    if (game.currentPhase == SETUP_PHASE) {
-      // Place Marker Button Listener
-      socket.on('placeMarkerButton', function() {
+    // Place Marker Button Listener
+    socket.on('placeMarkerButton', function() {
+      if (game.currentPhase == SETUP_PHASE) {
         eventPlaceMarkerButton(socket);
-      });
+      }
+    });
 
-      // Build fort button listener
-      socket.on('buildFortButton', function() {
+    // Build fort button listener
+    socket.on('buildFortButton', function() {
+      if (game.currentPhase == SETUP_PHASE) {
         eventBuildFortButton(socket);
-      });
+      }
+    });
 
-      // Hex click listener
-      socket.on('hexClicked', function(hexId) {
+    // Hex click listener
+    socket.on('hexClicked', function(hexId) {
+      if (game.currentPhase == SETUP_PHASE) {
         eventClickedOnHexSetupPhase(socket, hexId);
-      });
-    }
+      }
+    });
 
-    if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {
-      // Magic Cup click listener
-      socket.on('generateButtonClicked', function() {
+    // Magic Cup click listener
+    socket.on('generateButtonClicked', function() {
+      if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {
         eventGenerateClicked(socket);
-      });
+      }
+    });
 
-      // Hex click listener
-      socket.on('hexClicked', function(hexId) {
+    // Hex click listener
+    socket.on('hexClicked', function(hexId) {
+      if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {
         eventClickedOnHex(socket, hexId);
-      });
-    }
+      }
+    });
 
-    if (game.currentPhase == GOLD_COLLECTION_PHASE) {
-      socket.on('collectGoldButtonClicked', function() {
+
+    socket.on('collectGoldButtonClicked', function() {
+      if (game.currentPhase == GOLD_COLLECTION_PHASE) {
         eventCollectGoldButton(socket);
-      });
-    }
+      }
+    });
 
-    if (game.currentPhase == RECRUIT_HERO_PHASE) {
-      // Hex click listener
-      socket.on('hexClicked', function(hexId) {
+    // Hex click listener
+    socket.on('hexClicked', function(hexId) {
+      if (game.currentPhase == RECRUIT_HERO_PHASE) {
         eventClickedOnHex(socket, hexId);
-      });
-    }
+      }
+    });
 
-    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
-      // Magic Cup click listener
-      socket.on('generateButtonClicked', function() {
+    // Magic Cup click listener
+    socket.on('generateButtonClicked', function() {
+      if (game.currentPhase == RECRUIT_THINGS_PHASE) {
         eventGenerateClicked(socket);
-      });
+      }
+    });
 
-      // Hex click listener
-      socket.on('hexClicked', function(hexId) {
+    // Hex click listener
+    socket.on('hexClicked', function(hexId) {
+      if (game.currentPhase == RECRUIT_THINGS_PHASE) {
         eventClickedOnHex(socket, hexId);
-      });
-    }
+      }
+    });
 
     if (game.currentPhase == RANDOM_EVENTS_PHASE) {
 
@@ -148,12 +157,12 @@ io.sockets.on('connection', function(socket) {
 
     }
 
-    if (game.currentPhase == COMBAT_PHASE) {
-      // Dice roll (random) listener
-      socket.on('diceRollPressed', function() {
+    // Dice roll (random) listener
+    socket.on('diceRollPressed', function() {
+      if (game.currentPhase == COMBAT_PHASE) {
         handleDice(socket, randomDiceRoll());
-      });
-    }
+      }
+    });
 
     if (game.currentPhase == CONSTRUCTION_PHASE) {
 
@@ -470,6 +479,10 @@ function eventClickedOnHex(socket, hexId) {
   // place on the clicked hex if owned by player
 
   if (currentArmy.canPlaceDefender) {
+    console.log("LOG" + indexById(currentArmy.ownedHexes, hexId));
+    console.log("LOG" + indexById(currentArmy.stacks, hexId));
+    console.log("LOG" + currentArmy.stacks);
+    console.log("LOG" + currentArmy.ownedHexes);
     if (indexById(currentArmy.ownedHexes, hexId) !== null &&
       indexById(currentArmy.stacks, hexId) === null) {
       var stack = new Stack(hexId, currentArmy.affinity);
