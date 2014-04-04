@@ -109,8 +109,9 @@ io.sockets.on('connection', function(socket) {
 
     // Magic Cup click listener
     socket.on('generateButtonClicked', function() {
-      eventGenerateClicked(socket);
-      if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {}
+      if (game.currentPhase === SETUP_RECRUITMENT_PHASE) {
+        eventGenerateClicked(socket);
+      }
     });
 
     // Hex click listener
@@ -137,7 +138,14 @@ io.sockets.on('connection', function(socket) {
     // Magic Cup click listener
     socket.on('generateButtonClicked', function() {
       eventGenerateClicked(socket);
-      if (game.currentPhase == RECRUIT_THINGS_PHASE) {}
+      if (game.currentPhase == RECRUIT_THINGS_PHASE) {
+        eventGenerateClicked(socket);
+      }
+    });
+
+    socket.on('defenderClicked', function(defenderName) {
+      // TODO Phase IF
+      eventDefenderClicked(socket);
     });
 
     // Hex click listener
@@ -371,7 +379,6 @@ function MovementPhase(socket, hexId) {
   }
 
   if (game.currentPhase == MOVEMENT_PHASE) {
-    // if (shape.getName() == "stack")
     if ((game.currentPlayerTurn == currentArmy.affinity)) {
       socket.emit('highlightMovement', hexId, game);
 
@@ -382,31 +389,10 @@ function MovementPhase(socket, hexId) {
   }
 }
 
-// function eventDefenderClicked(socket, defenderName) {
-//   console.log(game.armies);
-//   currentArmy = game.armies[indexById(game.armies, socket.id)];
-//   console.log("Player " + currentArmy + " clicked defender" + defenderName);
-
-//   if (currentArmy.canEndTurn) {
-//     socket.emit('error', "You must end your turn now!");
-//     return;
-//   }
-
-//   if (game.currentPlayerTurn != currentArmy.affinity) {
-//     socket.emit('error', "It is not your turn yet!");
-//     return;
-//   }
-
-//   if (game.currentPhase == -1) { //TODO CHange to 0
-//     currentArmy.canPlaceDefender = true;
-//     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
-//   }
-// }
-
-function eventGenerateClicked(socket) {
+function eventDefenderClicked(socket, defenderName) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy + " clicked generate button (cup)");
+  console.log("Player " + currentArmy + " clicked defender" + defenderName);
 
   if (currentArmy.canEndTurn) {
     socket.emit('error', "You must end your turn now!");
@@ -418,14 +404,48 @@ function eventGenerateClicked(socket) {
     return;
   }
 
-  currentArmy.thingInHand = game.newRandomDefender();
-  socket.emit('addThingToRack', currentArmy.thingInHand);
-
-  if (game.currentPhase === 0) {
+  if (game.currentPhase == -1) { //TODO CHange to 0
     currentArmy.canPlaceDefender = true;
     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
-    currentArmy.thingInHand = game.newRandomDefender();
   }
+}
+
+function eventGenerateClicked(socket) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked generate button (cup)");
+  console.log(currentArmy.thingInHand);
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if (game.currentPlayerTurn != currentArmy.affinity) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  // if (game.currentPhase === 0) {
+  if (!currentArmy.thingInHand) {
+    currentArmy.thingInHand = game.newRandomDefender();
+    currentArmy.rack.push(currentArmy.thingInHand);
+    socket.emit('updateRack', currentArmy.rack);
+    currentArmy.canReplace = true;
+  } else {
+    prevThing = currentArmy.thingInHand;
+    currentArmy.thingInHand = game.newRandomDefender();
+
+    // Remove previous thing
+    removeFromThingsArray(currentArmy.rack, prevThing);
+
+    currentArmy.rack.push(currentArmy.thingInHand);
+    socket.emit('rackUpdate', currentArmy.rack);
+    currentArmy.thingInHand = false;
+  }
+  // socket.emit('allowDefenderPlacement', publicGameData(socket.id));
+  // currentArmy.thingInHand = game.newRandomDefender();
+  // }
 }
 
 function eventClickedOnHexSetupPhase(socket, hexId) {
@@ -636,4 +656,17 @@ function indexByKey(array, key, value) {
 
 function indexById(array, value) {
   return indexByKey(array, "id", value);
+}
+
+function removeFromThingsArray(array, name) {
+  for (var i in array) {
+    if (array[i] == name) {
+      console.log("Removing " + name + " in array");
+      array.slice(i, 1);
+      delete array[i]; // TODO big issues with deleting from arrays.. WHYYYYY
+      return true;
+    }
+  }
+  console.log("Could not find " + name + " in array. (Remove)");
+  return false;
 }

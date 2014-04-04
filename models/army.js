@@ -12,12 +12,14 @@ function Army(affinity, name, income, gold, currentGameTurn, id) {
   this.canEndTurn = false;
   this.canChooseHex = false;
   this.canBuildFort = false;
+  this.thingInHand = false;
 
   var color = ['yellow', 'grey', 'green', 'red'];
   this.color = color[affinity];
   this.ownedHexes = [];
   this.forts = [];
   this.stacks = [];
+  this.rack = [];
 
   this.getOwnedHexes = function() {
     return this.ownedHexes;

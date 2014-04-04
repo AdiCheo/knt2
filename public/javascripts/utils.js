@@ -75,6 +75,26 @@ function addPerPlayerPiecesToBoard(array) {
   }
 }
 
+function findInThingsArray(array, name) {
+  for (var i in array) {
+    if (array[i].getName() == name)
+      return array[i];
+  }
+  console.log("Could not find [" + name + "] in array. (Find)");
+  return false;
+}
+
+function removeFromThingsArray(array, name) {
+  for (var i in array) {
+    if (array[i].getName() == name) {
+      array.slice(i, 1)[0];
+      return true;
+    }
+  }
+  console.log("Could not find " + name + " in array. (Remove)");
+  return false;
+}
+
 function rolldice() {
   //rolldice example from
   //http://stackoverflow.com/questions/20701586/dice-roll-in-javascript

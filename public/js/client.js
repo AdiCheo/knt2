@@ -77,8 +77,12 @@ function initConnection() {
       endedTurn();
     });
 
-    iosocket.on('addThingToRack', function(thing) {
-      addThingToRack(thing);
+    iosocket.on('updateRack', function(rack) {
+      updateRack(rack);
+    });
+
+    iosocket.on('replaceThingInRack', function(thing, prevThing) {
+      replaceThingInRack(thing, prevThing);
     });
 
     //update the gold
@@ -136,8 +140,6 @@ function collectGoldButton() {
   document.getElementById("gold_" + game.armies[temp].color).textContent = "Gold: " + game.armies[temp].gold;
 }
 
-
-
 function updateUsers(users) {
   userList = users;
   $('#user').empty();
@@ -189,10 +191,40 @@ function updateForts(hexId, affinity) {
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
 }
 
-function addThingToRack(thing) {
-  console.log(thing);
-  boardLayer.get('#rack')[0].setThingIcon(thing);
+function updateRack(rack) {
+  console.log(rack);
+  // boardLayer.get('#rack')[0].addThingIcon(thing);
 }
+
+// function addThingToRack(thing) {
+//   console.log(thing);
+//   boardLayer.get('#rack')[0].addThingIcon(thing);
+// }
+
+// function replaceThingInRack(thing, prevThing) { //replaceThingInRack
+//   console.log(thing + " replacing earlier choice " + prevThing);
+
+//   findInThingsArray(thingsArray, prevThing).remove();
+
+//   // removeFromThingsArray(thingsArray, prevThing);
+//   for (var i in thingsArray) {
+//     if (thingsArray[i].getName() == prevThing) {
+//       // TODO Problem deleting item from array
+//       thingsArray = thingsArray.slice(0, 1);
+//       console.log("Found " + prevThing + " in array. (Remove)");
+//     }
+//   }
+//   // removeFromThingsArray(thingsInRack, prevThing);
+//   for (var i in thingsInRack) {
+//     if (thingsInRack[i].getName() == prevThing) {
+//       // TODO Problem deleting item from array
+//       thingsInRack = thingsInRack.slice(0, 1);
+//       console.log("Found " + prevThing + " in array. (Remove)");
+//     }
+//   }
+
+//   boardLayer.get('#rack')[0].addThingIcon(thing);
+// }
 
 // function newTurn(affinity) {
 //   console.log("New turn. Army " + affinity + " must play.");

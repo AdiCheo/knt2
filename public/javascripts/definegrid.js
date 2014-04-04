@@ -6,6 +6,9 @@ var stage = new Kinetic.Stage({
 
 var rack = initRack(1000, 300);
 
+var thingsArray = [];
+var thingsInRack = [];
+
 //dice1 button
 var dice1button = new Kinetic.Rect({
   x: 15, //stage.getWidth() - 350

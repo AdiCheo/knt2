@@ -227,29 +227,28 @@ function initRack(realX, realY) {
     id: "rack"
   });
 
-  rack.containedThings = [];
-
   // rack.rearrange = function(rack.containedThings) {}
 
-  rack.setThingIcon = function(thingName) {
+  rack.addThingIcon = function(thingName) {
     console.log(thingName + "Image");
     console.log(thingImagesArray[thingName + "Image"]);
-
     var thing = new Kinetic.Image({
-      x: this.getX(),
+      x: this.getX() + Math.max((thingsInRack.length - 1), 0) * 50,
       y: this.getY(),
-      id: this.id,
-      name: "thing",
+      id: "defender",
+      name: thingName,
       image: thingImagesArray[thingName + "Image"],
+      draggable: true,
       width: 50,
       height: 50
     });
 
+    thingsArray.push(thing);
+    thingsInRack.push(thing);
     boardLayer.add(thing);
     thing.moveToTop();
     thing.show();
     boardLayer.draw();
-
   };
 
 
