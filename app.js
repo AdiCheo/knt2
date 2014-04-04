@@ -239,10 +239,25 @@ function eventStateInit(socket, user) {
   socket.emit('createHexes', game.hexes);
   socket.emit('map', populateHexTiles());
 
-  // Testing only: (example setting rack and a stack)
+  // Testing only: (example setting rack and a stack) ////////////////////////////////////////////
   socket.emit('updateRack', ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
   socket.emit('updateStack', "0,0", ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'DustDevil']);
   socket.emit('updateStack', "2,1", ['Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
+
+  io.sockets.emit('updateOwnedHex', "-2,-1", 0);
+  io.sockets.emit('updateOwnedHex', "-1,-2", 0);
+  io.sockets.emit('updateOwnedHex', "-1,-1", 0);
+  io.sockets.emit('updateOwnedHex', "-3,3", 1);
+  io.sockets.emit('updateOwnedHex', "-3,2", 1);
+  io.sockets.emit('updateOwnedHex', "-2,3", 1);
+  io.sockets.emit('updateOwnedHex', "1,-3", 2);
+  io.sockets.emit('updateOwnedHex', "1,-2", 2);
+  io.sockets.emit('updateOwnedHex', "2,-3", 2);
+  io.sockets.emit('updateOwnedHex', "2,1", 3);
+  io.sockets.emit('updateOwnedHex', "1,2", 3);
+  io.sockets.emit('updateOwnedHex', "1,1", 3);
+
+  // End Testing /////////////////////////////////////////////////////////////////////////////////
 
   socket.emit('state.init', publicGameData(socket.id));
 }
