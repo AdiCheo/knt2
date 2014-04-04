@@ -304,10 +304,25 @@ function Game() {
   };
 
   this.nextPlayerTurn = function(currentArmy) {
+    console.log("The Total # of turns" + this.totalTurn);
     if (this.currentPlayerTurn == 3) {
       this.currentPlayerTurn = 0;
       this.totalTurn++;
       console.log("Army 4 turn ended. Army 1 to move");
+
+      console.log("The Total # of turns" + this.totalTurn);
+      // Handle phase transitions here
+      if ((this.currentPhase) % 9 === 0 && this.currentPhase !== 0) {
+        this.currentPhase = 1;
+        console.log("New phase cycle. Moving to phase: " + this.currentPhase);
+      } else if (this.totalTurn == 4) {
+        this.currentPhase = 0;
+        console.log("Moving to phase: " + this.currentPhase);
+      } else {
+        this.currentPhase++;
+        console.log("Moving to phase: " + this.currentPhase);
+      }
+
     } else if (this.currentPlayerTurn == 2) {
       this.currentPlayerTurn = 3;
       this.totalTurn++;
