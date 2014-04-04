@@ -386,11 +386,6 @@ document.getElementById("racktext").style.top = 300 + "px";
 document.getElementById("playerturntext").style.left = 100 + "px";
 document.getElementById("playerturntext").style.top = 15 + "px";
 
-//Set unit stats to the left
-document.getElementById("unitstats").style.left = (stage.getX() + 700) + "px";
-document.getElementById("unitstats").style.top = (stage.getY() + 25) + "px";
-document.getElementById("unitstats").style.position = "fixed";
-
 document.getElementById("armystats1").style.left = (stage.getX() + 900) + "px";
 document.getElementById("armystats1").style.top = (stage.getY() + 25) + "px";
 document.getElementById("armystats1").style.position = "fixed";

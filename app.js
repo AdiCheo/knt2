@@ -231,7 +231,7 @@ function eventStateInit(socket, user) {
   createHexTiles();
   socket.emit('createHexes', game.hexes);
   socket.emit('map', populateHexTiles());
-  socket.emit('state.init', publicGameData(socket.id));
+  socket.emit('state.init', initialGameData(socket.id));
 }
 
 function eventDisconnect(socket) {
@@ -262,7 +262,7 @@ function eventEndTurnClicked(socket) {
     currentArmy.canEndTurn = false;
     // socket.emit('endTurn', "New turn + num (TODO)");
     // Send message to all clients that a player turn ended
-    io.sockets.emit('nextPlayerTurn', game);
+    io.sockets.emit('nextPlayerTurn', publicGameData(socket.id));
 
     // Send message to current player that he ended his turn
     socket.emit('endedTurn');
@@ -421,8 +421,8 @@ function eventGenerateClicked(socket) {
 
   if (game.currentPhase === 0) {
     currentArmy.canPlaceDefender = true;
-    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
     currentArmy.defenderInHand = game.newRandomDefender();
+    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
   }
 
 }
@@ -515,11 +515,18 @@ function eventClickedOnHex(socket, hexId) {
 //   socket.emit('error', 'Select available action item first!');
 // }
 
-function publicGameData(socketId) {
+function initialGameData(socketId) {
   return {
     game: game,
     playerId: socketId,
-    affinity: game.users.length
+    affinity: game.users.length - 1
+  };
+}
+
+function publicGameData(socketId) {
+  return {
+    game: game,
+    playerId: socketId
   };
 }
 
