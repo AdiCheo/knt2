@@ -56,10 +56,11 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   hexagon.setFortIcon = function(affinity) {
 
+    console.log(this.getId());
     var fort = new Kinetic.Image({
       x: this.getX() - 35,
       y: this.getY() - 60,
-      id: this.id,
+      id: this.getId(),
       name: "fort" + affinity,
       image: fortImage,
       width: 40,
