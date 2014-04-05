@@ -211,6 +211,19 @@ function fortUpgraded(gameData) {
   console.log("fort has been upgraded");
   //TODO:change icon of the fort to upgraded for using the value
   //boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
+
+  //TODO: upgrade the gold value of the current player
+  if (localAffinity == gameData.game.currentPlayerTurn) {
+    if (localAffinity === 0) {
+      document.getElementById(gold_red).textContent = "Gold: " + publicData.game.armies[0].gold;
+    } else if (localAffinity == 1) {
+      document.getElementById(gold_grey).textContent = "Gold: " + publicData.game.armies[0].gold;
+    } else if (localAffinity == 2) {
+      document.getElementById(gold_yellow).textContent = "Gold: " + publicData.game.armies[0].gold;
+    } else if (localAffinity == 3) {
+      document.getElementById(gold_green).textContent = "Gold: " + publicData.game.armies[0].gold;
+    }
+  }
 }
 
 function updateRack(rackThings) {
