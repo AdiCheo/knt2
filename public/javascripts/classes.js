@@ -264,15 +264,15 @@ function Defender(source, defenderName, combatValue, canCharge, terrainType, isR
 
 
 function initRack(realX, realY) {
-  var rack = new Kinetic.Rect({
+  var rack = new Kinetic.Image({
     x: realX,
     y: realY,
     name: 'rack',
+    image: rackImage,
     width: 500,
     height: 50,
     draggable: false,
     strokeWidth: 0,
-    fill: "grey",
     id: "rack"
   });
 

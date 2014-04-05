@@ -86,13 +86,8 @@ io.sockets.on('connection', function(socket) {
     eventEndTurnClicked(socket);
   });
 
-  // rack click listener
-  socket.on('rackClicked', function() {
-    if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
-      eventClickedOnRack(socket);
-    }
-  });
 
+  /*** SETUP_PHASE ***/
   // Place Marker Button Listener
   socket.on('placeMarkerButton', function() {
     if (game.currentPhase == SETUP_PHASE) {
@@ -107,13 +102,6 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
-  //fort clicked/ upgraded listener
-  socket.on('clickedOnExistingFort', function(hexId) {
-    // if (game.currentPhase == CONSTRUCTION_PHASE) {
-    eventUpgradeFort(socket, hexId);
-    // } TODO: uncomment
-  });
-
   // Hex click listener
   socket.on('hexClicked', function(hexId) {
     if (game.currentPhase == SETUP_PHASE) {
@@ -121,6 +109,7 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
+  /*** SETUP_RECRUITMENT_PHASE **/
   // Magic Cup click listener
   socket.on('generateButtonClicked', function() {
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
@@ -135,11 +124,43 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
+  // rack click listener
+  socket.on('rackClicked', function() {
+    if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
+      eventClickedOnRack(socket);
+    }
+  });
+
+  /*** GOLD_COLLECTION_PHASE ***/
+  // Gold collection button listener
   socket.on('collectGoldButtonClicked', function() {
     if (game.currentPhase == GOLD_COLLECTION_PHASE) {
       eventCollectGoldButton(socket);
     }
   });
+
+  /*** RECRUIT_HERO_PHASE  ***/
+  /*** RECRUIT_THINGS_PHASE  ***/
+  /*** RANDOM_EVENTS_PHASE  ***/
+  /*** MOVEMENT_PHASE  ***/
+  /*** COMBAT_PHASE  ***/
+
+  /*** CONSTRUCTION_PHASE ***/
+  //fort clicked/upgraded listener
+  socket.on('clickedOnExistingFort', function(hexId) {
+    if (game.currentPhase == CONSTRUCTION_PHASE) {
+      eventUpgradeFort(socket, hexId);
+    }
+  });
+
+  socket.on('buildFortButton', function(hexId) {
+    if (game.currentPhase == CONSTRUCTION_PHASE) {
+      eventbuyFort(socket, hexId);
+    }
+  });
+
+  /*** SPECIAL_POWERS_PHASE ***/
+  /*** CHANGE_ORDER_PHASE ***/
 
   // Hex click listener
   socket.on('hexClicked', function(hexId) {
@@ -167,32 +188,12 @@ io.sockets.on('connection', function(socket) {
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {}
   });
 
-  if (game.currentPhase == RANDOM_EVENTS_PHASE) {
-
-  }
-
-  if (game.currentPhase == MOVEMENT_PHASE) {
-
-  }
-
   // Dice roll (random) listener
   socket.on('diceRollPressed', function() {
     if (game.currentPhase == COMBAT_PHASE) {
       handleDice(socket);
     }
   });
-
-  if (game.currentPhase == CONSTRUCTION_PHASE) {
-
-  }
-
-  if (game.currentPhase == SPECIAL_POWERS_PHASE) {
-
-  }
-
-  if (game.currentPhase == CHANGE_ORDER_PHASE) {
-
-  }
 
   // Hex click listener
   // socket.on('hexClicked', function(hexId) {

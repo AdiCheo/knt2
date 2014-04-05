@@ -1,5 +1,4 @@
 var fortImages = [];
-
 var fortImageSources = {
   tower: "images/Building/-n Tower -a 1.jpg",
   towerd: "images/Building/-n Tower -s Neutralised.jpg",
@@ -12,6 +11,9 @@ var fortImageSources = {
 };
 
 loadImages(fortImages, fortImageSources);
+
+var rackImage = new Image();
+rackImage.src = "images/Extra/-n Rack.png";
 
 // var fortImage = new Image();
 // fortImage.src = 'images/Building/-n Tower -a 1.jpg';
