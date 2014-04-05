@@ -86,6 +86,10 @@ function initConnection() {
       updateRack(rack);
     });
 
+    iosocket.on('updateHand', function(rack) {
+      updateHand(rack);
+    });
+
     iosocket.on('replaceThingInRack', function(thing, prevThing) {
       replaceThingInRack(thing, prevThing);
     });
@@ -221,6 +225,11 @@ function fortUpgraded(armyData) {
 function updateRack(rackThings) {
   console.log(rackThings);
   boardLayer.get('#rack')[0].updateIcons(rackThings);
+}
+
+function updateHand(thing) {
+  console.log("Thing in hand " + thing);
+  boardLayer.get('#cup')[0].updateIcons(thing);
 }
 
 // function addThingToRack(thing) {

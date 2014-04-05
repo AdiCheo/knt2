@@ -18,8 +18,7 @@ function Game() {
   // functions
   this.newRandomDefender = function() {
     i = Math.floor(Math.random() * this.cup.length);
-    return this.cup.splice(i, 1)[0];
-    // returnthis.cup.pop(Math.floor(Math.random() * this.cup.length));
+    return this.cup[i];
   }
 
   this.createCupDefenders = function() {
