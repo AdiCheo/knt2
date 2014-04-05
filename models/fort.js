@@ -1,5 +1,5 @@
 function Fort(hex, affinity) {
-  this.id = hex.id;
+  this.id = hex;
   this.name = "fort" + affinity;
 
   this.value = 1;

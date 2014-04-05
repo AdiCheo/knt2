@@ -353,6 +353,7 @@ function eventUpgradeFort(socket, hexId) {
     socket.emit('error', "You cannot end your turn yet!");
     return;
   }
+  console.log(currentArmy.forts);
   if (indexById(currentArmy.forts, hexId) !== null) {
     var index = indexById(currentArmy.forts, hexId);
     if (currentArmy.gold >= 5) {
@@ -360,7 +361,7 @@ function eventUpgradeFort(socket, hexId) {
         currentArmy.forts[index].hasBeenUpgraded = true;
         currentArmy.value++;
         currentArmy.gold -= 5;
-        io.sockets.emit('fortUpgraded', publicGameData(socket));
+        io.sockets.emit('fortUpgraded', publicGameData(socket.id));
       } else {
         socket.emit('error', "You already upgraded this turn!");
       }
