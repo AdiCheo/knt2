@@ -171,8 +171,8 @@ bowlbutton.addThingIcon = function(thingName) {
   console.log(thingName + "Image");
   console.log(thingImagesArray[thingName + "Image"]);
   var thing = new Kinetic.Image({
-    x: this.getX() + 50,
-    y: this.getY() + 50,
+    x: this.getX() + 40,
+    y: this.getY() + 40,
     id: "defender",
     name: thingName,
     image: thingImagesArray[thingName + "Image"],
@@ -302,7 +302,7 @@ boardLayer.on('click tap', function(e) {
 
   } else if (shape.getName() == "stack0") {
     // clicked twice same stack
-    console.log("Hex clicked " + shape.getId());
+    console.log("List " + shape.getId() + ":" + shape.containedDefenders);
     hex = shape.hex;
     if (!hex.defendersVisible)
       hex.showDefenders();

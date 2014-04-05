@@ -123,6 +123,7 @@ io.sockets.on('connection', function(socket) {
 
   // Magic Cup click listener
   socket.on('generateButtonClicked', function() {
+    // eventGenerateClicked(socket); // TODO Testing
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventGenerateClicked(socket);
     }
@@ -130,6 +131,7 @@ io.sockets.on('connection', function(socket) {
 
   // Hex click listener
   socket.on('hexClicked', function(hexId) {
+    // eventClickedOnHex(socket, hexId); // TODO Testing
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventClickedOnHex(socket, hexId);
     }
@@ -150,7 +152,6 @@ io.sockets.on('connection', function(socket) {
 
   // Magic Cup click listener
   socket.on('generateButtonClicked', function() {
-    // eventGenerateClicked(socket); // TODO testing only
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {
       eventGenerateClicked(socket);
     }
@@ -524,31 +525,29 @@ function eventGenerateClicked(socket) {
     return;
   }
 
-  if (game.currentPhase === 0) {
-    // Only pick up 10 things from cup
-    // either place on rack or on hex you own
-    // allow replacements
-    if (!currentArmy.thingInHand) {
-      // get thing in hand
-      currentArmy.thingInHand = game.newRandomDefender();
-      console.log("newRandomDefender" + currentArmy.thingInHand);
-      // update socket
-      socket.emit('updateHand', currentArmy.thingInHand);
-      currentArmy.canPlaceDefender = true;
-      currentArmy.canReplace = true;
-    } else if (currentArmy.canReplace) {
-      currentArmy.thingInHand = game.newRandomDefender();
-      console.log("newRandomDefender" + currentArmy.thingInHand);
-      // update socket
-      socket.emit('updateHand', currentArmy.thingInHand);
-      currentArmy.canReplace = false;
-    } else {
-      socket.emit('error', 'Invalid bowlButton click');
-      console.log("Invalid bowlButton click");
-    }
-    // socket.emit('allowDefenderPlacement', publicGameData(socket.id));
-    // currentArmy.thingInHand = game.newRandomDefender();
+  // if (game.currentPhase === 0) {
+  // Only pick up 10 things from cup
+  // either place on rack or on hex you own
+  // allow replacements
+  if (!currentArmy.thingInHand) {
+    // get thing in hand
+    currentArmy.thingInHand = game.newRandomDefender();
+    console.log("newRandomDefender" + currentArmy.thingInHand);
+    // update socket
+    socket.emit('updateHand', currentArmy.thingInHand);
+    currentArmy.canPlaceDefender = true;
+    currentArmy.canReplace = true;
+  } else if (currentArmy.canReplace) {
+    currentArmy.thingInHand = game.newRandomDefender();
+    console.log("newRandomDefender" + currentArmy.thingInHand);
+    // update socket
+    socket.emit('updateHand', currentArmy.thingInHand);
+    currentArmy.canReplace = false;
+  } else {
+    socket.emit('error', 'Invalid bowlButton click');
+    console.log("Invalid bowlButton click");
   }
+  // }
 }
 
 function eventClickedOnHexSetupPhase(socket, hexId) {
@@ -620,7 +619,7 @@ function eventClickedOnHex(socket, hexId) {
       game.removeFromCup(currentArmy.thingInHand);
       // send update socket
       io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-      socket.emit('updateStack', hexId, currentArmy.thingInHand);
+      socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)]).containDefenders;
       socket.emit('updateHand', null);
 
       currentArmy.thingInHand = false;
