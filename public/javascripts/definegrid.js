@@ -243,7 +243,6 @@ boardLayer.on('click tap', function(e) {
   var shape = e.targetNode;
   console.log("Selected shape name:" + shape.getName());
   console.log("\tId: " + shape.getId());
-
   currentPlayer = game.getCurrentPlayer();
 
   if (shape.getName() == "placeMarkerButton") {
