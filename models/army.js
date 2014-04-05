@@ -57,6 +57,21 @@ function Army(affinity, name, income, gold, id) {
     return this.ownedHexes.length;
   };
 
+  this.updateIncome = function() {
+    currentArmy.income = 0;
+
+    // Income from total number of hexes
+    currentArmy.income += currentArmy.ownedHexes.length;
+
+    // Income from value of forts
+    var fortTotalValue = 0;
+    for (var i in currentArmy.forts) {
+      fortTotalValue += currentArmy.forts[i].value;
+    }
+
+    currentArmy.income += fortTotalValue;
+  };
+
   function isHexLegalToOwn(hex, currentArmy, game) {
     var index = indexById(game.hexes, hex);
     var currentHex = game.hexes[index];

@@ -143,9 +143,12 @@ function initConnection() {
     });
 
     iosocket.on('gameOver', function() {
-      alert("A player disconnected. Game Over!");
-      var win = window.open("", "_self"); /* url = "" or "about:blank"; target="_self" */
-      win.close();
+      console.log("A player disconnected. Game Over!");
+      window.location.href = "about:blank";
+
+
+      // var win = window.open("", "_self"); /* url = "" or "about:blank"; target="_self" */
+      // win.close();
     });
   });
 }

@@ -369,15 +369,28 @@ function eventUpgradeFort(socket, hexId) {
     socket.emit('error', "You cannot end your turn yet!");
     return;
   }
-  console.log(currentArmy.forts);
+
   if (indexById(currentArmy.forts, hexId) !== null) {
     var index = indexById(currentArmy.forts, hexId);
     if (currentArmy.gold >= 5) {
       if (!currentArmy.forts[index].hasBeenUpgraded) {
-        currentArmy.forts[index].hasBeenUpgraded = true;
-        currentArmy.forts[index].value++;
-        currentArmy.gold -= 5;
-        io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].value, currentArmy.gold, currentArmy.forts[index].id));
+        if (currentArmy.forts[index].value == 3) {
+          if (currentArmy.income >= 20) {
+            currentArmy.forts[index].hasBeenUpgraded = true;
+            currentArmy.forts[index].value++;
+            currentArmy.gold -= 5;
+            io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].value, currentArmy.gold, currentArmy.forts[index].id));
+          } else {
+            socket.emit('error', "You need an income of at least 20 gold to upgrade to citadel.");
+          }
+        } else if (currentArmy.forts[index].value < 3) {
+          currentArmy.forts[index].hasBeenUpgraded = true;
+          currentArmy.forts[index].value++;
+          currentArmy.gold -= 5;
+          io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].value, currentArmy.gold, currentArmy.forts[index].id));
+        } else {
+          socket.emit('error', "You cannot upgrade a citadel.");
+        }
       } else {
         socket.emit('error', "You already upgraded this turn!");
       }
@@ -435,23 +448,9 @@ function eventCollectGoldButton(socket) {
     return;
   }
 
-  currentArmy.income = 0;
-
-  // Income from total number of hexes
-  currentArmy.income += currentArmy.ownedHexes.length;
-
-  // Income from value of forts
-  var fortTotalValue = 0;
-  for (var i in currentArmy.forts) {
-    console.log(currentArmy.forts[i].value);
-    fortTotalValue += currentArmy.forts[i].value;
-  }
-
-  currentArmy.income += fortTotalValue;
-
+  currentArmy.updateIncome();
   currentArmy.gold += currentArmy.income;
   currentArmy.canEndTurn = true;
-
   io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));
 }
 
