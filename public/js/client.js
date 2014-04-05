@@ -225,7 +225,9 @@ function updateForts(hexId, affinity) {
 function fortUpgraded(fortUpgradeData) {
   console.log("fort has been upgraded");
   //TODO:change icon of the fort to upgraded for using the value
-  //boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
+  boardLayer.get('#fort' + fortUpgradeData.hexId)[0].remove();
+  boardLayer.get('#' + fortUpgradeData.hexId)[0].setFortIcon(fortUpgradeData.affinity, fortUpgradeData.fortValue);
+
   if (fortUpgradeData.affinity === 0) {
     document.getElementById("gold_yellow").innerHTML = "Gold: " + fortUpgradeData.gold;
   } else if (fortUpgradeData.affinity == 1) {

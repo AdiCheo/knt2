@@ -1,5 +1,20 @@
-var fortImage = new Image();
-fortImage.src = 'images/Building/-n Tower -a 1.jpg';
+var fortImages = [];
+
+var fortImageSources = {
+  tower: "images/Building/-n Tower -a 1.jpg",
+  towerd: "images/Building/-n Tower -s Neutralised.jpg",
+  keep: "images/Building/-n Keep -a 2.jpg",
+  keepd: "images/Building/-n Keep -s Neutralised.jpeg",
+  castle: "images/Building/-n Castle -a 3.jpg",
+  castled: "images/Building/-n Castle -s Neutralised.jpg",
+  citadel: "images/Building/-n Citadel -a 4.jpg",
+  citadeld: "images/Building/-n Citadel -s Neutralised.jpg",
+};
+
+loadImages(fortImages, fortImageSources);
+
+// var fortImage = new Image();
+// fortImage.src = 'images/Building/-n Tower -a 1.jpg';
 
 // Dice Images
 var dice = {};

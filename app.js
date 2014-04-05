@@ -377,7 +377,7 @@ function eventUpgradeFort(socket, hexId) {
         currentArmy.forts[index].hasBeenUpgraded = true;
         currentArmy.forts[index].value++;
         currentArmy.gold -= 5;
-        io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].value, currentArmy.gold));
+        io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].value, currentArmy.gold, currentArmy.forts[index].id));
       } else {
         socket.emit('error', "You already upgraded this turn!");
       }
@@ -389,11 +389,12 @@ function eventUpgradeFort(socket, hexId) {
   }
 }
 
-function fortUpgradeData(affinity, fortValue, gold) {
+function fortUpgradeData(affinity, fortValue, gold, hexId) {
   return {
     affinity: affinity,
     fortValue: fortValue,
-    gold: gold
+    gold: gold,
+    hexId: hexId
   };
 }
 

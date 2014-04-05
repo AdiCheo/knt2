@@ -35,8 +35,6 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
     // TODO fix one icon limit
     var icon = createIcon(iconImg, 25, "marker");
-
-    var icon = createIcon(iconImg, 25, "marker");
     boardLayer.add(icon);
     console.log("Generating icon for hex " + this.id + " for army: " + (affinity + 1));
 
@@ -54,19 +52,30 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     console.log("New affinity: " + affinity + " for hex: " + this.getId());
   };
 
-  hexagon.setFortIcon = function(affinity) {
+  hexagon.setFortIcon = function(affinity, fortValue) {
+
+    fortImage = fortImages["tower"];
+
+    if (fortValue == 2) {
+      fortImage = fortImages["keep"];
+    } else if (fortValue == 3) {
+      fortImage = fortImages["castle"];
+    } else if (fortValue == 4) {
+      fortImage = fortImages["citadel"];
+    }
 
     console.log(this.getId());
     var fort = new Kinetic.Image({
       x: this.getX() - 35,
       y: this.getY() - 60,
-      id: this.getId(),
+      id: "fort" + this.getId(),
       name: "fort",
       image: fortImage,
       width: 40,
       height: 40
     });
 
+    fort.hexId = this.getId();
     boardLayer.add(fort);
     fort.moveToTop();
     fort.show();

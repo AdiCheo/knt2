@@ -124,7 +124,7 @@ var placeMarkerButton = new Kinetic.Image({
 
 var buildFortButton = new Kinetic.Image({
   name: "buildFortButton",
-  image: fortImage,
+  image: fortImages["tower"],
   id: "control",
   x: 5,
   y: 200,
@@ -204,7 +204,7 @@ var endturnbutton = new Kinetic.Image({ //End turn button
 var boardLayer = new Kinetic.Layer();
 
 createBoardLayer();
-generateFort(boardLayer.get("#-2,-1")[0], fortImage, 0, boardLayer);
+generateFort(boardLayer.get("#-2,-1")[0], fortImages["tower"], 0, boardLayer);
 
 var current_soldier;
 
@@ -290,7 +290,7 @@ boardLayer.on('click tap', function(e) {
 
   } else if (shape.getName() == "fort") {
     console.log("emit:clickedOnExistingFort");
-    iosocket.emit('clickedOnExistingFort', shape.getId());
+    iosocket.emit('clickedOnExistingFort', shape.hexId);
 
   } else if (shape.getName() == "hex") {
     console.log("emit:hexClicked," + shape.getId());
