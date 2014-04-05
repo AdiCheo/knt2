@@ -70,149 +70,146 @@ io.sockets.on('connection', function(socket) {
   // If the number of players is more than 4, don't do anything
   // We will only allow 4 players to join for now
   // Extra: Create game rooms of 4 players each
-  if (game.users.length <= 3) {
+  socket.on('disconnect', function() {
+    eventDisconnect(socket);
+  });
 
-    // Player connection event
-    socket.on('adduser', function(user) {
-      eventStateInit(socket, user);
-    });
+  // Player connection event
+  socket.on('adduser', function(user) {
+    eventStateInit(socket, user);
+  });
 
-    socket.on('disconnect', function() {
-      eventDisconnect(socket);
-    });
+  // End Turn button listener
+  socket.on('endTurnClicked', function() {
+    eventEndTurnClicked(socket);
+  });
 
-    // End Turn button listener
-    socket.on('endTurnClicked', function() {
-      eventEndTurnClicked(socket);
-    });
+  // Place Marker Button Listener
+  socket.on('placeMarkerButton', function() {
+    if (game.currentPhase == SETUP_PHASE) {
+      eventPlaceMarkerButton(socket);
+    }
+  });
 
-    // Place Marker Button Listener
-    socket.on('placeMarkerButton', function() {
-      if (game.currentPhase == SETUP_PHASE) {
-        eventPlaceMarkerButton(socket);
-      }
-    });
+  // Build fort button listener
+  socket.on('buildFortButton', function() {
+    if (game.currentPhase == SETUP_PHASE) {
+      eventBuildFortButton(socket);
+    }
+  });
 
-    // Build fort button listener
-    socket.on('buildFortButton', function() {
-      if (game.currentPhase == SETUP_PHASE) {
-        eventBuildFortButton(socket);
-      }
-    });
+  //fort clicked/ upgraded listener 
+  socket.on('clickedOnExistingFort', function(hexId) {
+    // if (game.currentPhase == CONSTRUCTION_PHASE) {
+    eventUpgradeFort(socket, hexId);
+    // } TODO: uncomment
+  });
 
-    //fort clicked/ upgraded listener 
-    socket.on('clickedOnExistingFort', function(hexId) {
-      // if (game.currentPhase == CONSTRUCTION_PHASE) {
-      eventUpgradeFort(socket, hexId);
-      // } TODO: uncomment
-    });
+  // Hex click listener
+  socket.on('hexClicked', function(hexId) {
+    if (game.currentPhase == SETUP_PHASE) {
+      eventClickedOnHexSetupPhase(socket, hexId);
+    }
+  });
 
-    // Hex click listener
-    socket.on('hexClicked', function(hexId) {
-      if (game.currentPhase == SETUP_PHASE) {
-        eventClickedOnHexSetupPhase(socket, hexId);
-      }
-    });
+  // Magic Cup click listener
+  socket.on('generateButtonClicked', function() {
+    if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
+      eventGenerateClicked(socket);
+    }
+  });
 
-    // Magic Cup click listener
-    socket.on('generateButtonClicked', function() {
-      if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
-        eventGenerateClicked(socket);
-      }
-    });
-
-    // Hex click listener
-    socket.on('hexClicked', function(hexId) {
-      if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
-        eventClickedOnHex(socket, hexId);
-      }
-    });
-
-
-    socket.on('collectGoldButtonClicked', function() {
-      if (game.currentPhase == GOLD_COLLECTION_PHASE) {
-        eventCollectGoldButton(socket);
-      }
-    });
-
-    // Hex click listener
-    socket.on('hexClicked', function(hexId) {
-      if (game.currentPhase == RECRUIT_HERO_PHASE) {
-        eventClickedOnHex(socket, hexId);
-      }
-    });
-
-    // Magic Cup click listener
-    socket.on('generateButtonClicked', function() {
-      // eventGenerateClicked(socket);
-      if (game.currentPhase == RECRUIT_THINGS_PHASE) {
-        eventGenerateClicked(socket);
-      }
-    });
-
-    socket.on('defenderClicked', function(defenderName) {
-      // TODO Phase IF
-      eventDefenderClicked(socket);
-    });
-
-    // Hex click listener
-    socket.on('hexClicked', function(hexId) {
+  // Hex click listener
+  socket.on('hexClicked', function(hexId) {
+    if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventClickedOnHex(socket, hexId);
-      if (game.currentPhase == RECRUIT_THINGS_PHASE) {}
-    });
-
-    if (game.currentPhase == RANDOM_EVENTS_PHASE) {
-
     }
+  });
 
-    if (game.currentPhase == MOVEMENT_PHASE) {
 
+  socket.on('collectGoldButtonClicked', function() {
+    if (game.currentPhase == GOLD_COLLECTION_PHASE) {
+      eventCollectGoldButton(socket);
     }
+  });
 
-    // Dice roll (random) listener
-    socket.on('diceRollPressed', function() {
-      if (game.currentPhase == COMBAT_PHASE) {
-        handleDice(socket);
-      }
-    });
-
-    if (game.currentPhase == CONSTRUCTION_PHASE) {
-
+  // Hex click listener
+  socket.on('hexClicked', function(hexId) {
+    if (game.currentPhase == RECRUIT_HERO_PHASE) {
+      eventClickedOnHex(socket, hexId);
     }
+  });
 
-    if (game.currentPhase == SPECIAL_POWERS_PHASE) {
-
+  // Magic Cup click listener
+  socket.on('generateButtonClicked', function() {
+    // eventGenerateClicked(socket);
+    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
+      eventGenerateClicked(socket);
     }
+  });
 
-    if (game.currentPhase == CHANGE_ORDER_PHASE) {
+  socket.on('defenderClicked', function(defenderName) {
+    // TODO Phase IF
+    eventDefenderClicked(socket);
+  });
 
-    }
+  // Hex click listener
+  socket.on('hexClicked', function(hexId) {
+    eventClickedOnHex(socket, hexId);
+    if (game.currentPhase == RECRUIT_THINGS_PHASE) {}
+  });
 
-    // Hex click listener
-    // socket.on('hexClicked', function(hexId) {
-    //   eventClickedOnHex(socket, hexId);
-    // });
+  if (game.currentPhase == RANDOM_EVENTS_PHASE) {
 
-    // Magic Cup click listener
-    // socket.on('generateButtonClicked', function() {
-    //   eventGenerateClicked(socket);
-    // });
-
-    // Defender click listener
-    // socket.on('defenderClicked', function(defenderName) {
-    //   eventDefenderClicked(socket, defenderName);
-    // });
-
-    // Dice roll (random) listener
-    // socket.on('diceRollPressed', function() {
-    //   handleDice(socket, randomDiceRoll());
-    // });
-
-    // Dice roll (preset) listener
-    // socket.on('diceRollDefined', function(diceValue) {
-    //   handleDice(socket, diceValue);
-    // });
   }
+
+  if (game.currentPhase == MOVEMENT_PHASE) {
+
+  }
+
+  // Dice roll (random) listener
+  socket.on('diceRollPressed', function() {
+    if (game.currentPhase == COMBAT_PHASE) {
+      handleDice(socket);
+    }
+  });
+
+  if (game.currentPhase == CONSTRUCTION_PHASE) {
+
+  }
+
+  if (game.currentPhase == SPECIAL_POWERS_PHASE) {
+
+  }
+
+  if (game.currentPhase == CHANGE_ORDER_PHASE) {
+
+  }
+
+  // Hex click listener
+  // socket.on('hexClicked', function(hexId) {
+  //   eventClickedOnHex(socket, hexId);
+  // });
+
+  // Magic Cup click listener
+  // socket.on('generateButtonClicked', function() {
+  //   eventGenerateClicked(socket);
+  // });
+
+  // Defender click listener
+  // socket.on('defenderClicked', function(defenderName) {
+  //   eventDefenderClicked(socket, defenderName);
+  // });
+
+  // Dice roll (random) listener
+  // socket.on('diceRollPressed', function() {
+  //   handleDice(socket, randomDiceRoll());
+  // });
+
+  // Dice roll (preset) listener
+  // socket.on('diceRollDefined', function(diceValue) {
+  //   handleDice(socket, diceValue);
+  // });
 });
 
 function handleDice(socket) {
@@ -234,10 +231,8 @@ function randomDiceRoll() {
 
 function eventStateInit(socket, user) {
   console.log("Adding a User");
-  console.log("AFFINITY: " + game.users.length);
-  army = new Army(game.users.length, user, 0, 10, game.users.length, socket.id);
+  army = new Army(game.users.length, user, 0, 10, socket.id);
   user.id = socket.id;
-
   game.users.push(user);
   game.numberOfPlayers++;
   game.armies.push(army);
@@ -272,8 +267,13 @@ function eventStateInit(socket, user) {
 }
 
 function eventDisconnect(socket) {
+  io.sockets.emit('gameOver');
+  game = new Game();
   game.users.splice(indexById(game.users, socket.id), 1);
-  io.sockets.emit('disconnect');
+  for (var i = 0; i < game.users.length; i++) {
+    io.sockets.socket(game.users[i]).disconnect();
+  }
+
   updateClients();
 }
 
@@ -304,7 +304,7 @@ function eventEndTurnClicked(socket) {
     };
 
     // Send message to all clients that a player turn ended
-    io.sockets.emit('nextPlayerTurn', publicGameData(socket.id));
+    io.sockets.emit('nextPlayerTurn', nextTurnData());
 
     // Send message to current player that he ended his turn
     socket.emit('endedTurn');
@@ -317,6 +317,13 @@ function eventEndTurnClicked(socket) {
   }
 }
 
+function nextTurnData() {
+  return {
+    currentPhase: game.currentPhase,
+    currentPlayerTurn: game.currentPlayerTurn
+  };
+}
+
 function eventBuildFortButton(socket) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -327,16 +334,16 @@ function eventBuildFortButton(socket) {
     return;
   }
 
-  // if (currentArmy.canEndTurn) {
-  //   socket.emit('error', "You must end your turn now!");
-  //   return;
-  // }
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
   //TODO: uncomment
 
   if (currentArmy.getNumOfHexes() == 3) {
     console.log("# of hexes" + currentArmy.getNumOfHexes);
     currentArmy.canBuildFort = true;
-    socket.emit('allowFortPlacement', publicGameData(socket.id));
+    socket.emit('allowFortPlacement');
   } else {
     // Now it is time to place a fort
     socket.emit('error', "You need to own 3 hexes first");
@@ -360,9 +367,9 @@ function eventUpgradeFort(socket, hexId) {
     if (currentArmy.gold >= 5) {
       if (!currentArmy.forts[index].hasBeenUpgraded) {
         currentArmy.forts[index].hasBeenUpgraded = true;
-        currentArmy.value++;
+        currentArmy.forts[index].value++;
         currentArmy.gold -= 5;
-        io.sockets.emit('fortUpgraded', publicArmyData(socket.id));
+        io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].value, currentArmy.gold));
       } else {
         socket.emit('error', "You already upgraded this turn!");
       }
@@ -374,15 +381,22 @@ function eventUpgradeFort(socket, hexId) {
   }
 }
 
+function fortUpgradeData(affinity, fortValue, gold) {
+  return {
+    affinity: affinity,
+    fortValue: fortValue,
+    gold: gold
+  };
+}
+
 function eventPlaceMarkerButton(socket) {
-  console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " pressed on Marker Button");
 
-  // if (currentArmy.canEndTurn) {
-  //   socket.emit('error', "You must end your turn now!");
-  //   return;
-  // }
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
 
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
@@ -391,7 +405,7 @@ function eventPlaceMarkerButton(socket) {
 
   if (currentArmy.getNumOfHexes() < 3) {
     currentArmy.canChooseHex = true;
-    socket.emit('allowMarkerPlacement', publicGameData(socket.id));
+    socket.emit('allowMarkerPlacement');
   } else if (currentArmy.getNumOfHexes() == 3) {
     // Now it is time to place a fort
     socket.emit('error', "You need to build a fort");
@@ -407,28 +421,36 @@ function eventCollectGoldButton(socket) {
     return;
   }
 
-  // if (currentArmy.canEndTurn) {
-  //   socket.emit('error', "You must end your turn now!");
-  //   return;
-  // }
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
 
   currentArmy.income = 0;
 
   // Income from total number of hexes
-  currentArmy.income += currentArmy.ownedHexes;
+  currentArmy.income += currentArmy.ownedHexes.length;
 
-  // // Income from value of forts
-  // var fortTotalValue = 0;
-  // for (var fort in currentArmy.getFortHexes()) {
-  //   fortTotalValue += currentArmy.getFortHexes()[fort].value;
-  //   currentArmy.income += currentArmy.getFortHexes()[fort].value;
+  // Income from value of forts
+  var fortTotalValue = 0;
+  for (var i in currentArmy.forts) {
+    console.log(currentArmy.forts[i].value);
+    fortTotalValue += currentArmy.forts[i].value;
+  }
+
+  currentArmy.income += fortTotalValue;
 
   currentArmy.gold += currentArmy.income;
+  currentArmy.canEndTurn = true;
 
-  army[currentPlayer].canEndTurn = true;
+  io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));
+}
 
-  io.sockets.emit('updateGold', publicGameData(socket.id));
-
+function updatedGoldData(affinity, gold) {
+  return {
+    affinity: affinity,
+    gold: gold
+  };
 }
 
 //function for Movement Phase
@@ -474,7 +496,7 @@ function eventDefenderClicked(socket, defenderName) {
   if (game.currentPhase == -1) { //TODO CHange to 0
     currentArmy.canPlaceDefender = true;
     currentArmy.defenderInHand = game.newRandomDefender();
-    socket.emit('allowDefenderPlacement', publicGameData(socket.id));
+    socket.emit('allowDefenderPlacement');
   }
 }
 

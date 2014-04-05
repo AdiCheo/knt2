@@ -65,8 +65,8 @@ function initConnection() {
       updateForts(hexId, affinity);
     });
 
-    iosocket.on('fortUpgraded', function(armyData) {
-      fortUpgraded(armyData);
+    iosocket.on('fortUpgraded', function(fortUpgradeData) {
+      fortUpgraded(fortUpgradeData);
     });
 
     iosocket.on('diceRollResult', function(diceValue) {
@@ -95,6 +95,11 @@ function initConnection() {
       collectGoldButton();
     });
 
+    iosocket.on('updateGold', function(updatedGoldData) {
+      updateGold(updatedGoldData);
+      console.log("Update the gold to all players.");
+    });
+
     iosocket.on('nextPlayerTurn', function(gameData) {
       nextPlayerTurn(gameData);
     });
@@ -103,11 +108,11 @@ function initConnection() {
       console.log("ERROR:" + msg);
     });
 
-    iosocket.on('allowMarkerPlacement', function(gameData) {
+    iosocket.on('allowMarkerPlacement', function() {
       allowMarkerPlacement();
     });
 
-    iosocket.on('allowFortPlacement', function(gameData) {
+    iosocket.on('allowFortPlacement', function() {
       console.log("Place a fort.");
     });
 
@@ -115,7 +120,7 @@ function initConnection() {
       highlightMovement();
     });
 
-    iosocket.on('allowDefenderPlacement', function(gameData) {
+    iosocket.on('allowDefenderPlacement', function() {
       console.log("Place your defender on a hex you own");
     });
 
@@ -131,6 +136,12 @@ function initConnection() {
 
     iosocket.on('map', function(mapData) {
       updateMapData(mapData);
+    });
+
+    iosocket.on('gameOver', function() {
+      alert("A player disconnected. Game Over!");
+      var win = window.open("", "_self"); /* url = "" or "about:blank"; target="_self" */
+      win.close();
     });
   });
 }
@@ -207,15 +218,31 @@ function updateForts(hexId, affinity) {
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
 }
 
-function fortUpgraded(armyData) {
+function fortUpgraded(fortUpgradeData) {
   console.log("fort has been upgraded");
   //TODO:change icon of the fort to upgraded for using the value
   //boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
+  if (fortUpgradeData.affinity === 0) {
+    document.getElementById("gold_yellow").innerHTML = "Gold: " + fortUpgradeData.gold;
+  } else if (fortUpgradeData.affinity == 1) {
+    document.getElementById("gold_grey").innerHTML = "Gold: " + fortUpgradeData.gold;
+  } else if (fortUpgradeData.affinity == 2) {
+    document.getElementById("gold_green").innerHTML = "Gold: " + fortUpgradeData.gold;
+  } else if (fortUpgradeData.affinity == 3) {
+    document.getElementById("gold_red").innerHTML = "Gold: " + fortUpgradeData.gold;
+  }
+}
 
-  document.getElementById("gold_yellow").innerHTML = "Gold: " + armyData.armies[0].gold;
-  document.getElementById("gold_grey").innerHTML = "Gold: " + armyData.armies[1].gold;
-  document.getElementById("gold_green").innerHTML = "Gold: " + armyData.armies[2].gold;
-  document.getElementById("gold_red").innerHTML = "Gold: " + armyData.armies[3].gold;
+function updateGold(updatedGoldData) {
+  if (updatedGoldData.affinity === 0) {
+    document.getElementById("gold_yellow").innerHTML = "Gold: " + updatedGoldData.gold;
+  } else if (updatedGoldData.affinity == 1) {
+    document.getElementById("gold_grey").innerHTML = "Gold: " + updatedGoldData.gold;
+  } else if (updatedGoldData.affinity == 2) {
+    document.getElementById("gold_green").innerHTML = "Gold: " + updatedGoldData.gold;
+  } else if (updatedGoldData.affinity == 3) {
+    document.getElementById("gold_red").innerHTML = "Gold: " + updatedGoldData.gold;
+  }
 }
 
 function updateRack(rackThings) {
@@ -269,13 +296,14 @@ function handleDiceResult(diceResult) {
 
 function nextPlayerTurn(gameData) {
   //output the current phase the game is in
-  document.getElementById("phasetext").innerHTML = "Current Phase: " + gameData.game.currentPhase;
+  document.getElementById("phasetext").innerHTML = "Current Phase: " + gameData.currentPhase;
 
   //output the current player turn
-  document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + gameData.game.currentPlayerTurn;
+  var turn = gameData.currentPlayerTurn + 1;
+  document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + turn;
 
   console.log(playerId);
-  if (localAffinity == gameData.game.currentPlayerTurn) {
+  if (localAffinity == gameData.currentPlayerTurn) {
     console.log("It is your turn to play now");
   }
 }
