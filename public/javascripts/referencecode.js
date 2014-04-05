@@ -1655,7 +1655,7 @@ boardLayer.on('click tap', function(e) {
       var distance = calculateDistance(current_soldier, shape);
       console.log("Distance for requested movement calculated as:" + distance);
 
-      if (distance > current_soldier.AP) {
+  if (distance > current_soldier.AP) {
         console.log("Not enough AP to reach destination hex!");
       } else {
 

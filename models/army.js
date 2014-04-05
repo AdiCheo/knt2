@@ -1,12 +1,12 @@
 var Fort = require('./fort.js');
 
 //define army class
-function Army(affinity, name, income, gold, currentGameTurn, id) {
+function Army(affinity, name, income, gold, id) {
   this.affinity = affinity;
   this.name = name;
   this.income = income;
   this.gold = gold;
-  this.currentGameTurn = currentGameTurn;
+  this.currentGameTurn = affinity;
   this.id = id;
 
   this.canEndTurn = false;

@@ -4,7 +4,6 @@ function Fort(hex, affinity) {
 
   this.value = 1;
   this.affinity = affinity;
-  this.name = "fort" + affinity;
 
   this.hasBeenUpgraded = false;
 
