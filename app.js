@@ -234,6 +234,7 @@ function randomDiceRoll() {
 
 function eventStateInit(socket, user) {
   console.log("Adding a User");
+  console.log("AFFINITY: " + game.users.length);
   army = new Army(game.users.length, user, 0, 10, game.users.length, socket.id);
   user.id = socket.id;
 
@@ -361,7 +362,7 @@ function eventUpgradeFort(socket, hexId) {
         currentArmy.forts[index].hasBeenUpgraded = true;
         currentArmy.value++;
         currentArmy.gold -= 5;
-        io.sockets.emit('fortUpgraded', publicGameData(socket.id));
+        io.sockets.emit('fortUpgraded', publicArmyData(socket.id));
       } else {
         socket.emit('error', "You already upgraded this turn!");
       }
@@ -626,6 +627,13 @@ function publicGameData(socketId) {
   return {
     game: game,
     playerId: socketId
+  };
+}
+
+function publicArmyData(socketId) {
+  return {
+    armies: game.armies
+    // playerId: socketId
   };
 }
 

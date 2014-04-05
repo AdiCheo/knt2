@@ -65,8 +65,8 @@ function initConnection() {
       updateForts(hexId, affinity);
     });
 
-    iosocket.on('fortUpgraded', function(gameData) {
-      fortUpgraded(gameData);
+    iosocket.on('fortUpgraded', function(armyData) {
+      fortUpgraded(armyData);
     });
 
     iosocket.on('diceRollResult', function(diceValue) {
@@ -207,23 +207,15 @@ function updateForts(hexId, affinity) {
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
 }
 
-function fortUpgraded(gameData) {
+function fortUpgraded(armyData) {
   console.log("fort has been upgraded");
   //TODO:change icon of the fort to upgraded for using the value
   //boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
 
-  //TODO: upgrade the gold value of the current player
-  if (localAffinity == gameData.game.currentPlayerTurn) {
-    if (localAffinity === 0) {
-      document.getElementById(gold_red).textContent = "Gold: " + publicData.game.armies[0].gold;
-    } else if (localAffinity == 1) {
-      document.getElementById(gold_grey).textContent = "Gold: " + publicData.game.armies[0].gold;
-    } else if (localAffinity == 2) {
-      document.getElementById(gold_yellow).textContent = "Gold: " + publicData.game.armies[0].gold;
-    } else if (localAffinity == 3) {
-      document.getElementById(gold_green).textContent = "Gold: " + publicData.game.armies[0].gold;
-    }
-  }
+  document.getElementById("gold_yellow").innerHTML = "Gold: " + armyData.armies[0].gold;
+  document.getElementById("gold_grey").innerHTML = "Gold: " + armyData.armies[1].gold;
+  document.getElementById("gold_green").innerHTML = "Gold: " + armyData.armies[2].gold;
+  document.getElementById("gold_red").innerHTML = "Gold: " + armyData.armies[3].gold;
 }
 
 function updateRack(rackThings) {
