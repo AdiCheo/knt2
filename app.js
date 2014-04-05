@@ -100,6 +100,13 @@ io.sockets.on('connection', function(socket) {
       }
     });
 
+    //fort clicked/ upgraded listener 
+    socket.on('clickedOnExistingFort', function(hexId) {
+      // if (game.currentPhase == CONSTRUCTION_PHASE) {
+      eventUpgradeFort(socket, hexId);
+      // } TODO: uncomment
+    });
+
     // Hex click listener
     socket.on('hexClicked', function(hexId) {
       if (game.currentPhase == SETUP_PHASE) {
@@ -289,7 +296,12 @@ function eventEndTurnClicked(socket) {
   if (currentArmy.canEndTurn) {
     game.nextPlayerTurn(currentArmy);
     currentArmy.canEndTurn = false;
-    // socket.emit('endTurn', "New turn + num (TODO)");
+
+    //reset the fort upgrade flags to false
+    for (var i in currentArmy.forts) {
+      currentArmy.forts[i].hasBeenUpgraded = false;
+    };
+
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', publicGameData(socket.id));
 
@@ -318,6 +330,7 @@ function eventBuildFortButton(socket) {
   //   socket.emit('error', "You must end your turn now!");
   //   return;
   // }
+  //TODO: uncomment
 
   if (currentArmy.getNumOfHexes() == 3) {
     console.log("# of hexes" + currentArmy.getNumOfHexes);
@@ -326,6 +339,36 @@ function eventBuildFortButton(socket) {
   } else {
     // Now it is time to place a fort
     socket.emit('error', "You need to own 3 hexes first");
+  }
+}
+
+function eventUpgradeFort(socket, hexId) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+  if (!currentArmy.canEndTurn) {
+    socket.emit('error', "You cannot end your turn yet!");
+    return;
+  }
+  if (indexById(currentArmy.forts, hexId) !== null) {
+    var index = indexById(currentArmy.forts, hexId);
+    if (currentArmy.gold >= 5) {
+      if (!currentArmy.forts[index].hasBeenUpgraded) {
+        currentArmy.forts[index].hasBeenUpgraded = true;
+        currentArmy.value++;
+        currentArmy.gold -= 5;
+        io.sockets.emit('fortUpgraded', publicGameData(socket));
+      } else {
+        socket.emit('error', "You already upgraded this turn!");
+      }
+    } else {
+      socket.emit('error', "You do not have enough gold!");
+    }
+  } else {
+    socket.emit('error', "This is not your fort!");
   }
 }
 

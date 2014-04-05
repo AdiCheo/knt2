@@ -253,6 +253,10 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:buildFortButton");
     iosocket.emit('buildFortButton');
 
+  } else if (shape.getName() == "fort") {
+    console.log("emit:clickedOnExistingFort");
+    iosocket.emit('clickedOnExistingFort', shape.getId());
+
   } else if (shape.getName() == "hex") {
     console.log("emit:hexClicked," + shape.getId());
     iosocket.emit('hexClicked', shape.getId());

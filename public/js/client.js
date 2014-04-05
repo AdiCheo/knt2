@@ -65,6 +65,10 @@ function initConnection() {
       updateForts(hexId, affinity);
     });
 
+    iosocket.on('fortUpgraded', function(gameData) {
+      fortUpgraded(gameData);
+    });
+
     iosocket.on('diceRollResult', function(diceValue) {
       console.log('Dice result:' + diceResult);
       handleDiceResult(diceValue);
@@ -201,6 +205,12 @@ function updateHex(hexId, affinity) {
 function updateForts(hexId, affinity) {
   console.log("Army " + affinity + " owning " + hexId);
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
+}
+
+function fortUpgraded(gameData) {
+  console.log("fort has been upgraded");
+  //TODO:change icon of the fort to upgraded for using the value
+  //boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
 }
 
 function updateRack(rackThings) {

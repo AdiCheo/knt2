@@ -6,6 +6,8 @@ function Fort(hex, affinity) {
   this.affinity = affinity;
   this.name = "fort" + affinity;
 
+  this.hasBeenUpgraded = false;
+
 }
 
 module.exports = Fort;

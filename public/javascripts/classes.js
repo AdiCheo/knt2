@@ -61,7 +61,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
       x: this.getX() - 35,
       y: this.getY() - 60,
       id: this.getId(),
-      name: "fort" + affinity,
+      name: "fort",
       image: fortImage,
       width: 40,
       height: 40
