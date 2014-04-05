@@ -151,11 +151,41 @@ var bowlbutton = new Kinetic.Image({
   x: 200,
   y: 20,
   name: 'generate',
-  id: "control",
+  id: "cup",
   image: bowlButtonImg,
   width: 128,
   height: 128
 });
+
+bowlbutton.updateIcons = function(thing) {
+  // Remove old icon
+  if (bowlbutton.oldThing)
+    bowlbutton.oldThing.remove();
+
+  // Update bowlbutton
+  bowlbutton.addThingIcon(thing);
+}
+
+bowlbutton.addThingIcon = function(thingName) {
+  console.log(thingName + "Image");
+  console.log(thingImagesArray[thingName + "Image"]);
+  var thing = new Kinetic.Image({
+    x: this.getX(),
+    y: this.getY(),
+    id: "defender",
+    name: thingName,
+    image: thingImagesArray[thingName + "Image"],
+    draggable: true,
+    width: 50,
+    height: 50
+  });
+
+  bowlbutton.oldThing = thing;
+  boardLayer.add(thing);
+  thing.moveToTop();
+  thing.show();
+  boardLayer.draw();
+};
 
 var endturnbutton = new Kinetic.Image({ //End turn button
   x: 5,
@@ -215,9 +245,13 @@ window.addEventListener('keydown', function(e) {
   } else if (e.keyCode == 68) { //d Key
     game.toggleDice();
 
-  } else if (e.keyCode == 77) { //m Key
+  } else if (e.keyCode == 83) { //s Key
     console.log("emit:placeMarkerButton");
     iosocket.emit('placeMarkerButton');
+
+  } else if (e.keyCode == 70) { //f Key
+    console.log("emit:buildFortButton");
+    iosocket.emit('buildFortButton');
 
   } else if (e.keyCode == 82) { //r
     console.log("emit:diceRollPressed,");

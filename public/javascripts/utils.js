@@ -87,7 +87,7 @@ function findInThingsArray(array, name) {
 function removeFromThingsArray(array, name) {
   for (var i in array) {
     if (array[i].getName() == name) {
-      array.slice(i, 1)[0];
+      array.splice(i, 1);
       return true;
     }
   }
