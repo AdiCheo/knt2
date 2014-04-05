@@ -260,7 +260,7 @@ function eventStateInit(socket, user) {
   // End Testing /////////////////////////////////////////////////////////////////////////////////
 
   // socket.emit('state.init', publicGameData(socket.id));
-  // socket.emit('state.init', initialGameData(socket.id));
+  socket.emit('state.init', initialGameData(socket.id));
 }
 
 function eventDisconnect(socket) {
