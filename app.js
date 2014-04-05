@@ -1,4 +1,4 @@
-//TODO: design - change it so that we are not sending all of the 
+//TODO: design - change it so that we are not sending all of the
 //game data.
 
 /* Globals */
@@ -126,6 +126,13 @@ io.sockets.on('connection', function(socket) {
     socket.on('hexClicked', function(hexId) {
       if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
         eventClickedOnHex(socket, hexId);
+      }
+    });
+
+    // rack click listener
+    socket.on('rackClicked', function() {
+      if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
+        eventClickedOnRack(socket);
       }
     });
 
@@ -500,14 +507,17 @@ function eventGenerateClicked(socket) {
     // either place on rack or on hex you own
     // allow replacements
     if (!currentArmy.thingInHand) {
+      // get thing in hand
       currentArmy.thingInHand = game.newRandomDefender();
       console.log("newRandomDefender" + currentArmy.thingInHand);
+      // update socket
       socket.emit('updateHand', currentArmy.thingInHand);
       currentArmy.canPlaceDefender = true;
       currentArmy.canReplace = true;
     } else if (currentArmy.canReplace) {
       currentArmy.thingInHand = game.newRandomDefender();
       console.log("newRandomDefender" + currentArmy.thingInHand);
+      // update socket
       socket.emit('updateHand', currentArmy.thingInHand);
       currentArmy.canReplace = false;
     } else {
@@ -574,21 +584,6 @@ function eventClickedOnHex(socket, hexId) {
     console.log("LOG" + indexById(currentArmy.stacks, hexId));
     console.log("LOG" + currentArmy.stacks);
     console.log("LOG" + currentArmy.ownedHexes);
-    // <<<<<<< HEAD
-    //     if (indexById(currentArmy.ownedHexes, hexId) !== null &&
-    //       indexById(currentArmy.stacks, hexId) === null) {
-
-    //       var stack = new Stack(hexId, currentArmy.affinity);
-    //       stack.containDefenders.push(currentArmy.thingInHand);
-    //       currentArmy.stacks.push(stack);
-
-    //     } else {
-    //       // Gets stack already on hexId and adds defender to it
-    //       currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
-    // =======
-
-    // currentArmy.thingInHand = false;
-    // socket.emit('updateHex', currentArmy.thingInHand);
 
     if (indexById(currentArmy.ownedHexes, hexId) !== null) {
       if (indexById(currentArmy.stacks, hexId) === null) {
@@ -599,12 +594,53 @@ function eventClickedOnHex(socket, hexId) {
         // Gets stack already on hexId and adds defender to it
         currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
       }
+      // remove from cup
+      game.removeFromCup(currentArmy.thingInHand);
+      // send update socket
       io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-      socket.emit('updateStack', hexId, currentArmy);
+      socket.emit('updateStack', hexId, currentArmy.thingInHand);
+      socket.emit('updateHand', null);
+
+      currentArmy.thingInHand = false;
       currentArmy.canPlaceDefender = false;
     } else {
       socket.emit('error', "You do not own this hex!");
     }
+  } else {
+    socket.emit('error', "You need to pick from the cup!");
+  }
+}
+
+function eventClickedOnRack(socket) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked hex ");
+
+  // if (currentArmy.canEndTurn) {
+  //   socket.emit('error', "You must end your turn now!");
+  //   return;
+  // }
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  // Each player collects 10 defenders in this faze
+  // create new defender
+  // place on the clicked hex if owned by player
+
+  if (currentArmy.canPlaceDefender && currentArmy.thingInHand) {
+    // remove from cup
+    game.removeFromCup(currentArmy.thingInHand);
+    // push to rack
+    currentArmy.rack.push(currentArmy.thingInHand);
+    //send update rack socket
+    socket.emit('updateRack', currentArmy.rack);
+    socket.emit('updateHand', null);
+
+    currentArmy.thingInHand = false;
+    currentArmy.canPlaceDefender = false;
   } else {
     socket.emit('error', "You need to pick from the cup!");
   }

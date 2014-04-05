@@ -163,15 +163,16 @@ bowlbutton.updateIcons = function(thing) {
     bowlbutton.oldThing.remove();
 
   // Update bowlbutton
-  bowlbutton.addThingIcon(thing);
+  if (thing)
+    bowlbutton.addThingIcon(thing);
 }
 
 bowlbutton.addThingIcon = function(thingName) {
   console.log(thingName + "Image");
   console.log(thingImagesArray[thingName + "Image"]);
   var thing = new Kinetic.Image({
-    x: this.getX(),
-    y: this.getY(),
+    x: this.getX() + 50,
+    y: this.getY() + 50,
     id: "defender",
     name: thingName,
     image: thingImagesArray[thingName + "Image"],
@@ -294,6 +295,10 @@ boardLayer.on('click tap', function(e) {
   } else if (shape.getName() == "hex") {
     console.log("emit:hexClicked," + shape.getId());
     iosocket.emit('hexClicked', shape.getId());
+
+  } else if (shape.getName() == "rack") {
+    console.log("emit:rackClicked,");
+    iosocket.emit('rackClicked');
 
   } else if (shape.getName() == "stack0") {
     // clicked twice same stack

@@ -21,6 +21,15 @@ function Game() {
     return this.cup[i];
   }
 
+  this.removeFromCup = function(thingName) {
+    for (var i in this.cup) {
+      if (this.cup[i] == thingName) {
+        console.log("Removing " + thingName + " from cup")
+        this.cup.splice(i, 1);
+      }
+    }
+  }
+
   this.createCupDefenders = function() {
     this.cup.push("OldDragon");
     this.cup.push("GiantSpider");
