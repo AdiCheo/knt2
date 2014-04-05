@@ -195,7 +195,7 @@ function updateStackAll(hexId, affinity) {
 function updateStack(hexId, stackThings) {
   console.log("Your stack at " + hexId + " has been updated with " + stackThings);
   if (!boardLayer.get('#stack' + hexId)[0]) {
-    updateStackAll(hexId, 0);
+    boardLayer.get('#stack' + hexId)[0].updateIcons(stackThings);
   }
 
   // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);

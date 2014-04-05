@@ -140,7 +140,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   };
 
   hexagon.showDefenders = function() {
-    var yO = 50;
+    var yO = 45;
 
     for (var each in hexagon.containedDefenders) {
       // hexagon.containedDefenders[each].setX(hexagon.getX() + 5);
@@ -175,6 +175,7 @@ function Stack(hex, stackIcon, affinity, boardLayer) {
     height: 50
   });
 
+
   stack.containedDefenders = new Array();
   stack.setId("stack");
   stack.currentHexId = hex.getId();
@@ -183,14 +184,14 @@ function Stack(hex, stackIcon, affinity, boardLayer) {
   stack.requiredRolls = 0;
 
   stack.showDefenders = function() {
-    var yO = 50;
+    var yLoc = 45;
 
     for (var each in stack.containedDefenders) {
       stack.containedDefenders[each].setX(stack.getX() + 5);
-      stack.containedDefenders[each].setY(stack.getY() + yO);
+      stack.containedDefenders[each].setY(stack.getY() + yLoc);
       stack.containedDefenders[each].show();
       stack.containedDefenders[each].moveToTop();
-      yO += 40;
+      yLoc += 40;
     }
     stack.defendersVisible = true;
   };
