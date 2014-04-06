@@ -147,6 +147,16 @@ var collectGoldButton = new Kinetic.Image({
   strokeWidth: 5
 });
 
+var selectedThing = new Kinetic.Image({
+  x: 100,
+  y: 850,
+  name: 'selectedThing',
+  id: "selected",
+  image: bowlButtonImg,
+  width: 150,
+  height: 150
+});
+
 var bowlbutton = new Kinetic.Image({
   x: 200,
   y: 20,
@@ -319,9 +329,9 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:generateButtonClicked,");
     iosocket.emit('generateButtonClicked');
 
-  } else if (shape.getId() == "defender") {
-    console.log("emit:defenderClicked," + shape.getName());
-    iosocket.emit('defenderClicked', shape.getName());
+  } else if (shape.getName() == "defender") {
+    console.log("emit:defenderClicked," + shape.getId());
+    iosocket.emit('defenderClicked', shape.getId());
 
   } else if (shape.getName() == "dicebutton") {
     console.log('Clicked ' + shape.getName() + ' ' + shape.diceValue);
@@ -434,8 +444,8 @@ boardLayer.add(endturnbutton);
 boardLayer.add(placeMarkerButton);
 // boardLayer.add(collectGoldButton);
 boardLayer.add(buildFortButton);
+boardLayer.add(selectedThing);
 boardLayer.add(bowlbutton);
-bowlbutton.moveToBottom();
 
 document.getElementById("phasetext").style.left = 260 + "px";
 document.getElementById("phasetext").style.top = 0 + "px";

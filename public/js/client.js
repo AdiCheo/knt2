@@ -90,6 +90,10 @@ function initConnection() {
       updateHand(rack);
     });
 
+    iosocket.on('updateSelectedIcon', function(thing) {
+      updateSelectedIcon(thing);
+    });
+
     iosocket.on('replaceThingInRack', function(thing, prevThing) {
       replaceThingInRack(thing, prevThing);
     });
@@ -295,6 +299,12 @@ function updateHand(thing) {
 //   console.log("New turn. Army " + affinity + " must play.");
 //   // TODO if client == affinity use an alert
 // }
+
+function updateSelectedIcon(thing) { //updateSelectedIcon
+  console.log("Selected " + thing);
+  highlightHex(boardLayer.get("#" + thing)[0]);
+  boardLayer.get('#selected')[0].setImage(thingImagesArray[thing + "Image"]);
+}
 
 // TODO Merged here
 function endedTurn() {
