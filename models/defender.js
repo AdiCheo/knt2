@@ -1,4 +1,4 @@
-function Defender(containerId, defenderName, combatValue, canCharge, terrainType, isRanged, isFlying, isMagic) {
+function Defender(containerId, defenderName, combatValue, terrainType, canCharge, isRanged, isFlying, isMagic) {
   this.id = containerId;
   this.name = defenderName;
 
