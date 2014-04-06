@@ -334,25 +334,33 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
   //take things out of the current Army's rack and add them back to the cup
   //increment the player's free things by 1
 
+  console.log("FIRST" + currentArmy.selectedFirstTrade);
+  console.log("SECOND" + currentArmy.selectedSecondTrade);
+
   if (currentArmy.findThing(currentArmy.rack, defenderName)) {
-    if (!currentArmy.selectedFirstTrade) {
+    if (currentArmy.selectedFirstTrade === undefined) {
       currentArmy.selectedFirstTrade = defenderName;
-    } else if (!currentArmy.selectedSecondTrade &&
-      (currentArmy.selectedFirstTrade != defenderName)) {
-      currentArmy.selectedSecondTrade = defenderName;
-
-      game.cup.push(selectedFirstTrade);
-      game.cup.push(selectedSecondTrade);
-
-      currentArmy.removeFromRack(selectedFirstTrade);
-      currentArmy.removeFromRack(selectedSecondTrade);
-
-      currentArmy.freeThings++;
-      currentArmy.selectedFirstTrade = null;
-      currentArmy.selectedSecondTrade = null;
-
+      console.log("FIRST 1" + currentArmy.selectedFirstTrade);
+      console.log("SECOND 1" + currentArmy.selectedSecondTrade);
     } else {
-      socket.emit('error', 'You clicked on the same defender!');
+      if (currentArmy.selectedFirstTrade != defenderName) {
+        currentArmy.selectedSecondTrade = defenderName;
+        console.log("FIRST 2" + currentArmy.selectedFirstTrade);
+        console.log("SECOND 2" + currentArmy.selectedSecondTrade);
+
+        game.cup.push(selectedFirstTrade);
+        game.cup.push(selectedSecondTrade);
+
+        currentArmy.removeFromRack(selectedFirstTrade);
+        currentArmy.removeFromRack(selectedSecondTrade);
+
+        currentArmy.freeThings++;
+        currentArmy.selectedFirstTrade = undefined;
+        currentArmy.selectedSecondTrade = undefined;
+
+      } else {
+        socket.emit('error', 'You clicked on the same defender!');
+      }
     }
   } else {
     socket.emit('error', 'Defender is not on the rack!');
