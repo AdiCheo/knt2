@@ -142,25 +142,27 @@ function initConnection() {
       updateMapData(mapData);
     });
 
+    iosocket.on('updateUI', function(armyData) {
+      updateUI(armyData);
+    });
+
     iosocket.on('gameOver', function() {
       console.log("A player disconnected. Game Over!");
       window.location.href = "about:blank";
-
-
-      // var win = window.open("", "_self"); /* url = "" or "about:blank"; target="_self" */
-      // win.close();
     });
   });
 }
 
+function updateUI(armyData) {
+  for (var i = armyData.armies.length - 1; i >= 0; i--) {
+    document.getElementById("gold_" + armyData.armies[i].color).innerHTML = "Gold: " + armyData.armies[i].gold;
+    document.getElementById("income_" + armyData.armies[i].color).innerHTML = "Income: " + armyData.armies[i].income;
+    document.getElementById("free_" + armyData.armies[i].color).innerHTML = "Free Things: " + armyData.armies[i].freeThings;
+  }
+}
 
 function collectGoldButton() {
-  var temp = indexById(game.armies, playerId);
-  alert("You have the following: \n ----------- \n" +
-    game.armies[temp].getOwnedHexes + " Hexes = " + game.armies.getNumOfHexes() + " Gold\n");
-
-  //army[currentPlayer].getNumOfFortHexes() + " Forts = " + fortTotalValue + " Gold");
-  document.getElementById("gold_" + game.armies[temp].color).textContent = "Gold: " + game.armies[temp].gold;
+  iosocket.emit('updateUI');
 }
 
 function updateUsers(users) {
@@ -190,6 +192,8 @@ function updateStackAll(hexId, affinity) {
   // place stack icon for particular army on hexId
   console.log("Army " + affinity + " placing stack at " + hexId);
   boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+  iosocket.emit('updateUI');
+
 }
 
 function updateStack(hexId, stackThings) {
@@ -203,6 +207,7 @@ function updateStack(hexId, stackThings) {
   if (!boardLayer.get('#stack' + hexId)[0]) {
     updateStackAll(hexId, 0);
   }
+  iosocket.emit('updateUI');
 
 
   // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);
@@ -230,45 +235,30 @@ function updateHex(hexId, affinity) {
 function updateForts(hexId, affinity) {
   console.log("Army " + affinity + " owning " + hexId);
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
+  iosocket.emit('updateUI');
 }
 
 function fortUpgraded(fortUpgradeData) {
-  console.log("fort has been upgraded");
-  //TODO:change icon of the fort to upgraded for using the value
   boardLayer.get('#fort' + fortUpgradeData.hexId)[0].remove();
   boardLayer.get('#' + fortUpgradeData.hexId)[0].setFortIcon(fortUpgradeData.affinity, fortUpgradeData.fortValue);
 
-  if (fortUpgradeData.affinity === 0) {
-    document.getElementById("gold_yellow").innerHTML = "Gold: " + fortUpgradeData.gold;
-  } else if (fortUpgradeData.affinity == 1) {
-    document.getElementById("gold_grey").innerHTML = "Gold: " + fortUpgradeData.gold;
-  } else if (fortUpgradeData.affinity == 2) {
-    document.getElementById("gold_green").innerHTML = "Gold: " + fortUpgradeData.gold;
-  } else if (fortUpgradeData.affinity == 3) {
-    document.getElementById("gold_red").innerHTML = "Gold: " + fortUpgradeData.gold;
-  }
+  iosocket.emit('updateUI');
 }
 
 function updateGold(updatedGoldData) {
-  if (updatedGoldData.affinity === 0) {
-    document.getElementById("gold_yellow").innerHTML = "Gold: " + updatedGoldData.gold;
-  } else if (updatedGoldData.affinity == 1) {
-    document.getElementById("gold_grey").innerHTML = "Gold: " + updatedGoldData.gold;
-  } else if (updatedGoldData.affinity == 2) {
-    document.getElementById("gold_green").innerHTML = "Gold: " + updatedGoldData.gold;
-  } else if (updatedGoldData.affinity == 3) {
-    document.getElementById("gold_red").innerHTML = "Gold: " + updatedGoldData.gold;
-  }
+  iosocket.emit('updateUI');
 }
 
 function updateRack(rackThings) {
   console.log(rackThings);
   boardLayer.get('#rack')[0].updateIcons(rackThings);
+  iosocket.emit('updateUI');
 }
 
 function updateHand(thing) {
   console.log("Thing in hand " + thing);
   boardLayer.get('#cup')[0].updateIcons(thing);
+  iosocket.emit('updateUI');
 }
 
 // function addThingToRack(thing) {
@@ -325,7 +315,7 @@ function nextPlayerTurn(gameData) {
 
   console.log(playerId);
   if (localAffinity == gameData.currentPlayerTurn) {
-    iosocket.emit('yourTurnToPlay');
+    iosocket.emit('updateUI');
     console.log("It is your turn to play now");
   }
 }
