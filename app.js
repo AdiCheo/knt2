@@ -176,6 +176,24 @@ io.sockets.on('connection', function(socket) {
   /*** RANDOM_EVENTS_PHASE - 4 ***/
 
   /*** MOVEMENT_PHASE - 5 ***/
+  // Defender Listener
+  socket.on('defenderClicked', function(defenderName) {
+    eventDefenderClickedMovePhase(socket); //testx Move
+    if (game.currentPhase == MOVEMENT_PHASE) {
+      eventDefenderClickedMovePhase(socket);
+    }
+  });
+
+  // Stack listener TODO
+
+  // Hex Listener
+  socket.on('hexClicked', function(hexId) {
+    if (game.currentPhase == MOVEMENT_PHASE) {
+      eventClickedOnHexMovePhase(socket, hexId);
+    }
+  });
+
+  // Movment consequences: ownHex, moveStack/defender
 
   /*** COMBAT_PHASE - 6 ***/
 
@@ -308,7 +326,7 @@ function eventStateInit(socket, user) {
 
   // Testing only: (example setting rack and a stack) ////////////////////////////////////////////
 
-  // socket.emit('updateRack', ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
+  socket.emit('updateRack', ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
   // socket.emit('updateStack', "0,0", ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'DustDevil']); // testx stack
   // socket.emit('updateStack', "2,1", ['Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
 
@@ -500,27 +518,21 @@ function MovementPhase(socket, hexId) {
   }
 }
 
-// function eventDefenderClicked(socket, defenderName) {
-//   console.log(game.armies);
-//   currentArmy = game.armies[indexById(game.armies, socket.id)];
-//   console.log("Player " + currentArmy + " clicked defender" + defenderName);
+function eventDefenderClickedMovePhase(socket, defenderName) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked defender" + defenderName);
 
-//   // if (currentArmy.canEndTurn) {
-//   //   socket.emit('error', "You must end your turn now!");
-//   //   return;
-//   // }
+  if (!currentArmy.canPlay()) return;
 
-//   if (game.currentPlayerTurn != currentArmy.affinity) {
-//     socket.emit('error', "It is not your turn yet!");
-//     return;
-//   }
-
-//   if (game.currentPhase == -1) { //TODO CHange to 0
-//     currentArmy.canPlaceDefender = true;
-//     currentArmy.thingInHand = game.newRandomDefender();
-//     socket.emit('allowDefenderPlacement', publicGameData(socket.id));
-//   }
-// }
+  // select defenderName
+  // get thing in hand
+  currentArmy.thingInHand = defenderName;
+  console.log("Selected " + defenderName);
+  // update socket
+  socket.emit('updateSelectedDefender', currentArmy.thingInHand);
+  currentArmy.canPlaceDefender = true;
+}
 
 function eventGenerateClicked(socket) {
   console.log(game.armies);

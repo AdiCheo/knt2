@@ -300,8 +300,8 @@ function initRack(realX, realY) {
     var thing = new Kinetic.Image({
       x: this.getX() + index * 50,
       y: this.getY(),
-      id: "defender",
-      name: thingName,
+      id: thingName,
+      name: "defender",
       image: thingImagesArray[thingName + "Image"],
       draggable: true,
       width: 50,

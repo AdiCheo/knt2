@@ -90,6 +90,10 @@ function initConnection() {
       updateHand(rack);
     });
 
+    iosocket.on('updateSelectedDefender', function(thing) {
+      updateSelectedDefender(thing);
+    });
+
     iosocket.on('replaceThingInRack', function(thing, prevThing) {
       replaceThingInRack(thing, prevThing);
     });
@@ -295,6 +299,11 @@ function updateHand(thing) {
 //   console.log("New turn. Army " + affinity + " must play.");
 //   // TODO if client == affinity use an alert
 // }
+
+function updateSelectedDefender(thing) { //updateSelectedDefender
+  console.log("Selected " + thing);
+  boardLayer.get('#selected')[0].setImage(thing + "Image");
+}
 
 // TODO Merged here
 function endedTurn() {
