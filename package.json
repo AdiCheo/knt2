@@ -1,15 +1,16 @@
 {
-    "name": "Kings-N-Things",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "start": "node app.js"
-    },
-    "dependencies": {
-        "express": "3.5.1",
-        "socket.io": "latest",
-        "ejs": "latest",
-        "jade": "*",
-        "hat": "latest"
-    }
+  "name": "Kings-N-Things",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.5.1",
+    "socket.io": "latest",
+    "ejs": "latest",
+    "jade": "*",
+    "ws": "latest",
+    "hat": "latest"
+  }
 }
