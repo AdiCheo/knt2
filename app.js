@@ -343,6 +343,8 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
         currentArmy.selectedFirstTrade = null;
         currentArmy.selectedSecondTrade = null;
 
+        socket.emit('updateRack', currentArmy.rack);
+
       } else {
         socket.emit('error', 'You clicked on the same defender!');
       }
