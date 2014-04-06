@@ -167,7 +167,8 @@ function Game() {
     this.defenders.push(new Defender(-1, "GiantSpider", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Elephant", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "BrownKnight", 0, 0, 0, 0, 0, 0));
-    this.defenders.push(new Defender(-1, "BabyDragon", 0, 0, 0, 0, 0, 0));
+
+    this.defenders.push(new Defender(-1, "BabyDragon", 3, "desert", 0, 0, true, 0));
     this.defenders.push(new Defender(-1, "CamelCorps", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Dervish", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "DesertBat", 0, 0, 0, 0, 0, 0));
