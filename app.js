@@ -91,6 +91,11 @@ io.sockets.on('connection', function(socket) {
     updateArmyData(socket);
   });
 
+  // Hex click listener to update selected
+  socket.on('hexClicked', function(hexId) {
+    eventClickedOnHex(socket, hexId);
+  });
+
   /*** SETUP_PHASE ***/
   // Place Marker Button Listener
   socket.on('placeMarkerButton', function() {
@@ -178,9 +183,9 @@ io.sockets.on('connection', function(socket) {
   /*** MOVEMENT_PHASE - 5 ***/
   // Defender Listener
   socket.on('defenderClicked', function(defenderName) {
-    eventDefenderClickedMovePhase(socket); //testx Move
+    // eventDefenderMovePhase(socket, defenderName); //testx Move
     if (game.currentPhase == MOVEMENT_PHASE) {
-      eventDefenderClickedMovePhase(socket);
+      eventDefenderMovePhase(socket, defenderName);
     }
   });
 
@@ -188,6 +193,7 @@ io.sockets.on('connection', function(socket) {
 
   // Hex Listener
   socket.on('hexClicked', function(hexId) {
+    // eventClickedOnHexMovePhase(socket, hexId); //testx Move
     if (game.currentPhase == MOVEMENT_PHASE) {
       eventClickedOnHexMovePhase(socket, hexId);
     }
@@ -518,19 +524,19 @@ function MovementPhase(socket, hexId) {
   }
 }
 
-function eventDefenderClickedMovePhase(socket, defenderName) {
+function eventDefenderMovePhase(socket, defenderName) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked defender" + defenderName);
 
-  if (!currentArmy.canPlay()) return;
+  // if (!currentArmy.canPlay(game, socket)) return; // testx Move
 
   // select defenderName
   // get thing in hand
   currentArmy.thingInHand = defenderName;
   console.log("Selected " + defenderName);
   // update socket
-  socket.emit('updateSelectedDefender', currentArmy.thingInHand);
+  socket.emit('updateSelectedIcon', currentArmy.thingInHand);
   currentArmy.canPlaceDefender = true;
 }
 
@@ -639,50 +645,52 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
   }
 }
 
-// function eventClickedOnHex(socket, hexId) {
-//   console.log(game.armies);
-//   currentArmy = game.armies[indexById(game.armies, socket.id)];
-//   console.log("Player " + currentArmy + " clicked hex " + hexId);
+function eventClickedOnHexMovePhase(socket, hexId) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-//   if (!currentArmy.canPlay(game, socket)) return;
+  // if (!currentArmy.canPlay(game, socket)) return;
 
-//   //  TODO change comments here
-//   // Each player collects 10 defenders in this faze
-//   // create new defender
-//   // place on the clicked hex if owned by player
+  // Each player collects 10 defenders in this faze
+  // create new defender
+  // place on the clicked hex if owned by player
+  // if (currentArmy.canPlaceThing && currentArmy.thingInHand) { // pick from the cup
+  //   if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
+  // if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
+  //   var stack = new Stack(hexId, currentArmy.affinity);
+  //   stack.containDefenders.push(currentArmy.thingInHand);
+  //   currentArmy.stacks.push(stack);
+  // } else { // stack already exists
+  //   // Gets stack already on hexId and adds defender to it
+  //   currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
+  // }
 
-//   if (currentArmy.canPlaceThing && currentArmy.thingInHand) { // pick from the cup
-//     console.log("LOG" + indexById(currentArmy.ownedHexes, hexId));
-//     console.log("LOG" + indexById(currentArmy.stacks, hexId));
-//     console.log("LOG" + currentArmy.stacks);
-//     console.log("LOG" + currentArmy.ownedHexes);
 
-//     if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
-//       if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
-//         var stack = new Stack(hexId, currentArmy.affinity);
-//         stack.containDefenders.push(currentArmy.thingInHand);
-//         currentArmy.stacks.push(stack);
-//       } else { // stack already exists
-//         // Gets stack already on hexId and adds defender to it
-//         currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
-//       }
-//       // remove from cup
-//       game.removeFromCup(currentArmy.thingInHand);
-//       // send update socket
-//       io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-//       socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders);
-//       // empty hand
-//       socket.emit('updateHand', null);
+  // send update socket
+  io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+  // socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders);
+  // empty hand
+  // socket.emit('updateHand', null);
 
-//       currentArmy.thingInHand = false;
-//       currentArmy.canPlaceThing = false;
-//     } else {
-//       socket.emit('error', "You do not own this hex!");
-//     }
-//   } else {
-//     socket.emit('error', "You need to pick from the cup!");
-//   }
-// }
+  currentArmy.thingInHand = false;
+  currentArmy.canPlaceThing = false;
+  //   } else {
+  //     socket.emit('error', "You do not own this hex!");
+  //   }
+  // } else {
+  //   socket.emit('error', "You need to pick from the cup!");
+  // }
+}
+
+function eventClickedOnHex(socket, hexId) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked hex " + hexId);
+
+  // select hexId
+  console.log("Selected " + hexId);
+  // update socket
+  socket.emit('updateSelectedIcon', hexId);
+}
 
 function eventClickedOnRack(socket) {
   console.log(game.armies);

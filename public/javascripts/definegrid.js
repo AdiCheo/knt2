@@ -149,7 +149,7 @@ var collectGoldButton = new Kinetic.Image({
 
 var selectedThing = new Kinetic.Image({
   x: 100,
-  y: 1000,
+  y: 850,
   name: 'selectedThing',
   id: "selected",
   image: bowlButtonImg,
@@ -330,8 +330,8 @@ boardLayer.on('click tap', function(e) {
     iosocket.emit('generateButtonClicked');
 
   } else if (shape.getName() == "defender") {
-    console.log("emit:defenderClicked," + shape.getName());
-    iosocket.emit('defenderClicked', shape.getName());
+    console.log("emit:defenderClicked," + shape.getId());
+    iosocket.emit('defenderClicked', shape.getId());
 
   } else if (shape.getName() == "dicebutton") {
     console.log('Clicked ' + shape.getName() + ' ' + shape.diceValue);

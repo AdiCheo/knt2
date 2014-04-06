@@ -90,8 +90,8 @@ function initConnection() {
       updateHand(rack);
     });
 
-    iosocket.on('updateSelectedDefender', function(thing) {
-      updateSelectedDefender(thing);
+    iosocket.on('updateSelectedIcon', function(thing) {
+      updateSelectedIcon(thing);
     });
 
     iosocket.on('replaceThingInRack', function(thing, prevThing) {
@@ -300,9 +300,10 @@ function updateHand(thing) {
 //   // TODO if client == affinity use an alert
 // }
 
-function updateSelectedDefender(thing) { //updateSelectedDefender
+function updateSelectedIcon(thing) { //updateSelectedIcon
   console.log("Selected " + thing);
-  boardLayer.get('#selected')[0].setImage(thing + "Image");
+  highlightHex(boardLayer.get("#" + thing)[0]);
+  boardLayer.get('#selected')[0].setImage(thingImagesArray[thing + "Image"]);
 }
 
 // TODO Merged here
