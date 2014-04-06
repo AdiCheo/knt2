@@ -86,6 +86,11 @@ io.sockets.on('connection', function(socket) {
     eventEndTurnClicked(socket);
   });
 
+  // New Turn listener
+  socket.on('updateUI', function() {
+    updateArmyData(socket);
+  });
+
   /*** SETUP_PHASE ***/
   // Place Marker Button Listener
   socket.on('placeMarkerButton', function() {
@@ -142,26 +147,39 @@ io.sockets.on('connection', function(socket) {
   });
 
   /*** RECRUIT_HERO_PHASE  ***/
-  /*** RECRUIT_THINGS_PHASE  ***/
 
-  // End Turn button listener
-  socket.on('yourTurnToPlay', function() {
-    updateArmyData(socket);
-  });
-
+  /*** RECRUIT_THINGS_PHASE - 3 ***/
   // Magic Cup click listener
   socket.on('generateButtonClicked', function() {
-    // eventGenerateClicked(socket); // TODO Testing
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {
       console.log("RECRUIT_THINGS_PHASE");
-      eventGenerateClicked(socket);
+      eventRecruitThings(socket);
     }
   });
-  /*** RANDOM_EVENTS_PHASE  ***/
-  /*** MOVEMENT_PHASE  ***/
-  /*** COMBAT_PHASE  ***/
 
-  /*** CONSTRUCTION_PHASE ***/
+  // Hex click listener
+  socket.on('hexClicked', function(hexId) {
+    // eventClickedOnHexSetupRecPhase(socket, hexId); // Testx stack
+    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
+      eventClickedOnHexSetupRecPhase(socket, hexId);
+    }
+  });
+
+  // rack click listener
+  socket.on('rackClicked', function() {
+    // eventClickedOnRack(socket); // testx rack
+    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
+      eventClickedOnRack(socket);
+    }
+  });
+
+  /*** RANDOM_EVENTS_PHASE - 4 ***/
+
+  /*** MOVEMENT_PHASE - 5 ***/
+
+  /*** COMBAT_PHASE - 6 ***/
+
+  /*** CONSTRUCTION_PHASE - 7 ***/
   //fort clicked/upgraded listener
   socket.on('clickedOnExistingFort', function(hexId) {
     if (game.currentPhase == CONSTRUCTION_PHASE) {
@@ -175,33 +193,15 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
-  /*** SPECIAL_POWERS_PHASE ***/
-  /*** CHANGE_ORDER_PHASE ***/
+  /*** SPECIAL_POWERS_PHASE - 8 ***/
 
-  // Hex click listener
-  socket.on('hexClicked', function(hexId) {
-    if (game.currentPhase == RECRUIT_HERO_PHASE) {
-      eventClickedOnHex(socket, hexId);
-    }
-  });
+  /*** CHANGE_ORDER_PHASE - 9 ***/
 
-  // Magic Cup click listener
-  socket.on('generateButtonClicked', function() {
-    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
-      console.log("RECRUIT_THINGS_PHASE");
-      eventRecruitThings(socket);
-    }
-  });
+
 
   socket.on('defenderClicked', function(defenderName) {
     // TODO Phase IF
     // eventDefenderClicked(socket);
-  });
-
-  // Hex click listener
-  socket.on('hexClicked', function(hexId) {
-    eventClickedOnHex(socket, hexId);
-    if (game.currentPhase == RECRUIT_THINGS_PHASE) {}
   });
 
   // Dice roll (random) listener
@@ -214,11 +214,6 @@ io.sockets.on('connection', function(socket) {
   // Hex click listener
   // socket.on('hexClicked', function(hexId) {
   //   eventClickedOnHex(socket, hexId);
-  // });
-
-  // Magic Cup click listener
-  // socket.on('generateButtonClicked', function() {
-  //   eventGenerateClicked(socket);
   // });
 
   // Defender click listener
@@ -240,14 +235,14 @@ io.sockets.on('connection', function(socket) {
 function updateArmyData(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (game.currentPhase == 1) {
-    currentArmy.updateIncome();
-  }
+  currentArmy.updateIncome();
 
   if (game.currentPhase == 3) {
     currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
     currentArmy.thingsPurchased = 0;
   }
+
+  io.sockets.emit('updateUI', publicArmyData(socket));
 }
 
 function eventRecruitThings(socket) {
