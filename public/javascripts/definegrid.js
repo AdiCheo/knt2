@@ -432,7 +432,7 @@ cheatDice6.hide();
 
 boardLayer.add(endturnbutton);
 boardLayer.add(placeMarkerButton);
-boardLayer.add(collectGoldButton);
+// boardLayer.add(collectGoldButton);
 boardLayer.add(buildFortButton);
 boardLayer.add(bowlbutton);
 bowlbutton.moveToBottom();

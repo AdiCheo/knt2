@@ -10,6 +10,4 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   };
 }
 
-
-
 module.exports = HexTile;

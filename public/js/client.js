@@ -95,14 +95,14 @@ function initConnection() {
     });
 
     //update the gold
-    iosocket.on('collectGoldButton', function(game) {
-      collectGoldButton();
-    });
+    // iosocket.on('collectGoldButton', function(game) {
+    //   collectGoldButton();
+    // });
 
-    iosocket.on('updateGold', function(updatedGoldData) {
-      updateGold(updatedGoldData);
-      console.log("Update the gold to all players.");
-    });
+    // iosocket.on('updateGold', function(updatedGoldData) {
+    //   updateGold(updatedGoldData);
+    //   console.log("Update the gold to all players.");
+    // });
 
     iosocket.on('nextPlayerTurn', function(gameData) {
       nextPlayerTurn(gameData);
@@ -161,9 +161,9 @@ function updateUI(armyData) {
   }
 }
 
-function collectGoldButton() {
-  iosocket.emit('updateUI');
-}
+// function collectGoldButton() {
+//   iosocket.emit('updateUI');
+// }
 
 function updateUsers(users) {
   userList = users;
@@ -245,9 +245,9 @@ function fortUpgraded(fortUpgradeData) {
   iosocket.emit('updateUI');
 }
 
-function updateGold(updatedGoldData) {
-  iosocket.emit('updateUI');
-}
+// function updateGold(updatedGoldData) {
+//   iosocket.emit('updateUI');
+// }
 
 function updateRack(rackThings) {
   console.log(rackThings);
