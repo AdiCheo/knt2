@@ -253,15 +253,8 @@ function updateArmyData(socket) {
 function eventRecruitThings(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (game.currentPlayerTurn != currentArmy.affinity) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   if (!currentArmy.thingInHand) {
     if (currentArmy.freeThings > 0) {
@@ -403,16 +396,7 @@ function eventBuildFortButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " pressed on Marker Button");
 
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
-
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
-  //TODO: uncomment
+  if (!currentArmy.canPlay()) return;
 
   if (currentArmy.getNumOfHexes() == 3) {
     console.log("# of hexes" + currentArmy.getNumOfHexes);
@@ -427,14 +411,7 @@ function eventBuildFortButton(socket) {
 function eventUpgradeFort(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
-  if (!currentArmy.canEndTurn) {
-    socket.emit('error', "You cannot end your turn yet!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   if (indexById(currentArmy.forts, hexId) !== null) {
     var index = indexById(currentArmy.forts, hexId);
@@ -481,15 +458,7 @@ function eventPlaceMarkerButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " pressed on Marker Button");
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
-
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   if (currentArmy.getNumOfHexes() < 3) {
     currentArmy.canChooseHex = true;
@@ -504,15 +473,8 @@ function eventPlaceMarkerButton(socket) {
 function eventCollectGoldButton(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
 
   currentArmy.gold += currentArmy.income;
   currentArmy.canEndTurn = true;
@@ -530,15 +492,7 @@ function updatedGoldData(affinity, gold) {
 function MovementPhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  // if (currentArmy.canEndTurn) {
-  //   socket.emit('error', "You must end your turn now!");
-  //   return;
-  // }
-
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   if (game.currentPhase == MOVEMENT_PHASE) {
     if ((game.currentPlayerTurn == currentArmy.affinity)) {
@@ -579,15 +533,7 @@ function eventGenerateClicked(socket) {
   console.log("Player " + currentArmy + " clicked generate button (cup)");
   console.log(currentArmy.thingInHand);
 
-  if (game.currentPlayerTurn != currentArmy.affinity) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
-
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   if (!currentArmy.freeThings) {
     socket.emit('error', "Cannot place anymore defenders!");
@@ -623,14 +569,7 @@ function eventGenerateClicked(socket) {
 function eventClickedOnHexSetupPhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-  }
-
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   if (currentArmy.canChooseHex) {
     if (currentArmy.ownHex(hexId, game)) {
@@ -656,15 +595,7 @@ function eventClickedOnHexSetupRecPhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked hex " + hexId);
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
-
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   // Each player collects 10 defenders in this faze
   // create new defender
@@ -704,15 +635,7 @@ function eventClickedOnHex(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked hex " + hexId);
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
-
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   //  TODO change comments here
   // Each player collects 10 defenders in this faze
@@ -757,15 +680,7 @@ function eventClickedOnRack(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked hex ");
 
-  if (currentArmy.canEndTurn) {
-    socket.emit('error', "You must end your turn now!");
-    return;
-  }
-
-  if ((game.currentPlayerTurn != currentArmy.affinity)) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
+  if (!currentArmy.canPlay()) return;
 
   // Each player collects 10 defenders in this faze
   // create new defender

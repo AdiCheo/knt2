@@ -302,7 +302,7 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:rackClicked,");
     iosocket.emit('rackClicked');
 
-  } else if (shape.getName() == "stack0") {
+  } else if (shape.getName() == "stack" + localAffinity) {
     // clicked twice same stack
     console.log("List " + shape.getId());
     hex = shape.hex;

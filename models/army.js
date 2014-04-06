@@ -22,6 +22,18 @@ function Army(affinity, name, income, gold, id) {
   this.stacks = [];
   this.rack = [];
 
+  this.canPlay = function() {
+    if (game.currentPlayerTurn != this.affinity) {
+      socket.emit('error', "It is not your turn yet!");
+      return false;
+    }
+
+    if (this.canEndTurn) {
+      socket.emit('error', "You must end your turn now!");
+      return false;
+    }
+  };
+
   this.getOwnedHexes = function() {
     return this.ownedHexes;
   };
