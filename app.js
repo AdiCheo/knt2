@@ -178,7 +178,7 @@ io.sockets.on('connection', function(socket) {
   /*** MOVEMENT_PHASE - 5 ***/
   // Defender Listener
   socket.on('defenderClicked', function(defenderName) {
-    eventDefenderClickedMovePhase(socket); //testx Move
+    // eventDefenderClickedMovePhase(socket); //testx Move
     if (game.currentPhase == MOVEMENT_PHASE) {
       eventDefenderClickedMovePhase(socket);
     }
