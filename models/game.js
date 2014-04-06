@@ -141,7 +141,6 @@ function Game() {
     this.cup.push("Tribesmen");
     this.cup.push("Basilisk");
     this.cup.push("BlackKnight");
-    this.cup.push("Crocodiles");
     this.cup.push("DarkWizard");
     this.cup.push("Ghost");
     this.cup.push("GiantLizard");
@@ -271,7 +270,6 @@ function Game() {
     this.defenders.push(new Defender(-1, "Tribesmen", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Basilisk", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "BlackKnight", 0, 0, 0, 0, 0, 0));
-    this.defenders.push(new Defender(-1, "Crocodiles", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "DarkWizard", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Ghost", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "GiantLizard", 0, 0, 0, 0, 0, 0));
