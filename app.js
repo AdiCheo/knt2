@@ -240,11 +240,13 @@ function updateArmyData(socket) {
   if (game.currentPhase == 1) {
     currentArmy.gold += currentArmy.income;
     currentArmy.mustEndTurn = true;
+
+    currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
+
     io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));
   }
 
   if (game.currentPhase == 3) {
-    currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
     currentArmy.thingsPurchased = 0;
   }
 
@@ -259,8 +261,7 @@ function eventRecruitThings(socket) {
 
   if (!currentArmy.freeThings) {
     socket.emit('error', "Cannot place anymore free defenders!");
-    currentArmy.canEndTurn = true; // TODO correct?
-    return;
+    currentArmy.canEndTurn = true;
   }
 
   if (!currentArmy.thingInHand) {
@@ -269,13 +270,17 @@ function eventRecruitThings(socket) {
       socket.emit('updateHand', currentArmy.thingInHand);
       currentArmy.canPlaceThing = true;
       currentArmy.canReplace = false;
-    } else if (currentArmy.gold >= 5 && currentArmy.thingsPurchased < 5) {
-      currentArmy.thingInHand = game.newRandomDefender();
-      currentArmy.gold -= 5;
-      currentArmy.thingsPurchased++;
-      socket.emit('updateHand', currentArmy.thingInHand);
-      currentArmy.canPlaceThing = true;
-      currentArmy.canReplace = false;
+    } else if (currentArmy.thingsPurchased < 5) {
+      if (currentArmy.gold >= 5) {
+        currentArmy.thingInHand = game.newRandomDefender();
+        currentArmy.gold -= 5;
+        currentArmy.thingsPurchased++;
+        socket.emit('updateHand', currentArmy.thingInHand);
+        currentArmy.canPlaceThing = true;
+        currentArmy.canReplace = false;
+      } else {
+        socket.emit('error', 'You cannot afford it anymore!');
+      }
     } else {
       currentArmy.mustEndTurn = true;
       socket.emit('error', 'No more things for free or to buy this turn!');
@@ -374,7 +379,7 @@ function eventEndTurnClicked(socket) {
   //reset the fort upgrade flags to false
   for (var i in currentArmy.forts) {
     currentArmy.forts[i].hasBeenUpgraded = false;
-  };
+  }
 
   // Send message to all clients that a player turn ended
   io.sockets.emit('nextPlayerTurn', nextTurnData());
@@ -604,7 +609,11 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
       // remove from cup
       game.removeFromCup(currentArmy.thingInHand);
-      currentArmy.freeThings--; // decrement recruitable things
+      if (currentArmy.freeThings > 0)
+        currentArmy.freeThings--; // decrement recruitable things
+
+      if (currentArmy.freeThings === 0)
+        currentArmy.canEndTurn = true;
 
       // If placing last free element in phase 0, must end turn
       if (game.currentPhase === 0 && !currentArmy.freeThings) {
@@ -684,7 +693,11 @@ function eventClickedOnRack(socket) {
   // place on the clicked hex if owned by player
 
   if (currentArmy.canPlaceThing && currentArmy.thingInHand) {
-    currentArmy.freeThings--; // decrement recruitable things
+    if (currentArmy.freeThings > 0)
+      currentArmy.freeThings--; // decrement recruitable things
+
+    if (currentArmy.freeThings === 0)
+      currentArmy.canEndTurn = true;
 
     // If placing last free element in phase 0, must end turn
     if (game.currentPhase === 0 && !currentArmy.freeThings) {

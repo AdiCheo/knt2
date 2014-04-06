@@ -337,6 +337,8 @@ function Game() {
         // Skip Phase 2 (Hero Recruitment)
         if (this.currentPhase == 2)
           this.currentPhase = 3;
+        if (this.currentPhase == 4)
+          this.currentPhase = 5;
         console.log("Moving to phase: " + this.currentPhase);
       }
 
