@@ -39,11 +39,7 @@ function initConnection() {
       playerId = gameData.playerId;
       localAffinity = gameData.affinity;
       //output the current phase the game is in
-<<<<<<< HEAD
       document.getElementById("phasetext").innerHTML = "Current Phase: -1";
-=======
-      document.getElementById("phasetext").innerHTML = "Change Phase: -1";
->>>>>>> 5bcb9704e7b655a4f661439b7b7bb8e4ca97aea5
 
       //output the current player turn
       document.getElementById("playerturntext").innerHTML = "Current Player Turn: 1";
