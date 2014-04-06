@@ -39,7 +39,11 @@ function initConnection() {
       playerId = gameData.playerId;
       localAffinity = gameData.affinity;
       //output the current phase the game is in
+<<<<<<< HEAD
       document.getElementById("phasetext").innerHTML = "Current Phase: -1";
+=======
+      document.getElementById("phasetext").innerHTML = "Change Phase: -1";
+>>>>>>> 5bcb9704e7b655a4f661439b7b7bb8e4ca97aea5
 
       //output the current player turn
       document.getElementById("playerturntext").innerHTML = "Current Player Turn: 1";
@@ -189,14 +193,21 @@ function highlightMovement() {
 function updateStackAll(hexId, affinity) {
   // place stack icon for particular army on hexId
   console.log("Army " + affinity + " placing stack at " + hexId);
-  boardLayer.get('#' + hexId)[0].setStackIcon(affinity, hexId);
+  boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
 }
 
 function updateStack(hexId, stackThings) {
   console.log("Your stack at " + hexId + " has been updated with " + stackThings);
-  if (!boardLayer.get('#stack' + hexId)[0]) {
-    boardLayer.get('#stack' + hexId)[0].updateIcons(stackThings);
+  for (var i in stackThings) {
+    console.log(stackThings[i]);
   }
+  // udate stack icons
+  boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
+
+  if (!boardLayer.get('#stack' + hexId)[0]) {
+    updateStackAll(hexId, 0);
+  }
+
 
   // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);
 
@@ -204,7 +215,7 @@ function updateStack(hexId, stackThings) {
   // boardLayer.get('#rack')[0].updateIcons(currentArmy.rack);
 
   // Update stacks
-  boardLayer.get('#' + hexId)[0].updateIcons(stackThings, 0);
+  // boardLayer.get('#' + hexId)[0].updateIcons(stackThings, 0);
   // boardLayer.get('#' + hexId)[0].setStackView(stackThings);
 
 }
