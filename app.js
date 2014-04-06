@@ -88,6 +88,7 @@ io.sockets.on('connection', function(socket) {
 
   // rack click listener
   socket.on('rackClicked', function() {
+    // eventClickedOnRack(socket); // testx rack
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventClickedOnRack(socket);
     }
@@ -123,7 +124,7 @@ io.sockets.on('connection', function(socket) {
 
   // Magic Cup click listener
   socket.on('generateButtonClicked', function() {
-    // eventGenerateClicked(socket); // TODO Testing
+    // eventGenerateClicked(socket); // Testx stack testx rack
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventGenerateClicked(socket);
     }
@@ -131,7 +132,7 @@ io.sockets.on('connection', function(socket) {
 
   // Hex click listener
   socket.on('hexClicked', function(hexId) {
-    // eventClickedOnHex(socket, hexId); // TODO Testing
+    // eventClickedOnHex(socket, hexId); // Testx stack
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventClickedOnHex(socket, hexId);
     }
@@ -251,9 +252,13 @@ function eventStateInit(socket, user) {
   socket.emit('createHexes', game.hexes);
   socket.emit('map', populateHexTiles());
 
+  // socket.emit('state.init', publicGameData(socket.id));
+  socket.emit('state.init', initialGameData(socket.id));
+
   // Testing only: (example setting rack and a stack) ////////////////////////////////////////////
+
   // socket.emit('updateRack', ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
-  // socket.emit('updateStack', "0,0", ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'DustDevil']);
+  // socket.emit('updateStack', "0,0", ['GreatHawk', 'HugeLeech', 'Pirates', 'FlyingSquirrel0', 'Ogre', 'Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'DustDevil']); // testx stack
   // socket.emit('updateStack', "2,1", ['Wyvern', 'Hunter', 'Crocodiles', 'WingedPirhana', 'Crocodiles', 'GreenKnight', 'Sphinx', 'Watusi', 'DustDevil']);
 
   // io.sockets.emit('updateOwnedHex', "-2,-1", 0);
@@ -270,9 +275,6 @@ function eventStateInit(socket, user) {
   // io.sockets.emit('updateOwnedHex', "1,1", 3);
 
   // End Testing /////////////////////////////////////////////////////////////////////////////////
-
-  // socket.emit('state.init', publicGameData(socket.id));
-  socket.emit('state.init', initialGameData(socket.id));
 }
 
 function eventDisconnect(socket) {
@@ -525,29 +527,29 @@ function eventGenerateClicked(socket) {
     return;
   }
 
-  // if (game.currentPhase === 0) {
-  // Only pick up 10 things from cup
-  // either place on rack or on hex you own
-  // allow replacements
-  if (!currentArmy.thingInHand) {
-    // get thing in hand
-    currentArmy.thingInHand = game.newRandomDefender();
-    console.log("newRandomDefender" + currentArmy.thingInHand);
-    // update socket
-    socket.emit('updateHand', currentArmy.thingInHand);
-    currentArmy.canPlaceDefender = true;
-    currentArmy.canReplace = true;
-  } else if (currentArmy.canReplace) {
-    currentArmy.thingInHand = game.newRandomDefender();
-    console.log("newRandomDefender" + currentArmy.thingInHand);
-    // update socket
-    socket.emit('updateHand', currentArmy.thingInHand);
-    currentArmy.canReplace = false;
-  } else {
-    socket.emit('error', 'Invalid bowlButton click');
-    console.log("Invalid bowlButton click");
-  }
-  // }
+  if (game.currentPhase === 0) { // Testx stack testx rack
+    // Only pick up 10 things from cup
+    // either place on rack or on hex you own
+    // allow replacements
+    if (!currentArmy.thingInHand) {
+      // get thing in hand
+      currentArmy.thingInHand = game.newRandomDefender();
+      console.log("newRandomDefender" + currentArmy.thingInHand);
+      // update socket
+      socket.emit('updateHand', currentArmy.thingInHand);
+      currentArmy.canPlaceDefender = true;
+      currentArmy.canReplace = true;
+    } else if (currentArmy.canReplace) {
+      currentArmy.thingInHand = game.newRandomDefender();
+      console.log("newRandomDefender" + currentArmy.thingInHand);
+      // update socket
+      socket.emit('updateHand', currentArmy.thingInHand);
+      currentArmy.canReplace = false;
+    } else {
+      socket.emit('error', 'Invalid bowlButton click');
+      console.log("Invalid bowlButton click");
+    }
+  } // Testx stack testx rack
 }
 
 function eventClickedOnHexSetupPhase(socket, hexId) {
@@ -600,18 +602,18 @@ function eventClickedOnHex(socket, hexId) {
   // create new defender
   // place on the clicked hex if owned by player
 
-  if (currentArmy.canPlaceDefender && currentArmy.thingInHand) {
+  if (currentArmy.canPlaceDefender && currentArmy.thingInHand) { // pick from the cup
     console.log("LOG" + indexById(currentArmy.ownedHexes, hexId));
     console.log("LOG" + indexById(currentArmy.stacks, hexId));
     console.log("LOG" + currentArmy.stacks);
     console.log("LOG" + currentArmy.ownedHexes);
 
-    if (indexById(currentArmy.ownedHexes, hexId) !== null) {
-      if (indexById(currentArmy.stacks, hexId) === null) {
+    if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
+      if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
         var stack = new Stack(hexId, currentArmy.affinity);
         stack.containDefenders.push(currentArmy.thingInHand);
         currentArmy.stacks.push(stack);
-      } else {
+      } else { // stack already exists
         // Gets stack already on hexId and adds defender to it
         currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
       }
@@ -619,7 +621,8 @@ function eventClickedOnHex(socket, hexId) {
       game.removeFromCup(currentArmy.thingInHand);
       // send update socket
       io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-      socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)]).containDefenders;
+      socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders);
+      // empty hand
       socket.emit('updateHand', null);
 
       currentArmy.thingInHand = false;

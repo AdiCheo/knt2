@@ -204,6 +204,8 @@ var endturnbutton = new Kinetic.Image({ //End turn button
 var boardLayer = new Kinetic.Layer();
 
 createBoardLayer();
+
+// TODO WTF is going on here
 generateFort(boardLayer.get("#-2,-1")[0], fortImages["tower"], 0, boardLayer);
 
 var current_soldier;
@@ -262,7 +264,7 @@ window.addEventListener('keydown', function(e) {
     console.log("emit:endTurnButton");
     iosocket.emit('endTurnClicked');
 
-  } else if (e.keyCode == 81) { //q
+  } else if (e.keyCode == 71) { //g
     console.log("emit:generateDefenderClicked,");
     iosocket.emit('generateDefenderClicked');
 
@@ -302,12 +304,16 @@ boardLayer.on('click tap', function(e) {
 
   } else if (shape.getName() == "stack0") {
     // clicked twice same stack
-    console.log("List " + shape.getId() + ":" + shape.containedDefenders);
+    console.log("List " + shape.getId());
     hex = shape.hex;
-    if (!hex.defendersVisible)
+    console.log(hex);
+    if (!hex.defendersVisible) {
+      console.log("Showing defenders " + shape.getId());
       hex.showDefenders();
-    else
+    } else {
+      console.log("Hiding defenders " + shape.getId());
       hex.hideDefenders();
+    }
 
   } else if (shape.getName() == "generate") {
     console.log("emit:generateButtonClicked,");

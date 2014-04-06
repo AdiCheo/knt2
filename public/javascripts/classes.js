@@ -22,7 +22,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.affinity = -1;
   hexagon.isExplored = false;
 
-  hexagon.containedDefenders = [];
+  hexagon.containDefenders = [];
   hexagon.defendersVisible = true;
 
   hexagon.setOwnerIcon = function(affinity) {
@@ -83,12 +83,12 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   };
 
-  hexagon.setStackIcon = function(affinity, hexId) {
+  hexagon.setStackIcon = function(affinity) {
 
     var stack = new Kinetic.Image({
       x: this.getX() - 20,
       y: this.getY() - 20,
-      id: "stack" + hexId,
+      id: "stack" + this.getId(),
       name: "stack" + affinity,
       image: StackIconArray[affinity],
       width: 40,
@@ -112,12 +112,13 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
       id: "defender",
       name: thingName,
       image: thingImagesArray[thingName + "Image"],
-      draggable: true,
+      // draggable: true, //testing
       width: 50,
       height: 50
     });
 
-    hexagon.containedDefenders.push(thing);
+    this.containDefenders.push(thing);
+
     boardLayer.add(thing);
     thing.moveToTop();
     thing.show();
@@ -126,39 +127,38 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   hexagon.updateIcons = function(stackThings) {
     // Remove old icons
-    for (var i in hexagon.containedDefenders) {
-      hexagon.containedDefenders[i].remove();
-      delete hexagon.containedDefenders[i]
+    for (var i in this.containDefenders) {
+      this.containDefenders[i].remove();
+      delete this.containDefenders[i]
     }
-    hexagon.containedDefenders = [];
+    this.containDefenders = [];
 
-    // Update Rack
-    cleanList = cleanArray(stackThings);
-    for (var i in cleanList) {
-      hexagon.addThingIcon(cleanList[i], i);
+    // Update stack
+    for (var i in stackThings) {
+      this.addThingIcon(stackThings[i], i);
     }
   };
 
   hexagon.showDefenders = function() {
     var yO = 45;
 
-    for (var each in hexagon.containedDefenders) {
-      // hexagon.containedDefenders[each].setX(hexagon.getX() + 5);
-      // hexagon.containedDefenders[each].setY(hexagon.getY() + yO);
-      hexagon.containedDefenders[each].show();
-      hexagon.containedDefenders[each].moveToTop();
+    for (var each in this.containDefenders) {
+      console.log(this.containDefenders[each]);
+      // this.containDefenders[each].setX(this.getX() + 5);
+      // this.containDefenders[each].setY(this.getY() + yO);
+      this.containDefenders[each].show();
+      this.containDefenders[each].moveToTop();
       yO += 40;
     }
-    hexagon.defendersVisible = true;
+    this.defendersVisible = true;
   };
 
   hexagon.hideDefenders = function() {
-    for (var each in hexagon.containedDefenders) {
-      hexagon.containedDefenders[each].hide();
+    for (var each in this.containDefenders) {
+      this.containDefenders[each].hide();
     }
-    hexagon.defendersVisible = false;
+    this.defendersVisible = false;
   };
-
 
   return hexagon;
 }
