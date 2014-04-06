@@ -1,6 +1,3 @@
-//TODO: design - change it so that we are not sending all of the
-//game data.
-
 /* Globals */
 
 var SETUP_PHASE = -1;
