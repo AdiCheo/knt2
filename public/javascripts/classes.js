@@ -109,8 +109,8 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     var thing = new Kinetic.Image({
       x: this.getX() - 25, //500 + 300,
       y: this.getY() + 25 + index * 50, //500 + index * 50,
-      id: "defender",
-      name: thingName,
+      id: thingName,
+      name: "defender",
       image: thingImagesArray[thingName + "Image"],
       // draggable: true, //testing
       width: 50,

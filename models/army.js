@@ -10,6 +10,7 @@ function Army(affinity, name, income, gold, id) {
   this.id = id;
   this.freeThings = 10;
 
+  this.mustEndTurn = false;
   this.canEndTurn = false;
   this.canChooseHex = false;
   this.canBuildFort = false;
@@ -22,16 +23,18 @@ function Army(affinity, name, income, gold, id) {
   this.stacks = [];
   this.rack = [];
 
-  this.canPlay = function() {
+  this.canPlay = function(game, socket) {
     if (game.currentPlayerTurn != this.affinity) {
       socket.emit('error', "It is not your turn yet!");
       return false;
     }
 
-    if (this.canEndTurn) {
+    if (this.mustEndTurn) {
       socket.emit('error', "You must end your turn now!");
       return false;
     }
+
+    return true;
   };
 
   this.getOwnedHexes = function() {

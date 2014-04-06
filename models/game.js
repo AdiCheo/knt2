@@ -21,7 +21,7 @@ function Game() {
   this.newRandomDefender = function() {
     i = Math.floor(Math.random() * this.cup.length);
     return this.cup[i];
-  }
+  };
 
   this.removeFromCup = function(thingName) {
     for (var i in this.cup) {
@@ -30,7 +30,7 @@ function Game() {
         this.cup.splice(i, 1);
       }
     }
-  }
+  };
 
   this.createCupDefenders = function() {
     this.cup.push("OldDragon");
@@ -290,7 +290,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "Watersanke", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Will_O_Wisp", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "WingedPirhana", 0, 0, 0, 0, 0, 0));
-  }
+  };
 
 
   this.getHexById = function(hexId) {
