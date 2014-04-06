@@ -15,6 +15,8 @@ function Game() {
   this.currentPhase = -1;
   this.totalTurn = 0;
 
+  this.defendersPurchased = 0;
+
   // functions
   this.newRandomDefender = function() {
     i = Math.floor(Math.random() * this.cup.length);
@@ -314,6 +316,7 @@ function Game() {
   };
 
   this.nextPlayerTurn = function(currentArmy) {
+
     console.log("The Total # of turns" + this.totalTurn);
     if (this.currentPlayerTurn == 3) {
       this.currentPlayerTurn = 0;
@@ -326,7 +329,8 @@ function Game() {
         this.currentPhase = 1;
         console.log("New phase cycle. Moving to phase: " + this.currentPhase);
       } else if (this.totalTurn == 4) {
-        this.currentPhase = 0;
+        // this.currentPhase = 0; 
+        this.currentPhase = 1;
         console.log("Moving to phase: " + this.currentPhase);
       } else {
         this.currentPhase++;

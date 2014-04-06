@@ -143,6 +143,20 @@ io.sockets.on('connection', function(socket) {
 
   /*** RECRUIT_HERO_PHASE  ***/
   /*** RECRUIT_THINGS_PHASE  ***/
+
+  // End Turn button listener
+  socket.on('yourTurnToPlay', function() {
+    updateArmyData(socket);
+  });
+
+  // Magic Cup click listener
+  socket.on('generateButtonClicked', function() {
+    // eventGenerateClicked(socket); // TODO Testing
+    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
+      console.log("RECRUIT_THINGS_PHASE");
+      eventGenerateClicked(socket);
+    }
+  });
   /*** RANDOM_EVENTS_PHASE  ***/
   /*** MOVEMENT_PHASE  ***/
   /*** COMBAT_PHASE  ***/
@@ -174,7 +188,8 @@ io.sockets.on('connection', function(socket) {
   // Magic Cup click listener
   socket.on('generateButtonClicked', function() {
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {
-      eventGenerateClicked(socket);
+      console.log("RECRUIT_THINGS_PHASE");
+      eventRecruitThings(socket);
     }
   });
 
@@ -221,6 +236,54 @@ io.sockets.on('connection', function(socket) {
   //   handleDice(socket, diceValue);
   // });
 });
+
+function updateArmyData(socket) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (game.currentPhase == 1) {
+    currentArmy.updateIncome();
+  }
+
+  if (game.currentPhase == 3) {
+    currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
+    currentArmy.thingsPurchased = 0;
+  }
+}
+
+function eventRecruitThings(socket) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (game.currentPlayerTurn != currentArmy.affinity) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if (!currentArmy.thingInHand) {
+    if (currentArmy.freeThings > 0) {
+      currentArmy.thingInHand = game.newRandomDefender();
+      currentArmy.freeThings--;
+      socket.emit('updateHand', currentArmy.thingInHand);
+      currentArmy.canPlaceThing = true;
+      currentArmy.canReplace = false;
+    } else if (currentArmy.gold >= 5 && currentArmy.thingsPurchased < 5) {
+      currentArmy.thingInHand = game.newRandomDefender();
+      currentArmy.gold -= 5;
+      currentArmy.thingsPurchased++;
+      socket.emit('updateHand', currentArmy.thingInHand);
+      currentArmy.canPlaceThing = true;
+      currentArmy.canReplace = false;
+    } else {
+      socket.emit('error', 'No more things for free or to buy this turn!');
+    }
+  } else {
+    socket.emit('error', 'Invalid bowlButton click');
+  }
+}
 
 function handleDice(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -450,7 +513,6 @@ function eventCollectGoldButton(socket) {
     return;
   }
 
-  currentArmy.updateIncome();
   currentArmy.gold += currentArmy.income;
   currentArmy.canEndTurn = true;
   io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));

@@ -39,7 +39,7 @@ function initConnection() {
       playerId = gameData.playerId;
       localAffinity = gameData.affinity;
       //output the current phase the game is in
-      document.getElementById("phasetext").innerHTML = "Change Phase: " + game.currentPhase;
+      document.getElementById("phasetext").innerHTML = "Current Phase: -1";
 
       //output the current player turn
       document.getElementById("playerturntext").innerHTML = "Current Player Turn: 1";
@@ -318,6 +318,7 @@ function nextPlayerTurn(gameData) {
 
   console.log(playerId);
   if (localAffinity == gameData.currentPlayerTurn) {
+    iosocket.emit('yourTurnToPlay');
     console.log("It is your turn to play now");
   }
 }
