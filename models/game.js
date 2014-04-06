@@ -32,6 +32,7 @@ function Game() {
     }
   };
 
+
   this.createCupDefenders = function() {
     this.cup.push("OldDragon");
     this.cup.push("GiantSpider");

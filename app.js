@@ -175,6 +175,15 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
+  //
+  socket.on('defenderClicked', function(defenderName) {
+    // eventDefenderMovePhase(socket, defenderName); //testx Move
+    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
+      eventClickedOnDefenderOnRack(socket, defenderName);
+    }
+  });
+
+
   /*** RANDOM_EVENTS_PHASE - 4 ***/
 
   /*** MOVEMENT_PHASE - 5 ***/
@@ -285,6 +294,7 @@ function eventRecruitThings(socket) {
     currentArmy.canEndTurn = true;
   }
 
+
   if (!currentArmy.thingInHand) {
     if (currentArmy.freeThings > 0) {
       currentArmy.thingInHand = game.newRandomDefender();
@@ -310,6 +320,45 @@ function eventRecruitThings(socket) {
     socket.emit('error', 'Invalid bowlButton click');
   }
 }
+
+function eventClickedOnDefenderOnRack(socket, defenderName) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canPlay(game, socket)) return;
+
+  //defender on rack is clicked - make sure that the defender is on 
+  //the rack 
+  //first time clicked, save it as the first thing to trade, second
+  //time, you put it in second thing to trade 
+  //clear the objects
+  //take things out of the current Army's rack and add them back to the cup
+  //increment the player's free things by 1
+
+  if (currentArmy.findThing(currentArmy.rack, defenderName)) {
+    if (!currentArmy.selectedFirstTrade) {
+      currentArmy.selectedFirstTrade = defenderName;
+    } else if (!currentArmy.selectedSecondTrade &&
+      (currentArmy.selectedFirstTrade != defenderName)) {
+      currentArmy.selectedSecondTrade = defenderName;
+
+      game.cup.push(selectedFirstTrade);
+      game.cup.push(selectedSecondTrade);
+
+      currentArmy.removeFromRack(selectedFirstTrade);
+      currentArmy.removeFromRack(selectedSecondTrade);
+
+      currentArmy.freeThings++;
+      currentArmy.selectedFirstTrade = null;
+      currentArmy.selectedSecondTrade = null;
+
+    } else {
+      socket.emit('error', 'You clicked on the same defender!');
+    }
+  } else {
+    socket.emit('error', 'Defender is not on the rack!');
+  }
+}
+
 
 function handleDice(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];

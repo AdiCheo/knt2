@@ -69,6 +69,26 @@ function Army(affinity, name, income, gold, id) {
     }
   };
 
+  this.removeFromRack = function(thingName) {
+    for (var i in this.rack) {
+      if (this.rack[i] == thingName) {
+        console.log("Removing " + thingName + " from rack")
+        this.rack.splice(i, 1);
+      }
+    }
+  };
+
+  this.findThing = function(array, thingName) {
+    for (var i = array.length - 1; i >= 0; i--) {
+      console.log("Thing Name: " + thingName + " " + array[i]);
+      if (array[i] == thingName) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   this.getNumOfHexes = function() {
     return this.ownedHexes.length;
   };
