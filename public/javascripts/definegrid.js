@@ -264,11 +264,11 @@ window.addEventListener('keydown', function(e) {
     console.log("emit:endTurnButton");
     iosocket.emit('endTurnClicked');
 
-  } else if (e.keyCode == 71) { //g
-    console.log("emit:generateDefenderClicked,");
-    iosocket.emit('generateDefenderClicked');
-
   } else if (e.keyCode == 67) { //c
+    console.log("emit:generateButtonClicked,");
+    iosocket.emit('generateButtonClicked');
+
+  } else if (e.keyCode == 71) { //g
     console.log("emit:collectGoldButton");
     iosocket.emit('collectGoldButtonClicked');
   }

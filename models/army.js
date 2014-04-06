@@ -8,6 +8,7 @@ function Army(affinity, name, income, gold, id) {
   this.gold = gold;
   this.currentGameTurn = affinity;
   this.id = id;
+  this.freeThings = 10;
 
   this.canEndTurn = false;
   this.canChooseHex = false;

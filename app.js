@@ -132,9 +132,9 @@ io.sockets.on('connection', function(socket) {
 
   // Hex click listener
   socket.on('hexClicked', function(hexId) {
-    // eventClickedOnHex(socket, hexId); // Testx stack
+    // eventClickedOnHexSetupRecPhase(socket, hexId); // Testx stack
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
-      eventClickedOnHex(socket, hexId);
+      eventClickedOnHexSetupRecPhase(socket, hexId);
     }
   });
 
@@ -517,13 +517,19 @@ function eventGenerateClicked(socket) {
   console.log("Player " + currentArmy + " clicked generate button (cup)");
   console.log(currentArmy.thingInHand);
 
-  // if (currentArmy.canEndTurn) {
-  //   socket.emit('error', "You must end your turn now!");
-  //   return;
-  // }
-
   if (game.currentPlayerTurn != currentArmy.affinity) {
     socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if (!currentArmy.freeThings) {
+    socket.emit('error', "Cannot place anymore defenders!");
+    currentArmy.canEndTurn = true; // TODO correct?
     return;
   }
 
@@ -583,21 +589,70 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
   }
 }
 
-function eventClickedOnHex(socket, hexId) {
+function eventClickedOnHexSetupRecPhase(socket, hexId) {
   console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked hex " + hexId);
 
-  // if (currentArmy.canEndTurn) {
-  //   socket.emit('error', "You must end your turn now!");
-  //   return;
-  // }
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
 
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
     return;
   }
 
+  // Each player collects 10 defenders in this faze
+  // create new defender
+  // place on the clicked hex if owned by player
+  if (currentArmy.canPlaceDefender && currentArmy.thingInHand) { // pick from the cup
+    if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
+      if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
+        var stack = new Stack(hexId, currentArmy.affinity);
+        stack.containDefenders.push(currentArmy.thingInHand);
+        currentArmy.stacks.push(stack);
+      } else { // stack already exists
+        // Gets stack already on hexId and adds defender to it
+        currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
+      }
+
+      // remove from cup
+      game.removeFromCup(currentArmy.thingInHand);
+      currentArmy.freeThings--; // decrement recruitable things
+      // send update socket
+      io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+      socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders);
+      // empty hand
+      socket.emit('updateHand', null);
+
+      currentArmy.thingInHand = false;
+      currentArmy.canPlaceDefender = false;
+    } else {
+      socket.emit('error', "You do not own this hex!");
+    }
+  } else {
+    socket.emit('error', "You need to pick from the cup!");
+  }
+}
+
+function eventClickedOnHex(socket, hexId) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked hex " + hexId);
+
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
+
+  if ((game.currentPlayerTurn != currentArmy.affinity)) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  //  TODO change comments here
   // Each player collects 10 defenders in this faze
   // create new defender
   // place on the clicked hex if owned by player
@@ -640,10 +695,10 @@ function eventClickedOnRack(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
   console.log("Player " + currentArmy + " clicked hex ");
 
-  // if (currentArmy.canEndTurn) {
-  //   socket.emit('error', "You must end your turn now!");
-  //   return;
-  // }
+  if (currentArmy.canEndTurn) {
+    socket.emit('error', "You must end your turn now!");
+    return;
+  }
 
   if ((game.currentPlayerTurn != currentArmy.affinity)) {
     socket.emit('error', "It is not your turn yet!");
@@ -655,6 +710,7 @@ function eventClickedOnRack(socket) {
   // place on the clicked hex if owned by player
 
   if (currentArmy.canPlaceDefender && currentArmy.thingInHand) {
+    currentArmy.freeThings--; // decrement recruitable things
     // remove from cup
     game.removeFromCup(currentArmy.thingInHand);
     // push to rack
