@@ -6,6 +6,7 @@ var stage = new Kinetic.Stage({
 
 var rack = initRack(1000, 125);
 var bowlbutton = new Bowl();
+var diceControls = new DiceControls();
 
 var thingsArray = [];
 var thingsInRack = [];
@@ -190,7 +191,7 @@ window.addEventListener('keydown', function(e) {
     toggle_help();
 
   } else if (e.keyCode == 68) { //d Key
-    game.toggleDice();
+    diceControls.toggleDice();
 
   } else if (e.keyCode == 83) { //s Key
     console.log("emit:placeMarkerButton");
