@@ -61,7 +61,7 @@ function initConnection() {
       updateHex(hexId, affinity);
     });
 
-    iosocket.on('updateAllhexes', function(hexes) {
+    iosocket.on('updateAllHexes', function(hexes) {
       updateAllHexes(hexes);
     });
 
