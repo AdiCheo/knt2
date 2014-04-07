@@ -5,6 +5,7 @@ var stage = new Kinetic.Stage({
 });
 
 var rack = initRack(1000, 300);
+var bowlbutton = new Bowl();
 
 var thingsArray = [];
 var thingsInRack = [];
@@ -152,51 +153,10 @@ var selectedThing = new Kinetic.Image({
   y: 850,
   name: 'selectedThing',
   id: "selected",
-  image: bowlButtonImg,
+  fill: "grey",
   width: 150,
   height: 150
 });
-
-var bowlbutton = new Kinetic.Image({
-  x: 200,
-  y: 20,
-  name: 'generate',
-  id: "cup",
-  image: bowlButtonImg,
-  width: 128,
-  height: 128
-});
-
-bowlbutton.updateIcons = function(thing) {
-  // Remove old icon
-  if (bowlbutton.oldThing)
-    bowlbutton.oldThing.remove();
-
-  // Update bowlbutton
-  if (thing)
-    bowlbutton.addThingIcon(thing);
-}
-
-bowlbutton.addThingIcon = function(thingName) {
-  console.log(thingName + "Image");
-  console.log(thingImagesArray[thingName + "Image"]);
-  var thing = new Kinetic.Image({
-    x: this.getX() + 40,
-    y: this.getY() + 40,
-    id: "defender",
-    name: thingName,
-    image: thingImagesArray[thingName + "Image"],
-    draggable: true,
-    width: 50,
-    height: 50
-  });
-
-  bowlbutton.oldThing = thing;
-  boardLayer.add(thing);
-  thing.moveToTop();
-  thing.show();
-  boardLayer.draw();
-};
 
 var endturnbutton = new Kinetic.Image({ //End turn button
   x: 5,
@@ -218,40 +178,33 @@ createBoardLayer();
 // TODO WTF is going on here
 generateFort(boardLayer.get("#-2,-1")[0], fortImages["tower"], 0, boardLayer);
 
-var current_soldier;
-
-game = new Game();
-
-console.log(game.currentTurn);
-
 // Add Buttons
 // buildFortButton(fortImage, boardLayer);
 
 // addAllPiecesToBoard();
 var selectedObject;
 var tmpPlayerStack;
-var army = new Array();
+// var army = new Array();
 
-army[0] = new Army(0, "yellow", 0, 10);
-army[1] = new Army(1, "grey", 0, 10);
-army[2] = new Army(2, "green", 0, 10);
-army[3] = new Army(3, "red", 0, 10);
+// army[0] = new Army(0, "yellow", 0, 10);
+// army[1] = new Army(1, "grey", 0, 10);
+// army[2] = new Army(2, "green", 0, 10);
+// army[3] = new Army(3, "red", 0, 10);
 
-currentPlayer = game.getCurrentPlayer();
+// currentPlayer = game.getCurrentPlayer();
 
-var SETUP_PHASE = -1;
-var SETUP_RECRUITMENT_PHASE = 0;
-var GOLD_COLLECTION_PHASE = 1;
-var RECRUIT_THINGS_PHASE = 3;
-var MOVEMENT_PHASE = 5;
-var COMBAT_PHASE = 6;
+// var SETUP_PHASE = -1;
+// var SETUP_RECRUITMENT_PHASE = 0;
+// var GOLD_COLLECTION_PHASE = 1;
+// var RECRUIT_THINGS_PHASE = 3;
+// var MOVEMENT_PHASE = 5;
+// var COMBAT_PHASE = 6;
 
 // TODO: Add later, it's getting annoying
 window.addEventListener('keydown', function(e) {
   var key = e.keyCode;
   console.log("Pressed key:" + displayKeyCode(key) + ' (' + key + ')');
 
-  currentPlayer = game.getCurrentPlayer();
   if (e.keyCode == 72 || e.keyCode == 27) { //h Key || esc
     toggle_help();
 
@@ -290,7 +243,6 @@ boardLayer.on('click tap', function(e) {
   var shape = e.targetNode;
   console.log("Selected shape name:" + shape.getName());
   console.log("\tId: " + shape.getId());
-  currentPlayer = game.getCurrentPlayer();
 
   if (shape.getName() == "placeMarkerButton") {
     console.log("emit:placeMarkerButton");

@@ -220,7 +220,7 @@ function Stack(hex, stackIcon, affinity, boardLayer) {
     // boardLayer.remove(stack);
     stack.hide();
     return;
-  }
+  };
 
   stack.getcontainedDefenders = function() {
     return stack.containedDefenders;
@@ -315,57 +315,6 @@ function initRack(realX, realY) {
   };
 
   return rack;
-}
-
-
-// define action points bar class
-function APBar(xS, yS, ap) {
-  this.background = new Kinetic.Rect({
-    x: xS + 40,
-    y: yS - 15,
-    name: "APbar",
-    width: 25,
-    height: 25,
-    fill: 'gainsboro',
-    stroke: 'grey',
-    strokeWidth: 1,
-    visible: true
-  });
-  this.text = new Kinetic.Text({
-    x: xS + 48,
-    y: yS - 12,
-    text: '' + ap,
-    fontSize: 18,
-    fontFamily: 'Calibri',
-    fill: 'red',
-    visible: true
-  });
-
-
-  this.initBar = function(layer) {
-    layer.add(this.background);
-    layer.add(this.text);
-  };
-
-  this.hideBar = function() {
-    this.background.hide();
-    this.text.hide();
-  };
-
-  this.showBar = function(x, y, ap) {
-    this.background.setX(x + 40);
-    this.background.setY(y - 20);
-    this.text.setX(x + 48);
-    this.text.setY(y - 17);
-    this.text.setText('' + ap);
-    this.background.show();
-    this.text.show();
-  };
-
-  this.remove = function() {
-    this.background.remove();
-    this.text.remove();
-  };
 }
 
 //define army class

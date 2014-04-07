@@ -717,7 +717,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
         if (!currentHex.isExplored) {
           // The hex is not explored, the dice needs to be rolled
           // army[currentPlayer].mustRollDice = true;
-          currentArmy.thingInHand.movementPoints -= calculateDistance(currentArmy.thingInHand, currentHex);
+          currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
         } else {
           // If the current army already explored and owned the hex
           if (indexById(currentArmy.ownedHexes, hexId) !== null) {
@@ -731,7 +731,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
             // If there is no existing stack
             if (indexById(currentArmy.stacks, hexId) === null) {
               var stack = new Stack(hexId, currentArmy.affinity);
-              stack.containedDefenders.push(currentArmy.thingInHand);
+              stack.containedDefenders.push(currentArmy.thingInHand.name);
               currentArmy.stacks.push(stack);
             }
             // Else there is already is a stack
