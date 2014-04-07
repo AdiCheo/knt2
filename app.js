@@ -642,11 +642,11 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
     if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
       if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
         var stack = new Stack(hexId, currentArmy.affinity);
-        stack.containDefenders.push(currentArmy.thingInHand);
+        stack.containedDefenders.push(currentArmy.thingInHand);
         currentArmy.stacks.push(stack);
       } else { // stack already exists
         // Gets stack already on hexId and adds defender to it
-        currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
+        currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders.push(currentArmy.thingInHand);
       }
 
       // Find the thing in hands object model and update it
@@ -667,7 +667,7 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
       // send update socket
       io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-      socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders);
+      socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
       // empty hand
       socket.emit('updateHand', null);
 
@@ -694,7 +694,7 @@ function eventDefenderMovePhase(socket, defenderName) {
   console.log("Selected " + defenderName);
   // update socket
   socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
-  currentArmy.canPlaceDefender = true;
+  currentArmy.canPlaceThing = true;
 }
 
 function eventClickedOnHexMovePhase(socket, hexId) {
@@ -702,58 +702,104 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
+  currentHex = game.getHexById(hexId);
+
   // Remove the defender in hand from the stack on his old hex,
   // Place the defender on the new indicated hex
 
   // Check if the thing in hand is an defender object
-  if (thingInHand instanceof Defender) {
+  if (currentArmy.canPlaceThing && currentArmy.thingInHand) {
+    if (thingInHand instanceof Defender) {
 
-    // If Defender has movement points left
-    if (thingInHand.movementPoints > 0) {
+      // If Defender has enough movement points for the move
+      if (calculateDistance(thingInHand, currentHex) <= thingInHand.movementPoints) {
+        // check if hex is unexplored
+        if (!currentHex.isExplored) {
+          // The hex is not explored, the dice needs to be rolled
+          // army[currentPlayer].mustRollDice = true;
+          thingInHand.movementPoints -= calculateDistance(thingInHand, currentHex);
+        } else {
+          // If the current army already explored and owned the hex
+          if (indexById(currentArmy.ownedHexes, hexId) !== null) {
 
-    } else {
-      socket.emit('error', "No more movement points!");
+            // Remove the defender in hand from current stack
+            // Access the stack the thing is in currently
+            var stackIndex = indexById(currentArmy.stacks, currentArmy.thingInHand.containerId);
+            // Access the contained
+
+            currentArmy.stacks[stackIndex].containedDefenders[indexByKey()]
+
+            // If there is no existing stack
+            if (indexById(currentArmy.stacks, hexId) === null) {
+              var stack = new Stack(hexId, currentArmy.affinity);
+              stack.containedDefenders.push(currentArmy.thingInHand);
+              currentArmy.stacks.push(stack);
+            }
+            // Else there is already is a stack
+            else {
+              // Gets stack already on hexId and adds defender to it
+              currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders.push(currentArmy.thingInHand);
+            }
+          }
+          // Else it is owned by another army!
+          else {
+
+          }
+
+          // send update socket
+          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+          socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
+          // empty hand
+          socket.emit('updateHand', null);
+
+          currentArmy.thingInHand = false;
+          currentArmy.canPlaceThing = false;
+        }
+      } else {
+        socket.emit('error', "No more movement points!");
+      }
+
+      io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+      currentArmy.thingInHand = false;
+      currentArmy.canPlaceThing = false;
     }
-
-    io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-    currentArmy.thingInHand = false;
-    currentArmy.canPlaceThing = false;
   }
-
-
-
-
-
-  // if (!currentArmy.canPlay(game, socket)) return;
-
-  // Each player collects 10 defenders in this faze
-  // create new defender
-  // place on the clicked hex if owned by player
-  // if (currentArmy.canPlaceThing && currentArmy.thingInHand) { // pick from the cup
-  //   if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
-  // if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
-  //   var stack = new Stack(hexId, currentArmy.affinity);
-  //   stack.containDefenders.push(currentArmy.thingInHand);
-  //   currentArmy.stacks.push(stack);
-  // } else { // stack already exists
-  //   // Gets stack already on hexId and adds defender to it
-  //   currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
-  // }
-
-
-  // send update socket
-  // socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders);
-  // empty hand
-  // socket.emit('updateHand', null);
-
-
-  //   } else {
-  //     socket.emit('error', "You do not own this hex!");
-  //   }
-  // } else {
-  //   socket.emit('error', "You need to pick from the cup!");
-  // }
 }
+
+
+
+
+
+// if (!currentArmy.canPlay(game, socket)) return;
+
+// Each player collects 10 defenders in this faze
+// create new defender
+// place on the clicked hex if owned by player
+// if (currentArmy.canPlaceThing && currentArmy.thingInHand) { // pick from the cup
+//   if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
+// if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
+//   var stack = new Stack(hexId, currentArmy.affinity);
+//   stack.containedDefenders.push(currentArmy.thingInHand);
+//   currentArmy.stacks.push(stack);
+// } else { // stack already exists
+//   // Gets stack already on hexId and adds defender to it
+//   currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders.push(currentArmy.thingInHand);
+// }
+
+
+// send update socket
+// socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
+// empty hand
+// socket.emit('updateHand', null);
+
+
+//   } else {
+//     socket.emit('error', "You do not own this hex!");
+//   }
+// } else {
+//   socket.emit('error', "You need to pick from the cup!");
+// }
+
 
 function eventClickedOnHex(socket, hexId) {
   console.log(game.armies);
@@ -880,7 +926,7 @@ function createHexTiles() {
       var x1;
       var y1;
 
-      if (rowIdx % 2 == 0) {
+      if (rowIdx % 2 === 0) {
         x1 = rowIdx - 4; - colIdx / 2;
         y1 = colIdx - 1 - rowIdx / 2;
       } else {

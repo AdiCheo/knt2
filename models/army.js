@@ -160,6 +160,9 @@ function Army(affinity, name, income, gold, id) {
     if (target.name == "hex") {
       x1 = parseInt(target.id.split(",")[0], 10);
       y1 = parseInt(target.id.split(",")[1], 10);
+    } else if (target.id == "defender") {
+      x1 = parseInt(target.containerId.split(",")[0], 10);
+      y1 = parseInt(target.containerId.split(",")[1], 10);
     } else {
       x1 = parseInt(target.split(",")[0], 10);
       y1 = parseInt(target.split(",")[1], 10);
