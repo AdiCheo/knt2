@@ -1,4 +1,5 @@
 function Defender(containerId, defenderName, combatValue, terrainType, canCharge, isRanged, isFlying, isMagic) {
+
   this.id = "defender";
   this.name = defenderName;
 
