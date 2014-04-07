@@ -178,29 +178,10 @@ createBoardLayer();
 // TODO WTF is going on here
 generateFort(boardLayer.get("#-2,-1")[0], fortImages["tower"], 0, boardLayer);
 
-// Add Buttons
-// buildFortButton(fortImage, boardLayer);
-
-// addAllPiecesToBoard();
 var selectedObject;
 var tmpPlayerStack;
-// var army = new Array();
 
-// army[0] = new Army(0, "yellow", 0, 10);
-// army[1] = new Army(1, "grey", 0, 10);
-// army[2] = new Army(2, "green", 0, 10);
-// army[3] = new Army(3, "red", 0, 10);
-
-// currentPlayer = game.getCurrentPlayer();
-
-// var SETUP_PHASE = -1;
-// var SETUP_RECRUITMENT_PHASE = 0;
-// var GOLD_COLLECTION_PHASE = 1;
-// var RECRUIT_THINGS_PHASE = 3;
-// var MOVEMENT_PHASE = 5;
-// var COMBAT_PHASE = 6;
-
-// TODO: Add later, it's getting annoying
+// handle key press events
 window.addEventListener('keydown', function(e) {
   var key = e.keyCode;
   console.log("Pressed key:" + displayKeyCode(key) + ' (' + key + ')');
