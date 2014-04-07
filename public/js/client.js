@@ -226,8 +226,8 @@ function updateStack(hexId, stackThings) {
 }
 
 function createHexes(hexes) {
-  for (index = 0; index < hexes.length; ++index) {
-    // boardLayer.add(hexes[index]);
+  for (var i in hexes) {
+    boardLayer.get("#" + hexes[i].id)[0].setFillPatternImage(hexTiles[hexes[i].terrainType]);
   }
 }
 
@@ -267,7 +267,7 @@ function updateHand(thing) {
 
 // function addThingToRack(thing) {
 //   console.log(thing);
-//   boardLayer.get('#rack')[0].addThingIcon(thing);
+//   boardLayer.get('#rack')[0].addDefenderIcon(thing);
 // }
 
 // function replaceThingInRack(thing, prevThing) { //replaceThingInRack
@@ -292,7 +292,7 @@ function updateHand(thing) {
 //     }
 //   }
 
-//   boardLayer.get('#rack')[0].addThingIcon(thing);
+//   boardLayer.get('#rack')[0].addDefenderIcon(thing);
 // }
 
 // function newTurn(affinity) {

@@ -384,7 +384,6 @@ function eventStateInit(socket, user) {
   io.sockets.emit('updateUsers', game.users);
   createHexTiles();
   socket.emit('createHexes', game.hexes);
-  socket.emit('map', populateHexTiles());
 
   // socket.emit('state.init', publicGameData(socket.id));
   socket.emit('state.init', initialGameData(socket.id));
@@ -894,6 +893,9 @@ function createHexTiles() {
   var x;
   var y;
 
+  var mapData = populateHexTiles();
+  // var mapData = populateHexTiles1();
+
   for (colIdx = 0; colIdx < cols; colIdx++) {
     for (rowIdx = 1; rowIdx < rows; rowIdx++) {
       if ((colIdx === 0 && rowIdx == 1) ||
@@ -934,7 +936,7 @@ function createHexTiles() {
         y1 = colIdx - 1 - (rowIdx + 1) / 2;
       }
 
-      var hexagon = new HexTile(x, y, hexRadius, strokeColor, x1, y1);
+      var hexagon = new HexTile(x1, y1, mapData.pop());
 
       game.hexes.push(hexagon);
     }
@@ -944,46 +946,51 @@ function createHexTiles() {
 function populateHexTiles() {
   var mapData = [];
 
-  mapData.push("swamp");
+  mapData.push("mountain");
 
-  mapData.push("sea");
-  mapData.push("plains");
   mapData.push("frozenWaste");
-  mapData.push("desert");
-  mapData.push("forest");
   mapData.push("mountain");
+  mapData.push("forest");
 
-  mapData.push("swamp");
-  mapData.push("mountain");
-  mapData.push("forest");
   mapData.push("desert");
-  mapData.push("forest");
-  mapData.push("forest");
-  mapData.push("mountain");
-  mapData.push("plains");
-  mapData.push("sea");
-  mapData.push("mountain");
-  mapData.push("frozenWaste");
   mapData.push("desert");
-
-  mapData.push("sea");
   mapData.push("jungle");
-  mapData.push("frozenWaste");
-  mapData.push("plains");
-  mapData.push("frozenWaste");
-  mapData.push("swamp");
-  mapData.push("desert");
-  mapData.push("desert");
-  mapData.push("frozenWaste");
   mapData.push("mountain");
-  mapData.push("forest");
+  mapData.push("plains");
   mapData.push("swamp");
   mapData.push("sea");
+
   mapData.push("swamp");
   mapData.push("forest");
+  mapData.push("frozenWaste");
+  mapData.push("desert");
+  mapData.push("forest");
+  mapData.push("sea");
+  mapData.push("swamp");
+
+  mapData.push("frozenWaste");
+  mapData.push("desert");
   mapData.push("plains");
   mapData.push("swamp");
+  mapData.push("mountain");
+  mapData.push("mountain");
+  mapData.push("forest");
+
   mapData.push("plains");
+  mapData.push("forest");
+  mapData.push("mountain");
+  mapData.push("sea");
+  mapData.push("desert");
+  mapData.push("frozenWaste");
+  mapData.push("plains");
+
+  mapData.push("frozenWaste");
+  mapData.push("jungle");
+  mapData.push("swamp");
+  mapData.push("plains");
+  mapData.push("swamp");
+
+  mapData.push("sea");
 
   return mapData;
 }
