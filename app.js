@@ -447,7 +447,7 @@ function eventLoadGame(socket, num) {
     stack1.containedDefenders.push("Unicorn");
     stack1.containedDefenders.push("Bears");
     stack1.containedDefenders.push("GiantSpider");
-    stack1.containedDefenders.push("CamelCorpse");
+    stack1.containedDefenders.push("CamelCorps");
     stack1.containedDefenders.push("Sandworm");
 
     game.armies[0].stacks.push(stack1);
