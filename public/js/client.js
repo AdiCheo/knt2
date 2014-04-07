@@ -30,8 +30,7 @@ function register() {
 
 function initConnection() {
 
-  // iosocket = io.connect();
-  iosocket = io.connect("http://172.17.46.21:3000/");
+  iosocket = io.connect("http://192.168.43.154:3000");
 
   iosocket.on('connect', function() {
     nickname = randomName();
