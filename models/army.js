@@ -110,6 +110,10 @@ function Army(affinity, name, income, gold, id) {
   this.isHexLegalToOwn = function(hex, game) {
     var index = indexById(game.hexes, hex);
     var currentHex = game.hexes[index];
+
+    if (currentHex.terrainType == "sea")
+      return false;
+
     if (this.ownedHexes.length === 0) {
       if (hex == "-2,-1" || hex == "2,-3" || hex == "-2,3" || hex == "2,1" &&
         (currentHex.affinity == this.affinity || currentHex.affinity == -1))
