@@ -294,7 +294,7 @@ function initRack(realX, realY) {
 
   rack.addThingIcon = function(thingName, index) {
     var thing = new Kinetic.Image({
-      x: this.getX() + 10,
+      x: this.getX() - 35,
       y: this.getY() + index * 50,
       id: thingName,
       name: "defender",
