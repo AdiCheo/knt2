@@ -4,7 +4,7 @@ var stage = new Kinetic.Stage({
   height: 1200,
 });
 
-var rack = initRack(1000, 300);
+var rack = initRack(1000, 125);
 var bowlbutton = new Bowl();
 
 var thingsArray = [];
@@ -402,8 +402,8 @@ boardLayer.add(bowlbutton);
 document.getElementById("phasetext").style.left = 260 + "px";
 document.getElementById("phasetext").style.top = 0 + "px";
 
-document.getElementById("racktext").style.left = 1000 + "px";
-document.getElementById("racktext").style.top = 300 + "px";
+document.getElementById("racktext").style.left = 950 + "px";
+document.getElementById("racktext").style.top = 125 + "px";
 
 //current player turn
 document.getElementById("playerturntext").style.left = 100 + "px";
