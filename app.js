@@ -387,8 +387,20 @@ function eventLoadGame(socket, num) {
     game.armies[0].ownHex("2,-1", game);
     game.armies[0].ownHex("2,0", game);
     game.armies[0].ownHex("2,1", game);
+    game.armies[0].ownHex("2,1", game);
 
     sendAllHexes(socket, game.hexes);
+
+  } else if (num == 2) {
+    game.armies[0].ownHex("3,-2", game);
+    game.armies[0].ownHex("3,-1", game);
+    game.armies[0].ownHex("3,0", game);
+    game.armies[0].ownHex("2,-1", game);
+    game.armies[0].ownHex("2,0", game);
+    game.armies[0].ownHex("2,1", game);
+
+    sendAllHexes(socket, game.hexes);
+
   }
 }
 
@@ -629,9 +641,7 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
 }
 
 function sendAllHexes(socket, gameHexes) {
-  for (var hex in gameHexes) {
-    io.sockets.emit('updateOwnedHex', gameHexes[hex].id, gameHexes[hex].affinity);
-  }
+  io.sockets.emit('updateAllHexes', gameHexes);
 }
 
 function eventClickedOnHexPlaceThing(socket, hexId) {
