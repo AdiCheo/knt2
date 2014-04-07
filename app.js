@@ -745,7 +745,14 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
 }
 
 function eventClickedOnHexPlaceThing(socket, hexId) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  if (!indexById(game.armies, socket.id))
+    currentArmy = game.armies[indexById(game.armies, socket.id)];
+  else {
+    console.log(socket.id);
+    for (var army in game.armies) {
+      console.log("Army Ids: " + armies[army].id);
+    }
+  }
 
   if (!currentArmy.canPlay(game, socket)) return;
 
