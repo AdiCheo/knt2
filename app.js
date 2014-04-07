@@ -611,6 +611,12 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
   }
 }
 
+function sendAllHexes(socket, gameHexes) {
+  for (var hex in gameHexes) {
+    io.sockets.emit('updateOwnedHex', gameHexes[hex].id, gameHexes[hex].affinity);
+  }
+}
+
 function eventClickedOnHexPlaceThing(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
