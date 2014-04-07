@@ -390,7 +390,6 @@ function Game() {
 
   this.isHexOwned = function(hexId) {
     hex = this.getHexById(hexId);
-    console.log(hex);
 
     if (hex.affinity == -1) {
       return false;
