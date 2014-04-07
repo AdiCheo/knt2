@@ -395,10 +395,12 @@ function eventLoadGame(socket, num) {
     game.armies[1].ownHex("-2,-1", game, true);
     game.armies[1].ownHex("-2,0", game, true);
     game.armies[1].ownHex("-1,2", game, true);
+    game.armies[1].ownHex("-3,0", game, true);
     game.armies[1].ownHex("-3,1", game, true);
     game.armies[1].ownHex("-3,2", game, true);
     game.armies[1].ownHex("-2,0", game, true);
     game.armies[1].ownHex("-1,-1", game, true);
+    game.armies[1].ownHex("-1,-2", game, true);
 
     game.armies[2].ownHex("-2,3", game, true);
     game.armies[2].ownHex("-1,3", game, true);
@@ -416,7 +418,16 @@ function eventLoadGame(socket, num) {
     game.armies[3].ownHex("2,-2", game, true);
     game.armies[3].ownHex("3,-3", game, true);
 
+    // game.armies[0].buildFort(",", val);
+    // game.armies[1].buildFort(",", val);
+    // game.armies[2].buildFort(",", val);
+    // game.armies[3].buildFort(",", val);
+
     sendAllHexes(socket, game.hexes);
+
+    for (var hex in game.armies[0].hexes) {
+      console.log(game.armies[0].hexes[hex].id);
+    }
 
   } else if (num == 2) {
     game.armies[0].ownHex("3,-2", game, true);

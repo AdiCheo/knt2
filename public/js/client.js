@@ -62,7 +62,7 @@ function initConnection() {
     });
 
     iosocket.on('updateAllHexes', function(hexes) {
-      updateAllhexes(hexes);
+      updateAllHexes(hexes);
     });
 
     iosocket.on('updateForts', function(hexId, affinity) {
@@ -259,7 +259,7 @@ function createHexes(hexes) {
   }
 }
 
-function updateAllhexes(hexes) {
+function updateAllHexes(hexes) {
   for (var i in hexes) {
     boardLayer.get('#' + hexes[i].id)[0].setOwnerIcon(hexes[i].affinity);
   }
