@@ -380,54 +380,53 @@ function randomDiceRoll() {
 //TODO
 function eventLoadGame(socket, num) {
   if (num == 1) {
-    game.armies[0].ownHex("2,1", game);
-    game.armies[0].ownHex("2,0", game);
-    game.armies[0].ownHex("2,1", game);
-    game.armies[0].ownHex("2,-1", game);
-    game.armies[0].ownHex("3,-2", game);
-    game.armies[0].ownHex("3,-1", game);
-    game.armies[0].ownHex("3,0", game);
-    game.armies[0].ownHex("1,2", game);
-    game.armies[0].ownHex("1,1", game);
-    game.armies[0].ownHex("1,0", game);
-    game.armies[0].ownHex("0,1", game);
+    game.armies[0].ownHex("2,1", game, true);
+    game.armies[0].ownHex("2,0", game, true);
+    game.armies[0].ownHex("2,1", game, true);
+    game.armies[0].ownHex("2,-1", game, true);
+    game.armies[0].ownHex("3,-2", game, true);
+    game.armies[0].ownHex("3,-1", game, true);
+    game.armies[0].ownHex("3,0", game, true);
+    game.armies[0].ownHex("1,2", game, true);
+    game.armies[0].ownHex("1,1", game, true);
+    game.armies[0].ownHex("1,0", game, true);
+    game.armies[0].ownHex("0,1", game, true);
 
-    game.armies[1].ownHex("-2,-1", game);
-    game.armies[1].ownHex("-2,0", game);
-    game.armies[1].ownHex("-1,2", game);
-    game.armies[1].ownHex("-3,1", game);
-    game.armies[1].ownHex("-3,2", game);
-    game.armies[1].ownHex("-2,0", game);
-    game.armies[1].ownHex("-1,-1", game);
+    game.armies[1].ownHex("-2,-1", game, true);
+    game.armies[1].ownHex("-2,0", game, true);
+    game.armies[1].ownHex("-1,2", game, true);
+    game.armies[1].ownHex("-3,1", game, true);
+    game.armies[1].ownHex("-3,2", game, true);
+    game.armies[1].ownHex("-2,0", game, true);
+    game.armies[1].ownHex("-1,-1", game, true);
 
-    game.armies[2].ownHex("-2,3", game);
-    game.armies[2].ownHex("-1,3", game);
-    game.armies[2].ownHex("0,3", game);
-    game.armies[2].ownHex("0,2", game);
-    game.armies[2].ownHex("-1,2", game);
-    game.armies[2].ownHex("-1,1", game);
+    game.armies[2].ownHex("-2,3", game, true);
+    game.armies[2].ownHex("-1,3", game, true);
+    game.armies[2].ownHex("0,3", game, true);
+    game.armies[2].ownHex("0,2", game, true);
+    game.armies[2].ownHex("-1,2", game, true);
+    game.armies[2].ownHex("-1,1", game, true);
 
-    game.armies[3].ownHex("2,-3", game);
-    game.armies[3].ownHex("1,-3", game);
-    game.armies[3].ownHex("0,-2", game);
-    game.armies[3].ownHex("1,-2", game);
-    game.armies[3].ownHex("1,-1", game);
-    game.armies[3].ownHex("0,0", game);
-    game.armies[3].ownHex("2,-2", game);
-    game.armies[3].ownHex("3,-3", game);
+    game.armies[3].ownHex("2,-3", game, true);
+    game.armies[3].ownHex("1,-3", game, true);
+    game.armies[3].ownHex("0,-2", game, true);
+    game.armies[3].ownHex("1,-2", game, true);
+    game.armies[3].ownHex("1,-1", game, true);
+    game.armies[3].ownHex("0,0", game, true);
+    game.armies[3].ownHex("2,-2", game, true);
+    game.armies[3].ownHex("3,-3", game, true);
 
     sendAllHexes(socket, game.hexes);
 
   } else if (num == 2) {
-    game.armies[0].ownHex("3,-2", game);
-    game.armies[0].ownHex("3,-1", game);
-    game.armies[0].ownHex("3,0", game);
-    game.armies[0].ownHex("2,-1", game);
-    game.armies[0].ownHex("2,0", game);
-    game.armies[0].ownHex("2,1", game);
+    game.armies[0].ownHex("3,-2", game, true);
+    game.armies[0].ownHex("3,-1", game, true);
+    game.armies[0].ownHex("3,0", game, true);
+    game.armies[0].ownHex("2,-1", game, true);
+    game.armies[0].ownHex("2,0", game, true);
+    game.armies[0].ownHex("2,1", game, true);
 
     sendAllHexes(socket, game.hexes);
-    a
   }
 }
 
