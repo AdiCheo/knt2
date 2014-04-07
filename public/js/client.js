@@ -173,6 +173,34 @@ function updateUsers(users) {
   }
 }
 
+function loadGame1() {
+  iosocket.emit('loadGame', 1);
+}
+
+function loadGame2() {
+  iosocket.emit('loadGame', 2);
+}
+
+function loadGame3() {
+  iosocket.emit('loadGame', 3);
+}
+
+function loadGame4() {
+  iosocket.emit('loadGame', 4);
+}
+
+function loadGame5() {
+  iosocket.emit('loadGame', 5);
+}
+
+function loadGame6() {
+  iosocket.emit('loadGame', 6);
+}
+
+function loadGame7() {
+  iosocket.emit('loadGame', 7);
+}
+
 function allowMarkerPlacement() {
   console.log("Place your marker on a hex");
 

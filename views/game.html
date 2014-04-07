@@ -101,9 +101,13 @@
                     <strong class='nuke'>Nuke</strong>is the last resort weapon of last resort weapons. It will destroy all creeps on the screen, but has two drawbacks. First, you won't recieve any loot from creeps destroyed this way. Second, you only have a limited supply and have no way to replenish that supply once they are exhausted.</p>
             </div>
             <div id="help-loadgame">
-                <div id="loadgame-options">
-                    <h1>Demo: Predefined Scenario 1 </h1>
-                </div>
+                <button onclick="loadGame1()"> <h1>Demo: Predefined Scenario 1 </h1> </button>
+                <button onclick="loadGame2()"> <h1>Demo: Predefined Scenario 2 </h1> </button>
+                <button onclick="loadGame3()"> <h1>Demo: Predefined Scenario 3 </h1> </button>
+                <button onclick="loadGame4()"> <h1>Demo: Predefined Scenario 4 </h1> </button>
+                <button onclick="loadGame5()"> <h1>Demo: Predefined Scenario 5 </h1> </button>
+                <button onclick="loadGame6()"> <h1>Demo: Predefined Scenario 6 </h1> </button>
+                <button onclick="loadGame7()"> <h1>Demo: Predefined Scenario 7 </h1> </button>
             </div>
             <div class="visible" id="help-hotkeys">
                 <h4>Hotkeys:</h4>
@@ -212,10 +216,6 @@
             $("#help-headers .section").removeClass("active");
             $(this).addClass("active");
             return false;
-        });
-
-        $("#loadgame-options .section").click(function() {
-            iosocket.emit('disconnect');
         });
 
         var help_displayed = false;

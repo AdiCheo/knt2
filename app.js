@@ -75,6 +75,11 @@ io.sockets.on('connection', function(socket) {
   });
 
   // Player connection event
+  socket.on('loadGame', function(num) {
+    eventLoadGame(socket, num);
+  });
+
+  // Player connection event
   socket.on('adduser', function(user) {
     eventStateInit(socket, user);
   });
@@ -371,6 +376,20 @@ function handleDice(socket) {
 
 function randomDiceRoll() {
   return Math.floor(Math.random() * 6 + 1);
+}
+
+//TODO
+function eventLoadGame(socket, num) {
+  if (num == 1) {
+    game.armies[0].ownHex("3,-2", game);
+    game.armies[0].ownHex("3,-1", game);
+    game.armies[0].ownHex("3,0", game);
+    game.armies[0].ownHex("2,-1", game);
+    game.armies[0].ownHex("2,0", game);
+    game.armies[0].ownHex("2,1", game);
+
+    sendAllHexes(socket, game.hexes);
+  }
 }
 
 function eventStateInit(socket, user) {
