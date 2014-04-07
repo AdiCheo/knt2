@@ -34,26 +34,26 @@ function Game() {
 
 
   this.createCupDefenders = function() {
-    this.cup.push("OldDragon");
-    this.cup.push("GiantSpider");
-    this.cup.push("Elephant");
-    this.cup.push("BrownKnight");
     this.cup.push("BabyDragon");
     this.cup.push("CamelCorps");
-    this.cup.push("Dervish");
+    this.cup.push("Dervish1");
+    this.cup.push("Dervish2");
     this.cup.push("DesertBat");
     this.cup.push("DustDevil");
     this.cup.push("Genie");
-    this.cup.push("GiantWasp");
-    this.cup.push("GiantWasp");
+    this.cup.push("GiantSpider");
+    this.cup.push("GiantWasp1");
+    this.cup.push("GiantWasp2");
     this.cup.push("Griffon");
     this.cup.push("Nomads1");
     this.cup.push("Nomads2");
+    this.cup.push("OldDragon");
     this.cup.push("Sandworm");
     this.cup.push("Skletons1");
     this.cup.push("Skletons2");
     this.cup.push("Sphinx");
-    this.cup.push("Vultures");
+    this.cup.push("Vultures1");
+    this.cup.push("Vultures2");
     this.cup.push("YellowKnight");
     this.cup.push("Bandits");
     this.cup.push("Bears");
@@ -69,14 +69,18 @@ function Game() {
     this.cup.push("GreatOwl");
     this.cup.push("GreenKnight");
     this.cup.push("KillerRacoon");
-    this.cup.push("Pixies");
+    this.cup.push("Pixies1");
+    this.cup.push("Pixies2");
     this.cup.push("Unicorn");
     this.cup.push("WalkingTree");
     this.cup.push("WildCat");
     this.cup.push("Wyvern");
     this.cup.push("DragonRider");
     this.cup.push("ElkHerd");
-    this.cup.push("Eskimos");
+    this.cup.push("Eskimos1");
+    this.cup.push("Eskimos2");
+    this.cup.push("Eskimos3");
+    this.cup.push("Eskimos4");
     this.cup.push("IceBats");
     this.cup.push("IceGiant");
     this.cup.push("Iceworm");
@@ -92,15 +96,19 @@ function Game() {
     this.cup.push("CrawlingVines");
     this.cup.push("Crocodiles");
     this.cup.push("Dinasaur");
-    this.cup.push("GiantApe");
+    this.cup.push("Elephant");
+    this.cup.push("GiantApe1");
+    this.cup.push("GiantApe2");
     this.cup.push("GiantSnake");
     this.cup.push("HeadHunter");
     this.cup.push("PterodactylWarriors");
     this.cup.push("Pygmies");
-    this.cup.push("Tigers");
+    this.cup.push("Tigers1");
+    this.cup.push("Tigers2");
     this.cup.push("Watusi");
     this.cup.push("WitchDoctor");
     this.cup.push("BrownDragon");
+    this.cup.push("BrownKnight");
     this.cup.push("Cyclops");
     this.cup.push("Dwarves1");
     this.cup.push("Dwarves2");
@@ -110,11 +118,14 @@ function Game() {
     this.cup.push("GiantCondor");
     this.cup.push("Goblins1");
     this.cup.push("Goblins2");
+    this.cup.push("Goblins3");
+    this.cup.push("Goblins4");
     this.cup.push("GreatEagle");
     this.cup.push("GreatHawk");
     this.cup.push("LittleRoc");
     this.cup.push("MountainLion");
-    this.cup.push("MountainMen");
+    this.cup.push("MountainMen1");
+    this.cup.push("MountainMen2");
     this.cup.push("Ogre");
     this.cup.push("Troll");
     this.cup.push("BuffaloHerd1");
@@ -124,6 +135,8 @@ function Game() {
     this.cup.push("Eagles");
     this.cup.push("Farmers1");
     this.cup.push("Farmers2");
+    this.cup.push("Farmers3");
+    this.cup.push("Farmers4");
     this.cup.push("FlyingBuffalo");
     this.cup.push("GiantBeetle");
     this.cup.push("GreatHawk");
@@ -142,9 +155,14 @@ function Game() {
     this.cup.push("Tribesmen");
     this.cup.push("Basilisk");
     this.cup.push("BlackKnight");
+    this.cup.push("Crocodiles");
     this.cup.push("DarkWizard");
-    this.cup.push("Ghost");
-    this.cup.push("GiantLizard");
+    this.cup.push("Ghost1");
+    this.cup.push("Ghost2");
+    this.cup.push("Ghost3");
+    this.cup.push("Ghost4");
+    this.cup.push("GiantLizard1");
+    this.cup.push("GiantLizard2");
     this.cup.push("GiantMosquito");
     this.cup.push("GiantSnake");
     this.cup.push("HugeLeech");
@@ -160,6 +178,7 @@ function Game() {
     this.cup.push("Watersanke");
     this.cup.push("Will_O_Wisp");
     this.cup.push("WingedPirhana");
+
   };
 
   this.createDefenders = function() {
