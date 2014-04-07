@@ -61,6 +61,10 @@ function initConnection() {
       updateHex(hexId, affinity);
     });
 
+    iosocket.on('updateAllhexes', function(hexes) {
+      updateAllhexes(hexes);
+    });
+
     iosocket.on('updateForts', function(hexId, affinity) {
       updateForts(hexId, affinity);
     });
@@ -224,6 +228,12 @@ function updateStack(hexId, stackThings) {
 function createHexes(hexes) {
   for (var i in hexes) {
     boardLayer.get("#" + hexes[i].id)[0].setFillPatternImage(hexTiles[hexes[i].terrainType]);
+  }
+}
+
+function updateAllhexes(hexes) {
+  for (var i in hexes) {
+    boardLayer.get('#' + hexes[i].id)[0].setOwnerIcon(hexes[i].affinity);
   }
 }
 
