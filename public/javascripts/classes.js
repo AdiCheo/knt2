@@ -19,8 +19,6 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.setId(logicalX + "," + logicalY);
   hexagon.logX = logicalX;
   hexagon.logY = logicalY;
-  hexagon.affinity = -1;
-  hexagon.isExplored = false;
 
   hexagon.containDefenders = [];
   hexagon.defendersVisible = true;
