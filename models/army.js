@@ -101,7 +101,7 @@ function Army(affinity, name, income, gold, id) {
     // Income from value of forts
     var fortTotalValue = 0;
     for (var i in this.forts) {
-      fortTotalValue += this.forts[i].value;
+      fortTotalValue += this.forts[i].fortValue;
     }
 
     this.income += fortTotalValue;

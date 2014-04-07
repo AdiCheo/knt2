@@ -69,6 +69,10 @@ function initConnection() {
       updateForts(hexId, affinity);
     });
 
+    iosocket.on('updateAllForts', function(forts) {
+      updateAllForts(forts);
+    });
+
     iosocket.on('fortUpgraded', function(fortUpgradeData) {
       fortUpgraded(fortUpgradeData);
     });
@@ -273,6 +277,13 @@ function updateHex(hexId, affinity) {
 function updateForts(hexId, affinity) {
   console.log("Army " + affinity + " owning " + hexId);
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
+  iosocket.emit('updateUI');
+}
+
+function updateAllForts(forts) {
+  for (var i in forts) {
+    boardLayer.get('#' + forts[i].currentHexId)[0].setFortIcon(forts[i].affinity, forts[i].fortValue);
+  }
   iosocket.emit('updateUI');
 }
 

@@ -418,16 +418,36 @@ function eventLoadGame(socket, num) {
     game.armies[3].ownHex("2,-2", game, true);
     game.armies[3].ownHex("3,-3", game, true);
 
-    // game.armies[0].buildFort(",", val);
-    // game.armies[1].buildFort(",", val);
-    // game.armies[2].buildFort(",", val);
-    // game.armies[3].buildFort(",", val);
+    game.armies[0].buildFort("3,-1", 1);
+    game.armies[0].buildFort("3,-2", 2);
+    game.armies[0].buildFort("2,0", 2);
+    game.armies[0].buildFort("2,-1", 2);
+    game.armies[0].buildFort("1,1", 3);
+    game.armies[0].buildFort("1,0", 1);
 
-    sendAllHexes(socket, game.hexes);
+    game.armies[1].buildFort("-2,-1", 3);
+    game.armies[1].buildFort("-2,0", 1);
+    game.armies[1].buildFort("-3,0", 2);
+    game.armies[1].buildFort("3,1", 2);
 
-    for (var hex in game.armies[0].hexes) {
-      console.log(game.armies[0].hexes[hex].id);
-    }
+    game.armies[2].buildFort("-2,3", 1);
+    game.armies[2].buildFort("-1,3", 2);
+
+    game.armies[3].buildFort("1,-3", 2);
+    game.armies[3].buildFort("1,-2", 3);
+    game.armies[3].buildFort("3,-3", 3);
+    game.armies[3].buildFort("2,-2", 1);
+    game.armies[3].buildFort("1,-1", 1);
+    game.armies[3].buildFort("0,0", 2);
+
+    sendAllHexes();
+    sendAllForts();
+
+    game.currentPhase = 1;
+    game.currentPlayerTurn = 0;
+    // Send message to all clients that a player turn ended
+    io.sockets.emit('nextPlayerTurn', nextTurnData());
+
 
   } else if (num == 2) {
     game.armies[0].ownHex("3,-2", game, true);
@@ -437,7 +457,17 @@ function eventLoadGame(socket, num) {
     game.armies[0].ownHex("2,0", game, true);
     game.armies[0].ownHex("2,1", game, true);
 
-    sendAllHexes(socket, game.hexes);
+    game.sendAllHexes(socket);
+  }
+}
+
+function sendAllHexes() {
+  io.sockets.emit('updateAllHexes', game.hexes);
+}
+
+function sendAllForts() {
+  for (var army in game.armies) {
+    io.sockets.emit('updateAllForts', game.armies[army].forts);
   }
 }
 
@@ -532,20 +562,20 @@ function eventUpgradeFort(socket, hexId) {
     var index = indexById(currentArmy.forts, hexId);
     if (currentArmy.gold >= 5) {
       if (!currentArmy.forts[index].hasBeenUpgraded) {
-        if (currentArmy.forts[index].value == 3) {
+        if (currentArmy.forts[index].fortValue == 3) {
           if (currentArmy.income >= 20) {
             currentArmy.forts[index].hasBeenUpgraded = true;
-            currentArmy.forts[index].value++;
+            currentArmy.forts[index].fortValue++;
             currentArmy.gold -= 5;
-            io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].value, currentArmy.gold, currentArmy.forts[index].id));
+            io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].fortValue, currentArmy.gold, currentArmy.forts[index].id));
           } else {
             socket.emit('error', "You need an income of at least 20 gold to upgrade to citadel.");
           }
-        } else if (currentArmy.forts[index].value < 3) {
+        } else if (currentArmy.forts[index].fortValue < 3) {
           currentArmy.forts[index].hasBeenUpgraded = true;
-          currentArmy.forts[index].value++;
+          currentArmy.forts[index].fortValue++;
           currentArmy.gold -= 5;
-          io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].value, currentArmy.gold, currentArmy.forts[index].id));
+          io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].fortValue, currentArmy.gold, currentArmy.forts[index].id));
         } else {
           socket.emit('error', "You cannot upgrade a citadel.");
         }
@@ -667,7 +697,7 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
       socket.emit('error', 'This hex cannot be owned!');
     }
   } else if (currentArmy.canBuildFort) {
-    if (currentArmy.buildFort(hexId)) {
+    if (currentArmy.buildFort(hexId, 1)) {
       io.sockets.emit('updateForts', hexId, currentArmy.affinity);
       currentArmy.mustEndTurn = true;
       currentArmy.canBuildFort = false;
@@ -675,10 +705,6 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
       socket.emit('error', "Cannot build fort here!");
     }
   }
-}
-
-function sendAllHexes(socket, gameHexes) {
-  io.sockets.emit('updateAllHexes', gameHexes);
 }
 
 function eventClickedOnHexPlaceThing(socket, hexId) {

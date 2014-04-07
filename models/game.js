@@ -442,7 +442,6 @@ function Game() {
     }
   };
 
-
   this.createCupDefenders();
   this.createDefenders();
   this.createSpecialIncomeThings();
