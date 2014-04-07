@@ -37,11 +37,11 @@ function Army(affinity, name, income, gold, id) {
     return true;
   };
 
-  this.ownHex = function(hexId, game) {
+  this.ownHex = function(hexId, game, loadMode) {
     var index = indexById(game.hexes, hexId);
     var currentHex = game.hexes[index];
 
-    if (!game.isHexOwned(hexId) && this.isHexLegalToOwn(hexId, game)) {
+    if (!game.isHexOwned(hexId) && this.isHexLegalToOwn(hexId, game) || loadMode) {
       game.getHexById(hexId).affinity = this.affinity;
       game.getHexById(hexId).isExplored = true;
       this.ownedHexes.push(currentHex);

@@ -391,6 +391,10 @@ function eventLoadGame(socket, num) {
 
     sendAllHexes(socket, game.hexes);
 
+    for (var hex in game.armies[0].hexes) {
+      console.log(game.armies[0].hexes[hex].id);
+    }
+
   } else if (num == 2) {
     game.armies[0].ownHex("3,-2", game);
     game.armies[0].ownHex("3,-1", game);
