@@ -272,6 +272,7 @@ function initRack(realX, realY) {
     image: rackImage,
     width: 500,
     height: 50,
+    rotation: 1.57,
     draggable: false,
     strokeWidth: 0,
     id: "rack"
@@ -296,8 +297,8 @@ function initRack(realX, realY) {
 
   rack.addThingIcon = function(thingName, index) {
     var thing = new Kinetic.Image({
-      x: this.getX() + index * 50,
-      y: this.getY(),
+      x: this.getX() + 10,
+      y: this.getY() + index * 50,
       id: thingName,
       name: "defender",
       image: thingImagesArray[thingName + "Image"],
