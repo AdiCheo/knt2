@@ -393,6 +393,7 @@ GoblinsImage.src = 'images/Defenders/Mountain/-n Goblins -c 4 -t Mountain -a 1.j
 thingImagesArray["Goblins1Image"] = GoblinsImage;
 thingImagesArray["Goblins2Image"] = GoblinsImage;
 thingImagesArray["Goblins3Image"] = GoblinsImage;
+thingImagesArray["Goblins4Image"] = GoblinsImage;
 
 var GreatEagleImage = new Image();
 GreatEagleImage.src = 'images/Defenders/Mountain/-n Great Eagle -t Mountain -s Fly -a 2.jpg';
