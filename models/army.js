@@ -196,7 +196,6 @@ function Army(affinity, name, income, gold, id) {
   };
 
   function indexByKey(array, key, value) {
-    console.log("The Value: " + value);
     for (var i = 0; i < array.length; i++) {
       if (array[i][key] == value) {
         return i;

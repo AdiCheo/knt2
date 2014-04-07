@@ -712,7 +712,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
             // Access the stack the thing is in currently
             var stackIndex = indexById(currentArmy.stacks, currentArmy.thingInHand.containerId);
             // Access the contained defender
-            removeFromThingsArray(currentArmy.stacks[stackIndex], currentArmy.thingInHand.name);
+            removeFromThingsArray(currentArmy.stacks[stackIndex].containedDefenders, currentArmy.thingInHand.name);
             socket.emit('updateStack', currentArmy.stacks[stackIndex].currentHexId, currentArmy.stacks[stackIndex].containedDefenders);
 
             // If there is no existing stack
