@@ -690,7 +690,7 @@ function eventDefenderMovePhase(socket, defenderName) {
 
   // select defenderName
   // get thing in hand
-  currentArmy.thingInHand = game.defenders[indexByKey(game.defenders, "name", thingInHand)];
+  currentArmy.thingInHand = game.defenders[indexByKey(game.defenders, "name", defenderName)];
   console.log("Selected " + defenderName);
   // update socket
   socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
@@ -709,15 +709,15 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
   // Check if the thing in hand is an defender object
   if (currentArmy.canPlaceThing && currentArmy.thingInHand) {
-    if (thingInHand instanceof Defender) {
+    if (currentArmy.thingInHand instanceof Defender) {
 
       // If Defender has enough movement points for the move
-      if (calculateDistance(thingInHand, currentHex) <= thingInHand.movementPoints) {
+      if (calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
         // check if hex is unexplored
         if (!currentHex.isExplored) {
           // The hex is not explored, the dice needs to be rolled
           // army[currentPlayer].mustRollDice = true;
-          thingInHand.movementPoints -= calculateDistance(thingInHand, currentHex);
+          currentArmy.thingInHand.movementPoints -= calculateDistance(currentArmy.thingInHand, currentHex);
         } else {
           // If the current army already explored and owned the hex
           if (indexById(currentArmy.ownedHexes, hexId) !== null) {
@@ -725,9 +725,8 @@ function eventClickedOnHexMovePhase(socket, hexId) {
             // Remove the defender in hand from current stack
             // Access the stack the thing is in currently
             var stackIndex = indexById(currentArmy.stacks, currentArmy.thingInHand.containerId);
-            // Access the contained
-
-            currentArmy.stacks[stackIndex].containedDefenders[indexByKey()]
+            // Access the contained defender
+            removeFromThingsArray(currentArmy.stacks[stackIndex], currentArmy.thingInHand.name);
 
             // If there is no existing stack
             if (indexById(currentArmy.stacks, hexId) === null) {
@@ -864,7 +863,6 @@ function eventClickedOnRack(socket) {
 
 function initialGameData(socketId) {
   return {
-    game: game,
     playerId: socketId,
     affinity: game.users.length - 1
   };

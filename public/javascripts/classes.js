@@ -292,7 +292,7 @@ function initRack(realX, realY) {
     for (var i in cleanList) {
       rack.addThingIcon(cleanList[i], i);
     }
-  }
+  };
 
   rack.addThingIcon = function(thingName, index) {
     console.log(thingName + "Image");
