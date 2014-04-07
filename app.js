@@ -452,7 +452,7 @@ function eventLoadGame(socket, num) {
 
     game.armies[0].stacks.push(stack1);
 
-    var stack2 = new Stack("1,-1", game.armies[2].affinity);
+    var stack2 = new Stack("1,-1", game.armies[3].affinity);
     stack2.containedDefenders.push("Crocodiles");
     stack2.containedDefenders.push("MountainMen");
     stack2.containedDefenders.push("GiantLizard2");
@@ -462,7 +462,7 @@ function eventLoadGame(socket, num) {
     stack2.containedDefenders.push("WildCat");
     stack2.containedDefenders.push("Sandworm");
 
-    game.armies[2].stacks.push(stack2);
+    game.armies[3].stacks.push(stack2);
     io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
     io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
 
