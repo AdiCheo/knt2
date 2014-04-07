@@ -15,102 +15,117 @@
 
 <body>
     <div id="help">
-    <div id="help-headers">
-        <span><a class="section active" href="#help-gameplay">Gameplay</a>
-        </span>
-        <span><a class="section active" href="#help-income">Income/Gold</a>
-        </span>
-        <span><a class="section" href="#help-towers">Towers</a>
-        </span>
-        <span><a class="section" href="#help-creeps">Creeps</a>
-        </span>
-        <span><a class="section" href="#help-terrain">Terrain</a>
-        </span>
-        <span><a class="section" href="#help-bomb">Bombs &amp; Nukes</a>
-        </span>
-        <span><a class="section" href="#help-hotkeys">Hotkeys</a>
-        </span>
+        <div id="help-headers">
+            <span><a class="section" href="#help-gameplay">Gameplay</a>
+            </span>
+            <span><a class="section" href="#help-income">Income/Gold</a>
+            </span>
+            <span><a class="section" href="#help-towers">Towers</a>
+            </span>
+            <span><a class="section" href="#help-creeps">Creeps</a>
+            </span>
+            <span><a class="section" href="#help-terrain">Terrain</a>
+            </span>
+            <span><a class="section" href="#help-bomb">Bombs &amp; Nukes</a>
+            </span>
+            <span><a class="section" href="#help-loadgame">Load Game</a>
+            </span>
+            <!-- <span><a class="section" href="#help-savegame">Save Game</a>
+            </span> -->
+            <span><a class="section" href="#help-hotkeys">Hotkeys</a>
+            </span>
+        </div>
+        <div id="help-sections">
+            <div id="help-gameplay">
+                <p>Processed Tower Defense is a strategy game where you try to defeat waves of dangerous monsters before they reach your tower. Of course, its less of a tower and more of a blueish square on the right side of the screen, but the idea stands.</p>
+                <p>Monsters appear on the only colorful square on the far left edge of the map, sprint towards the only colorful square on the far right edge of the map. Each time a monster reaches your tower, you lose one life. Lose all of your lives and the game ends.</p>
+                <p>You start out with a small treasury of gold, and each time you defeat a creep you receive a bit more gold to aid in your valiant defense of the lame blue squa... I mean... your tower. You also receive a few more points to your score when you defeat a creep. While gold can be redeemed for more powerful towers, score can only be redeemed as social capital among fellow PTD players, and thus could be fairly described as both invaluable and worthless.</p>
+            </div>
+            <div id="help-income">
+                <p>In the gold collection phase, you will automatically receive
+                    the amount of income you have collected in the previous game
+                    turn</p>
+                <ul>
+                    <li>You get 1 gold for each hex tile that you own.</li>
+                    <li>You get 1 gold per hero that you have in your army.</li>
+                    <li>You get gold per the value of each income counter you placed.</li>
+                    <li>You get gold per the value of each fort you placed.</li>
+                </ul>
+            </div>
+            <div id="help-towers">
+                <p>Towers are your first and last line of defense against creeps. Except for the bomb and the nuke, but thats not the point right now. We're talking about towers, okay? Keep on task, won't ya?</p>
+                <ul>
+                    <li>
+                        <strong class='missile-tower'>Missile Towers</strong>– slow-firing towers with long range and the gentle caress of a freight truck.</li>
+                    <li>
+                        <strong class='cannon-tower'>Cannon Towers</strong>– potent beasts whose arcing balls of destruction cause splash damage</li>
+                    <li>
+                        <strong class='gatling-tower'>Gatling Towers</strong>– unleash a relentless fury of bullets... until they pause to reload</li>
+                    <li>
+                        <strong class='laser-tower'>Laser Towers</strong>– the circular reincarnation of bland reliability: they shoot blue lines at a high rate, and nothing else</li>
+                </ul>
+                <p>Towers all have another helpful characteristic: they block the paths of creeps. This lets you build complex mazes in the hope that the creeps will become dizzy and stop for a few moments to recover over a nice cup of tea. At the bare minimum you'll get to shoot at them for longer.</p>
+            </div>
+            <div id="help-creeps">
+                <p>Creeps are the evil scourge which long to plaster the sickening
+                    <strong>Game Over</strong>message at the top of your screen. Resisting them is your calling, your purpose, your afternoon you were supposed to spend doing laundry.</p>
+                <ul>
+                    <li>
+                        <strong class='normal-creep'>Normal</strong>creeps: You will know these creeps well, and will prosper by ending their drab, boring existences</li>
+                    <li>
+                        <strong class='quick-creep'>Quick</strong>creeps arrive every third wave. These creeps move quickly, but their smaller bodies can take less damage</li>
+                    <li>
+                        <strong class='strong-creep'>Strong</strong>creeps plow through your territory every five waves. They're slow, but extremely hearty.</li>
+                    <li>
+                        <strong class='boss-creep'>Boss</strong>creep: once in a blue moon, one of these warlords appears and lays waste to your defenses with its absurd hitpoints and size.</li>
+                </ul>
+                <p>Each of those categories of creeps can also have one additional behavior. Some creeps are very slow crossing water, some climb mountains at shocking speeds, and some even fly over your towers while mocking the effectiveness of your intricate designs.</p>
+            </div>
+            <div id="help-terrain">
+                <p>Each square on the board is a certain type of terrain. Terrain is randomly assigned each time the game is played, and bestows certain effects upon towers and creeps inside of them.</p>
+                <ul>
+                    <li>
+                        <strong class='neutral-terrain'>Neutral</strong>terrain is the most common terrain, and doesn't do anything.</li>
+                    <li>
+                        <strong class='water-terrain'>Water</strong>terrain slows most creeps down.</li>
+                    <li>
+                        <strong class='mountain-terrain'>Mountain</strong>terrain slows creeps down, and gives towers a range bonus.</li>
+                    <li>
+                        <strong class='power-plant-terrain'>Power plant</strong>terrain makes creep zip along at double speed, but will also double the damage of any tower built there.</li>
+                </ul>
+            </div>
+            <div id="help-bomb">
+                <p>The
+                    <strong class='bomb'>Bomb</strong>is the first of two last resort weapons at your disposal. You have an unlimited supply, but they get a bit more expensive with each passing level. Will severely damage all creeps in its radius (dealing 75% of their max hitpoints), but won't come cheap.</p>
+                <p>The
+                    <strong class='nuke'>Nuke</strong>is the last resort weapon of last resort weapons. It will destroy all creeps on the screen, but has two drawbacks. First, you won't recieve any loot from creeps destroyed this way. Second, you only have a limited supply and have no way to replenish that supply once they are exhausted.</p>
+            </div>
+            <div id="help-loadgame">
+                <button onclick="loadGame1()"> <h1>Demo: Predefined Scenario 1 </h1> </button>
+                <button onclick="loadGame2()"> <h1>Demo: Predefined Scenario 2 </h1> </button>
+                <button onclick="loadGame3()"> <h1>Demo: Predefined Scenario 3 </h1> </button>
+                <button onclick="loadGame4()"> <h1>Demo: Predefined Scenario 4 </h1> </button>
+                <button onclick="loadGame5()"> <h1>Demo: Predefined Scenario 5 </h1> </button>
+                <button onclick="loadGame6()"> <h1>Demo: Predefined Scenario 6 </h1> </button>
+                <button onclick="loadGame7()"> <h1>Demo: Predefined Scenario 7 </h1> </button>
+            </div>
+            <div class="visible" id="help-hotkeys">
+                <h4>Hotkeys:</h4>
+                <ul>
+                    <li>C – Cup - get new thing</li>
+                    <li>E – End turn</li>
+                    <li>G – Collect gold</li>
+                    <li>R – Roll dice</li>
+                    <li>S – Place start marker</li>
+
+                    <li>F – Place Fort</li>
+                    <li>D – Show/Hide cheat dice</li>
+                    <li>H – Help!</li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div id="help-sections">
-        <div id="help-gameplay">
-            <p>Processed Tower Defense is a strategy game where you try to defeat waves of dangerous monsters before they reach your tower. Of course, its less of a tower and more of a blueish square on the right side of the screen, but the idea stands.</p>
-            <p>Monsters appear on the only colorful square on the far left edge of the map, sprint towards the only colorful square on the far right edge of the map. Each time a monster reaches your tower, you lose one life. Lose all of your lives and the game ends.</p>
-            <p>You start out with a small treasury of gold, and each time you defeat a creep you receive a bit more gold to aid in your valiant defense of the lame blue squa... I mean... your tower. You also receive a few more points to your score when you defeat a creep. While gold can be redeemed for more powerful towers, score can only be redeemed as social capital among fellow PTD players, and thus could be fairly described as both invaluable and worthless.</p>
-        </div>
-        <div id="help-income">
-            <p>In the gold collection phase, you will automatically receive
-                the amount of income you have collected in the previous game
-                turn</p>
-            <ul>
-                <li>You get 1 gold for each hex tile that you own.</li>
-                <li>You get 1 gold per hero that you have in your army.</li>
-                <li>You get gold per the value of each income counter you placed.</li>
-                <li>You get gold per the value of each fort you placed.</li>
-            </ul>
-        </div>
-        <div id="help-towers">
-            <p>Towers are your first and last line of defense against creeps. Except for the bomb and the nuke, but thats not the point right now. We're talking about towers, okay? Keep on task, won't ya?</p>
-            <ul>
-                <li>
-                    <strong class='missile-tower'>Missile Towers</strong>– slow-firing towers with long range and the gentle caress of a freight truck.</li>
-                <li>
-                    <strong class='cannon-tower'>Cannon Towers</strong>– potent beasts whose arcing balls of destruction cause splash damage</li>
-                <li>
-                    <strong class='gatling-tower'>Gatling Towers</strong>– unleash a relentless fury of bullets... until they pause to reload</li>
-                <li>
-                    <strong class='laser-tower'>Laser Towers</strong>– the circular reincarnation of bland reliability: they shoot blue lines at a high rate, and nothing else</li>
-            </ul>
-            <p>Towers all have another helpful characteristic: they block the paths of creeps. This lets you build complex mazes in the hope that the creeps will become dizzy and stop for a few moments to recover over a nice cup of tea. At the bare minimum you'll get to shoot at them for longer.</p>
-        </div>
-        <div id="help-creeps">
-            <p>Creeps are the evil scourge which long to plaster the sickening
-                <strong>Game Over</strong>message at the top of your screen. Resisting them is your calling, your purpose, your afternoon you were supposed to spend doing laundry.</p>
-            <ul>
-                <li>
-                    <strong class='normal-creep'>Normal</strong>creeps: You will know these creeps well, and will prosper by ending their drab, boring existences</li>
-                <li>
-                    <strong class='quick-creep'>Quick</strong>creeps arrive every third wave. These creeps move quickly, but their smaller bodies can take less damage</li>
-                <li>
-                    <strong class='strong-creep'>Strong</strong>creeps plow through your territory every five waves. They're slow, but extremely hearty.</li>
-                <li>
-                    <strong class='boss-creep'>Boss</strong>creep: once in a blue moon, one of these warlords appears and lays waste to your defenses with its absurd hitpoints and size.</li>
-            </ul>
-            <p>Each of those categories of creeps can also have one additional behavior. Some creeps are very slow crossing water, some climb mountains at shocking speeds, and some even fly over your towers while mocking the effectiveness of your intricate designs.</p>
-        </div>
-        <div id="help-terrain">
-            <p>Each square on the board is a certain type of terrain. Terrain is randomly assigned each time the game is played, and bestows certain effects upon towers and creeps inside of them.</p>
-            <ul>
-                <li>
-                    <strong class='neutral-terrain'>Neutral</strong>terrain is the most common terrain, and doesn't do anything.</li>
-                <li>
-                    <strong class='water-terrain'>Water</strong>terrain slows most creeps down.</li>
-                <li>
-                    <strong class='mountain-terrain'>Mountain</strong>terrain slows creeps down, and gives towers a range bonus.</li>
-                <li>
-                    <strong class='power-plant-terrain'>Power plant</strong>terrain makes creep zip along at double speed, but will also double the damage of any tower built there.</li>
-            </ul>
-        </div>
-        <div id="help-bomb">
-            <p>The
-                <strong class='bomb'>Bomb</strong>is the first of two last resort weapons at your disposal. You have an unlimited supply, but they get a bit more expensive with each passing level. Will severely damage all creeps in its radius (dealing 75% of their max hitpoints), but won't come cheap.</p>
-            <p>The
-                <strong class='nuke'>Nuke</strong>is the last resort weapon of last resort weapons. It will destroy all creeps on the screen, but has two drawbacks. First, you won't recieve any loot from creeps destroyed this way. Second, you only have a limited supply and have no way to replenish that supply once they are exhausted.</p>
-        </div>
-        <div class="visible" id="help-hotkeys">
-            <h4>Hotkeys:</h4>
-            <ul>
-                <li>C – Cup - get new thing</li>
-                <li>E – End turn</li>
-                <li>G – Collect gold</li>
-                <li>R – Roll dice</li>
-                <li>S – Place start marker</li>
-                <li>F – Place Fort</li>
-                <li>D – Show/Hide cheat dice</li>
-                <li>H – Help!</li>
-            </ul>
-        </div>
-    </div>
-    </div>
+
 
     <div id="container" class="noselect">
 
@@ -176,16 +191,6 @@
             </div> -->
         </div>
 
-        <div style="float:right;margin-right:900px;">
-            <!--
-    <p id="gold_red" style="color: red"> Red gold: 10</p>
-    <p id="income_red" style="color: red"> (+3) </p>
-
-    <p id="gold_grey" style="color: grey"> grey gold: 10</p>
-    <p id="income_grey" style="color: grey"> (+3) </p>
-
--->
-        </div>
         <script type="text/javascript" src="javascripts/bowl.js"></script>
         <script type="text/javascript" src="javascripts/dice.js"></script>
 
@@ -201,9 +206,10 @@
         <script src="/js/client.js"></script>
         <script>
 
-    var getIdFromURL = function(url) {
-        return url.slice(url.indexOf("#"));
-    }
+        var getIdFromURL = function(url) {
+            return url.slice(url.indexOf("#"));
+        }
+
         $("#help-headers .section").click(function() {
             $("#help-sections div").hide();
             $(getIdFromURL(this.href)).show();
@@ -224,8 +230,8 @@
             }
         };
         </script>
-
     </div>
+
 
     <!--  <audio src="gun.mp3" id="gunaudio" type="audio/mpeg">
     <audio src="axe.mp3" id="axeaudio" type="audio/mpeg">        -->

@@ -75,6 +75,11 @@ io.sockets.on('connection', function(socket) {
   });
 
   // Player connection event
+  socket.on('loadGame', function(num) {
+    eventLoadGame(socket, num);
+  });
+
+  // Player connection event
   socket.on('adduser', function(user) {
     eventStateInit(socket, user);
   });
@@ -373,6 +378,32 @@ function randomDiceRoll() {
   return Math.floor(Math.random() * 6 + 1);
 }
 
+//TODO
+function eventLoadGame(socket, num) {
+  if (num == 1) {
+    game.armies[0].ownHex("3,-2", game);
+    game.armies[0].ownHex("3,-1", game);
+    game.armies[0].ownHex("3,0", game);
+    game.armies[0].ownHex("2,-1", game);
+    game.armies[0].ownHex("2,0", game);
+    game.armies[0].ownHex("2,1", game);
+    game.armies[0].ownHex("2,1", game);
+
+    sendAllHexes(socket, game.hexes);
+
+  } else if (num == 2) {
+    game.armies[0].ownHex("3,-2", game);
+    game.armies[0].ownHex("3,-1", game);
+    game.armies[0].ownHex("3,0", game);
+    game.armies[0].ownHex("2,-1", game);
+    game.armies[0].ownHex("2,0", game);
+    game.armies[0].ownHex("2,1", game);
+
+    sendAllHexes(socket, game.hexes);
+
+  }
+}
+
 function eventStateInit(socket, user) {
   console.log("Adding a User");
   army = new Army(game.users.length, user, 0, 10, socket.id);
@@ -387,8 +418,6 @@ function eventStateInit(socket, user) {
 
   // socket.emit('state.init', publicGameData(socket.id));
   socket.emit('state.init', initialGameData(socket.id));
-
-
 }
 
 function eventDisconnect(socket) {
@@ -612,9 +641,7 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
 }
 
 function sendAllHexes(socket, gameHexes) {
-  for (var hex in gameHexes) {
-    io.sockets.emit('updateOwnedHex', gameHexes[hex].id, gameHexes[hex].affinity);
-  }
+  io.sockets.emit('updateAllHexes', gameHexes);
 }
 
 function eventClickedOnHexPlaceThing(socket, hexId) {
