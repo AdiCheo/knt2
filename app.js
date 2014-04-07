@@ -505,6 +505,7 @@ function eventStateInit(socket, user) {
   console.log("Adding a User");
   army = new Army(game.users.length, user, 0, 10, socket.id);
   user.id = socket.id;
+  user.socket = socket;
   game.users.push(user);
   game.numberOfPlayers++;
   game.armies.push(army);
