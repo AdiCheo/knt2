@@ -392,7 +392,7 @@ GiantCondorImage.src = 'images/Defenders/Mountain/-n Giant Condor -t Mountain -s
 thingImagesArray["GiantCondorImage"] = GiantCondorImage;
 
 var GoblinsImage = new Image();
-Goblins1Image.src = 'images/Defenders/Mountain/-n Goblins -c 4 -t Mountain -a 1.jpg';
+GoblinsImage.src = 'images/Defenders/Mountain/-n Goblins -c 4 -t Mountain -a 1.jpg';
 thingImagesArray["Goblins1Image"] = GoblinsImage;
 thingImagesArray["Goblins2Image"] = GoblinsImage;
 thingImagesArray["Goblins3Image"] = GoblinsImage;
@@ -448,7 +448,7 @@ EaglesImage.src = 'images/Defenders/Plains/-n Eagles -t Plains -s Fly -a 2.jpg';
 thingImagesArray["EaglesImage"] = EaglesImage;
 
 var FarmersImage = new Image();
-Farmers1Image.src = 'images/Defenders/Plains/-n Farmers -c 4 -t Plains -a 1.jpg';
+FarmersImage.src = 'images/Defenders/Plains/-n Farmers -c 4 -t Plains -a 1.jpg';
 thingImagesArray["Farmers1Image"] = FarmersImage;
 thingImagesArray["Farmers2Image"] = FarmersImage;
 thingImagesArray["Farmers3Image"] = FarmersImage;
