@@ -64,6 +64,14 @@ function Army(affinity, name, income, gold, id) {
     }
   };
 
+  this.getStackOnHex = function(hexId) {
+    for (var stack in this.stacks) {
+      if (this.stacks[stack].currentHexId == hexId)
+        return this.stacks[stack];
+    }
+    return false;
+  };
+
   this.removeFromRack = function(thingName) {
     for (var i in this.rack) {
       if (this.rack[i] == thingName) {

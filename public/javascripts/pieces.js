@@ -15,9 +15,6 @@ loadImages(fortImages, fortImageSources);
 var rackImage = new Image();
 rackImage.src = "images/Extra/-n Rack.png";
 
-// var fortImage = new Image();
-// fortImage.src = 'images/Building/-n Tower -a 1.jpg';
-
 // Dice Images
 var dice = {};
 var diceSources = {
@@ -33,14 +30,14 @@ var diceSources = {
 // Hex Tiles
 var hexTiles = {};
 var hexTileSources = {
-  desert: 'images/Hex/-n-Desert.png',
-  forest: 'images/Hex/-n-Forest.png',
-  frozenWaste: 'images/Hex/-n-FrozenWaste.png',
-  jungle: 'images/Hex/-n-Jungle.png',
-  mountain: 'images/Hex/-n-Mountain.png',
-  plains: 'images/Hex/-n-Plains.png',
-  sea: 'images/Hex/-n-Sea.png',
-  swamp: 'images/Hex/-n-Swamp.png'
+  desert: 'images/Hex/-n-Desert.gif',
+  forest: 'images/Hex/-n-Forest.gif',
+  frozenWaste: 'images/Hex/-n-FrozenWaste.gif',
+  jungle: 'images/Hex/-n-Jungle.gif',
+  mountain: 'images/Hex/-n-Mountain.gif',
+  plains: 'images/Hex/-n-Plains.gif',
+  sea: 'images/Hex/-n-Sea.gif',
+  swamp: 'images/Hex/-n-Swamp.gif'
 };
 
 loadImages(hexTiles, hexTileSources);
@@ -511,9 +508,9 @@ var WolfPackImage = new Image();
 WolfPackImage.src = 'images/Defenders/Plains/-n Wolf Pack -t Plains -a 3.jpg';
 thingImagesArray["WolfPackImage"] = WolfPackImage;
 
-var TribesmenImage = new Image();
-TribesmenImage.src = 'images/Defenders/Plains/-s-Tribesmen -t Plains -s Range -a 1.jpg';
-thingImagesArray["TribesmenImage"] = TribesmenImage;
+var Tribesmen2Image = new Image();
+Tribesmen2Image.src = 'images/Defenders/Plains/-n Tribesmen -t Plains -s Range -a 1.jpg';
+thingImagesArray["Tribesmen3Image"] = Tribesmen2Image;
 
 //Swamp Defender
 var BasiliskImage = new Image();
@@ -608,49 +605,49 @@ thingImagesArray["WingedPirhanaImage"] = WingedPirhanaImage;
 var specialIncomeImagesArray = [];
 
 var CopperMineImage = new Image();
-CopperMineImage.src = '-n Copper Mine -t Mountain -a 1.jpg';
+CopperMineImage.src = 'images/Income/-n Copper Mine -t Mountain -a 1.jpg';
 specialIncomeImagesArray["CopperMineImage"] = CopperMineImage;
 
 var DiamondImage = new Image();
-DiamondImage.src = '-n Diamond -t Treasure -a 5.jpg';
+DiamondImage.src = 'images/Income/-n Diamond -t Treasure -a 5.jpg';
 specialIncomeImagesArray["DiamondImage"] = DiamondImage;
 
 var DiamondFieldImage = new Image();
-DiamondFieldImage.src = '-n Diamond Field -t Desert -a 1jpg';
+DiamondFieldImage.src = 'images/Income/-n Diamond Field -t Desert -a 1.jpg';
 specialIncomeImagesArray["DiamondFieldImage"] = DiamondFieldImage;
 
 var ElephantsGraveyardImage = new Image();
-ElephantsGraveyardImage.src = '-n Elephants Graveyard -t Jungle -a 3.jpg';
+ElephantsGraveyardImage.src = 'images/Income/-n Elephants Graveyard -t Jungle -a 3.jpg';
 specialIncomeImagesArray["ElephantsGraveyardImage"] = ElephantsGraveyardImage;
 
 var EmeraldImage = new Image();
-EmeraldImage.src = '-n Emerald -t Treasure -a 10.jpg';
+EmeraldImage.src = 'images/Income/-n Emerald -t Treasure -a 10.jpg';
 specialIncomeImagesArray["EmeraldImage"] = EmeraldImage;
 
 var FarmlandsImage = new Image();
-FarmlandsImage.src = '-n Farmlands -t Plains -a 1.jpg';
+FarmlandsImage.src = 'images/Income/-n Farmlands -t Plains -a 1.jpg';
 specialIncomeImagesArray["FarmlandsImage"] = FarmlandsImage;
 
 var GoldMineImage = new Image();
-GoldMineImage.src = '-n Gold Mine -t Mountain -a 3.jpg';
+GoldMineImage.src = 'images/Income/-n Gold Mine -t Mountain -a 3.jpg';
 specialIncomeImagesArray["GoldMineImage"] = GoldMineImage;
 
 var OilFieldImage = new Image();
-OilFieldImage.src = '-n Oil Field -t Frozen Waste -a 3.jpg';
+OilFieldImage.src = 'images/Income/-n Oil Field -t Frozen Waste -a 3.jpg';
 specialIncomeImagesArray["OilFieldImage"] = OilFieldImage;
 
 var PearlImage = new Image();
-PearlImage.src = '-n Pearl -t Treasure -a 5.jpg';
+PearlImage.src = 'images/Income/-n Pearl -t Treasure -a 5.jpg';
 specialIncomeImagesArray["PearlImage"] = PearlImage;
 
 var PeatBogImage = new Image();
-PeatBogImage.src = '-n Peat Bog -t Swamp -a 1.jpg';
+PeatBogImage.src = 'images/Income/-n Peat Bog -t Swamp -a 1.jpg';
 specialIncomeImagesArray["PeatBogImage"] = PeatBogImage;
 
 var RubyImage = new Image();
-RubyImage.src = '-n Ruby -t Treasure -a 10.jpg';
+RubyImage.src = 'images/Income/-n Ruby -t Treasure -a 10.jpg';
 specialIncomeImagesArray["RubyImage"] = RubyImage;
 
 var SapphireImage = new Image();
-SapphireImage.src = '-n Sapphire -t Treasure -a 5.jpg';
+SapphireImage.src = 'images/Income/-n Sapphire -t Treasure -a 5.jpg';
 specialIncomeImagesArray["SapphireImage"] = SapphireImage;
