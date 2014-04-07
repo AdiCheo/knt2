@@ -378,7 +378,7 @@ function randomDiceRoll() {
 }
 
 //TODO
-function eventLoadGame(socket, num) {
+function eventLoadGame(num) {
   if (num == 1) {
     game.armies[0].ownHex("2,1", game, true);
     game.armies[0].ownHex("2,0", game, true);
@@ -466,8 +466,8 @@ function eventLoadGame(socket, num) {
     io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
     io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
 
-    socket.emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
-    socket.emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
+    game.users[0].socket.emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
+    game.users[3].socket.emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
 
     sendAllHexes();
     sendAllForts();
