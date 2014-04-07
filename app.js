@@ -440,6 +440,35 @@ function eventLoadGame(socket, num) {
     game.armies[3].buildFort("1,-1", 1);
     game.armies[3].buildFort("0,0", 2);
 
+    var stack1 = new Stack("1,0", game.armies[0].affinity);
+    stack1.containedDefenders.push("Thing");
+    stack1.containedDefenders.push("GiantLizard1");
+    stack1.containedDefenders.push("SwampRat");
+    stack1.containedDefenders.push("Unicorn");
+    stack1.containedDefenders.push("Bears");
+    stack1.containedDefenders.push("GiantSpider");
+    stack1.containedDefenders.push("CamelCorps");
+    stack1.containedDefenders.push("Sandworm");
+
+    game.armies[0].stacks.push(stack1);
+
+    var stack2 = new Stack("1,-1", game.armies[3].affinity);
+    stack2.containedDefenders.push("Crocodiles");
+    stack2.containedDefenders.push("MountainMen");
+    stack2.containedDefenders.push("GiantLizard2");
+    stack2.containedDefenders.push("SwampBeast");
+    stack2.containedDefenders.push("KillerRacoon");
+    stack2.containedDefenders.push("Farmers");
+    stack2.containedDefenders.push("WildCat");
+    stack2.containedDefenders.push("Sandworm");
+
+    game.armies[3].stacks.push(stack2);
+    io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
+    io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
+
+    socket.emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
+    socket.emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
+
     sendAllHexes();
     sendAllForts();
 
