@@ -142,10 +142,6 @@ function initConnection() {
       updateStack(hexId, stackThings);
     });
 
-    iosocket.on('map', function(mapData) {
-      updateMapData(mapData);
-    });
-
     iosocket.on('updateUI', function(armyData) {
       updateUI(armyData);
     });
@@ -346,49 +342,4 @@ function indexById(array, value) {
 function randomName() {
   var names = ["Sung", "Kiley", "Sherryl", "Michel", "Tyrell", "Madie", "Annika", "Katharine", "Jess", "Thi", "Kelvin", "Kristina", "Danae", "Marjory", "Elijah", "Wilber", "Mary", "Yen", "Stan", "Sima", "Wendell", "Porfirio", "Efrain", "Carly", "Kazuko", "King", "Homer", "Enid", "Kum", "Royal", "Mika", "Collette", "Louis", "Raye", "Rhoda", "Sal", "Marquis", "Hershel", "Alisa", "Wade"];
   return names[Math.floor(Math.random() * names.length)];
-}
-
-function updateMapData(mapData) {
-
-  boardLayer.get("#-1,-2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-2,-1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-3,0")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-3,1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-3,2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-3,3")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-2,3")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-1,3")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#0,3")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#1,2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#2,1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#3,0")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#3,-1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#3,-2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#3,-3")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#2,-3")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#1,-3")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#0,-3")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-
-  boardLayer.get("#-1,-1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-2,0")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-2,1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-2,2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-1,2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#0,2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#1,1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#2,0")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#2,-1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#2,-2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#1,-2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#0,-2")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-
-  boardLayer.get("#-1,0")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#-1,1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#0,1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#1,0")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#1,-1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-  boardLayer.get("#0,-1")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-
-  boardLayer.get("#0,0")[0].setFillPatternImage(hexTiles[mapData.pop()]);
-
 }
