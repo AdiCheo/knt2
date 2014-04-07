@@ -1,13 +1,14 @@
 //initialize a regular hexagon with all additional parameters and methods
 function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
-  return {
-    id: logicalX + "," + logicalY,
-    logX: logicalX,
-    logY: logicalY,
-    affinity: -1,
-    isExplored: false,
-    name: "hex"
-  };
+
+  this.id = logicalX + "," + logicalY;
+  this.logX = logicalX;
+  this.logY = logicalY;
+  this.affinity = -1;
+  this.isExplored = false;
+  this.name = "hex";
+
+  this.terrainType = undefined;
 }
 
 module.exports = HexTile;

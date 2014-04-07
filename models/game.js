@@ -26,7 +26,7 @@ function Game() {
   this.removeFromCup = function(thingName) {
     for (var i in this.cup) {
       if (this.cup[i] == thingName) {
-        console.log("Removing " + thingName + " from cup")
+        console.log("Removing " + thingName + " from cup");
         this.cup.splice(i, 1);
       }
     }
@@ -160,7 +160,7 @@ function Game() {
     this.cup.push("Watersanke");
     this.cup.push("Will_O_Wisp");
     this.cup.push("WingedPirhana");
-  }
+  };
 
   this.createDefenders = function() {
     this.defenders.push(new Defender(-1, "OldDragon", 0, 0, 0, 0, 0, 0));
@@ -168,6 +168,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "Elephant", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "BrownKnight", 0, 0, 0, 0, 0, 0));
 
+    // Desert Defenders
     this.defenders.push(new Defender(-1, "BabyDragon", 3, "desert", 0, 0, true, 0));
     this.defenders.push(new Defender(-1, "CamelCorps", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Dervish", 0, 0, 0, 0, 0, 0));
@@ -185,6 +186,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "Sphinx", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Vultures", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "YellowKnight", 0, 0, 0, 0, 0, 0));
+
     this.defenders.push(new Defender(-1, "Bandits", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Bears", 0, 0, 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "BigFoot", 0, 0, 0, 0, 0, 0));
@@ -335,6 +337,8 @@ function Game() {
       } else {
         this.currentPhase++;
         // Skip Phase 2 (Hero Recruitment)
+        if (this.currentPhase == 1)
+          this.currentPhase = 5;
         if (this.currentPhase == 2)
           this.currentPhase = 3;
         if (this.currentPhase == 4)

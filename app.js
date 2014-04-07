@@ -467,8 +467,7 @@ function eventBuildFortButton(socket) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  if (currentArmy.getNumOfHexes() == 3) {
-    console.log("# of hexes" + currentArmy.getNumOfHexes);
+  if (currentArmy.ownedHexes.length == 3) {
     currentArmy.canBuildFort = true;
     socket.emit('allowFortPlacement');
   } else {
@@ -529,10 +528,10 @@ function eventPlaceMarkerButton(socket) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  if (currentArmy.getNumOfHexes() < 3) {
+  if (currentArmy.ownedHexes.length < 3) {
     currentArmy.canChooseHex = true;
     socket.emit('allowMarkerPlacement');
-  } else if (currentArmy.getNumOfHexes() == 3) {
+  } else if (currentArmy.ownedHexes.length == 3) {
     // Now it is time to place a fort
     socket.emit('error', "You need to build a fort");
   }
@@ -568,22 +567,6 @@ function MovementPhase(socket, hexId) {
       socket.emit('error', "This is not your stack");
     }
   }
-}
-
-function eventDefenderMovePhase(socket, defenderName) {
-  console.log(game.armies);
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy + " clicked defender" + defenderName);
-
-  // if (!currentArmy.canPlay(game, socket)) return; // testx Move
-
-  // select defenderName
-  // get thing in hand
-  currentArmy.thingInHand = defenderName;
-  console.log("Selected " + defenderName);
-  // update socket
-  socket.emit('updateSelectedIcon', currentArmy.thingInHand);
-  currentArmy.canPlaceDefender = true;
 }
 
 function eventGenerateClicked(socket) {
@@ -666,6 +649,9 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
         currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders.push(currentArmy.thingInHand);
       }
 
+      // Find the thing in hands object model and update it
+      game.defenders[indexByKey(game.defenders, "name", currentArmy.thingInHand)].containerId = hexId;
+
       // remove from cup
       game.removeFromCup(currentArmy.thingInHand);
       if (currentArmy.freeThings > 0)
@@ -695,8 +681,48 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
   }
 }
 
+function eventDefenderMovePhase(socket, defenderName) {
+  console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  console.log("Player " + currentArmy + " clicked defender" + defenderName);
+
+  // if (!currentArmy.canPlay(game, socket)) return; // testx Move
+
+  // select defenderName
+  // get thing in hand
+  currentArmy.thingInHand = game.defenders[indexByKey(game.defenders, "name", thingInHand)];
+  console.log("Selected " + defenderName);
+  // update socket
+  socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
+  currentArmy.canPlaceDefender = true;
+}
+
 function eventClickedOnHexMovePhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canPlay(game, socket)) return;
+
+  // Remove the defender in hand from the stack on his old hex,
+  // Place the defender on the new indicated hex
+
+  // Check if the thing in hand is an defender object
+  if (thingInHand instanceof Defender) {
+
+    // If Defender has movement points left
+    if (thingInHand.movementPoints > 0) {
+
+    } else {
+      socket.emit('error', "No more movement points!");
+    }
+
+    io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+    currentArmy.thingInHand = false;
+    currentArmy.canPlaceThing = false;
+  }
+
+
+
+
 
   // if (!currentArmy.canPlay(game, socket)) return;
 
@@ -716,13 +742,11 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
 
   // send update socket
-  io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
   // socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containDefenders);
   // empty hand
   // socket.emit('updateHand', null);
 
-  currentArmy.thingInHand = false;
-  currentArmy.canPlaceThing = false;
+
   //   } else {
   //     socket.emit('error', "You do not own this hex!");
   //   }
@@ -826,12 +850,12 @@ function createHexTiles() {
 
   for (colIdx = 0; colIdx < cols; colIdx++) {
     for (rowIdx = 1; rowIdx < rows; rowIdx++) {
-      if ((colIdx == 0 && rowIdx == 1) ||
-        (colIdx == 0 && rowIdx == 2) ||
-        (colIdx == 0 && rowIdx == 3) ||
-        (colIdx == 0 && rowIdx == 5) ||
-        (colIdx == 0 && rowIdx == 6) ||
-        (colIdx == 0 && rowIdx == 7) ||
+      if ((colIdx === 0 && rowIdx == 1) ||
+        (colIdx === 0 && rowIdx == 2) ||
+        (colIdx === 0 && rowIdx == 3) ||
+        (colIdx === 0 && rowIdx == 5) ||
+        (colIdx === 0 && rowIdx == 6) ||
+        (colIdx === 0 && rowIdx == 7) ||
         (colIdx == 1 && rowIdx == 7) ||
         (colIdx == 1 && rowIdx == 1) ||
         (colIdx == 6 && rowIdx == 7) ||
@@ -843,13 +867,13 @@ function createHexTiles() {
       //compute x coordinate of hex tile
       //I did my best to reduce the magic numbers ;)
       x = hexRadius + rowIdx * hexRadius * 2 - hexRadius / 8;
-      if (rowIdx != 0) {
+      if (rowIdx !== 0) {
         x = x - rowIdx * hexRadius / 2;
       }
 
       //compute y coordinate of hex tile
       y = (rowIdx % 2) ? hexRadius + colIdx * hexRadius * 2 - hexRadius + hexRadius / 8 : hexRadius + colIdx * hexRadius * 2;
-      if (colIdx != 0) {
+      if (colIdx !== 0) {
         y = y - colIdx * hexRadius / 4;
       }
 
@@ -864,7 +888,7 @@ function createHexTiles() {
         y1 = colIdx - 1 - (rowIdx + 1) / 2;
       }
 
-      var hexagon = HexTile(x, y, hexRadius, strokeColor, x1, y1);
+      var hexagon = new HexTile(x, y, hexRadius, strokeColor, x1, y1);
 
       game.hexes.push(hexagon);
     }

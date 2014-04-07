@@ -37,21 +37,16 @@ function Army(affinity, name, income, gold, id) {
     return true;
   };
 
-  this.getOwnedHexes = function() {
-    return this.ownedHexes;
-  };
-
   this.ownHex = function(hexId, game) {
     var index = indexById(game.hexes, hexId);
     var currentHex = game.hexes[index];
 
     if (!game.isHexOwned(hexId) && isHexLegalToOwn(hexId, this, game)) {
       game.getHexById(hexId).affinity = this.affinity;
+      game.getHexById(hexId).isExplored = true;
       this.ownedHexes.push(currentHex);
-      console.log("Owned hexes: " + this.ownedHexes);
       return true;
     } else {
-      console.log("Cannot own hex!");
       return false;
     }
   };
@@ -72,7 +67,7 @@ function Army(affinity, name, income, gold, id) {
   this.removeFromRack = function(thingName) {
     for (var i in this.rack) {
       if (this.rack[i] == thingName) {
-        console.log("Removing " + thingName + " from rack")
+        console.log("Removing " + thingName + " from rack");
         this.rack.splice(i, 1);
       }
     }
@@ -87,10 +82,6 @@ function Army(affinity, name, income, gold, id) {
     }
 
     return false;
-  };
-
-  this.getNumOfHexes = function() {
-    return this.ownedHexes.length;
   };
 
   this.updateIncome = function() {
@@ -111,7 +102,7 @@ function Army(affinity, name, income, gold, id) {
   function isHexLegalToOwn(hex, currentArmy, game) {
     var index = indexById(game.hexes, hex);
     var currentHex = game.hexes[index];
-    if (currentArmy.getNumOfHexes() === 0) {
+    if (currentArmy.ownedHexes.length === 0) {
       if (hex == "-2,-1" || hex == "2,-3" || hex == "-2,3" || hex == "2,1" &&
         (currentHex.affinity == currentArmy.affinity || currentHex.affinity == -1))
         return true;
@@ -164,23 +155,24 @@ function Army(affinity, name, income, gold, id) {
 
   //calculates distance between two hex tiles (NOT NEEDED, METHOD IS ADDED TO THE TILES)
   function calculateDistance(target, destination) {
-    console.log(target);
+    var x1, y1, x2, y2;
+
     if (target.name == "hex") {
-      var x1 = parseInt(target.id.split(",")[0]);
-      var y1 = parseInt(target.id.split(",")[1]);
+      x1 = parseInt(target.id.split(",")[0], 10);
+      y1 = parseInt(target.id.split(",")[1], 10);
     } else {
-      var x1 = parseInt(target.split(",")[0]);
-      var y1 = parseInt(target.split(",")[1]);
+      x1 = parseInt(target.split(",")[0], 10);
+      y1 = parseInt(target.split(",")[1], 10);
     }
 
     var z1 = -x1 - y1;
 
     if (destination.name == "hex") {
-      var x2 = parseInt(destination.id.split(",")[0]);
-      var y2 = parseInt(destination.id.split(",")[1]);
+      x2 = parseInt(destination.id.split(",")[0], 10);
+      y2 = parseInt(destination.id.split(",")[1], 10);
     } else {
-      var x2 = parseInt(destination.split(",")[0]);
-      var y2 = parseInt(destination.split(",")[1]);
+      x2 = parseInt(destination.split(",")[0], 10);
+      y2 = parseInt(destination.split(",")[1], 10);
     }
 
     var z2 = -x2 - y2;
@@ -191,8 +183,6 @@ function Army(affinity, name, income, gold, id) {
   function indexByKey(array, key, value) {
     console.log("The Value: " + value);
     for (var i = 0; i < array.length; i++) {
-      console.log("Array Value" + array[i][key]);
-
       if (array[i][key] == value) {
         return i;
       }
