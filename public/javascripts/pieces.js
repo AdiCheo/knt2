@@ -603,3 +603,54 @@ thingImagesArray["Will_O_WispImage"] = Will_O_WispImage;
 var WingedPirhanaImage = new Image();
 WingedPirhanaImage.src = 'images/Defenders/Swamp/-n Winged Pirhana -t Swamp -s Fly -a 3.jpg';
 thingImagesArray["WingedPirhanaImage"] = WingedPirhanaImage;
+
+
+var specialIncomeImagesArray = [];
+
+var CopperMineImage = new Image();
+CopperMineImage.src = '-n Copper Mine -t Mountain -a 1.jpg';
+specialIncomeImagesArray["CopperMineImage"] = CopperMineImage;
+
+var DiamondImage = new Image();
+DiamondImage.src = '-n Diamond -t Treasure -a 5.jpg';
+specialIncomeImagesArray["DiamondImage"] = DiamondImage;
+
+var DiamondFieldImage = new Image();
+DiamondFieldImage.src = '-n Diamond Field -t Desert -a 1jpg';
+specialIncomeImagesArray["DiamondFieldImage"] = DiamondFieldImage;
+
+var ElephantsGraveyardImage = new Image();
+ElephantsGraveyardImage.src = '-n Elephants Graveyard -t Jungle -a 3.jpg';
+specialIncomeImagesArray["ElephantsGraveyardImage"] = ElephantsGraveyardImage;
+
+var EmeraldImage = new Image();
+EmeraldImage.src = '-n Emerald -t Treasure -a 10.jpg';
+specialIncomeImagesArray["EmeraldImage"] = EmeraldImage;
+
+var FarmlandsImage = new Image();
+FarmlandsImage.src = '-n Farmlands -t Plains -a 1.jpg';
+specialIncomeImagesArray["FarmlandsImage"] = FarmlandsImage;
+
+var GoldMineImage = new Image();
+GoldMineImage.src = '-n Gold Mine -t Mountain -a 3.jpg';
+specialIncomeImagesArray["GoldMineImage"] = GoldMineImage;
+
+var OilFieldImage = new Image();
+OilFieldImage.src = '-n Oil Field -t Frozen Waste -a 3.jpg';
+specialIncomeImagesArray["OilFieldImage"] = OilFieldImage;
+
+var PearlImage = new Image();
+PearlImage.src = '-n Pearl -t Treasure -a 5.jpg';
+specialIncomeImagesArray["PearlImage"] = PearlImage;
+
+var PeatBogImage = new Image();
+PeatBogImage.src = '-n Peat Bog -t Swamp -a 1.jpg';
+specialIncomeImagesArray["PeatBogImage"] = PeatBogImage;
+
+var RubyImage = new Image();
+RubyImage.src = '-n Ruby -t Treasure -a 10.jpg';
+specialIncomeImagesArray["RubyImage"] = RubyImage;
+
+var SapphireImage = new Image();
+SapphireImage.src = '-n Sapphire -t Treasure -a 5.jpg';
+specialIncomeImagesArray["SapphireImage"] = SapphireImage;

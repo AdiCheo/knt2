@@ -28,6 +28,7 @@ var Army = require('./models/army.js');
 var Stack = require('./models/stack.js');
 var Defender = require('./models/defender.js');
 var HexTile = require('./models/hextile.js');
+var SpecialIncomeThing = require('./models/special_income.js');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -651,6 +652,7 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
       // Find the thing in hands object model and update it
       game.defenders[indexByKey(game.defenders, "name", currentArmy.thingInHand)].containerId = hexId;
+      // game.SpecialIncomeThing[indexByKey(game.specialIncome, "name", currentArmy.thingInHand)].hexId = hexId;
 
       // remove from cup
       game.removeFromCup(currentArmy.thingInHand);

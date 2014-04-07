@@ -1,4 +1,5 @@
 var Defender = require('./defender.js');
+var SpecialIncomeThing = require('./special_income.js');
 
 function Game() {
 
@@ -8,6 +9,7 @@ function Game() {
   this.armies = [];
   this.hexes = [];
   this.defenders = [];
+  this.specialIncome = [];
   this.cup = [];
 
   this.currentPlayerTurn = 0;
@@ -343,6 +345,37 @@ function Game() {
 
   };
 
+  //speical income 
+  //function SpecialIncomeThing(hexId, name, terrainType, buildingType, combatValue, incomeValue) {
+  this.createSpecialIncomeThings = function() {
+    this.specialIncome.push(new SpecialIncomeThing(-1, "CopperMine", "mountain", 0, 0, 1));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "Diamond", 0, 0, 0, 5));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "ElephantsGraveyard", "jungle", 0, 0, 3));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "Emerald", "jungle", 0, 0, 10));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "Farmlands", "plains", 0, 0, 1));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "GoldMine", "mountain", 0, 0, 3));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "OilField", "frozenWaste", 0, 0, 3));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "Pearl", 0, 0, 0, 5));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "PeatBog", "swamp", 0, 0, 1));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "Ruby", 0, 0, 0, 10));
+    this.specialIncome.push(new SpecialIncomeThing(-1, "Sapphire", 0, 0, 0, 5));
+  }
+
+  //special income for the cup 
+  this.createCupSpecialIncomeThings = function() {
+    this.cup.push("CopperMine");
+    this.cup.push("Diamond");
+    this.cup.push("ElephantsGraveyard");
+    this.cup.push("Emerald");
+    this.cup.push("Farmlands");
+    this.cup.push("GoldMine");
+    this.cup.push("OilField");
+    this.cup.push("Pearl");
+    this.cup.push("PeatBog");
+    this.cup.push("Ruby");
+    this.cup.push("Sapphire");
+  }
+
 
   this.getHexById = function(hexId) {
     for (var i in this.hexes) {
@@ -413,6 +446,8 @@ function Game() {
 
   this.createCupDefenders();
   this.createDefenders();
+  this.createSpecialIncomeThings();
+  this.createCupSpecialIncomeThings();
 }
 
 module.exports = Game;
