@@ -387,8 +387,6 @@ function eventStateInit(socket, user) {
 
   // socket.emit('state.init', publicGameData(socket.id));
   socket.emit('state.init', initialGameData(socket.id));
-
-
 }
 
 function eventDisconnect(socket) {
