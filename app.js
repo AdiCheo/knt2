@@ -651,7 +651,11 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
       }
 
       // Find the thing in hands object model and update it
-      game.defenders[indexByKey(game.defenders, "name", currentArmy.thingInHand)].containerId = hexId;
+      if (indexByKey(game.defenders, "name", currentArmy.thingInHand) !== null)
+        game.defenders[indexByKey(game.defenders, "name", currentArmy.thingInHand)].containerId = hexId;
+      else {
+        console.log("THING IN HAND: " + currentArmy.thingInHand);
+      }
       // game.SpecialIncomeThing[indexByKey(game.specialIncome, "name", currentArmy.thingInHand)].hexId = hexId;
 
       // remove from cup
@@ -729,6 +733,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
             var stackIndex = indexById(currentArmy.stacks, currentArmy.thingInHand.containerId);
             // Access the contained defender
             removeFromThingsArray(currentArmy.stacks[stackIndex], currentArmy.thingInHand.name);
+            socket.emit('updateStack', currentArmy.stacks[stackIndex].currentHexId, currentArmy.stacks[stackIndex].containedDefenders);
 
             // If there is no existing stack
             if (indexById(currentArmy.stacks, hexId) === null) {

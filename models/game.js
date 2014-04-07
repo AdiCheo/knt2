@@ -154,7 +154,7 @@ function Game() {
     this.cup.push("Villains");
     this.cup.push("WhiteKnight");
     this.cup.push("WolfPack");
-    this.cup.push("Tribesmen");
+    this.cup.push("Tribesmen3");
     this.cup.push("Basilisk");
     this.cup.push("BlackKnight");
     this.cup.push("Crocodiles");
@@ -314,7 +314,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "Villains", 2, "plains", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "WhiteKnight", 3, "plains", true, 0, 0, 0));
     this.defenders.push(new Defender(-1, "WolfPack", 3, "plains", 0, 0, 0, 0));
-    this.defenders.push(new Defender(-1, "Tribesmen", 1, "plains", 0, true, 0, 0));
+    this.defenders.push(new Defender(-1, "Tribesmen3", 1, "plains", 0, true, 0, 0));
 
     //swamp creatures 
     this.defenders.push(new Defender(-1, "Basilisk", 3, "swamp", 0, 0, 0, true));
@@ -363,18 +363,18 @@ function Game() {
 
   //special income for the cup 
   this.createCupSpecialIncomeThings = function() {
-    this.cup.push("CopperMine");
-    this.cup.push("Diamond");
-    this.cup.push("ElephantsGraveyard");
-    this.cup.push("Emerald");
-    this.cup.push("Farmlands");
-    this.cup.push("GoldMine");
-    this.cup.push("OilField");
-    this.cup.push("Pearl");
-    this.cup.push("PeatBog");
-    this.cup.push("Ruby");
-    this.cup.push("Sapphire");
-  }
+    // this.cup.push("CopperMine");
+    // this.cup.push("Diamond");
+    // this.cup.push("ElephantsGraveyard");
+    // this.cup.push("Emerald");
+    // this.cup.push("Farmlands");
+    // this.cup.push("GoldMine");
+    // this.cup.push("OilField");
+    // this.cup.push("Pearl");
+    // this.cup.push("PeatBog");
+    // this.cup.push("Ruby");
+    // this.cup.push("Sapphire");
+  };
 
 
   this.getHexById = function(hexId) {

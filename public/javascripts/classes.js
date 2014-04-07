@@ -64,7 +64,6 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
       fortImage = fortImages["citadel"];
     }
 
-    console.log(this.getId());
     var fort = new Kinetic.Image({
       x: this.getX() - 35,
       y: this.getY() - 60,
@@ -256,7 +255,7 @@ function Defender(source, defenderName, combatValue, canCharge, terrainType, isR
   // defender.affinity = affinity;
 
   // defender.hide();
-  defender.combatValue = combatValue;
+  // defender.combatValue = combatValue;
   boardLayer.add(defender);
   // defender.moveToBottom();
 
@@ -283,7 +282,7 @@ function initRack(realX, realY) {
     // Remove old icons
     for (var i in thingsInRack) {
       thingsInRack[i].remove();
-      delete thingsInRack[i]
+      delete thingsInRack[i];
     }
     thingsInRack = [];
 
@@ -315,89 +314,6 @@ function initRack(realX, realY) {
   };
 
   return rack;
-}
-
-//define army class
-function Army(affinity, color, income, gold) {
-  this.affinity = affinity;
-  this.color = color;
-  this.income = income;
-  this.gold = gold;
-
-  this.mustRollDice = false;
-
-  this.canChooseHex = 0;
-  this.hits = 0;
-
-  // this.stacks = new Array();
-  // this.stacks = new Stack(this.affinity, 0, 0)
-
-  this.indexPlayerIcons = 0;
-  this.indexStackIcons = 0;
-
-  this.isThingSelected = false;
-
-  this.ownedHexes = new Array();
-  this.fortHexes = new Array();
-  this.stacks = new Array();
-  this.rolls = new Array();
-
-  this.ownHex = function(target, iconType, icon, boardLayer, posx, posy) {
-    if (isHexLegalToOwn(target, this) && __indexOf.call(this.getOwnedHexes(), target) == -1) {
-      setPlayerIcon(target, iconType, icon, boardLayer, posx, posy, this.affinity);
-      this.ownedHexes.push(target);
-      console.log("Owned hexes: " + this.ownedHexes);
-    } else {
-      alert("Cannot own hex!");
-    }
-  };
-
-  this.getOwnedHexes = function() {
-    return this.ownedHexes;
-  };
-
-  this.getNumOfHexes = function() {
-    return this.ownedHexes.length;
-  };
-
-  this.buildFortHex = function(target, iconType, boardLayer) {
-    if (__indexOf.call(this.getOwnedHexes(), target) >= 0 &&
-      __indexOf.call(this.getFortHexes(), target) == -1) {
-
-      this.fortHexes.push(buildFort(target, iconType, this.affinity, boardLayer));
-      console.log("Fort hexes: " + this.fortHexes);
-    } else {
-      alert("Cannot built fort there!");
-    }
-  };
-
-
-  this.getFortHexes = function() {
-    return this.fortHexes;
-  };
-
-  this.getNumOfFortHexes = function() {
-    return this.fortHexes.length;
-  };
-
-  this.createStack = function(target, iconType, boardLayer, initialDefender) {
-    var new_stack = new Stack(target, iconType, this.affinity, boardLayer);
-    new_stack.addDefender(initialDefender);
-    this.stacks.push(new_stack);
-
-  };
-
-  this.getStacks = function() {
-    return this.stacks;
-  };
-
-  this.getStackOnHex = function(hex) {
-    for (var stack in this.stacks) {
-      if (this.stacks[stack].currentHexId == hex.getId())
-        return this.stacks[stack];
-    }
-    return false;
-  };
 }
 
 function Game() {
