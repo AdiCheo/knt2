@@ -76,7 +76,7 @@ io.sockets.on('connection', function(socket) {
 
   // Player connection event
   socket.on('loadGame', function(num) {
-    eventLoadGame(socket, num);
+    eventLoadGame(num);
   });
 
   // Player connection event
@@ -466,8 +466,11 @@ function eventLoadGame(num) {
     io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
     io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
 
-    game.users[0].socket.emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
-    game.users[3].socket.emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
+    console.log(game.users[0].socket);
+    console.log(game.users[0].socket);
+
+    // io.sockets[indexById(io.sockets, game.users[0].id)].emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
+    // io.sockets[indexById(io.sockets, game.users[3].id)].emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
 
     sendAllHexes();
     sendAllForts();
@@ -505,7 +508,10 @@ function eventStateInit(socket, user) {
   console.log("Adding a User");
   army = new Army(game.users.length, user, 0, 10, socket.id);
   user.id = socket.id;
-  user.socket = socket;
+  // console.log(socket);
+  // console.log(socket.id);
+
+  // user.socket = socket;
   game.users.push(user);
   game.numberOfPlayers++;
   game.armies.push(army);
