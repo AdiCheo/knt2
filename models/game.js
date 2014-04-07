@@ -418,8 +418,8 @@ function Game() {
       } else {
         this.currentPhase++;
         // Skip Phase 2 (Hero Recruitment)
-        if (this.currentPhase == 1)
-          this.currentPhase = 5;
+        // if (this.currentPhase == 1)
+        //   this.currentPhase = 5;
         if (this.currentPhase == 2)
           this.currentPhase = 3;
         if (this.currentPhase == 4)

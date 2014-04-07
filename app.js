@@ -444,6 +444,7 @@ function eventLoadGame(socket, num) {
     sendAllForts();
 
     game.currentPhase = 1;
+    game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', nextTurnData());

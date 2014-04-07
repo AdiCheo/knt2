@@ -284,7 +284,6 @@ function updateAllForts(forts) {
   for (var i in forts) {
     boardLayer.get('#' + forts[i].currentHexId)[0].setFortIcon(forts[i].affinity, forts[i].fortValue);
   }
-  iosocket.emit('updateUI');
 }
 
 function fortUpgraded(fortUpgradeData) {
