@@ -261,41 +261,6 @@ function updateHand(thing) {
   iosocket.emit('updateUI');
 }
 
-// function addThingToRack(thing) {
-//   console.log(thing);
-//   boardLayer.get('#rack')[0].addDefenderIcon(thing);
-// }
-
-// function replaceThingInRack(thing, prevThing) { //replaceThingInRack
-//   console.log(thing + " replacing earlier choice " + prevThing);
-
-//   findInThingsArray(thingsArray, prevThing).remove();
-
-//   // removeFromThingsArray(thingsArray, prevThing);
-//   for (var i in thingsArray) {
-//     if (thingsArray[i].getName() == prevThing) {
-//       // TODO Problem deleting item from array
-//       thingsArray = thingsArray.slice(0, 1);
-//       console.log("Found " + prevThing + " in array. (Remove)");
-//     }
-//   }
-//   // removeFromThingsArray(thingsInRack, prevThing);
-//   for (var i in thingsInRack) {
-//     if (thingsInRack[i].getName() == prevThing) {
-//       // TODO Problem deleting item from array
-//       thingsInRack = thingsInRack.slice(0, 1);
-//       console.log("Found " + prevThing + " in array. (Remove)");
-//     }
-//   }
-
-//   boardLayer.get('#rack')[0].addDefenderIcon(thing);
-// }
-
-// function newTurn(affinity) {
-//   console.log("New turn. Army " + affinity + " must play.");
-//   // TODO if client == affinity use an alert
-// }
-
 function updateSelectedIcon(thing) { //updateSelectedIcon
   console.log("Selected " + thing);
   highlightHex(boardLayer.get("#" + thing)[0]);
