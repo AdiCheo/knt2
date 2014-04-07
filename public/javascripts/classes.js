@@ -295,8 +295,6 @@ function initRack(realX, realY) {
   };
 
   rack.addThingIcon = function(thingName, index) {
-    console.log(thingName + "Image");
-    console.log(thingImagesArray[thingName + "Image"]);
     var thing = new Kinetic.Image({
       x: this.getX() + index * 50,
       y: this.getY(),

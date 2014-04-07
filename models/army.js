@@ -41,7 +41,7 @@ function Army(affinity, name, income, gold, id) {
     var index = indexById(game.hexes, hexId);
     var currentHex = game.hexes[index];
 
-    if (!game.isHexOwned(hexId) && isHexLegalToOwn(hexId, this, game)) {
+    if (!game.isHexOwned(hexId) && this.isHexLegalToOwn(hexId, game)) {
       game.getHexById(hexId).affinity = this.affinity;
       game.getHexById(hexId).isExplored = true;
       this.ownedHexes.push(currentHex);
@@ -85,76 +85,76 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.updateIncome = function() {
-    currentArmy.income = 0;
+    this.income = 0;
 
     // Income from total number of hexes
-    currentArmy.income += currentArmy.ownedHexes.length;
+    this.income += this.ownedHexes.length;
 
     // Income from value of forts
     var fortTotalValue = 0;
-    for (var i in currentArmy.forts) {
-      fortTotalValue += currentArmy.forts[i].value;
+    for (var i in this.forts) {
+      fortTotalValue += this.forts[i].value;
     }
 
-    currentArmy.income += fortTotalValue;
+    this.income += fortTotalValue;
   };
 
-  function isHexLegalToOwn(hex, currentArmy, game) {
+  this.isHexLegalToOwn = function(hex, game) {
     var index = indexById(game.hexes, hex);
     var currentHex = game.hexes[index];
-    if (currentArmy.ownedHexes.length === 0) {
+    if (this.ownedHexes.length === 0) {
       if (hex == "-2,-1" || hex == "2,-3" || hex == "-2,3" || hex == "2,1" &&
-        (currentHex.affinity == currentArmy.affinity || currentHex.affinity == -1))
+        (currentHex.affinity == this.affinity || currentHex.affinity == -1))
         return true;
       else {
         console.log("Illegal hex");
         console.log(
-          "Current player affinity: " + currentArmy.affinity +
+          "Current player affinity: " + this.affinity +
           "\nhex affinity: " + currentHex.affinity);
         return false;
       }
     } else if (
-      isOneHexAway(currentArmy.ownedHexes, currentHex) && !isAdjacentToEnemyHex(currentHex, currentArmy, game) &&
-      (currentHex.affinity == currentArmy.affinity || currentHex.affinity == -1)) {
+      this.isOneHexAway(this.ownedHexes, currentHex) && !this.isAdjacentToEnemyHex(currentHex, game) &&
+      (currentHex.affinity == this.affinity || currentHex.affinity == -1)) {
       return true;
     } else {
       console.log("Illegal hex");
       console.log(
-        "Current player affinity: " + currentArmy.affinity +
+        "Current player affinity: " + this.affinity +
         "\nhex affinity: " + currentHex.affinity);
       return false;
     }
-  }
+  };
 
   //return true if hex is in range
-  function isOneHexAway(targetArray, destination) {
+  this.isOneHexAway = function(targetArray, destination) {
     console.log(targetArray);
     for (var i in targetArray) {
       console.log(targetArray[i]);
-      if (calculateDistance(targetArray[i], destination) == 1)
+      if (this.calculateDistance(targetArray[i], destination) == 1)
         return true;
     }
     return false;
-  }
+  };
 
   //Adjacency check
-  function isAdjacentToEnemyHex(target, currentArmy, game) {
+  this.isAdjacentToEnemyHex = function(target, game) {
     var opponentHexes = [];
     for (var i in game.hexes) {
-      if (game.hexes[i].affinity != -1 && game.hexes[i].affinity != currentArmy.affinity) {
+      if (game.hexes[i].affinity != -1 && game.hexes[i].affinity != this.affinity) {
         opponentHexes.push(game.hexes[i]);
       }
     }
     console.log(opponentHexes);
-    if (isOneHexAway(opponentHexes, target)) {
+    if (this.isOneHexAway(opponentHexes, target)) {
       return true;
     }
 
     return false;
-  }
+  };
 
   //calculates distance between two hex tiles (NOT NEEDED, METHOD IS ADDED TO THE TILES)
-  function calculateDistance(target, destination) {
+  this.calculateDistance = function(target, destination) {
     var x1, y1, x2, y2;
 
     if (target.name == "hex") {
@@ -181,7 +181,7 @@ function Army(affinity, name, income, gold, id) {
     var z2 = -x2 - y2;
 
     return Math.max(Math.abs((x2 - x1)), Math.abs((y2 - y1)), Math.abs((z2 - z1)));
-  }
+  };
 
   function indexByKey(array, key, value) {
     console.log("The Value: " + value);

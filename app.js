@@ -712,7 +712,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
     if (currentArmy.thingInHand instanceof Defender) {
 
       // If Defender has enough movement points for the move
-      if (calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
+      if (currentArmy.calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
         // check if hex is unexplored
         if (!currentHex.isExplored) {
           // The hex is not explored, the dice needs to be rolled

@@ -211,7 +211,7 @@ function updateStack(hexId, stackThings) {
   if (!boardLayer.get('#stack' + hexId)[0]) {
     updateStackAll(hexId, 0);
   }
-  iosocket.emit('updateUI');
+  // iosocket.emit('updateUI');
 
 
   // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);
