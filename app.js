@@ -634,7 +634,7 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
       socket.emit('error', 'This hex cannot be owned!');
     }
   } else if (currentArmy.canBuildFort) {
-    if (currentArmy.buildFort(hexId, game)) {
+    if (currentArmy.buildFort(hexId)) {
       io.sockets.emit('updateForts', hexId, currentArmy.affinity);
       currentArmy.mustEndTurn = true;
       currentArmy.canBuildFort = false;

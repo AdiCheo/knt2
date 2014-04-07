@@ -51,12 +51,12 @@ function Army(affinity, name, income, gold, id) {
     }
   };
 
-  this.buildFort = function(hexId, game) {
-    var index = indexById(game.hexes, hexId);
-    var currentHex = game.hexes[index];
+  this.buildFort = function(hexId, value) {
+    // var index = indexById(game.hexes, hexId);
+    // var currentHex = game.hexes[index];
 
     if (indexById(this.ownedHexes, hexId) !== null && indexById(this.forts, hexId) === null) {
-      var fort = new Fort(hexId, game.currentPlayerTurn);
+      var fort = new Fort(hexId, this.affinity, value);
       this.forts.push(fort);
       return true;
     } else {

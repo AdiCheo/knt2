@@ -1,9 +1,14 @@
-function Fort(hex, affinity) {
-  this.id = hex;
+function Fort(hexId, affinity, value) {
+  this.id = hexId;
   this.name = "fort" + affinity;
 
-  this.value = 1;
+  if (!value)
+    this.value = 1;
+  else
+    this.value = value;
+
   this.affinity = affinity;
+  this.currentHexId = hexId;
 
   this.hasBeenUpgraded = false;
 
