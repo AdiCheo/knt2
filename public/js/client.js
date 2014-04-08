@@ -243,7 +243,7 @@ function updateStackAll(hexId, affinity) {
 function updateStack(hexId, stackThings) {
   console.log("Your stack at " + hexId + " has been updated with " + stackThings);
   for (var i in stackThings) {
-    console.log(stackThings[i]);
+    console.log(stackThings[i].name);
   }
   // udate stack icons
   boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
