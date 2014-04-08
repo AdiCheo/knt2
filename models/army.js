@@ -1,4 +1,5 @@
 var Fort = require('./fort.js');
+var Stack = require('./stack.js');
 
 //define army class
 function Army(affinity, name, income, gold, id) {
@@ -67,8 +68,9 @@ function Army(affinity, name, income, gold, id) {
 
   this.addDefenderToStack = function(defender, hexId) {
     // no existing stack
+    var stack;
     if (indexById(this.stacks, hexId) === null) {
-      var stack = new Stack(hexId, this.affinity);
+      stack = new Stack(hexId, this.affinity);
       this.stacks.push(stack);
 
       // stack already exists
@@ -76,8 +78,8 @@ function Army(affinity, name, income, gold, id) {
       i = indexById(this.stacks, hexId);
       stack = this.stacks[i];
     }
-    stack.containedDefenders.push(defender);
     defender.containerId = stack.currentHexId;
+    stack.containedDefenders.push(defender);
   };
 
   this.getStackOnHex = function(hexId) {

@@ -74,9 +74,14 @@ io.sockets.on('connection', function(socket) {
     eventDisconnect(socket);
   });
 
-  // Player connection event
+  // Load game scenarios
   socket.on('loadGame', function(num) {
     eventLoadGame(num);
+  });
+
+  // helper to load user specific data
+  socket.on('getUserData', function(num) {
+    eventLoadUserData(socket, num);
   });
 
   // Player connection event
@@ -678,12 +683,6 @@ function fortUpgradeData(affinity, fortValue, gold, hexId) {
   };
 }
 
-
-
-
-
-
-
 function updateArmyData(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
@@ -702,7 +701,7 @@ function updateArmyData(socket) {
     currentArmy.thingsPurchased = 0;
   }
 
-  io.sockets.emit('updateUI', publicArmyData(socket));
+  // io.sockets.emit('updateUI', publicArmyData(socket));
 }
 
 function handleDice(socket) {
@@ -722,213 +721,181 @@ function randomDiceRoll() {
   return Math.floor(Math.random() * 6 + 1);
 }
 
-//TODO
+function ownHexesScenario1() {
+
+  game.armies[0].ownHex("2,1", game, true);
+  game.armies[0].ownHex("2,0", game, true);
+  game.armies[0].ownHex("2,1", game, true);
+  game.armies[0].ownHex("2,-1", game, true);
+  game.armies[0].ownHex("3,-2", game, true);
+  game.armies[0].ownHex("3,-1", game, true);
+  game.armies[0].ownHex("3,0", game, true);
+  game.armies[0].ownHex("1,2", game, true);
+  game.armies[0].ownHex("1,1", game, true);
+  game.armies[0].ownHex("1,0", game, true);
+  game.armies[0].ownHex("0,1", game, true);
+
+  game.armies[1].ownHex("-2,-1", game, true);
+  game.armies[1].ownHex("-2,0", game, true);
+  game.armies[1].ownHex("-1,2", game, true);
+  game.armies[1].ownHex("-3,0", game, true);
+  game.armies[1].ownHex("-3,1", game, true);
+  game.armies[1].ownHex("-3,2", game, true);
+  game.armies[1].ownHex("-2,0", game, true);
+  game.armies[1].ownHex("-1,-1", game, true);
+  game.armies[1].ownHex("-1,-2", game, true);
+
+  game.armies[2].ownHex("-2,3", game, true);
+  game.armies[2].ownHex("-1,3", game, true);
+  game.armies[2].ownHex("0,3", game, true);
+  game.armies[2].ownHex("0,2", game, true);
+  game.armies[2].ownHex("-1,2", game, true);
+  game.armies[2].ownHex("-1,1", game, true);
+
+  game.armies[3].ownHex("2,-3", game, true);
+  game.armies[3].ownHex("1,-3", game, true);
+  game.armies[3].ownHex("0,-2", game, true);
+  game.armies[3].ownHex("1,-2", game, true);
+  game.armies[3].ownHex("1,-1", game, true);
+  game.armies[3].ownHex("0,0", game, true);
+  game.armies[3].ownHex("2,-2", game, true);
+  game.armies[3].ownHex("3,-3", game, true);
+
+  sendAllHexes();
+}
+
+function buildFortsScenario1() {
+
+  game.armies[0].buildFort("3,-1", 1);
+  game.armies[0].buildFort("3,-2", 2);
+  game.armies[0].buildFort("2,0", 2);
+  game.armies[0].buildFort("2,-1", 2);
+  game.armies[0].buildFort("1,1", 3);
+  game.armies[0].buildFort("1,0", 1);
+
+  game.armies[1].buildFort("-2,-1", 3);
+  game.armies[1].buildFort("-2,0", 1);
+  game.armies[1].buildFort("-3,0", 2);
+  game.armies[1].buildFort("3,1", 2);
+
+  game.armies[2].buildFort("-2,3", 1);
+  game.armies[2].buildFort("-1,3", 2);
+
+  game.armies[3].buildFort("1,-3", 2);
+  game.armies[3].buildFort("1,-2", 3);
+  game.armies[3].buildFort("3,-3", 3);
+  game.armies[3].buildFort("2,-2", 1);
+  game.armies[3].buildFort("1,-1", 1);
+  game.armies[3].buildFort("0,0", 2);
+
+  sendAllForts();
+}
+
+function getStacksScenario1() {
+  var stack1 = new Stack("1,0", game.armies[0].affinity);
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Thing")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard1")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "SwampRat")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Unicorn")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Bears")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantSpider")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "CamelCorps")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Sandworm")], "1,0");
+
+  game.removeFromCup(game.cup[indexById(game.cup, "Thing")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "GiantLizard1")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "SwampRat")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Unicorn")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Bears")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "GiantSpider")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "CamelCorps")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Sandworm")]);
+
+  game.armies[0].stacks.push(stack1);
+
+  var stack2 = new Stack("1,-1", game.armies[3].affinity);
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Crocodiles")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "MountainMen")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard2")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "SwampBeast")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "KillerRacoon")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Farmers")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "WildCat")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Sandworm")], "1,-1");
+
+  game.removeFromCup(game.cup[indexById(game.cup, "Crocodiles")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "MountainMen")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "GiantLizard2")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "SwampBeast")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "KillerRacoon")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Farmers")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Sandworm")]);
+
+  game.armies[3].stacks.push(stack2);
+
+  console.log(game.users[0].socket);
+  console.log(game.users[0].socket);
+
+  io.sockets[indexById(io.sockets, game.users[0].id)].emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
+  io.sockets[indexById(io.sockets, game.users[3].id)].emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
+
+  // Update stack for all (no defenders)
+  io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
+  io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
+}
+
+function loadScenario1(num) {
+  ownHexesScenario1();
+  buildFortsScenario1();
+  getStacksScenario1();
+
+}
+
+function eventLoadUserData(socket, num) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  //send update rack socket
+  socket.emit('updateRack', currentArmy.rack);
+
+}
+
 function eventLoadGame(num) {
   if (num == 1) {
-    game.armies[0].ownHex("2,1", game, true);
-    game.armies[0].ownHex("2,0", game, true);
-    game.armies[0].ownHex("2,1", game, true);
-    game.armies[0].ownHex("2,-1", game, true);
-    game.armies[0].ownHex("3,-2", game, true);
-    game.armies[0].ownHex("3,-1", game, true);
-    game.armies[0].ownHex("3,0", game, true);
-    game.armies[0].ownHex("1,2", game, true);
-    game.armies[0].ownHex("1,1", game, true);
-    game.armies[0].ownHex("1,0", game, true);
-    game.armies[0].ownHex("0,1", game, true);
-
-    game.armies[1].ownHex("-2,-1", game, true);
-    game.armies[1].ownHex("-2,0", game, true);
-    game.armies[1].ownHex("-1,2", game, true);
-    game.armies[1].ownHex("-3,0", game, true);
-    game.armies[1].ownHex("-3,1", game, true);
-    game.armies[1].ownHex("-3,2", game, true);
-    game.armies[1].ownHex("-2,0", game, true);
-    game.armies[1].ownHex("-1,-1", game, true);
-    game.armies[1].ownHex("-1,-2", game, true);
-
-    game.armies[2].ownHex("-2,3", game, true);
-    game.armies[2].ownHex("-1,3", game, true);
-    game.armies[2].ownHex("0,3", game, true);
-    game.armies[2].ownHex("0,2", game, true);
-    game.armies[2].ownHex("-1,2", game, true);
-    game.armies[2].ownHex("-1,1", game, true);
-
-    game.armies[3].ownHex("2,-3", game, true);
-    game.armies[3].ownHex("1,-3", game, true);
-    game.armies[3].ownHex("0,-2", game, true);
-    game.armies[3].ownHex("1,-2", game, true);
-    game.armies[3].ownHex("1,-1", game, true);
-    game.armies[3].ownHex("0,0", game, true);
-    game.armies[3].ownHex("2,-2", game, true);
-    game.armies[3].ownHex("3,-3", game, true);
-
-    game.armies[0].buildFort("3,-1", 1);
-    game.armies[0].buildFort("3,-2", 2);
-    game.armies[0].buildFort("2,0", 2);
-    game.armies[0].buildFort("2,-1", 2);
-    game.armies[0].buildFort("1,1", 3);
-    game.armies[0].buildFort("1,0", 1);
-
-    game.armies[1].buildFort("-2,-1", 3);
-    game.armies[1].buildFort("-2,0", 1);
-    game.armies[1].buildFort("-3,0", 2);
-    game.armies[1].buildFort("3,1", 2);
-
-    game.armies[2].buildFort("-2,3", 1);
-    game.armies[2].buildFort("-1,3", 2);
-
-    game.armies[3].buildFort("1,-3", 2);
-    game.armies[3].buildFort("1,-2", 3);
-    game.armies[3].buildFort("3,-3", 3);
-    game.armies[3].buildFort("2,-2", 1);
-    game.armies[3].buildFort("1,-1", 1);
-    game.armies[3].buildFort("0,0", 2);
-
-    var stack1 = new Stack("1,0", game.armies[0].affinity);
-    stack1.containedDefenders.push("Thing");
-    stack1.containedDefenders.push("GiantLizard1");
-    stack1.containedDefenders.push("SwampRat");
-    stack1.containedDefenders.push("Unicorn");
-    stack1.containedDefenders.push("Bears");
-    stack1.containedDefenders.push("GiantSpider");
-    stack1.containedDefenders.push("CamelCorps");
-    stack1.containedDefenders.push("Sandworm");
-
-    game.armies[0].stacks.push(stack1);
-
-    var stack2 = new Stack("1,-1", game.armies[3].affinity);
-    stack2.containedDefenders.push("Crocodiles");
-    stack2.containedDefenders.push("MountainMen1");
-    stack2.containedDefenders.push("GiantLizard2");
-    stack2.containedDefenders.push("SwampBeast");
-    stack2.containedDefenders.push("KillerRacoon");
-    stack2.containedDefenders.push("Farmers1");
-    stack2.containedDefenders.push("WildCat");
-    stack2.containedDefenders.push("Sandworm");
-
-    game.armies[3].stacks.push(stack2);
-    io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
-    io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
-
-    console.log(game.users[0].socket);
-    console.log(game.users[0].socket);
-
-    // io.sockets[indexById(io.sockets, game.users[0].id)].emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
-    // io.sockets[indexById(io.sockets, game.users[3].id)].emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
-
-    sendAllHexes();
-    sendAllForts();
+    loadScenario1();
 
     game.currentPhase = 1;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', nextTurnData());
+
 
   } else if (num == 2) {
-    game.armies[0].ownHex("2,1", game, true);
-    game.armies[0].ownHex("2,0", game, true);
-    game.armies[0].ownHex("2,1", game, true);
-    game.armies[0].ownHex("2,-1", game, true);
-    game.armies[0].ownHex("3,-2", game, true);
-    game.armies[0].ownHex("3,-1", game, true);
-    game.armies[0].ownHex("3,0", game, true);
-    game.armies[0].ownHex("1,2", game, true);
-    game.armies[0].ownHex("1,1", game, true);
-    game.armies[0].ownHex("1,0", game, true);
-    game.armies[0].ownHex("0,1", game, true);
+    loadScenario1();
 
-    game.armies[1].ownHex("-2,-1", game, true);
-    game.armies[1].ownHex("-2,0", game, true);
-    game.armies[1].ownHex("-1,2", game, true);
-    game.armies[1].ownHex("-3,0", game, true);
-    game.armies[1].ownHex("-3,1", game, true);
-    game.armies[1].ownHex("-3,2", game, true);
-    game.armies[1].ownHex("-2,0", game, true);
-    game.armies[1].ownHex("-1,-1", game, true);
-    game.armies[1].ownHex("-1,-2", game, true);
+    var thing = game.newRandomDefender();
+    // remove from cup
+    game.removeFromCup(thing);
+    // push to rack
+    currentArmy.rack.push(thing);
 
-    game.armies[2].ownHex("-2,3", game, true);
-    game.armies[2].ownHex("-1,3", game, true);
-    game.armies[2].ownHex("0,3", game, true);
-    game.armies[2].ownHex("0,2", game, true);
-    game.armies[2].ownHex("-1,2", game, true);
-    game.armies[2].ownHex("-1,1", game, true);
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
 
-    game.armies[3].ownHex("2,-3", game, true);
-    game.armies[3].ownHex("1,-3", game, true);
-    game.armies[3].ownHex("0,-2", game, true);
-    game.armies[3].ownHex("1,-2", game, true);
-    game.armies[3].ownHex("1,-1", game, true);
-    game.armies[3].ownHex("0,0", game, true);
-    game.armies[3].ownHex("2,-2", game, true);
-    game.armies[3].ownHex("3,-3", game, true);
-
-    game.armies[0].buildFort("3,-1", 1);
-    game.armies[0].buildFort("3,-2", 2);
-    game.armies[0].buildFort("2,0", 2);
-    game.armies[0].buildFort("2,-1", 2);
-    game.armies[0].buildFort("1,1", 3);
-    game.armies[0].buildFort("1,0", 1);
-
-    game.armies[1].buildFort("-2,-1", 3);
-    game.armies[1].buildFort("-2,0", 1);
-    game.armies[1].buildFort("-3,0", 2);
-    game.armies[1].buildFort("3,1", 2);
-
-    game.armies[2].buildFort("-2,3", 1);
-    game.armies[2].buildFort("-1,3", 2);
-
-    game.armies[3].buildFort("1,-3", 2);
-    game.armies[3].buildFort("1,-2", 3);
-    game.armies[3].buildFort("3,-3", 3);
-    game.armies[3].buildFort("2,-2", 1);
-    game.armies[3].buildFort("1,-1", 1);
-    game.armies[3].buildFort("0,0", 2);
-
-    var stack1 = new Stack("1,0", game.armies[0].affinity);
-    stack1.containedDefenders.push("Thing");
-    stack1.containedDefenders.push("GiantLizard1");
-    stack1.containedDefenders.push("SwampRat");
-    stack1.containedDefenders.push("Unicorn");
-    stack1.containedDefenders.push("Bears");
-    stack1.containedDefenders.push("GiantSpider");
-    stack1.containedDefenders.push("CamelCorps");
-    stack1.containedDefenders.push("Sandworm");
-
-    game.armies[0].stacks.push(stack1);
-
-    var stack2 = new Stack("1,-1", game.armies[3].affinity);
-    stack2.containedDefenders.push("Crocodiles");
-    stack2.containedDefenders.push("MountainMen");
-    stack2.containedDefenders.push("GiantLizard2");
-    stack2.containedDefenders.push("SwampBeast");
-    stack2.containedDefenders.push("KillerRacoon");
-    stack2.containedDefenders.push("Farmers");
-    stack2.containedDefenders.push("WildCat");
-    stack2.containedDefenders.push("Sandworm");
-
-    game.armies[3].stacks.push(stack2);
-
-    console.log(game.users[0].socket);
-    console.log(game.users[0].socket);
-
-    // io.sockets[indexById(io.sockets, game.users[0].id)].emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
-    // io.sockets[indexById(io.sockets, game.users[3].id)].emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
-
-    sendAllHexes();
-    sendAllForts();
-
-    // Update stack for all (no defenders)
-    io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
-    io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
-
-    game.currentPhase = 1;
+    game.currentPhase = 3;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', nextTurnData());
+
 
   }
 }
@@ -947,10 +914,7 @@ function eventStateInit(socket, user) {
   console.log("Adding a User");
   army = new Army(game.users.length, user, 0, 10, socket.id);
   user.id = socket.id;
-  // console.log(socket);
-  // console.log(socket.id);
 
-  // user.socket = socket;
   game.users.push(user);
   game.numberOfPlayers++;
   game.armies.push(army);

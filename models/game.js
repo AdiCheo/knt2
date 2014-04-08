@@ -25,10 +25,10 @@ function Game() {
     return this.cup[i];
   };
 
-  this.removeFromCup = function(thingName) {
+  this.removeFromCup = function(thingObj) {
     for (var i in this.cup) {
-      if (this.cup[i] == thingName) {
-        console.log("Removing " + thingName + " from cup");
+      if (this.cup[i] == thingObj) {
+        console.log("Removing " + thingObj + " from cup");
         this.cup.splice(i, 1);
       }
     }
@@ -345,7 +345,7 @@ function Game() {
 
   };
 
-  //speical income 
+  //speical income
   //function SpecialIncomeThing(hexId, name, terrainType, buildingType, combatValue, incomeValue) {
   this.createSpecialIncomeThings = function() {
     // this.cup.push(new SpecialIncomeThing(-1, "PeatBog", "swamp", 0, 1));
@@ -369,7 +369,7 @@ function Game() {
 
   };
 
-  //special income for the cup 
+  //special income for the cup
   this.createCupSpecialIncomeThings = function() {
     // this.cup.push("CopperMine");
     // this.cup.push("Diamond");

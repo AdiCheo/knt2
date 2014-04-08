@@ -4,6 +4,7 @@ html {
 
 body {
   color: #fff;
+  font-family:Arial, Times New Roman;
 }
 .label {
     -webkit-touch-callout: none;
@@ -13,7 +14,7 @@ body {
     -ms-user-select: none;
     user-select: none;
     user-select: none;
-    font-family:Lucida Console;
+    font-family:Arial, Times New Roman;
     z-index:1;
     position: relative;
 }
@@ -79,6 +80,10 @@ body {
     z-index: 1000;
 }
 
+#armystats0 {
+    z-index: 1000;
+}
+
 #armystats1 {
     z-index: 1000;
 }
@@ -90,11 +95,6 @@ body {
 #armystats3 {
     z-index: 1000;
 }
-
-#armystats4 {
-    z-index: 1000;
-}
-
 #melee {
     z-index: 1000;
 }
