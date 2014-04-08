@@ -25,10 +25,10 @@ function Game() {
     return this.cup[i];
   };
 
-  this.removeFromCup = function(thingName) {
+  this.removeFromCup = function(thingObj) {
     for (var i in this.cup) {
-      if (this.cup[i] == thingName) {
-        console.log("Removing " + thingName + " from cup");
+      if (this.cup[i] == thingObj) {
+        console.log("Removing " + thingObj + " from cup");
         this.cup.splice(i, 1);
       }
     }
@@ -208,7 +208,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "Vultures2", 1, "desert", 0, 0, true, 0));
     this.defenders.push(new Defender(-1, "YellowKnight", 3, "desert", true, 0, 0, 0));
 
-    //forest creatures 
+    //forest creatures
     this.defenders.push(new Defender(-1, "Bandits", 2, "forest", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Bears", 2, "forest", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "BigFoot", 5, "forest", 0, 0, 0, 0));
@@ -249,7 +249,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "WhiteDragon", 5, "frozenWaste", 0, 0, 0, true));
     this.defenders.push(new Defender(-1, "Wolves", 3, "frozenWaste", 0, 0, 0, true));
 
-    //Jungle creatures 
+    //Jungle creatures
     this.defenders.push(new Defender(-1, "BirdOfParadise", 1, "jungle", 0, 0, true, 0));
     this.defenders.push(new Defender(-1, "CrawlingVines", 6, "jungle", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Crocodiles", 2, "jungle", 0, 0, 0, 0));
@@ -266,7 +266,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "Watusi", 2, "jungle", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "WitchDoctor", 2, "jungle", 0, 0, 0, true));
 
-    //Mountain creatures 
+    //Mountain creatures
     this.defenders.push(new Defender(-1, "BrownDragon", 3, "mountain", 0, 0, true, 0));
     this.defenders.push(new Defender(-1, "BrownKnight", 4, "mountain", true, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Cyclops", 5, "mountain", 0, 0, 0, 0));
@@ -289,7 +289,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "Ogre", 2, "mountain", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Troll", 4, "mountain", 0, 0, 0, 0));
 
-    //plains creatures 
+    //plains creatures
     this.defenders.push(new Defender(-1, "BuffaloHerd1", 3, "plains", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "BuffaloHerd2", 4, "plains", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Centaur", 2, "plains", 0, 0, 0, 0));
@@ -316,7 +316,7 @@ function Game() {
     this.defenders.push(new Defender(-1, "WolfPack", 3, "plains", 0, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Tribesmen3", 1, "plains", 0, true, 0, 0));
 
-    //swamp creatures 
+    //swamp creatures
     this.defenders.push(new Defender(-1, "Basilisk", 3, "swamp", 0, 0, 0, true));
     this.defenders.push(new Defender(-1, "BlackKnight", 3, "swamp", true, 0, 0, 0));
     this.defenders.push(new Defender(-1, "Crocodiles", 2, "jungle", 0, 0, 0, 0));
@@ -345,7 +345,7 @@ function Game() {
 
   };
 
-  //speical income 
+  //speical income
   //function SpecialIncomeThing(hexId, name, terrainType, buildingType, combatValue, incomeValue) {
   this.createSpecialIncomeThings = function() {
     this.specialIncome.push(new SpecialIncomeThing(-1, "CopperMine", "mountain", 0, 0, 1));
@@ -361,7 +361,7 @@ function Game() {
     this.specialIncome.push(new SpecialIncomeThing(-1, "Sapphire", 0, 0, 0, 5));
   }
 
-  //special income for the cup 
+  //special income for the cup
   this.createCupSpecialIncomeThings = function() {
     // this.cup.push("CopperMine");
     // this.cup.push("Diamond");
