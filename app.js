@@ -550,8 +550,7 @@ function eventDefenderMovePhase(socket, defenderName) {
   // if (!currentArmy.canPlay(game, socket)) return; // testx Move
 
   // select defenderName
-  // get thing in hand
-  currentArmy.thingInHand = game.defenders[indexByKey(game.defenders, "name", defenderName)];
+  // get thing in hand TODO
   console.log("Selected " + defenderName);
   // update socket
   socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
@@ -569,17 +568,19 @@ function eventClickedOnHexMovePhase(socket, hexId) {
   // Place the defender on the new indicated hex
 
   // Check if the thing in hand is an defender object
-  if (currentArmy.canPlaceThing && currentArmy.thingInHand) {
+  if (currentArmy.thingInHand) {
     if (currentArmy.thingInHand instanceof Defender) {
 
       console.log(currentArmy.thingInHand);
       // If Defender has enough movement points for the move
       if (currentArmy.calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
+
         // check if hex is unexplored
         if (!currentHex.isExplored) {
           // The hex is not explored, the dice needs to be rolled
           // army[currentPlayer].mustRollDice = true;
           currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+
         } else {
           // If the current army already explored and owned the hex
           if (indexById(currentArmy.ownedHexes, hexId) !== null) {

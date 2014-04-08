@@ -240,17 +240,23 @@ function updateStackAll(hexId, affinity) {
 
 }
 
-function updateStack(hexId, stackThings) {
+function updateStack(hexId, stackThings, affinity) {
   console.log("Your stack at " + hexId + " has been updated with " + stackThings);
   for (var i in stackThings) {
     console.log(stackThings[i].name);
   }
-  // udate stack icons
-  boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
-
-  if (!boardLayer.get('#stack' + hexId)[0]) {
-    updateStackAll(hexId, 0);
+  // update stack icons
+  if (stackThings.length !== 0) {
+    boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+  } else {
+    boardLayer.get('#' + hexId)[0].setStackIcon(null);
   }
+  if (localAffinity == affinity)
+    boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
+
+  // if (!boardLayer.get('#stack' + hexId)[0]) {
+  //   updateStackAll(hexId, 0);
+  // }
   // iosocket.emit('updateUI');
 
 
