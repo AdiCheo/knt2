@@ -457,7 +457,7 @@ function eventClickedOnRack(socket) {
 
     // If placing last free element in phase 0, must end turn
     if (game.currentPhase === 0 && !currentArmy.freeThings) {
-      currentArmy.mustEndTurn = true; // TODO correct?
+      currentArmy.mustEndTurn = true;
     }
 
     // remove that thing from the cup
@@ -935,10 +935,10 @@ function eventEndTurnClicked(socket) {
     return;
   }
 
-  // if (!currentArmy.mustEndTurn && !currentArmy.canEndTurn) {
-  //   socket.emit('error', "You cannot end your turn yet!");
-  //   return;
-  // }
+  if (currentArmy.thingInHand) {
+    socket.emit('error', "You have a thing in hand, place it first!");
+    return;
+  }
 
   game.nextPlayerTurn(currentArmy);
   currentArmy.mustEndTurn = false;
