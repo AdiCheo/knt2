@@ -11,7 +11,7 @@ function Army(affinity, name, income, gold, id) {
   this.freeThings = 10;
 
   this.mustEndTurn = false;
-  this.canEndTurn = false;
+  this.canEndTurn = true;
   this.canChooseHex = false;
   this.canBuildFort = false;
   this.thingInHand = false;
