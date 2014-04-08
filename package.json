@@ -12,5 +12,9 @@
     "jade": "*",
     "ws": "latest",
     "hat": "latest"
+  },
+  "engines": {
+    "node": "latest",
+    "npm": "latest"
   }
 }
