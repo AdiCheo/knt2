@@ -553,9 +553,7 @@ function eventDefenderMovePhase(socket, defenderName) {
   if (!currentArmy.thingInHand)
     socket.emit('error', 'Choose a defender on the board only!');
 
-  // Update the selected icon
   socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
-
 }
 
 function eventClickedOnHexMovePhase(socket, hexId) {
@@ -574,11 +572,13 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
       // If Defender has enough movement points for the move
       if (currentArmy.calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
+
         // check if hex is unexplored
         if (!currentHex.isExplored) {
           // The hex is not explored, the dice needs to be rolled
           // army[currentPlayer].mustRollDice = true;
           currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+
         } else {
           // If the current army already explored and owned the hex
           if (indexById(currentArmy.ownedHexes, hexId) !== null) {
