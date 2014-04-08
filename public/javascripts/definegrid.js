@@ -216,6 +216,11 @@ window.addEventListener('keydown', function(e) {
   } else if (e.keyCode == 71) { //g
     console.log("emit:collectGoldButton");
     iosocket.emit('collectGoldButtonClicked');
+
+  } else if (e.keyCode == 187) { //=
+    console.log("emit:getUserData");
+    iosocket.emit('getUserData');
+
   }
 });
 

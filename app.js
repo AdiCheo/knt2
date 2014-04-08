@@ -74,9 +74,14 @@ io.sockets.on('connection', function(socket) {
     eventDisconnect(socket);
   });
 
-  // Player connection event
+  // Load game scenarios
   socket.on('loadGame', function(num) {
     eventLoadGame(num);
+  });
+
+  // helper to load user specific data
+  socket.on('getUserData', function(num) {
+    eventLoadUserData(socket, num);
   });
 
   // Player connection event
@@ -673,12 +678,6 @@ function fortUpgradeData(affinity, fortValue, gold, hexId) {
   };
 }
 
-
-
-
-
-
-
 function updateArmyData(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
@@ -697,7 +696,7 @@ function updateArmyData(socket) {
     currentArmy.thingsPurchased = 0;
   }
 
-  io.sockets.emit('updateUI', publicArmyData(socket));
+  // io.sockets.emit('updateUI', publicArmyData(socket));
 }
 
 function handleDice(socket) {
@@ -848,6 +847,14 @@ function loadScenario1(num) {
 
 }
 
+function eventLoadUserData(socket, num) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  //send update rack socket
+  socket.emit('updateRack', currentArmy.rack);
+
+}
+
 function eventLoadGame(num) {
   if (num == 1) {
     loadScenario1();
@@ -862,23 +869,27 @@ function eventLoadGame(num) {
   } else if (num == 2) {
     loadScenario1();
 
+    var thing = game.newRandomDefender();
     // remove from cup
-    game.removeFromCup(game.newRandomDefender());
+    game.removeFromCup(thing);
     // push to rack
-    currentArmy.rack.push(currentArmy.thingInHand);
-    //send update rack socket
-    socket.emit('updateRack', currentArmy.rack);
-    socket.emit('updateHand', null);
+    currentArmy.rack.push(thing);
 
-    game.armies[0].thingInHand = game.newRandomDefender();
-    game.armies[0].thingInHand = game.newRandomDefender();
-    game.armies[0].thingInHand = game.newRandomDefender();
-    game.armies[0].thingInHand = game.newRandomDefender();
-    game.armies[0].thingInHand = game.newRandomDefender();
-    game.armies[0].thingInHand = game.newRandomDefender();
-    game.armies[0].thingInHand = game.newRandomDefender();
-    game.armies[0].thingInHand = game.newRandomDefender();
-    game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomDefender();
+
+    game.currentPhase = 3;
+    game.totalTurn = 5;
+    game.currentPlayerTurn = 0;
+    // Send message to all clients that a player turn ended
+    io.sockets.emit('nextPlayerTurn', nextTurnData());
 
 
   }
@@ -898,10 +909,7 @@ function eventStateInit(socket, user) {
   console.log("Adding a User");
   army = new Army(game.users.length, user, 0, 10, socket.id);
   user.id = socket.id;
-  // console.log(socket);
-  // console.log(socket.id);
 
-  // user.socket = socket;
   game.users.push(user);
   game.numberOfPlayers++;
   game.armies.push(army);
