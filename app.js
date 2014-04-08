@@ -486,6 +486,7 @@ function eventRecruitThings(socket) {
       socket.emit('updateHand', currentArmy.thingInHand.name);
       // currentArmy.canPlaceThing = true;
       // currentArmy.canReplace = false;
+
     } else if (currentArmy.thingsPurchased < 5) {
       if (currentArmy.gold >= 5) {
         currentArmy.thingInHand = game.newRandomThing();
@@ -808,30 +809,22 @@ function getStacksScenario1() {
 
   var stack2 = new Stack("1,-1", game.armies[3].affinity);
   game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Crocodiles")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "MountainMen")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "MountainMen1")], "1,-1");
   game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard2")], "1,-1");
   game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "SwampBeast")], "1,-1");
   game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "KillerRacoon")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Farmers")], "1,-1");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Farmers1")], "1,-1");
   game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "WildCat")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Sandworm")], "1,-1");
 
   game.removeFromCup(game.cup[indexById(game.cup, "Crocodiles")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "MountainMen")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "MountainMen1")]);
   game.removeFromCup(game.cup[indexById(game.cup, "GiantLizard2")]);
   game.removeFromCup(game.cup[indexById(game.cup, "SwampBeast")]);
   game.removeFromCup(game.cup[indexById(game.cup, "KillerRacoon")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "Farmers")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Farmers1")]);
   game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "Sandworm")]);
 
   game.armies[3].stacks.push(stack2);
-
-  console.log(game.users[0].socket);
-  console.log(game.users[0].socket);
-
-  io.sockets[indexById(io.sockets, game.users[0].id)].emit('updateStack', stack1.currentHexId, stack1.containedDefenders);
-  io.sockets[indexById(io.sockets, game.users[3].id)].emit('updateStack', stack2.currentHexId, stack2.containedDefenders);
 
   // Update stack for all (no defenders)
   io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
@@ -871,7 +864,7 @@ function eventLoadGame(num) {
     // remove from cup
     game.removeFromCup(thing);
     // push to rack
-    currentArmy.rack.push(thing);
+    game.armies[0].rack.push(thing);
 
     // game.armies[0].thingInHand = game.newRandomThing();
     // game.armies[0].thingInHand = game.newRandomThing();
@@ -888,9 +881,9 @@ function eventLoadGame(num) {
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', nextTurnData());
-
-
   }
+
+  io.sockets.emit('updateUserLoadGame', num);
 }
 
 function sendAllHexes() {
