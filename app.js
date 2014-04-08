@@ -848,7 +848,7 @@ function eventLoadUserData(socket, num) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   //send update rack socket
-  socket.emit('updateRack', currentArmy.rack);
+  // socket.emit('updateRack', currentArmy.rack);
 
 }
 
