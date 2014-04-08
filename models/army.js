@@ -67,17 +67,13 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.addDefenderToStack = function(defender, hexId) {
-    // no existing stack
-    var stack;
-    if (indexById(this.stacks, hexId) === null) {
+    // No existing stack
+    var stack = this.getStackOnHex(hexId);
+    if (!stack) {
       stack = new Stack(hexId, this.affinity);
       this.stacks.push(stack);
-
-      // stack already exists
-    } else {
-      i = indexById(this.stacks, hexId);
-      stack = this.stacks[i];
     }
+
     defender.containerId = stack.currentHexId;
     stack.containedDefenders.push(defender);
   };
@@ -100,14 +96,39 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.findThing = function(array, thingName) {
-    for (var i = array.length - 1; i >= 0; i--) {
+    for (var i in array) {
       console.log("Thing Name: " + thingName + " " + array[i]);
       if (array[i] == thingName) {
-        return true;
+        return array[i];
       }
     }
 
     return false;
+  };
+
+  this.findDefenderInStacks = function(defenderName) {
+    for (var i in this.stacks) {
+      if (this.findThing(this.stacks[i], defenderName))
+        return this.findThing(this.stacks[i].containedDefenders, defenderName);
+    }
+
+    return false;
+  };
+
+  this.findDefenderInRack = function(defenderName) {
+    for (var i in this.rack) {
+      if (this.rack[i].name == defenderName)
+        return this.rack[i];
+    }
+    return false;
+  };
+
+  this.findStackContainingDefender = function(defender) {
+
+  };
+
+  this.removeDefenderFromStack = function(defender) {
+
   };
 
   this.updateIncome = function() {

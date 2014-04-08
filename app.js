@@ -193,10 +193,10 @@ io.sockets.on('connection', function(socket) {
 
   /*** MOVEMENT_PHASE - 5 ***/
   // Defender Listener
-  socket.on('defenderClicked', function(defenderName) {
+  socket.on('defenderClicked', function(defenderName, hexId) {
     // eventDefenderMovePhase(socket, defenderName); //testx Move
     if (game.currentPhase == MOVEMENT_PHASE) {
-      eventDefenderMovePhase(socket, defenderName);
+      eventDefenderMovePhase(socket, defenderName, hexId);
     }
   });
 
@@ -397,8 +397,8 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
           currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId);
 
           // Update the view for all players
-          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-          socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
+          // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+          socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
 
         } else if (currentArmy.thingInHand.type == "specialIncome") {
           // TODO: If a special income thing, place somewhere on the hex
@@ -512,7 +512,7 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  if (currentArmy.findThing(currentArmy.rack, defenderName)) {
+  if (currentArmy.findDefenderInRack(defenderName)) {
     if (!currentArmy.selectedFirstTrade) {
       currentArmy.selectedFirstTrade = defenderName;
     } else {
@@ -542,20 +542,20 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
 
 /*********** MOVEMENT_PHASE ***********/
 
+// Clicking on a defender that's on the board to move him
 function eventDefenderMovePhase(socket, defenderName) {
-  console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy + " clicked defender" + defenderName);
 
-  // if (!currentArmy.canPlay(game, socket)) return; // testx Move
+  // Find the selected defender in the current armies stacks
 
-  // select defenderName
-  // get thing in hand
-  currentArmy.thingInHand = game.defenders[indexByKey(game.defenders, "name", defenderName)];
-  console.log("Selected " + defenderName);
-  // update socket
+  currentArmy.thingInHand = currentArmy.findDefenderInStacks(defenderName);
+
+  if (!currentArmy.thingInHand)
+    socket.emit('error', 'Choose a defender on the board only!');
+
+  // Update the selected icon
   socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
-  currentArmy.canPlaceThing = true;
+
 }
 
 function eventClickedOnHexMovePhase(socket, hexId) {
@@ -569,10 +569,9 @@ function eventClickedOnHexMovePhase(socket, hexId) {
   // Place the defender on the new indicated hex
 
   // Check if the thing in hand is an defender object
-  if (currentArmy.canPlaceThing && currentArmy.thingInHand) {
-    if (currentArmy.thingInHand instanceof Defender) {
+  if (currentArmy.thingInHand) {
+    if (currentArmy.thingInHand.type == "defender") {
 
-      console.log(currentArmy.thingInHand);
       // If Defender has enough movement points for the move
       if (currentArmy.calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
         // check if hex is unexplored
@@ -584,25 +583,14 @@ function eventClickedOnHexMovePhase(socket, hexId) {
           // If the current army already explored and owned the hex
           if (indexById(currentArmy.ownedHexes, hexId) !== null) {
 
-            // Remove the defender in hand from current stack
-            // Access the stack the thing is in currently
-            var stackIndex = indexById(currentArmy.stacks, currentArmy.thingInHand.containerId);
-            // Access the contained defender
-            testlog = removeFromThingsArray(currentArmy.stacks[stackIndex].containedDefenders, currentArmy.thingInHand.name);
-            console.log("testlog : " + testlog)
-            socket.emit('updateStack', currentArmy.stacks[stackIndex].currentHexId, currentArmy.stacks[stackIndex].containedDefenders);
+            // Remove the defender in hand from it's current stack
+            removeFromThingsArray(currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId), currentArmy.thingInHand);
 
-            // If there is no existing stack
-            if (indexById(currentArmy.stacks, hexId) === null) {
-              var stack = new Stack(hexId, currentArmy.affinity);
-              stack.containedDefenders.push(currentArmy.thingInHand.name);
-              currentArmy.stacks.push(stack);
-            }
-            // Else there is already is a stack
-            else {
-              // Gets stack already on hexId and adds defender to it
-              currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders.push(currentArmy.thingInHand);
-            }
+            io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId).containedDefenders, currentArmy.affinity);
+
+            // io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+
+            currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId);
           }
           // Else it is owned by another army!
           else {
@@ -610,21 +598,24 @@ function eventClickedOnHexMovePhase(socket, hexId) {
           }
 
           // send update socket
-          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-          socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
+          // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+          socket.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
+
           // empty hand
           socket.emit('updateHand', null);
 
           currentArmy.thingInHand = false;
-          currentArmy.canPlaceThing = false;
+          // currentArmy.canPlaceThing = false;
         }
       } else {
         socket.emit('error', "No more movement points!");
       }
 
-      io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+      // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
       currentArmy.thingInHand = false;
       currentArmy.canPlaceThing = false;
+    } else {
+      socket.emit('error', "You cannot move this thing.");
     }
   }
 }
@@ -823,8 +814,8 @@ function getStacksScenario1() {
   game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
 
   // Update stack for all (no defenders)
-  io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
-  io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
+  // io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
+  // io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
 }
 
 function loadScenario1(num) {
@@ -840,7 +831,7 @@ function eventLoadUserData(socket, num) {
   //send update rack socket
   socket.emit('updateRack', currentArmy.rack);
   for (var i in currentArmy.stacks) {
-    socket.emit('updateStack', currentArmy.stacks[i].currentHexId, currentArmy.stacks[i].containedDefenders);
+    socket.emit('updateStack', currentArmy.stacks[i].currentHexId, currentArmy.stacks[i].containedDefenders, currentArmy.affinity);
   }
 
 }
