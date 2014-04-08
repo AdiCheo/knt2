@@ -55,6 +55,12 @@ function initConnection() {
       iosocket.emit('disconnect');
     });
 
+    // Send additional user specific data
+    iosocket.on('updateUserLoadGame', function(loadNum) {
+      console.log("emit:getUserData, " + loadNum);
+      iosocket.emit('getUserData', loadNum);
+    });
+
     iosocket.on('updateUsers', function(users) {
       updateUsers(users);
     });
