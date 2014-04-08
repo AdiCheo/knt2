@@ -454,11 +454,11 @@ function eventLoadGame(num) {
 
     var stack2 = new Stack("1,-1", game.armies[3].affinity);
     stack2.containedDefenders.push("Crocodiles");
-    stack2.containedDefenders.push("MountainMen");
+    stack2.containedDefenders.push("MountainMen1");
     stack2.containedDefenders.push("GiantLizard2");
     stack2.containedDefenders.push("SwampBeast");
     stack2.containedDefenders.push("KillerRacoon");
-    stack2.containedDefenders.push("Farmers");
+    stack2.containedDefenders.push("Farmers1");
     stack2.containedDefenders.push("WildCat");
     stack2.containedDefenders.push("Sandworm");
 
@@ -541,10 +541,10 @@ function eventEndTurnClicked(socket) {
     return;
   }
 
-  if (!currentArmy.mustEndTurn && !currentArmy.canEndTurn) {
-    socket.emit('error', "You cannot end your turn yet!");
-    return;
-  }
+  // if (!currentArmy.mustEndTurn && !currentArmy.canEndTurn) {
+  //   socket.emit('error', "You cannot end your turn yet!");
+  //   return;
+  // }
 
   game.nextPlayerTurn(currentArmy);
   currentArmy.mustEndTurn = false;
