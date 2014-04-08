@@ -130,7 +130,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
     // Update stack
     for (var i in stackThings) {
-      this.addThingIcon(stackThings[i], i);
+      this.addThingIcon(stackThings[i].name, i);
     }
   };
 
@@ -284,9 +284,8 @@ function initRack(realX, realY) {
     thingsInRack = [];
 
     // Update Rack
-    cleanList = cleanArray(rackThings);
-    for (var i in cleanList) {
-      rack.addThingIcon(cleanList[i], i);
+    for (var i in rackThings) {
+      rack.addThingIcon(rackThings[i].name, i);
     }
   };
 

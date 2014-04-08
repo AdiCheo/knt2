@@ -121,9 +121,8 @@ function Stack(hex, stackIcon, affinity, boardLayer) {
       thingsInRack = [];
 
       // Update Rack
-      cleanList = cleanArray(rackThings);
-      for (var i in cleanList) {
-        rack.addThingIcon(cleanList[i], i);
+      for (var i in rackThings) {
+        rack.addThingIcon(rackThings[i].name, i);
       }
     }
 

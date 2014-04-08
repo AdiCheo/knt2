@@ -805,16 +805,14 @@ function getStacksScenario1() {
   game.removeFromCup(game.cup[indexById(game.cup, "CamelCorps")]);
   game.removeFromCup(game.cup[indexById(game.cup, "Sandworm")]);
 
-  game.armies[0].stacks.push(stack1);
-
   var stack2 = new Stack("1,-1", game.armies[3].affinity);
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Crocodiles")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "MountainMen1")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard2")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "SwampBeast")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "KillerRacoon")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Farmers1")], "1,-1");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "WildCat")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Crocodiles")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "MountainMen1")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard2")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "SwampBeast")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "KillerRacoon")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Farmers1")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "WildCat")], "1,-1");
 
   game.removeFromCup(game.cup[indexById(game.cup, "Crocodiles")]);
   game.removeFromCup(game.cup[indexById(game.cup, "MountainMen1")]);
@@ -823,8 +821,6 @@ function getStacksScenario1() {
   game.removeFromCup(game.cup[indexById(game.cup, "KillerRacoon")]);
   game.removeFromCup(game.cup[indexById(game.cup, "Farmers1")]);
   game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
-
-  game.armies[3].stacks.push(stack2);
 
   // Update stack for all (no defenders)
   io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
@@ -843,6 +839,9 @@ function eventLoadUserData(socket, num) {
 
   //send update rack socket
   socket.emit('updateRack', currentArmy.rack);
+  for (var i in currentArmy.stacks) {
+    socket.emit('updateStack', currentArmy.stacks[i].currentHexId, currentArmy.stacks[i].containedDefenders);
+  }
 
 }
 
