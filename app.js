@@ -481,7 +481,6 @@ function eventLoadGame(num) {
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', nextTurnData());
 
-
   } else if (num == 2) {
     game.armies[0].ownHex("2,1", game, true);
     game.armies[0].ownHex("2,0", game, true);
@@ -566,8 +565,6 @@ function eventLoadGame(num) {
     stack2.containedDefenders.push("Sandworm");
 
     game.armies[3].stacks.push(stack2);
-    io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
-    io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
 
     console.log(game.users[0].socket);
     console.log(game.users[0].socket);
@@ -577,6 +574,10 @@ function eventLoadGame(num) {
 
     sendAllHexes();
     sendAllForts();
+
+    // Update stack for all (no defenders)
+    io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
+    io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
 
     game.currentPhase = 1;
     game.totalTurn = 5;

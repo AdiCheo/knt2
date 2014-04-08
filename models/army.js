@@ -64,6 +64,21 @@ function Army(affinity, name, income, gold, id) {
     }
   };
 
+  this.addDefenderToStack = function(defender, hexId) {
+    // no existing stack
+    if (indexById(this.stacks, hexId) === null) {
+      var stack = new Stack(hexId, this.affinity);
+      this.stacks.push(stack);
+
+      // stack already exists
+    } else {
+      i = indexById(this.stacks, hexId);
+      stack = this.stacks[i];
+    }
+    stack.containedDefenders.push(defender);
+    defender.containerId = stack.currentHexId;
+  }
+
   this.getStackOnHex = function(hexId) {
     for (var stack in this.stacks) {
       if (this.stacks[stack].currentHexId == hexId)
