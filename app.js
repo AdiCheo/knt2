@@ -478,29 +478,22 @@ function eventClickedOnRack(socket) {
 function eventRecruitThings(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-
   if (!currentArmy.canPlay(game, socket)) return;
-
-  if (!currentArmy.freeThings) {
-    socket.emit('error', "Cannot place anymore free defenders!");
-    currentArmy.canEndTurn = true;
-  }
-
 
   if (!currentArmy.thingInHand) {
     if (currentArmy.freeThings > 0) {
-      currentArmy.thingInHand = game.newRandomDefender();
-      socket.emit('updateHand', currentArmy.thingInHand);
-      currentArmy.canPlaceThing = true;
-      currentArmy.canReplace = false;
+      currentArmy.thingInHand = game.newRandomThing();
+      socket.emit('updateHand', currentArmy.thingInHand.name);
+      // currentArmy.canPlaceThing = true;
+      // currentArmy.canReplace = false;
     } else if (currentArmy.thingsPurchased < 5) {
       if (currentArmy.gold >= 5) {
-        currentArmy.thingInHand = game.newRandomDefender();
+        currentArmy.thingInHand = game.newRandomThing();
         currentArmy.gold -= 5;
         currentArmy.thingsPurchased++;
-        socket.emit('updateHand', currentArmy.thingInHand);
-        currentArmy.canPlaceThing = true;
-        currentArmy.canReplace = false;
+        socket.emit('updateHand', currentArmy.thingInHand.name);
+        // currentArmy.canPlaceThing = true;
+        // currentArmy.canReplace = false;
       } else {
         socket.emit('error', 'You cannot afford it anymore!');
       }
@@ -874,21 +867,21 @@ function eventLoadGame(num) {
   } else if (num == 2) {
     loadScenario1();
 
-    var thing = game.newRandomDefender();
+    var thing = game.newRandomThing();
     // remove from cup
     game.removeFromCup(thing);
     // push to rack
     currentArmy.rack.push(thing);
 
-    // game.armies[0].thingInHand = game.newRandomDefender();
-    // game.armies[0].thingInHand = game.newRandomDefender();
-    // game.armies[0].thingInHand = game.newRandomDefender();
-    // game.armies[0].thingInHand = game.newRandomDefender();
-    // game.armies[0].thingInHand = game.newRandomDefender();
-    // game.armies[0].thingInHand = game.newRandomDefender();
-    // game.armies[0].thingInHand = game.newRandomDefender();
-    // game.armies[0].thingInHand = game.newRandomDefender();
-    // game.armies[0].thingInHand = game.newRandomDefender();
+    // game.armies[0].thingInHand = game.newRandomThing();
+    // game.armies[0].thingInHand = game.newRandomThing();
+    // game.armies[0].thingInHand = game.newRandomThing();
+    // game.armies[0].thingInHand = game.newRandomThing();
+    // game.armies[0].thingInHand = game.newRandomThing();
+    // game.armies[0].thingInHand = game.newRandomThing();
+    // game.armies[0].thingInHand = game.newRandomThing();
+    // game.armies[0].thingInHand = game.newRandomThing();
+    // game.armies[0].thingInHand = game.newRandomThing();
 
     game.currentPhase = 3;
     game.totalTurn = 5;
