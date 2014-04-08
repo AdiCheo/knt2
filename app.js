@@ -934,7 +934,7 @@ function eventEndTurnClicked(socket) {
     return;
   }
 
-  if (thingInHand) {
+  if (currentArmy.thingInHand) {
     socket.emit('error', "You have a thing in hand, place it first!");
     return;
   }
