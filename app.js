@@ -94,11 +94,6 @@ io.sockets.on('connection', function(socket) {
     updateArmyData(socket);
   });
 
-  // Hex click listener to update selected
-  socket.on('hexClicked', function(hexId) {
-    eventClickedOnHex(socket, hexId);
-  });
-
   /*** SETUP_PHASE ***/
   // Place Marker Button Listener
   socket.on('placeMarkerButton', function() {
@@ -325,11 +320,11 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
 
 /*********** SETUP_RECRUITMENT_PHASE ***********/
 
+// This is for the Setup Recruitment Phase
+// Each player picks 10 things at random from the cup
+// He can exchange the item he picked only once
 function eventGenerateClicked(socket) {
-  console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy + " clicked generate button (cup)");
-  console.log(currentArmy.thingInHand);
 
   if (!currentArmy.canPlay(game, socket)) return;
 
@@ -344,17 +339,23 @@ function eventGenerateClicked(socket) {
   // allow replacements
   if (!currentArmy.thingInHand) {
     // get thing in hand
-    currentArmy.thingInHand = game.newRandomDefender();
-    console.log("newRandomDefender" + currentArmy.thingInHand);
-    // update socket
-    socket.emit('updateHand', currentArmy.thingInHand);
-    currentArmy.canPlaceThing = true;
+    currentArmy.thingInHand = game.newRandomThing();
+    console.log("New Random Thing: " + currentArmy.thingInHand);
+
+    // Socket message to update cup view
+    socket.emit('updateHand', currentArmy.thingInHand.name);
+
+    // currentArmy.canPlaceThing = true;
     currentArmy.canReplace = true;
+
   } else if (currentArmy.canReplace) {
-    currentArmy.thingInHand = game.newRandomDefender();
-    console.log("newRandomDefender" + currentArmy.thingInHand);
-    // update socket
-    socket.emit('updateHand', currentArmy.thingInHand);
+
+    currentArmy.thingInHand = game.newRandomThing();
+    console.log("New Random Thing: " + currentArmy.thingInHand);
+
+    // Socket message to update cup view
+    socket.emit('updateHand', currentArmy.thingInHand.name);
+
     currentArmy.canReplace = false;
   } else {
     socket.emit('error', 'Invalid bowlButton click');
@@ -362,6 +363,8 @@ function eventGenerateClicked(socket) {
   }
 }
 
+// This is for the Setup Recruitment Phase
+// The player places his item on the hex board (if allowed)
 function eventClickedOnHexPlaceThing(socket, hexId) {
   if (!indexById(game.armies, socket.id))
     currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -374,69 +377,73 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  // Each player collects 10 defenders in this faze
-  // create new defender
-  // place on the clicked hex if owned by player
-  if (currentArmy.canPlaceThing && currentArmy.thingInHand) { // pick from the cup
-    if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
-      if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
-        var stack = new Stack(hexId, currentArmy.affinity);
-        stack.containedDefenders.push(currentArmy.thingInHand);
-        currentArmy.stacks.push(stack);
-      } else { // stack already exists
-        // Gets stack already on hexId and adds defender to it
-        currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders.push(currentArmy.thingInHand);
-      }
-
-      // Find the thing in hands object model and update it
-      if (indexByKey(game.defenders, "name", currentArmy.thingInHand) !== null)
-        game.defenders[indexByKey(game.defenders, "name", currentArmy.thingInHand)].containerId = hexId;
-      else {
-        console.log("THING IN HAND: " + currentArmy.thingInHand);
-      }
-      // game.SpecialIncomeThing[indexByKey(game.specialIncome, "name", currentArmy.thingInHand)].hexId = hexId;
-
-      // remove from cup
-      game.removeFromCup(currentArmy.thingInHand);
-      if (currentArmy.freeThings > 0)
-        currentArmy.freeThings--; // decrement recruitable things
-
-      if (currentArmy.freeThings === 0)
-        currentArmy.canEndTurn = true;
-
-      // If placing last free element in phase 0, must end turn
-      if (game.currentPhase === 0 && !currentArmy.freeThings) {
-        currentArmy.mustEndTurn = true; // TODO correct?
-      }
-
-      // send update socket
-      io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-      socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
-      // empty hand
-      socket.emit('updateHand', null);
-
-      currentArmy.thingInHand = false;
-      currentArmy.canPlaceThing = false;
-    } else {
-      socket.emit('error', "You do not own this hex!");
-    }
+  if (currentArmy.thingInHand.type == "treasure") {
+    socket.emit('error', "Cannot place treaure on game board, only on rack.");
+    return;
   } else {
-    socket.emit('error', "You need to pick from the cup!");
+
+    // If the player has a thing in his hand that needs placing
+    if (currentArmy.thingInHand) {
+      // If the player owns the hex he just clicked on
+      if (indexById(currentArmy.ownedHexes, hexId) !== null) {
+
+        if (currentArmy.thingInHand.type == "defender") {
+          // Add the thing in hand to a stack on the hex board
+          currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId);
+
+          // Update the view for all players
+          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+          socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
+
+        } else if (currentArmy.thingInHand.type == "specialIncome") {
+          // TODO: If a special income thing, place somewhere on the hex
+          // Add it to the armies special income counter to count as income
+          // Must match terrain type
+        }
+
+        if (currentArmy.freeThings > 0)
+          currentArmy.freeThings--; // decrement recruitable things
+
+        if (currentArmy.freeThings === 0)
+          currentArmy.canEndTurn = true;
+
+        // If placing last free element in phase 0, must end turn
+        if (game.currentPhase === 0 && !currentArmy.freeThings) {
+          currentArmy.mustEndTurn = true;
+        }
+
+        // remove that thing from the cup
+        game.removeFromCup(currentArmy.thingInHand);
+
+        // empty hand
+        socket.emit('updateHand', null);
+
+        currentArmy.thingInHand = false;
+
+      } else {
+        socket.emit('error', "You do not own this hex!");
+      }
+    } else {
+      socket.emit('error', "You need to pick from the cup!");
+    }
   }
 }
 
+// If the player wants to place the item in his rack for later
+// Player cannot put more than 10 items on rack
 function eventClickedOnRack(socket) {
-  console.log(game.armies);
   currentArmy = game.armies[indexById(game.armies, socket.id)];
-  console.log("Player " + currentArmy + " clicked hex ");
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  // Each player collects 10 defenders in this faze
-  // create new defender
-  // place on the clicked hex if owned by player
+  if (currentArmy.thingInHand) {
 
-  if (currentArmy.canPlaceThing && currentArmy.thingInHand) {
+    // push to rack
+    currentArmy.rack.push(currentArmy.thingInHand);
+
+    //send update rack socket
+    socket.emit('updateRack', currentArmy.rack);
+
     if (currentArmy.freeThings > 0)
       currentArmy.freeThings--; // decrement recruitable things
 
@@ -448,16 +455,14 @@ function eventClickedOnRack(socket) {
       currentArmy.mustEndTurn = true; // TODO correct?
     }
 
-    // remove from cup
+    // remove that thing from the cup
     game.removeFromCup(currentArmy.thingInHand);
-    // push to rack
-    currentArmy.rack.push(currentArmy.thingInHand);
-    //send update rack socket
-    socket.emit('updateRack', currentArmy.rack);
+
+    // empty hand
     socket.emit('updateHand', null);
 
     currentArmy.thingInHand = false;
-    currentArmy.canPlaceThing = false;
+    // currentArmy.canPlaceThing = false;
   } else {
     socket.emit('error', "You need to pick from the cup!");
   }
@@ -1081,18 +1086,6 @@ function updatedGoldData(affinity, gold) {
 //   }
 // } else {
 //   socket.emit('error', "You need to pick from the cup!");
-// }
-
-
-// function eventClickedOnHex(socket, hexId) {
-//   console.log(game.armies);
-//   currentArmy = game.armies[indexById(game.armies, socket.id)];
-//   console.log("Player " + currentArmy + " clicked hex " + hexId);
-
-//   // select hexId
-//   console.log("Selected " + hexId);
-//   // update socket
-//   socket.emit('updateSelectedIcon', hexId);
 // }
 
 

@@ -16,16 +16,16 @@ function Bowl() {
 
     // Update bowlbutton
     if (thing)
-      bowlbutton.addDefenderIcon(thing);
+      bowlbutton.addThingIcon(thing);
   };
 
-  bowl.addDefenderIcon = function(thingName) {
+  bowl.addThingIcon = function(thingName) {
     console.log(thingName + "Image");
     console.log(thingImagesArray[thingName + "Image"]);
     var thing = new Kinetic.Image({
       x: this.getX() + 40,
       y: this.getY() + 40,
-      id: "defender",
+      id: "thing",
       name: thingName,
       image: thingImagesArray[thingName + "Image"],
       draggable: true,

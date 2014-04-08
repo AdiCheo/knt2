@@ -1,7 +1,8 @@
-function Defender(containerId, defenderName, combatValue, terrainType, canCharge, isRanged, isFlying, isMagic) {
+function Defender(hexId, defenderName, combatValue, terrainType, canCharge, isRanged, isFlying, isMagic) {
 
-  this.id = "defender";
+  this.id = defenderName;
   this.name = defenderName;
+  this.type = "defender";
 
   this.combatValue = combatValue;
   this.canCharge = canCharge;
@@ -11,7 +12,7 @@ function Defender(containerId, defenderName, combatValue, terrainType, canCharge
   this.isMagic = isMagic;
 
   this.movementPoints = 4;
-  this.containerId = containerId;
+  this.currentHexId = hexId;
 
   // this.affinity = affinity; // get from container TODO
 }

@@ -64,23 +64,23 @@ var bowlButtonImg = new Image();
 bowlButtonImg.src = 'images/Extra/-n Bowl.png';
 
 // markerIcons Images
-var markerIcons = new Array();
+var markerIcons = [];
 var markerIconsSources = {
   0: 'images/States/-n Player -s Yellow.jpg',
   1: 'images/States/-n Player -s Gray.jpg',
   2: 'images/States/-n Player -s Green.jpg',
   3: 'images/States/-n Player -s Red.jpg',
-}
+};
 loadImages(markerIcons, markerIconsSources);
 
 // Stack Icons
-var StackIconArray = new Array();
+var StackIconArray = [];
 var StackImageSources = {
   0: 'images/States/Yellow Stack.jpg',
   1: 'images/States/Gray Stack.jpg',
   2: 'images/States/Green Stack.jpg',
   3: 'images/States/Red Stack.jpg',
-}
+};
 loadImages(StackIconArray, StackImageSources);
 
 var thingImagesArray = [];
@@ -237,7 +237,7 @@ WyvernImage.src = 'images/Defenders/Forest/-n Wyvern -t Forest -s Fly -a 3.jpg';
 thingImagesArray["WyvernImage"] = WyvernImage;
 
 // Frozen Defenders
-var DragonRiderImage = new Image()
+var DragonRiderImage = new Image();
 DragonRiderImage.src = 'images/Defenders/Frozen Waste/-n Dragon Rider -t Frozen Waste -s Fly -s Range -a 3.jpg';
 thingImagesArray["DragonRiderImage"] = DragonRiderImage;
 
@@ -268,7 +268,7 @@ var KillerPenguinsImage = new Image();
 KillerPenguinsImage.src = 'images/Defenders/Frozen Waste/-n Killer Penguins -t Frozen Waste -a 3.jpg';
 thingImagesArray["KillerPenguinsImage"] = KillerPenguinsImage;
 
-var KillerPuffinsImage = new Image()
+var KillerPuffinsImage = new Image();
 KillerPuffinsImage.src = 'images/Defenders/Frozen Waste/-n Killer Puffins -t Frozen Waste -s Fly -a 2.jpg';
 thingImagesArray["KillerPuffinsImage"] = KillerPuffinsImage;
 
@@ -276,7 +276,7 @@ var MammothImage = new Image();
 MammothImage.src = 'images/Defenders/Frozen Waste/-n Mammoth -t Frozen Waste -s Charge -a 5.jpg';
 thingImagesArray["MammothImage"] = MammothImage;
 
-var NorthWindImage = new Image()
+var NorthWindImage = new Image();
 NorthWindImage.src = 'images/Defenders/Frozen Waste/-n North Wind -t Frozen Waste -s Fly -s Magic -a 2.jpg';
 thingImagesArray["NorthWindImage"] = NorthWindImage;
 
@@ -330,7 +330,7 @@ var HeadHunterImage = new Image();
 HeadHunterImage.src = 'images/Defenders/Jungle/-n Head Hunter -t Jungle -s Range -a 2.jpg';
 thingImagesArray["HeadHunterImage"] = HeadHunterImage;
 
-var PterodactylWarriorsImage = new Image()
+var PterodactylWarriorsImage = new Image();
 PterodactylWarriorsImage.src = 'images/Defenders/Jungle/-n Pterodactyl Warriors -c 2 -t Jungle -s Fly -s Range -a 2.jpg';
 thingImagesArray["PterodactylWarriorsImage"] = PterodactylWarriorsImage;
 
@@ -603,52 +603,65 @@ WingedPirhanaImage.src = 'images/Defenders/Swamp/-n Winged Pirhana -t Swamp -s F
 thingImagesArray["WingedPirhanaImage"] = WingedPirhanaImage;
 
 
-var specialIncomeImagesArray = [];
+// var specialIncomeImagesArray = [];
 
 var CopperMineImage = new Image();
 CopperMineImage.src = 'images/Income/-n Copper Mine -t Mountain -a 1.jpg';
-specialIncomeImagesArray["CopperMineImage"] = CopperMineImage;
+thingImagesArray["CopperMineImage"] = CopperMineImage;
 
 var DiamondImage = new Image();
 DiamondImage.src = 'images/Income/-n Diamond -t Treasure -a 5.jpg';
-specialIncomeImagesArray["DiamondImage"] = DiamondImage;
+thingImagesArray["DiamondImage"] = DiamondImage;
 
 var DiamondFieldImage = new Image();
 DiamondFieldImage.src = 'images/Income/-n Diamond Field -t Desert -a 1.jpg';
-specialIncomeImagesArray["DiamondFieldImage"] = DiamondFieldImage;
+thingImagesArray["DiamondFieldImage"] = DiamondFieldImage;
 
 var ElephantsGraveyardImage = new Image();
 ElephantsGraveyardImage.src = 'images/Income/-n Elephants Graveyard -t Jungle -a 3.jpg';
-specialIncomeImagesArray["ElephantsGraveyardImage"] = ElephantsGraveyardImage;
+thingImagesArray["ElephantsGraveyardImage"] = ElephantsGraveyardImage;
 
 var EmeraldImage = new Image();
 EmeraldImage.src = 'images/Income/-n Emerald -t Treasure -a 10.jpg';
-specialIncomeImagesArray["EmeraldImage"] = EmeraldImage;
+thingImagesArray["EmeraldImage"] = EmeraldImage;
 
 var FarmlandsImage = new Image();
 FarmlandsImage.src = 'images/Income/-n Farmlands -t Plains -a 1.jpg';
-specialIncomeImagesArray["FarmlandsImage"] = FarmlandsImage;
+thingImagesArray["FarmlandsImage"] = FarmlandsImage;
 
 var GoldMineImage = new Image();
 GoldMineImage.src = 'images/Income/-n Gold Mine -t Mountain -a 3.jpg';
-specialIncomeImagesArray["GoldMineImage"] = GoldMineImage;
+thingImagesArray["GoldMineImage"] = GoldMineImage;
 
 var OilFieldImage = new Image();
 OilFieldImage.src = 'images/Income/-n Oil Field -t Frozen Waste -a 3.jpg';
-specialIncomeImagesArray["OilFieldImage"] = OilFieldImage;
+thingImagesArray["OilFieldImage"] = OilFieldImage;
 
 var PearlImage = new Image();
 PearlImage.src = 'images/Income/-n Pearl -t Treasure -a 5.jpg';
-specialIncomeImagesArray["PearlImage"] = PearlImage;
+thingImagesArray["PearlImage"] = PearlImage;
 
 var PeatBogImage = new Image();
 PeatBogImage.src = 'images/Income/-n Peat Bog -t Swamp -a 1.jpg';
-specialIncomeImagesArray["PeatBogImage"] = PeatBogImage;
+thingImagesArray["PeatBogImage"] = PeatBogImage;
 
 var RubyImage = new Image();
 RubyImage.src = 'images/Income/-n Ruby -t Treasure -a 10.jpg';
-specialIncomeImagesArray["RubyImage"] = RubyImage;
+thingImagesArray["RubyImage"] = RubyImage;
 
 var SapphireImage = new Image();
 SapphireImage.src = 'images/Income/-n Sapphire -t Treasure -a 5.jpg';
-specialIncomeImagesArray["SapphireImage"] = SapphireImage;
+thingImagesArray["SapphireImage"] = SapphireImage;
+
+var SilverMineImage = new Image();
+SilverMineImage.src = 'images/Income/-n Silver Mine -t Mountain -a 2.jpg';
+thingImagesArray["SilverMine1Image"] = SilverMineImage;
+thingImagesArray["SilverMine2Image"] = SilverMineImage;
+
+var TreasureChestImage = new Image();
+TreasureChestImage.src = 'images/Income/-n Threasure Chest -t Treasure -a 20.jpg';
+thingImagesArray["TreasureChestImage"] = TreasureChestImage;
+
+var TimberlandImage = new Image();
+TimberlandImage.src = 'images/Income/-n Timberland -t Forest -a 1.jpg';
+thingImagesArray["TimberlandImage"] = TimberlandImage;

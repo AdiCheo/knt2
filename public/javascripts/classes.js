@@ -124,7 +124,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     // Remove old icons
     for (var i in this.containDefenders) {
       this.containDefenders[i].remove();
-      delete this.containDefenders[i]
+      delete this.containDefenders[i];
     }
     this.containDefenders = [];
 

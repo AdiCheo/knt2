@@ -95,12 +95,8 @@ function initConnection() {
       updateRack(rack);
     });
 
-    iosocket.on('updateHand', function(rack) {
-      updateHand(rack);
-    });
-
-    iosocket.on('updateSelectedIcon', function(thing) {
-      updateSelectedIcon(thing);
+    iosocket.on('updateHand', function(thing) {
+      updateHand(thing);
     });
 
     iosocket.on('replaceThingInRack', function(thing, prevThing) {
@@ -307,16 +303,8 @@ function updateRack(rackThings) {
 function updateHand(thing) {
   console.log("Thing in hand " + thing);
   boardLayer.get('#cup')[0].updateIcons(thing);
-  iosocket.emit('updateUI');
 }
 
-function updateSelectedIcon(thing) { //updateSelectedIcon
-  console.log("Selected " + thing);
-  highlightHex(boardLayer.get("#" + thing)[0]);
-  boardLayer.get('#selected')[0].setImage(thingImagesArray[thing + "Image"]);
-}
-
-// TODO Merged here
 function endedTurn() {
   console.log('You have ended your turn');
 }

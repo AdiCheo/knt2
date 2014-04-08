@@ -1,14 +1,16 @@
-function SpecialIncomeThing(hexId, name, terrainType, buildingType, combatValue, incomeValue) {
+function SpecialIncomeThing(hexId, name, terrainType, buildingType, incomeValue) {
 
-  this.id = "specialIncome";
+  this.id = name;
   this.name = name;
+  this.type = "specialIncome";
 
   this.terrainType = terrainType;
   this.buildingType = buildingType;
-  this.combatValue = combatValue;
   this.incomeValue = incomeValue;
 
   this.currentHex = hexId;
+
+  this.affinity = -1;
 }
 
 module.exports = SpecialIncomeThing;

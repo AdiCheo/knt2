@@ -20,6 +20,7 @@ function Army(affinity, name, income, gold, id) {
   this.color = color[affinity];
   this.ownedHexes = [];
   this.forts = [];
+  this.incomeCounters = [];
   this.stacks = [];
   this.rack = [];
 
@@ -77,7 +78,7 @@ function Army(affinity, name, income, gold, id) {
     }
     stack.containedDefenders.push(defender);
     defender.containerId = stack.currentHexId;
-  }
+  };
 
   this.getStackOnHex = function(hexId) {
     for (var stack in this.stacks) {

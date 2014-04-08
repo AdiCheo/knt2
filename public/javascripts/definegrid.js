@@ -240,6 +240,7 @@ boardLayer.on('click tap', function(e) {
 
   } else if (shape.getName() == "hex") {
     console.log("emit:hexClicked," + shape.getId());
+    highlightHex(shape);
     iosocket.emit('hexClicked', shape.getId());
 
   } else if (shape.getName() == "rack") {
