@@ -39,6 +39,9 @@ function initConnection() {
     iosocket.on('state.init', function(gameData) {
       playerId = gameData.playerId;
       localAffinity = gameData.affinity;
+
+      document.getElementById("armystats" + localAffinity).style.left = (stage.getX() + 1050) + "px";
+
       //output the current phase the game is in
       document.getElementById("phasetext").innerHTML = "Current Phase: -1";
 

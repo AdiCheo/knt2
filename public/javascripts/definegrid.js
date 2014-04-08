@@ -391,20 +391,20 @@ document.getElementById("racktext").style.top = 125 + "px";
 document.getElementById("playerturntext").style.left = 100 + "px";
 document.getElementById("playerturntext").style.top = 15 + "px";
 
-document.getElementById("armystats1").style.left = (stage.getX() + 900) + "px";
-document.getElementById("armystats1").style.top = (stage.getY() + 25) + "px";
+document.getElementById("armystats0").style.left = (stage.getX() + 1075) + "px";
+document.getElementById("armystats0").style.top = (stage.getY() + 100) + "px";
+document.getElementById("armystats0").style.position = "fixed";
+
+document.getElementById("armystats1").style.left = (stage.getX() + 1075) + "px";
+document.getElementById("armystats1").style.top = (stage.getY() + 225) + "px";
 document.getElementById("armystats1").style.position = "fixed";
 
-document.getElementById("armystats2").style.left = (stage.getX() + 1050) + "px";
-document.getElementById("armystats2").style.top = (stage.getY() + 25) + "px";
+document.getElementById("armystats2").style.left = (stage.getX() + 1075) + "px";
+document.getElementById("armystats2").style.top = (stage.getY() + 350) + "px";
 document.getElementById("armystats2").style.position = "fixed";
 
-document.getElementById("armystats3").style.left = (stage.getX() + 1200) + "px";
-document.getElementById("armystats3").style.top = (stage.getY() + 25) + "px";
+document.getElementById("armystats3").style.left = (stage.getX() + 1075) + "px";
+document.getElementById("armystats3").style.top = (stage.getY() + 475) + "px";
 document.getElementById("armystats3").style.position = "fixed";
-
-document.getElementById("armystats4").style.left = (stage.getX() + 1350) + "px";
-document.getElementById("armystats4").style.top = (stage.getY() + 25) + "px";
-document.getElementById("armystats4").style.position = "fixed";
 
 stage.add(boardLayer);

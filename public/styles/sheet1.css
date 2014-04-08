@@ -79,6 +79,10 @@ body {
     z-index: 1000;
 }
 
+#armystats0 {
+    z-index: 1000;
+}
+
 #armystats1 {
     z-index: 1000;
 }
@@ -90,11 +94,6 @@ body {
 #armystats3 {
     z-index: 1000;
 }
-
-#armystats4 {
-    z-index: 1000;
-}
-
 #melee {
     z-index: 1000;
 }
