@@ -100,7 +100,7 @@ io.sockets.on('connection', function(socket) {
 
   // New Turn listener
   socket.on('updateUI', function() {
-    updateArmyData(socket);
+    refreshData(socket);
   });
 
   /*** SETUP_PHASE ***/
@@ -149,11 +149,11 @@ io.sockets.on('connection', function(socket) {
 
   /*** GOLD_COLLECTION_PHASE ***/
   // Gold collection button listener
-  // socket.on('collectGoldButtonClicked', function() {
-  //   if (game.currentPhase == GOLD_COLLECTION_PHASE) {
-  //     eventCollectGoldButton(socket);
-  //   }
-  // });
+  socket.on('collectGoldButtonClicked', function() {
+    if (game.currentPhase == GOLD_COLLECTION_PHASE) {
+      eventCollectGoldButton(socket);
+    }
+  });
 
   /*** RECRUIT_HERO_PHASE  ***/
 
@@ -306,8 +306,6 @@ function eventBuildFortButton(socket) {
   }
 }
 
-
-
 function eventClickedOnHexSetupPhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
@@ -356,10 +354,20 @@ function eventGenerateClicked(socket) {
   if (!currentArmy.thingInHand) {
     // get thing in hand
     currentArmy.thingInHand = game.newRandomThing();
-    console.log("New Random Thing: " + currentArmy.thingInHand);
 
     // Socket message to update cup view
     socket.emit('updateHand', currentArmy.thingInHand.name);
+
+    if (currentArmy.freeThings > 0)
+      currentArmy.freeThings--; // decrement recruitable things
+
+    if (currentArmy.freeThings === 0)
+      currentArmy.canEndTurn = true;
+
+    // If placing last free element in phase 0, must end turn
+    if (game.currentPhase === 0 && !currentArmy.freeThings) {
+      currentArmy.mustEndTurn = true;
+    }
 
     // currentArmy.canPlaceThing = true;
     currentArmy.canReplace = true;
@@ -411,22 +419,10 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
             // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
             io.sockets.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
 
-
-            if (currentArmy.freeThings > 0)
-              currentArmy.freeThings--; // decrement recruitable things
-
-            if (currentArmy.freeThings === 0)
-              currentArmy.canEndTurn = true;
-
-            // If placing last free element in phase 0, must end turn
-            if (game.currentPhase === 0 && !currentArmy.freeThings) {
-              currentArmy.mustEndTurn = true;
-            }
-
             // remove that thing from the cup
             game.removeFromCup(currentArmy.thingInHand);
 
-            io.sockets.emit('updateUI', updateArmyData(socket));
+
 
             // empty hand
             socket.emit('updateHand', null);
@@ -437,6 +433,7 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
             socket.emit('error', "Cannot place more than 10 defenders per stack.");
           }
 
+          io.sockets.emit('updateUI', updateArmyData(socket));
 
           // Update the view for all players
           // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
@@ -471,17 +468,6 @@ function eventClickedOnRack(socket) {
       //send update rack socket
       socket.emit('updateRack', currentArmy.rack);
 
-      if (currentArmy.freeThings > 0)
-        currentArmy.freeThings--; // decrement recruitable things
-
-      if (currentArmy.freeThings === 0)
-        currentArmy.canEndTurn = true;
-
-      // If placing last free element in phase 0, must end turn
-      if (game.currentPhase === 0 && !currentArmy.freeThings) {
-        currentArmy.mustEndTurn = true;
-      }
-
       // remove that thing from the cup
       game.removeFromCup(currentArmy.thingInHand);
 
@@ -499,6 +485,28 @@ function eventClickedOnRack(socket) {
   }
 }
 
+/*********** GOLD_COLLECTION_PHASE ***********/
+//function for collecting the gold
+function eventCollectGoldButton(socket) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canPlay(game, socket)) return;
+
+  currentArmy.gold += currentArmy.income;
+
+  currentArmy.mustEndTurn = true;
+
+  io.sockets.emit('updateUI', updateArmyData(socket));
+
+}
+
+function updatedGoldData(affinity, gold) {
+  return {
+    affinity: affinity,
+    gold: gold
+  };
+}
+
 /*********** RECRUIT_THINGS_PHASE ***********/
 
 function eventRecruitThings(socket) {
@@ -512,6 +520,14 @@ function eventRecruitThings(socket) {
       socket.emit('updateHand', currentArmy.thingInHand.name);
       // currentArmy.canPlaceThing = true;
       // currentArmy.canReplace = false;
+
+      if (currentArmy.freeThings > 0)
+        currentArmy.freeThings--; // decrement recruitable things
+
+      if (currentArmy.freeThings === 0)
+        currentArmy.canEndTurn = true;
+
+      io.sockets.emit('updateUI', updateArmyData(socket));
 
     } else if (currentArmy.thingsPurchased < 5) {
       if (currentArmy.gold >= 5) {
@@ -806,13 +822,6 @@ function eventEndTurnClicked(socket) {
     currentArmy.forts[i].hasBeenUpgraded = false;
   }
 
-  if (game.currentPhase == 1) {
-    currentArmy.gold += currentArmy.income;
-    currentArmy.mustEndTurn = true;
-
-    currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
-
-  }
 
   // Send message to all clients that a player turn ended
   io.sockets.emit('nextPlayerTurn', nextTurnData());
@@ -835,6 +844,15 @@ function fortUpgradeData(affinity, fortValue, gold, hexId) {
     gold: gold,
     hexId: hexId
   };
+}
+
+function refreshData(socket) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (game.currentPhase > 0)
+    currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
+
+  io.sockets.emit('updateUI', updateArmyData(socket));
 }
 
 function updateArmyData(socket) {
@@ -1087,20 +1105,7 @@ function updateClients(socket) {
 
 
 
-//function for collecting the gold
-// function eventCollectGoldButton(socket) {
-//   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-//   if (!currentArmy.canPlay(game, socket)) return;
-
-// }
-
-function updatedGoldData(affinity, gold) {
-  return {
-    affinity: affinity,
-    gold: gold
-  };
-}
 
 //function for Movement Phase
 // function MovementPhase(socket, hexId) {
