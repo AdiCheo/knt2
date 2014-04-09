@@ -124,7 +124,6 @@ io.sockets.on('connection', function(socket) {
   /*** SETUP_RECRUITMENT_PHASE **/
   // Magic Cup click listener
   socket.on('generateButtonClicked', function() {
-    // eventGenerateClicked(socket); // Testx stack testx rack
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventGenerateClicked(socket);
     }
@@ -132,7 +131,6 @@ io.sockets.on('connection', function(socket) {
 
   // Hex click listener
   socket.on('hexClicked', function(hexId) {
-    // eventClickedOnHexPlaceThing(socket, hexId); // Testx stack
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventClickedOnHexPlaceThing(socket, hexId);
     }
@@ -140,7 +138,6 @@ io.sockets.on('connection', function(socket) {
 
   // rack click listener
   socket.on('rackClicked', function() {
-    // eventClickedOnRack(socket); // testx rack
     if (game.currentPhase == SETUP_RECRUITMENT_PHASE) {
       eventClickedOnRack(socket);
     }
@@ -166,7 +163,6 @@ io.sockets.on('connection', function(socket) {
 
   // Hex click listener
   socket.on('hexClicked', function(hexId) {
-    // eventClickedOnHexPlaceThing(socket, hexId); // Testx stack
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {
       eventClickedOnHexPlaceThing(socket, hexId);
     }
@@ -174,7 +170,6 @@ io.sockets.on('connection', function(socket) {
 
   // rack click listener
   socket.on('rackClicked', function() {
-    // eventClickedOnRack(socket); // testx rack
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {
       eventClickedOnRack(socket);
     }
@@ -199,16 +194,14 @@ io.sockets.on('connection', function(socket) {
   });
 
   // Stack listener
-  socket.on('stackClicked', function(defenderName, hexId) {
-    eventStackMovePhase(socket, defenderName, hexId);
+  socket.on('stackClicked', function(hexId) {
     if (game.currentPhase == MOVEMENT_PHASE) {
-      eventStackMovePhase(socket, defenderName, hexId);
+      eventStackMovePhase(socket, hexId);
     }
   });
 
   // Hex Listener
   socket.on('hexClicked', function(hexId) {
-    // eventClickedOnHexMovePhase(socket, hexId); //testx Move
     if (game.currentPhase == MOVEMENT_PHASE) {
       eventClickedOnHexMovePhase(socket, hexId);
     }
@@ -582,8 +575,8 @@ function eventDefenderMovePhase(socket, defenderName, hexId) {
     socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
 }
 
-// Clicking on a stack that's on the board to move him TODO
-function eventStackMovePhase(socket, defenderName, hexId) {
+// Clicking on a stack that's on the board to move him
+function eventStackMovePhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   // Find the selected stack in the current armies stacks
@@ -591,9 +584,8 @@ function eventStackMovePhase(socket, defenderName, hexId) {
 
   if (!currentArmy.thingInHand) {
     socket.emit('error', 'Choose a valid stack!');
-    socket.emit('updateSelectedIcon', 'DustDevilImage');
   } else
-    socket.emit('updateSelectedIcon', 'DesertBatImage');
+    socket.emit('updateSelectedIcon', 'stack' + hexId);
 }
 
 function eventClickedOnHexMovePhase(socket, hexId) {
@@ -653,10 +645,21 @@ function eventClickedOnHexMovePhase(socket, hexId) {
       } else {
         socket.emit('error', "No more movement points!");
       }
-    } else {
-      socket.emit('error', "You cannot move this thing.");
+    } else if (currentArmy.thingInHand.type == "stack") {
+
+    }
+    // Else it is owned by another army!
+    else {
+
     }
   }
+} else {
+  socket.emit('error', "No more movement points!");
+}
+} else {
+  socket.emit('error', "You cannot move this thing.");
+}
+}
 }
 
 /*********** CONSTRUCTION_PHASE ***********/
@@ -867,10 +870,6 @@ function getStacksScenario1() {
   game.removeFromCup(game.cup[indexById(game.cup, "KillerRacoon")]);
   game.removeFromCup(game.cup[indexById(game.cup, "Farmers1")]);
   game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
-
-  // Update stack for all (no defenders)
-  // io.sockets.emit('updateStackAll', stack1.currentHexId, stack1.affinity);
-  // io.sockets.emit('updateStackAll', stack2.currentHexId, stack2.affinity);
 }
 
 function loadScenario1(num) {
