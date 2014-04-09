@@ -396,7 +396,38 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
         if (currentArmy.thingInHand.type == "defender") {
           // Add the thing in hand to a stack on the hex board
-          currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId);
+          if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
+
+            // Update the view for all players
+            io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+            socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
+
+
+            if (currentArmy.freeThings > 0)
+              currentArmy.freeThings--; // decrement recruitable things
+
+            if (currentArmy.freeThings === 0)
+              currentArmy.canEndTurn = true;
+
+            // If placing last free element in phase 0, must end turn
+            if (game.currentPhase === 0 && !currentArmy.freeThings) {
+              currentArmy.mustEndTurn = true;
+            }
+
+            // remove that thing from the cup
+            game.removeFromCup(currentArmy.thingInHand);
+
+            io.sockets.emit('updateUI', updateArmyData(socket));
+
+            // empty hand
+            socket.emit('updateHand', null);
+
+            currentArmy.thingInHand = false;
+
+          } else {
+            socket.emit('error', "Cannot place more than 10 defenders per stack.");
+          }
+
 
           // Update the view for all players
           io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
@@ -407,27 +438,6 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
           // Add it to the armies special income counter to count as income
           // Must match terrain type
         }
-
-        if (currentArmy.freeThings > 0)
-          currentArmy.freeThings--; // decrement recruitable things
-
-        if (currentArmy.freeThings === 0)
-          currentArmy.canEndTurn = true;
-
-        // If placing last free element in phase 0, must end turn
-        if (game.currentPhase === 0 && !currentArmy.freeThings) {
-          currentArmy.mustEndTurn = true;
-        }
-
-        // remove that thing from the cup
-        game.removeFromCup(currentArmy.thingInHand);
-
-        io.sockets.emit('updateUI', updateArmyData(socket));
-
-        // empty hand
-        socket.emit('updateHand', null);
-
-        currentArmy.thingInHand = false;
 
       } else {
         socket.emit('error', "You do not own this hex!");
@@ -595,36 +605,36 @@ function eventClickedOnHexMovePhase(socket, hexId) {
           // If the current army already explored and owned the hex
           if (indexById(currentArmy.ownedHexes, hexId) !== null) {
 
-            // Remove the defender in hand from it's current stack
-            removeFromThingsArray(currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId), currentArmy.thingInHand);
+            if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
+              // Remove the defender in hand from it's current stack
+              removeFromThingsArray(currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId), currentArmy.thingInHand);
 
-            io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId).containedDefenders, currentArmy.affinity);
-            io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+              io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId).containedDefenders, currentArmy.affinity);
+              io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
 
-            currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId);
+              // send update socket
+              // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+              socket.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
+              io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+
+              // empty hand
+              socket.emit('updateHand', null);
+
+              currentArmy.thingInHand = false;
+              // currentArmy.canPlaceThing = false;
+
+            } else {
+              socket.emit('error', "Cannot place more than 10 defenders per stack.");
+            }
           }
           // Else it is owned by another army!
           else {
 
           }
-
-          // send update socket
-          // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-          socket.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
-          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-
-          // empty hand
-          socket.emit('updateHand', null);
-
-          currentArmy.thingInHand = false;
-          // currentArmy.canPlaceThing = false;
         }
       } else {
         socket.emit('error', "No more movement points!");
       }
-
-      currentArmy.thingInHand = false;
-      // currentArmy.canPlaceThing = false;
     } else {
       socket.emit('error', "You cannot move this thing.");
     }
