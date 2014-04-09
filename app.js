@@ -630,65 +630,62 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
   var oldHexId = currentArmy.thingInHand.currentHexId;
   var currentHex = game.getHexById(hexId);
+  var distanceTraveled = currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
   if (currentArmy.thingInHand.type == "defender") {
 
     // If Defender has enough movement points for the move
-    if (currentArmy.calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
+    if (distanceTraveled <= currentArmy.thingInHand.movementPoints) {
+      // If the current army already explored and owned the hex
+      if (indexById(currentArmy.ownedHexes, hexId) !== null && currentHex.isExplored) {
 
-      // check if hex is unexplored
-      if (!currentHex.isExplored) {
-        currentHex.isExplored = true;
-        // The hex is not explored, the dice needs to be rolled
+        if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
+          currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
-        // player goes on unexplored hex, then they must roll. If they roll a 1 or 6 then own hex and add marker
-        //if the roll is anything else, it is defended, game picks this amount of defenders from the cup and places them on that hex
-        //during that battle, you can bribe the creatures by paying as much gold as their combat value 
-        //if you fight for at least one combat round, then you cannot bribe anymore 
-        //affinity = 4 and the army NPC 
-        currentArmy.mustRollDice = true;
-        // you need to roll the dice for the unexplored hex 
-        // socket.emit('needRollDice', randomDiceRoll());
-        game.currentPhase = "exploration";
+          // Remove the defender in hand from it's current stack
+          currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
 
-        currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+          // Remove old stack
+          io.sockets.emit('removeStackAll', oldHexId);
+          io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
 
-      } else {
-        // If the current army already explored and owned the hex
-        if (indexById(currentArmy.ownedHexes, hexId) !== null) {
+          // send update socket
+          io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
 
-          if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
-            currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+          // empty hand
+          socket.emit('updateHand', null);
 
-            // Remove the defender in hand from it's current stack
-            currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
+          currentArmy.thingInHand = false;
+          // currentArmy.canPlaceThing = false;
 
-            // Remove old stack
-            io.sockets.emit('removeStackAll', oldHexId);
-            io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
-
-            // send update socket
-            io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
-
-            // empty hand
-            socket.emit('updateHand', null);
-
-            currentArmy.thingInHand = false;
-            // currentArmy.canPlaceThing = false;
-
-          } else {
-            socket.emit('error', "Cannot place more than 10 defenders per stack.");
-          }
-        }
-        // Else it is owned by another army!
-        else {
-
+        } else {
+          socket.emit('error', "Cannot place more than 10 defenders per stack.");
         }
       }
     } else {
       socket.emit('error', "No more movement points!");
     }
   } else if (currentArmy.thingInHand.type == "stack") {
+
+    // check if hex is unexplored
+    if (!currentHex.isExplored) {
+      currentHex.isExplored = true;
+      // The hex is not explored, the dice needs to be rolled
+
+      // player goes on unexplored hex, then they must roll. If they roll a 1 or 6 then own hex and add marker
+      //if the roll is anything else, it is defended, game picks this amount of defenders from the cup and places them on that hex
+      //during that battle, you can bribe the creatures by paying as much gold as their combat value
+      //if you fight for at least one combat round, then you cannot bribe anymore
+      //affinity = 4 and the army NPC
+      currentArmy.mustRollDice = true;
+      // you need to roll the dice for the unexplored hex
+      // socket.emit('needRollDice', randomDiceRoll());
+      game.currentPhase = "exploration";
+      moveStack(socket, currentArmy, oldHexId, hexId);
+
+      currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+
+    }
     // If hexID has an opponent's stack
     if (currentHex.isExplored) {
 
@@ -722,707 +719,707 @@ function eventClickedOnHexMovePhase(socket, hexId) {
         socket.emit('error', "TEST TODO SOmething went wrong."); // TODO
         socket.emit('error', conflictStack); // TODO
         socket.emit('error', conflictFort); // TODO
+      } else if (currentHex.isExplored && currentHex.affinity != currentArmy.affinity) {
+        moveStackBattle(socket, currentArmy, oldHexId, hexId);
+      } else {
+        // Not explored TODO
+        moveStack(socket, currentArmy, oldHexId, hexId);
       }
-
     } else {
-      // Not explored TODO
-      moveStack(socket, currentArmy, oldHexId, hexId);
+      socket.emit('error', "You cannot move this thing.");
     }
-  } else {
-    socket.emit('error', "You cannot move this thing.");
   }
-}
 
-// TODO
-function moveStackBattleFort(socket, currentArmy, oldHexId, newHexId, contestedStack) {
-  currentArmy.thingInHand.moveStack(newHexId);
+  // TODO
+  function moveStackBattleFort(socket, currentArmy, oldHexId, newHexId, contestedStack) {
+    currentArmy.thingInHand.moveStack(newHexId);
 
-  // Remove both old stacks
-  io.sockets.emit('removeStackAll', oldHexId);
-  io.sockets.emit('removeStackAll', newHexId);
+    // Remove both old stacks
+    io.sockets.emit('removeStackAll', oldHexId);
+    io.sockets.emit('removeStackAll', newHexId);
 
-  // temps
-  currHexId = currentArmy.thingInHand.currentHexId;
-  defenders = currentArmy.thingInHand.containedDefenders;
-  attackers = contestedStack.containedDefenders;
+    // temps
+    currHexId = currentArmy.thingInHand.currentHexId;
+    defenders = currentArmy.thingInHand.containedDefenders;
+    attackers = contestedStack.containedDefenders;
 
-  // send update socket
-  io.sockets.emit('updateStackBattle', currHexId,
-    defenders, currentArmy.affinity,
-    attackers, contestedStack.affinity);
+    // send update socket
+    io.sockets.emit('updateStackBattle', currHexId,
+      defenders, currentArmy.affinity,
+      attackers, contestedStack.affinity);
 
-  io.sockets.emit('updateStackAllBattle', currHexId, currentArmy.affinity, contestedStack.affinity);
-  io.sockets.emit('error', "Battle!");
+    io.sockets.emit('updateStackAllBattle', currHexId, currentArmy.affinity, contestedStack.affinity);
+    io.sockets.emit('error', "Battle!");
 
-  // empty hand
-  currentArmy.thingInHand = null;
-  socket.emit('updateHand', null);
-  socket.emit('updateSelectedIcon', "question");
-}
+    // empty hand
+    currentArmy.thingInHand = null;
+    socket.emit('updateHand', null);
+    socket.emit('updateSelectedIcon', "question");
+  }
 
-function moveStackBattle(socket, currentArmy, oldHexId, newHexId, contestedStack) {
-  currentArmy.thingInHand.moveStack(newHexId);
+  function moveStackBattle(socket, currentArmy, oldHexId, newHexId, contestedStack) {
+    currentArmy.thingInHand.moveStack(newHexId);
 
-  // Remove both old stacks
-  io.sockets.emit('removeStackAll', oldHexId);
-  io.sockets.emit('removeStackAll', newHexId);
+    // Remove both old stacks
+    io.sockets.emit('removeStackAll', oldHexId);
+    io.sockets.emit('removeStackAll', newHexId);
 
-  // temps
-  currHexId = currentArmy.thingInHand.currentHexId;
-  defenders = contestedStack;
-  attackers = currentArmy.thingInHand;
+    // temps
+    currHexId = currentArmy.thingInHand.currentHexId;
+    defenders = contestedStack;
+    attackers = currentArmy.thingInHand;
 
-  // send update socket
-  io.sockets.emit('updateStackBattle', currHexId,
-    defenders, defenders.affinity,
-    attackers, attackers.affinity);
+    // send update socket
+    io.sockets.emit('updateStackBattle', currHexId,
+      defenders, defenders.affinity,
+      attackers, attackers.affinity);
 
-  io.sockets.emit('error', "Battle!");
+    io.sockets.emit('error', "Battle!");
 
-  // empty hand
-  currentArmy.thingInHand = null;
-  socket.emit('updateHand', null);
-  socket.emit('updateSelectedIcon', "question");
-}
+    // empty hand
+    currentArmy.thingInHand = null;
+    socket.emit('updateHand', null);
+    socket.emit('updateSelectedIcon', "question");
+  }
 
-function moveStack(socket, currentArmy, oldHexId, newHexId) {
-  currentArmy.thingInHand.moveStack(newHexId);
+  function moveStack(socket, currentArmy, oldHexId, newHexId) {
+    currentArmy.thingInHand.moveStack(newHexId);
 
-  // Remove old stack
-  io.sockets.emit('removeStackAll', oldHexId);
+    // Remove old stack
+    io.sockets.emit('removeStackAll', oldHexId);
 
-  // send update socket
-  io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
-  io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+    // send update socket
+    io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
+    io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
 
-  // empty hand
-  currentArmy.thingInHand = null;
-  socket.emit('updateHand', null);
-}
+    // empty hand
+    currentArmy.thingInHand = null;
+    socket.emit('updateHand', null);
+  }
 
-/*********** CONSTRUCTION_PHASE ***********/
+  /*********** CONSTRUCTION_PHASE ***********/
 
-function eventUpgradeFort(socket, hexId) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  function eventUpgradeFort(socket, hexId) {
+    currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (!currentArmy.canPlay(game, socket)) return;
+    if (!currentArmy.canPlay(game, socket)) return;
 
-  if (indexById(currentArmy.forts, hexId) !== null) {
-    var index = indexById(currentArmy.forts, hexId);
-    if (currentArmy.gold >= 5) {
-      if (!currentArmy.forts[index].hasBeenUpgraded) {
-        if (currentArmy.forts[index].fortValue == 3) {
-          if (currentArmy.income >= 20) {
+    if (indexById(currentArmy.forts, hexId) !== null) {
+      var index = indexById(currentArmy.forts, hexId);
+      if (currentArmy.gold >= 5) {
+        if (!currentArmy.forts[index].hasBeenUpgraded) {
+          if (currentArmy.forts[index].fortValue == 3) {
+            if (currentArmy.income >= 20) {
+              currentArmy.forts[index].hasBeenUpgraded = true;
+              currentArmy.forts[index].fortValue++;
+              currentArmy.gold -= 5;
+              io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].fortValue, currentArmy.gold, currentArmy.forts[index].id));
+            } else {
+              socket.emit('error', "You need an income of at least 20 gold to upgrade to citadel.");
+            }
+          } else if (currentArmy.forts[index].fortValue < 3) {
             currentArmy.forts[index].hasBeenUpgraded = true;
             currentArmy.forts[index].fortValue++;
             currentArmy.gold -= 5;
             io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].fortValue, currentArmy.gold, currentArmy.forts[index].id));
           } else {
-            socket.emit('error', "You need an income of at least 20 gold to upgrade to citadel.");
+            socket.emit('error', "You cannot upgrade a citadel.");
           }
-        } else if (currentArmy.forts[index].fortValue < 3) {
-          currentArmy.forts[index].hasBeenUpgraded = true;
-          currentArmy.forts[index].fortValue++;
-          currentArmy.gold -= 5;
-          io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].fortValue, currentArmy.gold, currentArmy.forts[index].id));
         } else {
-          socket.emit('error', "You cannot upgrade a citadel.");
+          socket.emit('error', "You already upgraded this turn!");
         }
       } else {
-        socket.emit('error', "You already upgraded this turn!");
+        socket.emit('error', "You do not have enough gold!");
       }
     } else {
-      socket.emit('error', "You do not have enough gold!");
+      socket.emit('error', "This is not your fort!");
     }
-  } else {
-    socket.emit('error', "This is not your fort!");
   }
-}
 
 
-//TODO: Fix the fort gold for UI
-function eventbuyFort(socket, hexId) {
-  // console.log(game.armies);
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  //TODO: Fix the fort gold for UI
+  function eventbuyFort(socket, hexId) {
+    // console.log(game.armies);
+    currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (!currentArmy.canPlay(game, socket)) return;
-  console.log("current army can build a fort" + currentArmy.canBuildFort); {
+    if (!currentArmy.canPlay(game, socket)) return;
+    console.log("current army can build a fort" + currentArmy.canBuildFort); {
 
-    if (currentArmy.canBuildFort) {
-      if (currentArmy.buildFort(hexId, 1)) {
-        if (currentArmy.gold >= 5) {
-          console.log("It got here!");
-          io.sockets.emit('updateForts', hexId, currentArmy.affinity);
-          currentArmy.canBuildFort = false;
-          currentArmy.gold -= 5;
-          io.sockets.emit('updateUI', updateArmyData(socket));
+      if (currentArmy.canBuildFort) {
+        if (currentArmy.buildFort(hexId, 1)) {
+          if (currentArmy.gold >= 5) {
+            console.log("It got here!");
+            io.sockets.emit('updateForts', hexId, currentArmy.affinity);
+            currentArmy.canBuildFort = false;
+            currentArmy.gold -= 5;
+            io.sockets.emit('updateUI', updateArmyData(socket));
+          } else {
+            socket.emit('error', "You do not have enough gold!");
+          }
         } else {
-          socket.emit('error', "You do not have enough gold!");
+          socket.emit('error', "Cannot build fort here!");
         }
-      } else {
-        socket.emit('error', "Cannot build fort here!");
       }
     }
   }
-}
 
-function eventEndTurnClicked(socket) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  function eventEndTurnClicked(socket) {
+    currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (game.currentPlayerTurn != currentArmy.affinity) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
-
-  if (currentArmy.thingInHand) {
-    socket.emit('error', "You have a thing in hand, place it first!");
-    return;
-  }
-
-  if (!currentArmy.mustEndTurn && !currentArmy.canEndTurn) {
-    socket.emit('error', "You cannot end your turn yet!");
-    return;
-  }
-
-  game.nextPlayerTurn(currentArmy);
-  currentArmy.mustEndTurn = false;
-  currentArmy.canEndTurn = false;
-  currentArmy.thingsPurchased = 0;
-
-  //reset the fort upgrade flags to false
-  for (var i in currentArmy.forts) {
-    currentArmy.forts[i].hasBeenUpgraded = false;
-  }
-
-
-  // Send message to all clients that a player turn ended
-  io.sockets.emit('nextPlayerTurn', nextTurnData());
-
-  // Send message to current player that he ended his turn
-  socket.emit('endedTurn');
-}
-
-function nextTurnData() {
-  return {
-    currentPhase: game.currentPhase,
-    currentPlayerTurn: game.currentPlayerTurn
-  };
-}
-
-function fortUpgradeData(affinity, fortValue, gold, hexId) {
-  return {
-    affinity: affinity,
-    fortValue: fortValue,
-    gold: gold,
-    hexId: hexId
-  };
-}
-
-
-function refreshData(socket) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
-
-  if (game.currentPhase > 0)
-    currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
-
-  if (game.currentPhase == 5)
-    currentArmy.canEndTurn = true;
-
-  io.sockets.emit('updateUI', updateArmyData(socket));
-}
-
-function updateArmyData(socket) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
-
-  currentArmy.updateIncome();
-
-  io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));
-
-  return {
-    armies: game.armies
-  };
-}
-
-function handleDice(socket) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
-  // TODO reply with dice
-  if (true) {
-    // valid dice roll handle here
-    socket.emit('diceRollResult', randomDiceRoll());
-    return;
-  }
-  // Dice roll is invalid
-  socket.emit('error', 'Dice roll invalid at this time!');
-  return false;
-}
-
-function randomDiceRoll() {
-  return Math.floor(Math.random() * 6 + 1);
-}
-
-function recruitNumOfThingsToRack(thingsNum, armyNum) {
-  var thing = game.newRandomThing();
-  // remove from cup
-  game.removeFromCup(thing);
-  // push to rack
-  game.armies[armyNum].rack.push(thing);
-
-  for (var i = thingsNum - 1; i >= 0; i--) {
-    var thing = game.newRandomThing();
-    game.removeFromCup(thing);
-    game.armies[armyNum].rack.push(thing);
-  };
-
-  game.armies[armyNum].freeThings -= thingsNum; // decrement recruitable things
-  game.armies[armyNum].canEndTurn = true;
-
-}
-
-function ownHexesScenario1() {
-
-  game.armies[0].ownHex("2,1", game, true);
-  game.armies[0].ownHex("2,0", game, true);
-  game.armies[0].ownHex("2,1", game, true);
-  game.armies[0].ownHex("2,-1", game, true);
-  game.armies[0].ownHex("3,-2", game, true);
-  game.armies[0].ownHex("3,-1", game, true);
-  game.armies[0].ownHex("3,0", game, true);
-  game.armies[0].ownHex("1,2", game, true);
-  game.armies[0].ownHex("1,1", game, true);
-  game.armies[0].ownHex("1,0", game, true);
-  game.armies[0].ownHex("0,1", game, true);
-
-  game.armies[1].ownHex("-2,-1", game, true);
-  game.armies[1].ownHex("-2,0", game, true);
-  game.armies[1].ownHex("-1,2", game, true);
-  game.armies[1].ownHex("-3,0", game, true);
-  game.armies[1].ownHex("-3,1", game, true);
-  game.armies[1].ownHex("-3,2", game, true);
-  game.armies[1].ownHex("-2,0", game, true);
-  game.armies[1].ownHex("-1,-1", game, true);
-  game.armies[1].ownHex("-1,-2", game, true);
-
-  game.armies[2].ownHex("-2,3", game, true);
-  game.armies[2].ownHex("-1,3", game, true);
-  game.armies[2].ownHex("0,3", game, true);
-  game.armies[2].ownHex("0,2", game, true);
-  game.armies[2].ownHex("-1,2", game, true);
-  game.armies[2].ownHex("-1,1", game, true);
-
-  game.armies[3].ownHex("2,-3", game, true);
-  game.armies[3].ownHex("1,-3", game, true);
-  game.armies[3].ownHex("0,-2", game, true);
-  game.armies[3].ownHex("1,-2", game, true);
-  game.armies[3].ownHex("1,-1", game, true);
-  game.armies[3].ownHex("0,0", game, true);
-  game.armies[3].ownHex("2,-2", game, true);
-  game.armies[3].ownHex("3,-3", game, true);
-
-  sendAllHexes();
-}
-
-function buildFortsScenario1() {
-
-  game.armies[0].buildFort("3,-1", 1);
-  game.armies[0].buildFort("3,-2", 2);
-  game.armies[0].buildFort("2,0", 2);
-  game.armies[0].buildFort("2,-1", 2);
-  game.armies[0].buildFort("1,1", 3);
-  game.armies[0].buildFort("1,0", 1);
-
-  game.armies[1].buildFort("-2,-1", 3);
-  game.armies[1].buildFort("-2,0", 1);
-  game.armies[1].buildFort("-3,0", 2);
-  game.armies[1].buildFort("3,1", 2);
-
-  game.armies[2].buildFort("-2,3", 1);
-  game.armies[2].buildFort("-1,3", 2);
-
-  game.armies[3].buildFort("1,-3", 2);
-  game.armies[3].buildFort("1,-2", 3);
-  game.armies[3].buildFort("3,-3", 3);
-  game.armies[3].buildFort("2,-2", 1);
-  game.armies[3].buildFort("1,-1", 1);
-  game.armies[3].buildFort("0,0", 2);
-
-  sendAllForts();
-}
-
-function getStacksScenario1() {
-  var stack1 = new Stack("1,0", game.armies[0].affinity);
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Thing")], "1,0");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard1")], "1,0");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "SwampRat")], "1,0");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Unicorn")], "1,0");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Bears")], "1,0");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantSpider")], "1,0");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "CamelCorps")], "1,0");
-  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Sandworm")], "1,0");
-
-  game.removeFromCup(game.cup[indexById(game.cup, "Thing")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "GiantLizard1")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "SwampRat")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "Unicorn")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "Bears")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "GiantSpider")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "CamelCorps")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "Sandworm")]);
-
-  var stack2 = new Stack("1,-1", game.armies[3].affinity);
-  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Crocodiles")], "1,-1");
-  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "MountainMen1")], "1,-1");
-  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard2")], "1,-1");
-  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "SwampBeast")], "1,-1");
-  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "KillerRacoon")], "1,-1");
-  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Farmers1")], "1,-1");
-  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "WildCat")], "1,-1");
-
-  game.removeFromCup(game.cup[indexById(game.cup, "Crocodiles")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "MountainMen1")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "GiantLizard2")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "SwampBeast")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "KillerRacoon")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "Farmers1")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
-}
-
-function eventLoadUserData(socket, num) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
-
-  // Update the current armies rack
-  socket.emit('updateRack', currentArmy.rack);
-  // Send the current Armies stacks with units in them
-  for (var i in currentArmy.stacks) {
-    socket.emit('updateStack', currentArmy.stacks[i].currentHexId, currentArmy.stacks[i].containedDefenders, currentArmy.affinity);
-  }
-  for (var i in game.armies) {
-    // Send all the stack data, to fill the game board where stacks are
-    for (var j in game.armies[i].stacks) {
-      socket.emit('updateStackAll', game.armies[i].stacks[j].currentHexId, game.armies[i].stacks[j].affinity);
+    if (game.currentPlayerTurn != currentArmy.affinity) {
+      socket.emit('error', "It is not your turn yet!");
+      return;
     }
-    // Update UI for army
+
+    if (currentArmy.thingInHand) {
+      socket.emit('error', "You have a thing in hand, place it first!");
+      return;
+    }
+
+    if (!currentArmy.mustEndTurn && !currentArmy.canEndTurn) {
+      socket.emit('error', "You cannot end your turn yet!");
+      return;
+    }
+
+    game.nextPlayerTurn(currentArmy);
+    currentArmy.mustEndTurn = false;
+    currentArmy.canEndTurn = false;
+    currentArmy.thingsPurchased = 0;
+
+    //reset the fort upgrade flags to false
+    for (var i in currentArmy.forts) {
+      currentArmy.forts[i].hasBeenUpgraded = false;
+    }
+
+
+    // Send message to all clients that a player turn ended
+    io.sockets.emit('nextPlayerTurn', nextTurnData());
+
+    // Send message to current player that he ended his turn
+    socket.emit('endedTurn');
+  }
+
+  function nextTurnData() {
+    return {
+      currentPhase: game.currentPhase,
+      currentPlayerTurn: game.currentPlayerTurn
+    };
+  }
+
+  function fortUpgradeData(affinity, fortValue, gold, hexId) {
+    return {
+      affinity: affinity,
+      fortValue: fortValue,
+      gold: gold,
+      hexId: hexId
+    };
+  }
+
+
+  function refreshData(socket) {
+    currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+    if (game.currentPhase > 0)
+      currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
+
+    if (game.currentPhase == 5)
+      currentArmy.canEndTurn = true;
+
     io.sockets.emit('updateUI', updateArmyData(socket));
   }
-}
 
-function eventLoadGame(game, num) {
-  if (num == 1) {
+  function updateArmyData(socket) {
+    currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-    ownHexesScenario1();
-    buildFortsScenario1();
-    getStacksScenario1();
+    currentArmy.updateIncome();
 
-    game.currentPhase = MOVEMENT_PHASE;
-    game.totalTurn = 5;
-    game.currentPlayerTurn = 0;
-    // Send message to all clients that a player turn ended
-    io.sockets.emit('nextPlayerTurn', nextTurnData());
+    io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));
 
-
-  } else if (num == 2) {
-
-    ownHexesScenario1();
-    buildFortsScenario1();
-    getStacksScenario1();
-
-    recruitNumOfThingsToRack(10, 0); // recruit 10 things to rack
-
-    game.currentPhase = RECRUIT_THINGS_PHASE;
-    game.totalTurn = 5;
-    game.currentPlayerTurn = 0;
-    // Send message to all clients that a player turn ended
-    io.sockets.emit('nextPlayerTurn', nextTurnData());
-
-  } else if (num == 3) {
-    ownHexesScenario1();
-    getStacksScenario1();
-
-    game.currentPhase = MOVEMENT_PHASE;
-    game.totalTurn = 5;
-    game.currentPlayerTurn = 0;
-    // Send message to all clients that a player turn ended
-    io.sockets.emit('nextPlayerTurn', nextTurnData());
+    return {
+      armies: game.armies
+    };
   }
 
-  io.sockets.emit('updateUserLoadGame', num);
-}
-
-function sendAllHexes() {
-  io.sockets.emit('updateAllHexes', game.hexes);
-}
-
-function sendAllForts() {
-  for (var army in game.armies) {
-    io.sockets.emit('updateAllForts', game.armies[army].forts);
-  }
-}
-
-function eventStateInit(socket, user) {
-  console.log("Adding a User");
-  army = new Army(game.users.length, user, 0, 10, socket.id);
-  user.id = socket.id;
-
-  game.users.push(user);
-  game.numberOfPlayers++;
-  game.armies.push(army);
-
-  io.sockets.emit('updateUsers', game.users);
-  createHexTiles();
-  socket.emit('createHexes', game.hexes);
-
-  socket.emit('state.init', initialGameData(socket.id));
-}
-
-function eventDisconnect(socket) {
-  io.sockets.emit('gameOver');
-  game = new Game();
-  game.users.splice(indexById(game.users, socket.id), 1);
-  for (var i = 0; i < game.users.length; i++) {
-    io.sockets.socket(game.users[i]).disconnect();
+  function handleDice(socket) {
+    currentArmy = game.armies[indexById(game.armies, socket.id)];
+    // TODO reply with dice
+    if (true) {
+      // valid dice roll handle here
+      socket.emit('diceRollResult', randomDiceRoll());
+      return;
+    }
+    // Dice roll is invalid
+    socket.emit('error', 'Dice roll invalid at this time!');
+    return false;
   }
 
-  updateClients();
-}
+  function randomDiceRoll() {
+    return Math.floor(Math.random() * 6 + 1);
+  }
 
-function updateClients(socket) {
-  io.sockets.emit('updateUsers', game.users);
-}
+  function recruitNumOfThingsToRack(thingsNum, armyNum) {
+    var thing = game.newRandomThing();
+    // remove from cup
+    game.removeFromCup(thing);
+    // push to rack
+    game.armies[armyNum].rack.push(thing);
 
+    for (var i = thingsNum - 1; i >= 0; i--) {
+      var thing = game.newRandomThing();
+      game.removeFromCup(thing);
+      game.armies[armyNum].rack.push(thing);
+    };
 
+    game.armies[armyNum].freeThings -= thingsNum; // decrement recruitable things
+    game.armies[armyNum].canEndTurn = true;
 
+  }
 
+  function ownHexesScenario1() {
 
-//function for Movement Phase
-// function MovementPhase(socket, hexId) {
-//   currentArmy = game.armies[indexById(game.armies, socket.id)];
+    game.armies[0].ownHex("2,1", game, true);
+    game.armies[0].ownHex("2,0", game, true);
+    game.armies[0].ownHex("2,1", game, true);
+    game.armies[0].ownHex("2,-1", game, true);
+    game.armies[0].ownHex("3,-2", game, true);
+    game.armies[0].ownHex("3,-1", game, true);
+    game.armies[0].ownHex("3,0", game, true);
+    game.armies[0].ownHex("1,2", game, true);
+    game.armies[0].ownHex("1,1", game, true);
+    game.armies[0].ownHex("1,0", game, true);
+    game.armies[0].ownHex("0,1", game, true);
 
-//   if (!currentArmy.canPlay(game, socket)) return;
+    game.armies[1].ownHex("-2,-1", game, true);
+    game.armies[1].ownHex("-2,0", game, true);
+    game.armies[1].ownHex("-1,2", game, true);
+    game.armies[1].ownHex("-3,0", game, true);
+    game.armies[1].ownHex("-3,1", game, true);
+    game.armies[1].ownHex("-3,2", game, true);
+    game.armies[1].ownHex("-2,0", game, true);
+    game.armies[1].ownHex("-1,-1", game, true);
+    game.armies[1].ownHex("-1,-2", game, true);
 
-//   if (game.currentPhase == MOVEMENT_PHASE) {
-//     if ((game.currentPlayerTurn == currentArmy.affinity)) {
-//       socket.emit('highlightMovement', hexId, game);
+    game.armies[2].ownHex("-2,3", game, true);
+    game.armies[2].ownHex("-1,3", game, true);
+    game.armies[2].ownHex("0,3", game, true);
+    game.armies[2].ownHex("0,2", game, true);
+    game.armies[2].ownHex("-1,2", game, true);
+    game.armies[2].ownHex("-1,1", game, true);
 
-//       currentArmy.isMovingStack = true;
-//     } else {
-//       socket.emit('error', "This is not your stack");
-//     }
-//   }
-// }
+    game.armies[3].ownHex("2,-3", game, true);
+    game.armies[3].ownHex("1,-3", game, true);
+    game.armies[3].ownHex("0,-2", game, true);
+    game.armies[3].ownHex("1,-2", game, true);
+    game.armies[3].ownHex("1,-1", game, true);
+    game.armies[3].ownHex("0,0", game, true);
+    game.armies[3].ownHex("2,-2", game, true);
+    game.armies[3].ownHex("3,-3", game, true);
 
-// if (!currentArmy.canPlay(game, socket)) return;
+    sendAllHexes();
+  }
 
-// Each player collects 10 defenders in this faze
-// create new defender
-// place on the clicked hex if owned by player
-// if (currentArmy.canPlaceThing && currentArmy.thingInHand) { // pick from the cup
-//   if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
-// if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
-//   var stack = new Stack(hexId, currentArmy.affinity);
-//   stack.containedDefenders.push(currentArmy.thingInHand);
-//   currentArmy.stacks.push(stack);
-// } else { // stack already exists
-//   // Gets stack already on hexId and adds defender to it
-//   currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders.push(currentArmy.thingInHand);
-// }
+  function buildFortsScenario1() {
 
+    game.armies[0].buildFort("3,-1", 1);
+    game.armies[0].buildFort("3,-2", 2);
+    game.armies[0].buildFort("2,0", 2);
+    game.armies[0].buildFort("2,-1", 2);
+    game.armies[0].buildFort("1,1", 3);
+    game.armies[0].buildFort("1,0", 1);
 
-// send update socket
-// socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
-// empty hand
-// socket.emit('updateHand', null);
+    game.armies[1].buildFort("-2,-1", 3);
+    game.armies[1].buildFort("-2,0", 1);
+    game.armies[1].buildFort("-3,0", 2);
+    game.armies[1].buildFort("3,1", 2);
 
-//   } else {
-//     socket.emit('error', "You do not own this hex!");
-//   }
-// } else {
-//   socket.emit('error', "You need to pick from the cup!");
-// }
+    game.armies[2].buildFort("-2,3", 1);
+    game.armies[2].buildFort("-1,3", 2);
 
-// TODO
-// else if (currentArmy.canBuildFort &&
-//   __indexOf.call(currentArmy.getOwnedHexes(), shape) >= 0) {
-//   console.log("Placing fort location at: " + shape.getId());
-//   currentArmy.buildFortHex(shape, fortImage, boardLayer);
-//   currentArmy.canBuildFort = false;
-//   currentArmy.mustEndTurn = true;
-// }
-// else {
-//   console.log("Select available action item first!");
-//   socket.emit('error', 'Select available action item first!');
-// }
+    game.armies[3].buildFort("1,-3", 2);
+    game.armies[3].buildFort("1,-2", 3);
+    game.armies[3].buildFort("3,-3", 3);
+    game.armies[3].buildFort("2,-2", 1);
+    game.armies[3].buildFort("1,-1", 1);
+    game.armies[3].buildFort("0,0", 2);
 
-function initialGameData(socketId) {
-  return {
-    playerId: socketId,
-    affinity: game.users.length - 1
-  };
-}
+    sendAllForts();
+  }
 
-function publicGameData(socketId) {
-  return {
-    game: game,
-    playerId: socketId
-  };
-}
+  function getStacksScenario1() {
+    var stack1 = new Stack("1,0", game.armies[0].affinity);
+    game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Thing")], "1,0");
+    game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard1")], "1,0");
+    game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "SwampRat")], "1,0");
+    game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Unicorn")], "1,0");
+    game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Bears")], "1,0");
+    game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantSpider")], "1,0");
+    game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "CamelCorps")], "1,0");
+    game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Sandworm")], "1,0");
 
-function publicArmyData(socketId) {
-  currentArmy = game.armies[indexById(game.armies, socketId)];
+    game.removeFromCup(game.cup[indexById(game.cup, "Thing")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "GiantLizard1")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "SwampRat")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "Unicorn")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "Bears")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "GiantSpider")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "CamelCorps")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "Sandworm")]);
 
-  currentArmy.updateIncome();
+    var stack2 = new Stack("1,-1", game.armies[3].affinity);
+    game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Crocodiles")], "1,-1");
+    game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "MountainMen1")], "1,-1");
+    game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard2")], "1,-1");
+    game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "SwampBeast")], "1,-1");
+    game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "KillerRacoon")], "1,-1");
+    game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Farmers1")], "1,-1");
+    game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "WildCat")], "1,-1");
 
-  return {
-    armies: game.armies
-    // playerId: socketId
-  };
-}
+    game.removeFromCup(game.cup[indexById(game.cup, "Crocodiles")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "MountainMen1")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "GiantLizard2")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "SwampBeast")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "KillerRacoon")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "Farmers1")]);
+    game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
+  }
 
-function createHexTiles() {
-  var rows = rows || 8;
-  var cols = cols || 7;
-  var rowIdx;
-  var colIdx;
-  var hexRadius = 75;
-  var strokeColor = "#000";
-  var x;
-  var y;
+  function eventLoadUserData(socket, num) {
+    currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  var mapData = populateHexTiles();
-  // var mapData = populateHexTiles1();
-
-  for (colIdx = 0; colIdx < cols; colIdx++) {
-    for (rowIdx = 1; rowIdx < rows; rowIdx++) {
-      if ((colIdx === 0 && rowIdx == 1) ||
-        (colIdx === 0 && rowIdx == 2) ||
-        (colIdx === 0 && rowIdx == 3) ||
-        (colIdx === 0 && rowIdx == 5) ||
-        (colIdx === 0 && rowIdx == 6) ||
-        (colIdx === 0 && rowIdx == 7) ||
-        (colIdx == 1 && rowIdx == 7) ||
-        (colIdx == 1 && rowIdx == 1) ||
-        (colIdx == 6 && rowIdx == 7) ||
-        (colIdx == 6 && rowIdx == 6) ||
-        (colIdx == 6 && rowIdx == 2) ||
-        (colIdx == 6 && rowIdx == 1))
-        continue;
-
-      //compute x coordinate of hex tile
-      //I did my best to reduce the magic numbers ;)
-      x = hexRadius + rowIdx * hexRadius * 2 - hexRadius / 8;
-      if (rowIdx !== 0) {
-        x = x - rowIdx * hexRadius / 2;
+    // Update the current armies rack
+    socket.emit('updateRack', currentArmy.rack);
+    // Send the current Armies stacks with units in them
+    for (var i in currentArmy.stacks) {
+      socket.emit('updateStack', currentArmy.stacks[i].currentHexId, currentArmy.stacks[i].containedDefenders, currentArmy.affinity);
+    }
+    for (var i in game.armies) {
+      // Send all the stack data, to fill the game board where stacks are
+      for (var j in game.armies[i].stacks) {
+        socket.emit('updateStackAll', game.armies[i].stacks[j].currentHexId, game.armies[i].stacks[j].affinity);
       }
-
-      //compute y coordinate of hex tile
-      y = (rowIdx % 2) ? hexRadius + colIdx * hexRadius * 2 - hexRadius + hexRadius / 8 : hexRadius + colIdx * hexRadius * 2;
-      if (colIdx !== 0) {
-        y = y - colIdx * hexRadius / 4;
-      }
-
-      var x1;
-      var y1;
-
-      if (rowIdx % 2 === 0) {
-        x1 = rowIdx - 4; - colIdx / 2;
-        y1 = colIdx - 1 - rowIdx / 2;
-      } else {
-        x1 = rowIdx - 4; - (colIdx - 1) / 2;
-        y1 = colIdx - 1 - (rowIdx + 1) / 2;
-      }
-
-      var hexagon = new HexTile(x1, y1, mapData.pop());
-
-      game.hexes.push(hexagon);
+      // Update UI for army
+      io.sockets.emit('updateUI', updateArmyData(socket));
     }
   }
-}
 
-function populateHexTiles() {
-  var mapData = [];
+  function eventLoadGame(game, num) {
+    if (num == 1) {
 
-  mapData.push("mountain");
+      ownHexesScenario1();
+      buildFortsScenario1();
+      getStacksScenario1();
 
-  mapData.push("frozenWaste");
-  mapData.push("mountain");
-  mapData.push("forest");
+      game.currentPhase = MOVEMENT_PHASE;
+      game.totalTurn = 5;
+      game.currentPlayerTurn = 0;
+      // Send message to all clients that a player turn ended
+      io.sockets.emit('nextPlayerTurn', nextTurnData());
 
-  mapData.push("desert");
-  mapData.push("desert");
-  mapData.push("jungle");
-  mapData.push("mountain");
-  mapData.push("plains");
-  mapData.push("swamp");
-  mapData.push("sea");
 
-  mapData.push("swamp");
-  mapData.push("forest");
-  mapData.push("frozenWaste");
-  mapData.push("desert");
-  mapData.push("forest");
-  mapData.push("sea");
-  mapData.push("swamp");
+    } else if (num == 2) {
 
-  mapData.push("frozenWaste");
-  mapData.push("desert");
-  mapData.push("plains");
-  mapData.push("swamp");
-  mapData.push("mountain");
-  mapData.push("mountain");
-  mapData.push("forest");
+      ownHexesScenario1();
+      buildFortsScenario1();
+      getStacksScenario1();
 
-  mapData.push("plains");
-  mapData.push("forest");
-  mapData.push("mountain");
-  mapData.push("sea");
-  mapData.push("desert");
-  mapData.push("frozenWaste");
-  mapData.push("plains");
+      recruitNumOfThingsToRack(10, 0); // recruit 10 things to rack
 
-  mapData.push("frozenWaste");
-  mapData.push("jungle");
-  mapData.push("swamp");
-  mapData.push("plains");
-  mapData.push("swamp");
+      game.currentPhase = RECRUIT_THINGS_PHASE;
+      game.totalTurn = 5;
+      game.currentPlayerTurn = 0;
+      // Send message to all clients that a player turn ended
+      io.sockets.emit('nextPlayerTurn', nextTurnData());
 
-  mapData.push("sea");
+    } else if (num == 3) {
+      ownHexesScenario1();
+      getStacksScenario1();
 
-  return mapData;
-}
+      game.currentPhase = MOVEMENT_PHASE;
+      game.totalTurn = 5;
+      game.currentPlayerTurn = 0;
+      // Send message to all clients that a player turn ended
+      io.sockets.emit('nextPlayerTurn', nextTurnData());
+    }
 
-function indexByKey(array, key, value) {
-  for (var i = 0; i < array.length; i++) {
-    if (array[i][key] == value) {
-      return i;
+    io.sockets.emit('updateUserLoadGame', num);
+  }
+
+  function sendAllHexes() {
+    io.sockets.emit('updateAllHexes', game.hexes);
+  }
+
+  function sendAllForts() {
+    for (var army in game.armies) {
+      io.sockets.emit('updateAllForts', game.armies[army].forts);
     }
   }
-  return null;
-}
 
-function indexById(array, value) {
-  return indexByKey(array, "id", value);
-}
+  function eventStateInit(socket, user) {
+    console.log("Adding a User");
+    army = new Army(game.users.length, user, 0, 10, socket.id);
+    user.id = socket.id;
 
-function checkBattleFort(stack) {
-  for (var player in game.armies) {
-    fortOnHex = indexByKey[game.armies[player].forts, "currentHexId", stack.currentHexId];
-    if (fortOnHex)
-      return fortOnHex;
+    game.users.push(user);
+    game.numberOfPlayers++;
+    game.armies.push(army);
+
+    io.sockets.emit('updateUsers', game.users);
+    createHexTiles();
+    socket.emit('createHexes', game.hexes);
+
+    socket.emit('state.init', initialGameData(socket.id));
   }
-  return false;
-}
 
-function checkBattleStack(socket, hexId, affinity) {
-  socket.emit('error', 'stacks' + game.armies[0].stacks);
-  socket.emit('error', 'stacks' + game.armies[1].stacks);
-  socket.emit('error', 'stacks' + game.armies[2].stacks);
-  socket.emit('error', 'stacks' + game.armies[3].stacks);
-  for (var player in game.armies) {
-    contestedStack = game.armies[player].getStackOnHex(hexId);
-    socket.emit('error', "You " + contestedStack);
+  function eventDisconnect(socket) {
+    io.sockets.emit('gameOver');
+    game = new Game();
+    game.users.splice(indexById(game.users, socket.id), 1);
+    for (var i = 0; i < game.users.length; i++) {
+      io.sockets.socket(game.users[i]).disconnect();
+    }
+
+    updateClients();
+  }
+
+  function updateClients(socket) {
+    io.sockets.emit('updateUsers', game.users);
+  }
 
 
-    if (contestedStack && contestedStack.affinity != affinity) {
-      return contestedStack;
+
+
+
+  //function for Movement Phase
+  // function MovementPhase(socket, hexId) {
+  //   currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  //   if (!currentArmy.canPlay(game, socket)) return;
+
+  //   if (game.currentPhase == MOVEMENT_PHASE) {
+  //     if ((game.currentPlayerTurn == currentArmy.affinity)) {
+  //       socket.emit('highlightMovement', hexId, game);
+
+  //       currentArmy.isMovingStack = true;
+  //     } else {
+  //       socket.emit('error', "This is not your stack");
+  //     }
+  //   }
+  // }
+
+  // if (!currentArmy.canPlay(game, socket)) return;
+
+  // Each player collects 10 defenders in this faze
+  // create new defender
+  // place on the clicked hex if owned by player
+  // if (currentArmy.canPlaceThing && currentArmy.thingInHand) { // pick from the cup
+  //   if (indexById(currentArmy.ownedHexes, hexId) !== null) { //own this hex
+  // if (indexById(currentArmy.stacks, hexId) === null) { // no existing stack
+  //   var stack = new Stack(hexId, currentArmy.affinity);
+  //   stack.containedDefenders.push(currentArmy.thingInHand);
+  //   currentArmy.stacks.push(stack);
+  // } else { // stack already exists
+  //   // Gets stack already on hexId and adds defender to it
+  //   currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders.push(currentArmy.thingInHand);
+  // }
+
+
+  // send update socket
+  // socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders);
+  // empty hand
+  // socket.emit('updateHand', null);
+
+  //   } else {
+  //     socket.emit('error', "You do not own this hex!");
+  //   }
+  // } else {
+  //   socket.emit('error', "You need to pick from the cup!");
+  // }
+
+  // TODO
+  // else if (currentArmy.canBuildFort &&
+  //   __indexOf.call(currentArmy.getOwnedHexes(), shape) >= 0) {
+  //   console.log("Placing fort location at: " + shape.getId());
+  //   currentArmy.buildFortHex(shape, fortImage, boardLayer);
+  //   currentArmy.canBuildFort = false;
+  //   currentArmy.mustEndTurn = true;
+  // }
+  // else {
+  //   console.log("Select available action item first!");
+  //   socket.emit('error', 'Select available action item first!');
+  // }
+
+  function initialGameData(socketId) {
+    return {
+      playerId: socketId,
+      affinity: game.users.length - 1
+    };
+  }
+
+  function publicGameData(socketId) {
+    return {
+      game: game,
+      playerId: socketId
+    };
+  }
+
+  function publicArmyData(socketId) {
+    currentArmy = game.armies[indexById(game.armies, socketId)];
+
+    currentArmy.updateIncome();
+
+    return {
+      armies: game.armies
+      // playerId: socketId
+    };
+  }
+
+  function createHexTiles() {
+    var rows = rows || 8;
+    var cols = cols || 7;
+    var rowIdx;
+    var colIdx;
+    var hexRadius = 75;
+    var strokeColor = "#000";
+    var x;
+    var y;
+
+    var mapData = populateHexTiles();
+    // var mapData = populateHexTiles1();
+
+    for (colIdx = 0; colIdx < cols; colIdx++) {
+      for (rowIdx = 1; rowIdx < rows; rowIdx++) {
+        if ((colIdx === 0 && rowIdx == 1) ||
+          (colIdx === 0 && rowIdx == 2) ||
+          (colIdx === 0 && rowIdx == 3) ||
+          (colIdx === 0 && rowIdx == 5) ||
+          (colIdx === 0 && rowIdx == 6) ||
+          (colIdx === 0 && rowIdx == 7) ||
+          (colIdx == 1 && rowIdx == 7) ||
+          (colIdx == 1 && rowIdx == 1) ||
+          (colIdx == 6 && rowIdx == 7) ||
+          (colIdx == 6 && rowIdx == 6) ||
+          (colIdx == 6 && rowIdx == 2) ||
+          (colIdx == 6 && rowIdx == 1))
+          continue;
+
+        //compute x coordinate of hex tile
+        //I did my best to reduce the magic numbers ;)
+        x = hexRadius + rowIdx * hexRadius * 2 - hexRadius / 8;
+        if (rowIdx !== 0) {
+          x = x - rowIdx * hexRadius / 2;
+        }
+
+        //compute y coordinate of hex tile
+        y = (rowIdx % 2) ? hexRadius + colIdx * hexRadius * 2 - hexRadius + hexRadius / 8 : hexRadius + colIdx * hexRadius * 2;
+        if (colIdx !== 0) {
+          y = y - colIdx * hexRadius / 4;
+        }
+
+        var x1;
+        var y1;
+
+        if (rowIdx % 2 === 0) {
+          x1 = rowIdx - 4; - colIdx / 2;
+          y1 = colIdx - 1 - rowIdx / 2;
+        } else {
+          x1 = rowIdx - 4; - (colIdx - 1) / 2;
+          y1 = colIdx - 1 - (rowIdx + 1) / 2;
+        }
+
+        var hexagon = new HexTile(x1, y1, mapData.pop());
+
+        game.hexes.push(hexagon);
+      }
     }
   }
-  return true;
-}
+
+  function populateHexTiles() {
+    var mapData = [];
+
+    mapData.push("mountain");
+
+    mapData.push("frozenWaste");
+    mapData.push("mountain");
+    mapData.push("forest");
+
+    mapData.push("desert");
+    mapData.push("desert");
+    mapData.push("jungle");
+    mapData.push("mountain");
+    mapData.push("plains");
+    mapData.push("swamp");
+    mapData.push("sea");
+
+    mapData.push("swamp");
+    mapData.push("forest");
+    mapData.push("frozenWaste");
+    mapData.push("desert");
+    mapData.push("forest");
+    mapData.push("sea");
+    mapData.push("swamp");
+
+    mapData.push("frozenWaste");
+    mapData.push("desert");
+    mapData.push("plains");
+    mapData.push("swamp");
+    mapData.push("mountain");
+    mapData.push("mountain");
+    mapData.push("forest");
+
+    mapData.push("plains");
+    mapData.push("forest");
+    mapData.push("mountain");
+    mapData.push("sea");
+    mapData.push("desert");
+    mapData.push("frozenWaste");
+    mapData.push("plains");
+
+    mapData.push("frozenWaste");
+    mapData.push("jungle");
+    mapData.push("swamp");
+    mapData.push("plains");
+    mapData.push("swamp");
+
+    mapData.push("sea");
+
+    return mapData;
+  }
+
+  function indexByKey(array, key, value) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i][key] == value) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  function indexById(array, value) {
+    return indexByKey(array, "id", value);
+  }
+
+  function checkBattleFort(stack) {
+    for (var player in game.armies) {
+      fortOnHex = indexByKey[game.armies[player].forts, "currentHexId", stack.currentHexId];
+      if (fortOnHex)
+        return fortOnHex;
+    }
+    return false;
+  }
+
+  function checkBattleStack(socket, hexId, affinity) {
+    socket.emit('error', 'stacks' + game.armies[0].stacks);
+    socket.emit('error', 'stacks' + game.armies[1].stacks);
+    socket.emit('error', 'stacks' + game.armies[2].stacks);
+    socket.emit('error', 'stacks' + game.armies[3].stacks);
+    for (var player in game.armies) {
+      contestedStack = game.armies[player].getStackOnHex(hexId);
+      socket.emit('error', "You " + contestedStack);
+
+
+      if (contestedStack && contestedStack.affinity != affinity) {
+        return contestedStack;
+      }
+    }
+    return true;
+  }
