@@ -80,17 +80,23 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   hexagon.setStackIcon = function(affinity) {
 
-    this.stack = new Kinetic.Image({
-      x: this.getX() - 20,
-      y: this.getY() - 20,
-      id: "stack" + this.getId(),
-      name: "stack" + affinity,
-      image: StackIconArray[affinity],
-      width: 40,
-      height: 40
-    });
+    if (this.stackIcon) {
+      this.stackIcon.setFillPatternImage(StackIconArray[affinity]);
 
-    boardLayer.add(this.stack);
+    } else {
+      this.stack = new Kinetic.Image({
+        x: this.getX() - 20,
+        y: this.getY() - 20,
+        id: "stack" + this.getId(),
+        name: "stack" + affinity,
+        image: StackIconArray[affinity],
+        // draggable: true,
+        width: 40,
+        height: 40
+      });
+      boardLayer.add(this.stack);
+    }
+
     this.stack.moveToTop();
     this.stack.show();
     boardLayer.draw();
@@ -108,7 +114,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
     // remove stack
     this.stack.remove();
-    delete this.stack.remove();
+    delete this.stack;
     boardLayer.draw();
   };
 
@@ -182,7 +188,6 @@ function Stack(hex, stackIcon, affinity, boardLayer) {
     width: 50,
     height: 50
   });
-
 
   stack.containedDefenders = new Array();
   stack.setId("stack");
