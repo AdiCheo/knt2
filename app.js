@@ -1,5 +1,9 @@
 /* Globals */
 
+//TODO: 
+//Figure out ending turn permissions
+
+
 var SETUP_PHASE = -1;
 var SETUP_RECRUITMENT_PHASE = 0;
 var GOLD_COLLECTION_PHASE = 1;
