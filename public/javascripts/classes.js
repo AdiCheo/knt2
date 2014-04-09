@@ -81,7 +81,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.setStackIcon = function(affinity) {
 
     if (this.stackIcon) {
-      this.stackIcon.setFillPatternImage(StackIconArray[affinity]);
+      this.stackIcon.setImage(StackIconArray[affinity]);
 
     } else {
       this.stack = new Kinetic.Image({

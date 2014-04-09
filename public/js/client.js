@@ -240,8 +240,10 @@ function updateSelectedIcon(thing) { //updateSelectedIcon
   highlightHex(boardLayer.get("#" + thing)[0]);
   if (thing.slice(0, 5) == "stack")
     boardLayer.get('#selected')[0].setImage(StackIconArray[localAffinity]);
-  else
+  else if (thing)
     boardLayer.get('#selected')[0].setImage(thingImagesArray[thing + "Image"]);
+  else
+    boardLayer.get('#selected')[0].hide();
 }
 
 function highlightMovement() {
