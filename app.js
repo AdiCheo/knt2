@@ -666,13 +666,12 @@ function eventClickedOnHexMovePhase(socket, hexId) {
         socket.emit('error', "No more movement points!");
       }
     } else if (currentArmy.thingInHand.type == "stack") {
-      // oldHexId = currentArmy.thingInHand.currentHexId;
 
+      oldHexId = currentArmy.thingInHand.currentHexId;
       currentArmy.thingInHand.moveStack(hexId);
 
-      // // Remove old stack
-      // socket.emit('updateStack', oldHexId, 0, -1);
-      // io.sockets.emit('updateStackAll', oldHexId, -1);
+      // Remove old stack
+      io.sockets.emit('removeStackAll', oldHexId);
 
       // send update socket
       io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);

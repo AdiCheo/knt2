@@ -157,6 +157,11 @@ function initConnection() {
       updateStackAll(hexId, affinity);
     });
 
+    iosocket.on('removeStackAll', function(hexId) {
+      console.log("Remove stack on hex " + hexId);
+      removeStackAll(hexId);
+    });
+
     iosocket.on('updateStack', function(hexId, stackThings, affinity) {
       console.log("updateStack" + stackThings);
       updateStack(hexId, stackThings, affinity);
@@ -253,7 +258,13 @@ function updateStackAll(hexId, affinity) {
     boardLayer.get('#' + hexId)[0].setStackIcon(null);
   }
   iosocket.emit('updateUI');
+}
 
+function removeStackAll(hexId) {
+  // place stack icon for particular army on hexId
+  console.log("Removing stack at " + hexId);
+  boardLayer.get('#' + hexId)[0].removeStack();
+  iosocket.emit('updateUI');
 }
 
 function updateStack(hexId, stackThings, affinity) {
