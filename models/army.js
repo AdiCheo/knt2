@@ -123,20 +123,26 @@ function Army(affinity, name, income, gold, id) {
     return false;
   };
 
-  this.findDefenderInStacks = function(defenderName) {
-    return findThing(this.getStackOnHex(defender.currentHexId), defenderName);
+
+  this.putDefenderInHand = function(defenderName, hexId) {
+    //
+    this.thingInHand = this.findDefenderInStacks(defenderName, hexId);
+  };
+
+  this.findDefenderInStacks = function(defenderName, hexId) {
+    if (hexId) {
+      stack = this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
+      if (stack) {
+        return stack[indexByKey(this.stacks, "name", defenderName)];
+      }
+    }
+    console.log("Defender " + defenderName + " not found in any stack belonging to this army");
+    return null;
   };
 
   this.findDefenderInRack = function(defenderName) {
-    for (var i in this.rack) {
-      if (this.rack[i].name == defenderName)
-        return this.rack[i];
-    }
-    return false;
-  };
-
-  this.findStackContainingDefender = function(defender) {
-
+    // returns null if not found
+    return this.rack[indexByKey(this.stacks, "name", defenderName)];
   };
 
   this.removeDefenderFromStack = function(defender) {

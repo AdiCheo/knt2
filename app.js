@@ -182,7 +182,6 @@ io.sockets.on('connection', function(socket) {
 
   //
   socket.on('defenderClicked', function(defenderName) {
-    // eventDefenderMovePhase(socket, defenderName); //testx Move
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {
       eventClickedOnDefenderOnRack(socket, defenderName);
     }
@@ -194,13 +193,17 @@ io.sockets.on('connection', function(socket) {
   /*** MOVEMENT_PHASE - 5 ***/
   // Defender Listener
   socket.on('defenderClicked', function(defenderName, hexId) {
-    // eventDefenderMovePhase(socket, defenderName); //testx Move
     if (game.currentPhase == MOVEMENT_PHASE) {
       eventDefenderMovePhase(socket, defenderName, hexId);
     }
   });
 
-  // Stack listener TODO
+  // Stack listener
+  socket.on('stackClicked', function(defenderName, hexId) {
+    if (game.currentPhase == MOVEMENT_PHASE) {
+      eventStackMovePhase(socket, defenderName, hexId);
+    }
+  });
 
   // Hex Listener
   socket.on('hexClicked', function(hexId) {
@@ -566,15 +569,27 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
 /*********** MOVEMENT_PHASE ***********/
 
 // Clicking on a defender that's on the board to move him
-function eventDefenderMovePhase(socket, defenderName) {
+function eventDefenderMovePhase(socket, defenderName, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   // Find the selected defender in the current armies stacks
-
-  currentArmy.thingInHand = currentArmy.findDefenderInStacks(defenderName);
+  currentArmy.putDefenderInHand();
 
   if (!currentArmy.thingInHand)
     socket.emit('error', 'Choose a defender on the board only!');
+
+  socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
+}
+
+// Clicking on a stack that's on the board to move him TODO
+function eventStackMovePhase(socket, stackName) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  // Find the selected stack in the current armies stacks
+  currentArmy.thingInHand = currentArmy.findstackInStacks(stackName);
+
+  if (!currentArmy.thingInHand)
+    socket.emit('error', 'Choose a stack on the board only!');
 
   socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
 }
@@ -726,6 +741,24 @@ function randomDiceRoll() {
   return Math.floor(Math.random() * 6 + 1);
 }
 
+function recruitNumOfThingsToRack(thingsNum, armyNum) {
+  var thing = game.newRandomThing();
+  // remove from cup
+  game.removeFromCup(thing);
+  // push to rack
+  game.armies[armyNum].rack.push(thing);
+
+  for (var i = thingsNum - 1; i >= 0; i--) {
+    var thing = game.newRandomThing();
+    game.removeFromCup(thing);
+    game.armies[armyNum].rack.push(thing);
+  };
+
+  game.armies[armyNum].freeThings -= thingsNum; // decrement recruitable things
+  game.armies[armyNum].canEndTurn = true;
+
+}
+
 function ownHexesScenario1() {
 
   game.armies[0].ownHex("2,1", game, true);
@@ -854,11 +887,13 @@ function eventLoadUserData(socket, num) {
   for (var i in currentArmy.stacks) {
     socket.emit('updateStack', currentArmy.stacks[i].currentHexId, currentArmy.stacks[i].containedDefenders, currentArmy.affinity);
   }
-  // Send all the stack data, to fill the game board where stacks are
   for (var i in game.armies) {
+    // Send all the stack data, to fill the game board where stacks are
     for (var j in game.armies[i].stacks) {
       socket.emit('updateStackAll', game.armies[i].stacks[j].currentHexId, game.armies[i].stacks[j].affinity);
     }
+    // Update UI for army
+    io.sockets.emit('updateUI', updateArmyData(socket));
   }
 }
 
@@ -866,7 +901,7 @@ function eventLoadGame(game, num) {
   if (num == 1) {
     loadScenario1();
 
-    game.currentPhase = 1;
+    game.currentPhase = MOVEMENT_PHASE;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
@@ -876,23 +911,9 @@ function eventLoadGame(game, num) {
   } else if (num == 2) {
     loadScenario1();
 
-    var thing = game.newRandomThing();
-    // remove from cup
-    game.removeFromCup(thing);
-    // push to rack
-    game.armies[0].rack.push(thing);
+    recruitNumOfThingsToRack(10, 0); // recruit 10 things to rack
 
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-
-    game.currentPhase = 3;
+    game.currentPhase = RECRUIT_THINGS_PHASE;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
@@ -980,12 +1001,6 @@ function nextTurnData() {
   };
 }
 
-
-
-
-
-
-
 //function for collecting the gold
 // function eventCollectGoldButton(socket) {
 //   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -1018,14 +1033,6 @@ function updatedGoldData(affinity, gold) {
 //   }
 // }
 
-
-
-
-
-
-
-
-
 // if (!currentArmy.canPlay(game, socket)) return;
 
 // Each player collects 10 defenders in this faze
@@ -1048,14 +1055,12 @@ function updatedGoldData(affinity, gold) {
 // empty hand
 // socket.emit('updateHand', null);
 
-
 //   } else {
 //     socket.emit('error', "You do not own this hex!");
 //   }
 // } else {
 //   socket.emit('error', "You need to pick from the cup!");
 // }
-
 
 // TODO
 // else if (currentArmy.canBuildFort &&

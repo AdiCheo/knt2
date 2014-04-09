@@ -253,6 +253,10 @@ boardLayer.on('click tap', function(e) {
     console.log("List " + shape.getId());
     hex = shape.hex;
     console.log(hex);
+
+    console.log("emit:stackClicked, " + hex.getId());
+    iosocket.emit('stackClicked', hex.getId());
+
     if (!hex.defendersVisible) {
       console.log("Showing defenders " + shape.getId());
       hex.showDefenders();
