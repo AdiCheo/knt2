@@ -402,8 +402,8 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
           if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
 
             // Update the view for all players
-            io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-            socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
+            // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+            io.sockets.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
 
 
             if (currentArmy.freeThings > 0)
@@ -433,8 +433,8 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
 
           // Update the view for all players
-          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-          socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
+          // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+          io.sockets.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
 
         } else if (currentArmy.thingInHand.type == "specialIncome") {
           // TODO: If a special income thing, place somewhere on the hex
@@ -573,7 +573,7 @@ function eventDefenderMovePhase(socket, defenderName, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   // Find the selected defender in the current armies stacks
-  currentArmy.putDefenderInHand();
+  currentArmy.putDefenderInHand(defenderName, hexId);
 
   if (!currentArmy.thingInHand)
     socket.emit('error', 'Choose a defender on the board only!');
@@ -626,12 +626,9 @@ function eventClickedOnHexMovePhase(socket, hexId) {
               removeFromThingsArray(currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId), currentArmy.thingInHand);
 
               io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId).containedDefenders, currentArmy.affinity);
-              io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
 
               // send update socket
-              // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-              socket.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
-              io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+              io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
 
               // empty hand
               socket.emit('updateHand', null);
