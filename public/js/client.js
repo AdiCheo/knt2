@@ -258,7 +258,7 @@ function updateStackAll(hexId, affinity) {
 
 function updateStack(hexId, stackThings, affinity) {
   console.log("Stack Tghing length: " + stackThings.length);
-  console.log("The stack icon " + boardLayer.get('#stack' + hexId)[0]);
+  console.log(boardLayer.get('#stack' + hexId)[0]);
   // update stack icons
   if (stackThings.length === 0) {
     console.log("Stack is empty!");
