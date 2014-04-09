@@ -420,12 +420,14 @@ function Game() {
         this.currentPhase = 1;
         console.log("New phase cycle. Moving to phase: " + this.currentPhase);
       } else if (this.totalTurn == 4) {
-        this.currentPhase = 0;
-        // this.currentPhase = 1;
+        // this.currentPhase = 0;
+        this.currentPhase = 1;
         console.log("Moving to phase: " + this.currentPhase);
       } else {
         this.currentPhase++;
         // Skip Phase 2 (Hero Recruitment)
+        if (this.currentPhase === 0)
+          this.currentPhase = 1;
         // if (this.currentPhase == 1)
         //   this.currentPhase = 5;
         if (this.currentPhase == 2)
