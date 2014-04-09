@@ -687,8 +687,9 @@ function moveStackBattle(socket, currentArmy, oldHexId, newHexId) {
   io.sockets.emit('removeStackAll', oldHexId);
 
   // send update socket
-  io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
-  io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+  io.sockets.emit('updateStackBattle', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
+  io.sockets.emit('updateStackAllBattle', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+  io.sockets.emit('error', "Battle!");
 
   // empty hand
   currentArmy.thingInHand = null;
