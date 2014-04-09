@@ -683,7 +683,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
       game.currentPhase = "exploration";
       moveStack(socket, currentArmy, oldHexId, hexId);
 
-      currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+      // currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
     }
     // If hexID has an opponent's stack
