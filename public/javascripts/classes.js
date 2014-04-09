@@ -80,22 +80,42 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   hexagon.setStackIcon = function(affinity) {
 
-    var stack = new Kinetic.Image({
-      x: this.getX() - 20,
-      y: this.getY() - 20,
-      id: "stack" + this.getId(),
-      name: "stack" + affinity,
-      image: StackIconArray[affinity],
-      width: 40,
-      height: 40
-    });
+    if (this.stackIcon) {
+      this.stackIcon.setFillPatternImage(StackIconArray[affinity]);
 
-    boardLayer.add(stack);
-    stack.moveToTop();
-    stack.show();
+    } else {
+      this.stack = new Kinetic.Image({
+        x: this.getX() - 20,
+        y: this.getY() - 20,
+        id: "stack" + this.getId(),
+        name: "stack" + affinity,
+        image: StackIconArray[affinity],
+        // draggable: true,
+        width: 40,
+        height: 40
+      });
+      boardLayer.add(this.stack);
+    }
+
+    this.stack.moveToTop();
+    this.stack.show();
     boardLayer.draw();
 
-    stack.hex = hexagon;
+    this.stack.hex = hexagon;
+  };
+
+  hexagon.removeStack = function() {
+    // Remove old icons
+    for (var i in this.containDefenders) {
+      this.containDefenders[i].remove();
+      delete this.containDefenders[i];
+    }
+    this.containDefenders = [];
+
+    // remove stack
+    this.stack.remove();
+    delete this.stack;
+    boardLayer.draw();
   };
 
   hexagon.addThingIcon = function(thingName, index) {
@@ -168,7 +188,6 @@ function Stack(hex, stackIcon, affinity, boardLayer) {
     width: 50,
     height: 50
   });
-
 
   stack.containedDefenders = new Array();
   stack.setId("stack");
