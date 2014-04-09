@@ -67,6 +67,7 @@ var io = socket.listen(server);
 // The game model that holds all game data
 // Includes users, armies, units, tiles, turns, phases
 var game = new Game();
+var NPCArmy = new Army(4, "npc", 0, 0, 4);
 
 // Below is when a new connection with a client is established
 io.sockets.on('connection', function(socket) {
@@ -422,8 +423,6 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
             // remove that thing from the cup
             game.removeFromCup(currentArmy.thingInHand);
 
-
-
             // empty hand
             socket.emit('updateHand', null);
 
@@ -639,6 +638,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
       // check if hex is unexplored
       if (!currentHex.isExplored) {
+        currentHex.isExplored = true;
         // The hex is not explored, the dice needs to be rolled
 
         // player goes on unexplored hex, then they must roll. If they roll a 1 or 6 then own hex and add marker
@@ -646,9 +646,10 @@ function eventClickedOnHexMovePhase(socket, hexId) {
         //during that battle, you can bribe the creatures by paying as much gold as their combat value 
         //if you fight for at least one combat round, then you cannot bribe anymore 
         //affinity = 4 and the army NPC 
-        army[currentPlayer].mustRollDice = true;
-        //you need to roll the dice for the unexplored hex 
+        currentArmy.mustRollDice = true;
+        // you need to roll the dice for the unexplored hex 
         // socket.emit('needRollDice', randomDiceRoll());
+        game.currentPhase = "exploration";
 
         currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
@@ -660,16 +661,10 @@ function eventClickedOnHexMovePhase(socket, hexId) {
             currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
             // Remove the defender in hand from it's current stack
-            console.log("Old Hex Id: " + oldHexId);
-            console.log("Old Stack: " + currentArmy.getStackOnHex(oldHexId));
-
-            for (var defender in currentArmy.getStackOnHex(oldHexId).containedDefenders) {
-              console.log("Defender Contained: " + currentArmy.getStackOnHex(oldHexId).containedDefenders[defender].name);
-            }
-            console.log("Thing in hand: " + currentArmy.thingInHand.name);
-
             currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
 
+            // Remove old stack
+            io.sockets.emit('removeStackAll', oldHexId);
             io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
 
             // send update socket

@@ -89,10 +89,6 @@ function initConnection() {
       fortUpgraded(fortUpgradeData);
     });
 
-    // iosocket.on('needRollDice', function(fortUpgradeData) {
-    //   fortUpgraded(fortUpgradeData);
-    // });
-
     iosocket.on('diceRollResult', function(diceValue) {
       console.log('Dice result:' + diceResult);
       handleDiceResult(diceValue);
@@ -256,8 +252,6 @@ function highlightMovement() {
 }
 
 function updateStackAll(hexId, affinity) {
-  if (boardLayer.get('#stack' + hexId)[0])
-    boardLayer.get('#' + hexId)[0].removeStack();
   // place stack icon for particular army on hexId
   console.log("Army " + affinity + " placing stack at " + hexId);
   if (affinity !== localAffinity) {
@@ -269,7 +263,8 @@ function updateStackAll(hexId, affinity) {
 function removeStackAll(hexId) {
   // place stack icon for particular army on hexId
   console.log("Removing stack at " + hexId);
-  boardLayer.get('#' + hexId)[0].removeStack();
+  if (boardLayer.get('#stack' + hexId)[0])
+    boardLayer.get('#' + hexId)[0].removeStack();
 
 }
 
@@ -277,7 +272,6 @@ function updateStack(hexId, stackThings, affinity) {
 
   if (boardLayer.get('#stack' + hexId)[0]) {
     boardLayer.get('#' + hexId)[0].removeStack();
-
   }
 
   boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
