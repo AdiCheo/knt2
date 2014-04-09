@@ -309,6 +309,7 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
       io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
       // currentArmy.mustEndTurn = true;
       currentArmy.canChooseHex = false;
+      io.sockets.emit('updateUI', updateArmyData(socket));
     } else {
       socket.emit('error', 'This hex cannot be owned!');
     }
@@ -317,6 +318,7 @@ function eventClickedOnHexSetupPhase(socket, hexId) {
       io.sockets.emit('updateForts', hexId, currentArmy.affinity);
       currentArmy.mustEndTurn = true;
       currentArmy.canBuildFort = false;
+      io.sockets.emit('updateUI', updateArmyData(socket));
     } else {
       socket.emit('error', "Cannot build fort here!");
     }
@@ -669,7 +671,7 @@ function fortUpgradeData(affinity, fortValue, gold, hexId) {
 }
 
 function updateArmyData(socket) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
+  currentArmy = game.armies[indexById(game.armies, socketId)];
 
   currentArmy.updateIncome();
 
@@ -686,7 +688,9 @@ function updateArmyData(socket) {
     currentArmy.thingsPurchased = 0;
   }
 
-  // io.sockets.emit('updateUI', publicArmyData(socket));
+  return {
+    armies: game.armies
+  };
 }
 
 function handleDice(socket) {
@@ -840,7 +844,6 @@ function eventLoadUserData(socket, num) {
       socket.emit('updateStackAll', game.armies[i].stacks[j].currentHexId, game.armies[i].stacks[j].affinity);
     }
   }
-
 }
 
 function eventLoadGame(game, num) {
@@ -1064,6 +1067,10 @@ function publicGameData(socketId) {
 }
 
 function publicArmyData(socketId) {
+  currentArmy = game.armies[indexById(game.armies, socketId)];
+
+  currentArmy.updateIncome();
+
   return {
     armies: game.armies
     // playerId: socketId
