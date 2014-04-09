@@ -828,10 +828,17 @@ function loadScenario1(num) {
 function eventLoadUserData(socket, num) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  //send update rack socket
+  // Update the current armies rack
   socket.emit('updateRack', currentArmy.rack);
+  // Send the current Armies stacks with units in them
   for (var i in currentArmy.stacks) {
     socket.emit('updateStack', currentArmy.stacks[i].currentHexId, currentArmy.stacks[i].containedDefenders, currentArmy.affinity);
+  }
+  // Send all the stack data, to fill the game board where stacks are
+  for (var i in game.armies) {
+    for (var j in game.armies[i].stacks) {
+      socket.emit('updateStackAll', game.armies[i].stacks[j].currentHexId, game.armies[i].stacks[j].affinity);
+    }
   }
 
 }

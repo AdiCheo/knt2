@@ -153,9 +153,9 @@ function initConnection() {
       updateStackAll(hexId, affinity);
     });
 
-    iosocket.on('updateStack', function(hexId, stackThings) {
+    iosocket.on('updateStack', function(hexId, stackThings, affinity) {
       console.log("updateStack" + stackThings);
-      updateStack(hexId, stackThings);
+      updateStack(hexId, stackThings, affinity);
     });
 
     iosocket.on('updateUI', function(armyData) {
