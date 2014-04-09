@@ -75,7 +75,13 @@ function Army(affinity, name, income, gold, id) {
     }
 
     defender.containerId = stack.currentHexId;
-    stack.containedDefenders.push(defender);
+
+    if (stack.containedDefenders.length == 10) {
+      return false;
+    } else {
+      stack.containedDefenders.push(defender);
+    }
+    return true;
   };
 
   this.getStackOnHex = function(hexId) {
