@@ -640,7 +640,16 @@ function eventClickedOnHexMovePhase(socket, hexId) {
       // check if hex is unexplored
       if (!currentHex.isExplored) {
         // The hex is not explored, the dice needs to be rolled
-        // army[currentPlayer].mustRollDice = true;
+
+        // player goes on unexplored hex, then they must roll. If they roll a 1 or 6 then own hex and add marker
+        //if the roll is anything else, it is defended, game picks this amount of defenders from the cup and places them on that hex
+        //during that battle, you can bribe the creatures by paying as much gold as their combat value 
+        //if you fight for at least one combat round, then you cannot bribe anymore 
+        //affinity = 4 and the army NPC 
+        army[currentPlayer].mustRollDice = true;
+        //you need to roll the dice for the unexplored hex 
+        // socket.emit('needRollDice', randomDiceRoll());
+
         currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
       } else {
@@ -845,11 +854,15 @@ function fortUpgradeData(affinity, fortValue, gold, hexId) {
   };
 }
 
+
 function refreshData(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   if (game.currentPhase > 0)
     currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
+
+  if (game.currentPhase == 5)
+    currentArmy.canEndTurn = true;
 
   io.sockets.emit('updateUI', updateArmyData(socket));
 }

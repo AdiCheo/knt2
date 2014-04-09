@@ -89,6 +89,10 @@ function initConnection() {
       fortUpgraded(fortUpgradeData);
     });
 
+    // iosocket.on('needRollDice', function(fortUpgradeData) {
+    //   fortUpgraded(fortUpgradeData);
+    // });
+
     iosocket.on('diceRollResult', function(diceValue) {
       console.log('Dice result:' + diceResult);
       handleDiceResult(diceValue);
