@@ -76,7 +76,7 @@ io.sockets.on('connection', function(socket) {
 
   // Load game scenarios
   socket.on('loadGame', function(num) {
-    eventLoadGame(num);
+    eventLoadGame(game, num);
   });
 
   // helper to load user specific data
@@ -836,7 +836,7 @@ function eventLoadUserData(socket, num) {
 
 }
 
-function eventLoadGame(num) {
+function eventLoadGame(game, num) {
   if (num == 1) {
     loadScenario1();
 
