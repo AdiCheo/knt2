@@ -182,7 +182,6 @@ io.sockets.on('connection', function(socket) {
 
   //
   socket.on('defenderClicked', function(defenderName) {
-    // eventDefenderMovePhase(socket, defenderName); //testx Move
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {
       eventClickedOnDefenderOnRack(socket, defenderName);
     }
@@ -194,13 +193,17 @@ io.sockets.on('connection', function(socket) {
   /*** MOVEMENT_PHASE - 5 ***/
   // Defender Listener
   socket.on('defenderClicked', function(defenderName, hexId) {
-    // eventDefenderMovePhase(socket, defenderName); //testx Move
     if (game.currentPhase == MOVEMENT_PHASE) {
       eventDefenderMovePhase(socket, defenderName, hexId);
     }
   });
 
-  // Stack listener TODO
+  // Stack listener
+  socket.on('stackClicked', function(defenderName, hexId) {
+    if (game.currentPhase == MOVEMENT_PHASE) {
+      eventStackMovePhase(socket, defenderName, hexId);
+    }
+  });
 
   // Hex Listener
   socket.on('hexClicked', function(hexId) {
@@ -565,15 +568,27 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
 /*********** MOVEMENT_PHASE ***********/
 
 // Clicking on a defender that's on the board to move him
-function eventDefenderMovePhase(socket, defenderName) {
+function eventDefenderMovePhase(socket, defenderName, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   // Find the selected defender in the current armies stacks
-
-  currentArmy.thingInHand = currentArmy.findDefenderInStacks(defenderName);
+  currentArmy.thingInHand = currentArmy.findDefenderInStacks(defenderName, hexId);
 
   if (!currentArmy.thingInHand)
     socket.emit('error', 'Choose a defender on the board only!');
+
+  socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
+}
+
+// Clicking on a stack that's on the board to move him TODO
+function eventStackMovePhase(socket, stackName) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  // Find the selected stack in the current armies stacks
+  currentArmy.thingInHand = currentArmy.findstackInStacks(stackName);
+
+  if (!currentArmy.thingInHand)
+    socket.emit('error', 'Choose a stack on the board only!');
 
   socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
 }

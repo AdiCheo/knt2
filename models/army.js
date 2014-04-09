@@ -112,8 +112,17 @@ function Army(affinity, name, income, gold, id) {
     return false;
   };
 
-  this.findDefenderInStacks = function(defenderName) {
-    return this.findThing(this.getStackOnHex(defenderName.currentHexId), defenderName);
+
+  this.putDefenderInHand = function(defenderName, hexId) {
+    //
+    this.thingInHand = this.findDefenderInStacks(defenderName, hexId);
+  };
+
+  this.findDefenderInStacks = function(defenderName, hexId) {
+    if (hexId) {
+      // TODO
+    } else
+      return this.findThing(this.getStackOnHex(defenderName.currentHexId), defenderName);
   };
 
   this.findDefenderInRack = function(defenderName) {
