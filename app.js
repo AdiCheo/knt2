@@ -889,7 +889,7 @@ function eventLoadGame(game, num) {
   if (num == 1) {
     loadScenario1();
 
-    game.currentPhase = 1;
+    game.currentPhase = MOVEMENT_PHASE;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
