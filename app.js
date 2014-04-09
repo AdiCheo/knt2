@@ -671,7 +671,7 @@ function fortUpgradeData(affinity, fortValue, gold, hexId) {
 }
 
 function updateArmyData(socket) {
-  currentArmy = game.armies[indexById(game.armies, socketId)];
+  currentArmy = game.armies[indexById(game.armies, socket)];
 
   currentArmy.updateIncome();
 

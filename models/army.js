@@ -98,7 +98,7 @@ function Army(affinity, name, income, gold, id) {
   this.findThing = function(array, thingName) {
     for (var i in array) {
       console.log("Thing Name: " + thingName + " " + array[i]);
-      if (array[i] == thingName) {
+      if (array[i].name == thingName.name) {
         return array[i];
       }
     }
