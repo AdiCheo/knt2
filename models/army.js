@@ -86,10 +86,10 @@ function Army(affinity, name, income, gold, id) {
     return false;
   };
 
-  this.removeFromRack = function(thingName) {
+  this.removeFromRack = function(thing) {
     for (var i in this.rack) {
-      if (this.rack[i] == thingName) {
-        console.log("Removing " + thingName + " from rack");
+      if (this.rack[i].name == thing.name) {
+        console.log("Removing " + thing + " from rack");
         this.rack.splice(i, 1);
       }
     }
@@ -98,7 +98,7 @@ function Army(affinity, name, income, gold, id) {
   this.findThing = function(array, thingName) {
     for (var i in array) {
       console.log("Thing Name: " + thingName + " " + array[i]);
-      if (array[i].name == thingName.name) {
+      if (array[i].name == thingName) {
         return array[i];
       }
     }
@@ -107,12 +107,15 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.findDefenderInStacks = function(defenderName) {
-    for (var i in this.stacks) {
-      if (this.findThing(this.stacks[i], defenderName))
-        return this.findThing(this.stacks[i].containedDefenders, defenderName);
-    }
+    return findThing(this.getStackOnHex(defender.currentHexId), defenderName);
 
-    return false;
+    // for (var i in this.stacks) {
+    //   var defender = this.findThing(this.stacks[i], defenderName);
+    //   if (defender)
+    //     return defender;
+    // }
+
+    // return false;
   };
 
   this.findDefenderInRack = function(defenderName) {

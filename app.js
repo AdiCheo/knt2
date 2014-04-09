@@ -399,7 +399,7 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
           currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId);
 
           // Update the view for all players
-          // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
           socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
 
         } else if (currentArmy.thingInHand.type == "specialIncome") {
@@ -597,8 +597,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
             removeFromThingsArray(currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId), currentArmy.thingInHand);
 
             io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId).containedDefenders, currentArmy.affinity);
-
-            // io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+            io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
 
             currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId);
           }
@@ -610,6 +609,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
           // send update socket
           // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
           socket.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
+          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
 
           // empty hand
           socket.emit('updateHand', null);
@@ -621,9 +621,8 @@ function eventClickedOnHexMovePhase(socket, hexId) {
         socket.emit('error', "No more movement points!");
       }
 
-      // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
       currentArmy.thingInHand = false;
-      currentArmy.canPlaceThing = false;
+      // currentArmy.canPlaceThing = false;
     } else {
       socket.emit('error', "You cannot move this thing.");
     }
