@@ -693,6 +693,48 @@ function eventUpgradeFort(socket, hexId) {
   }
 }
 
+function eventEndTurnClicked(socket) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (game.currentPlayerTurn != currentArmy.affinity) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (currentArmy.thingInHand) {
+    socket.emit('error', "You have a thing in hand, place it first!");
+    return;
+  }
+
+  if (!currentArmy.mustEndTurn && !currentArmy.canEndTurn) {
+    socket.emit('error', "You cannot end your turn yet!");
+    return;
+  }
+
+  game.nextPlayerTurn(currentArmy);
+  currentArmy.mustEndTurn = false;
+  currentArmy.canEndTurn = false;
+  currentArmy.thingsPurchased = 0;
+
+  //reset the fort upgrade flags to false
+  for (var i in currentArmy.forts) {
+    currentArmy.forts[i].hasBeenUpgraded = false;
+  }
+
+  // Send message to all clients that a player turn ended
+  io.sockets.emit('nextPlayerTurn', nextTurnData());
+
+  // Send message to current player that he ended his turn
+  socket.emit('endedTurn');
+}
+
+function nextTurnData() {
+  return {
+    currentPhase: game.currentPhase,
+    currentPlayerTurn: game.currentPlayerTurn
+  };
+}
+
 function fortUpgradeData(affinity, fortValue, gold, hexId) {
   return {
     affinity: affinity,
@@ -961,42 +1003,7 @@ function updateClients(socket) {
   io.sockets.emit('updateUsers', game.users);
 }
 
-function eventEndTurnClicked(socket) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (game.currentPlayerTurn != currentArmy.affinity) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
-
-  if (currentArmy.thingInHand) {
-    socket.emit('error', "You have a thing in hand, place it first!");
-    return;
-  }
-
-  game.nextPlayerTurn(currentArmy);
-  currentArmy.mustEndTurn = false;
-  currentArmy.canEndTurn = false;
-  currentArmy.thingsPurchased = 0;
-
-  //reset the fort upgrade flags to false
-  for (var i in currentArmy.forts) {
-    currentArmy.forts[i].hasBeenUpgraded = false;
-  }
-
-  // Send message to all clients that a player turn ended
-  io.sockets.emit('nextPlayerTurn', nextTurnData());
-
-  // Send message to current player that he ended his turn
-  socket.emit('endedTurn');
-}
-
-function nextTurnData() {
-  return {
-    currentPhase: game.currentPhase,
-    currentPlayerTurn: game.currentPlayerTurn
-  };
-}
 
 //function for collecting the gold
 // function eventCollectGoldButton(socket) {
