@@ -461,32 +461,33 @@ function eventClickedOnRack(socket) {
   if (currentArmy.thingInHand) {
 
     // push to rack
-    currentArmy.rack.push(currentArmy.thingInHand);
+    if (currentArmy.addThingToRack(currentArmy.thingInHand)) {
+      //send update rack socket
+      socket.emit('updateRack', currentArmy.rack);
 
-    //send update rack socket
-    socket.emit('updateRack', currentArmy.rack);
+      if (currentArmy.freeThings > 0)
+        currentArmy.freeThings--; // decrement recruitable things
 
-    if (currentArmy.freeThings > 0)
-      currentArmy.freeThings--; // decrement recruitable things
+      if (currentArmy.freeThings === 0)
+        currentArmy.canEndTurn = true;
 
-    if (currentArmy.freeThings === 0)
-      currentArmy.canEndTurn = true;
+      // If placing last free element in phase 0, must end turn
+      if (game.currentPhase === 0 && !currentArmy.freeThings) {
+        currentArmy.mustEndTurn = true;
+      }
 
-    // If placing last free element in phase 0, must end turn
-    if (game.currentPhase === 0 && !currentArmy.freeThings) {
-      currentArmy.mustEndTurn = true;
+      // remove that thing from the cup
+      game.removeFromCup(currentArmy.thingInHand);
+
+      io.sockets.emit('updateUI', updateArmyData(socket));
+
+      // empty hand
+      socket.emit('updateHand', null);
+
+      currentArmy.thingInHand = false;
+    } else {
+      socket.emit('error', "Cannot fit more than 10 things on rack.");
     }
-
-    // remove that thing from the cup
-    game.removeFromCup(currentArmy.thingInHand);
-
-    io.sockets.emit('updateUI', updateArmyData(socket));
-
-    // empty hand
-    socket.emit('updateHand', null);
-
-    currentArmy.thingInHand = false;
-    // currentArmy.canPlaceThing = false;
   } else {
     socket.emit('error', "You need to pick from the cup!");
   }
@@ -716,10 +717,6 @@ function updateArmyData(socket) {
     currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
 
     io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));
-  }
-
-  if (game.currentPhase == 3) {
-    currentArmy.thingsPurchased = 0;
   }
 
   return {
@@ -983,6 +980,7 @@ function eventEndTurnClicked(socket) {
   game.nextPlayerTurn(currentArmy);
   currentArmy.mustEndTurn = false;
   currentArmy.canEndTurn = false;
+  currentArmy.thingsPurchased = 0;
 
   //reset the fort upgrade flags to false
   for (var i in currentArmy.forts) {
