@@ -119,9 +119,13 @@ function Army(affinity, name, income, gold, id) {
 
   this.findDefenderInStacks = function(defenderName, hexId) {
     if (hexId) {
-      // TODO
-    } else
-      return findThing(this.getStackOnHex(defender.currentHexId), defenderName);
+      stack = this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
+      if (stack) {
+        return stack[indexById(this.stacks, defenderName)];
+      }
+    }
+    console.log("defender not found");
+    return null;
   };
 
   this.findDefenderInRack = function(defenderName) {
@@ -130,10 +134,6 @@ function Army(affinity, name, income, gold, id) {
         return this.rack[i];
     }
     return false;
-  };
-
-  this.findStackContainingDefender = function(defender) {
-
   };
 
   this.removeDefenderFromStack = function(defender) {

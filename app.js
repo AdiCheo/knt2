@@ -572,7 +572,7 @@ function eventDefenderMovePhase(socket, defenderName, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   // Find the selected defender in the current armies stacks
-  currentArmy.thingInHand = currentArmy.findDefenderInStacks(defenderName, hexId);
+  currentArmy.putDefenderInHand();
 
   if (!currentArmy.thingInHand)
     socket.emit('error', 'Choose a defender on the board only!');
