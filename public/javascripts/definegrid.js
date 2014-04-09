@@ -217,6 +217,10 @@ window.addEventListener('keydown', function(e) {
     console.log("emit:collectGoldButton");
     iosocket.emit('collectGoldButtonClicked');
 
+  } else if (e.keyCode == 187) { //=
+    console.log("loadGame3()");
+    loadGame3();
+
   }
 });
 
