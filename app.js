@@ -729,6 +729,24 @@ function randomDiceRoll() {
   return Math.floor(Math.random() * 6 + 1);
 }
 
+function recruitNumOfThingsToRack(thingsNum, armyNum) {
+  var thing = game.newRandomThing();
+  // remove from cup
+  game.removeFromCup(thing);
+  // push to rack
+  game.armies[armyNum].rack.push(thing);
+
+  for (var i = thingsNum - 1; i >= 0; i--) {
+    var thing = game.newRandomThing();
+    game.removeFromCup(thing);
+    game.armies[armyNum].rack.push(thing);
+  };
+
+  game.armies[armyNum].freeThings -= thingsNum; // decrement recruitable things
+  game.armies[armyNum].canEndTurn = true;
+
+}
+
 function ownHexesScenario1() {
 
   game.armies[0].ownHex("2,1", game, true);
@@ -857,11 +875,13 @@ function eventLoadUserData(socket, num) {
   for (var i in currentArmy.stacks) {
     socket.emit('updateStack', currentArmy.stacks[i].currentHexId, currentArmy.stacks[i].containedDefenders, currentArmy.affinity);
   }
-  // Send all the stack data, to fill the game board where stacks are
   for (var i in game.armies) {
+    // Send all the stack data, to fill the game board where stacks are
     for (var j in game.armies[i].stacks) {
       socket.emit('updateStackAll', game.armies[i].stacks[j].currentHexId, game.armies[i].stacks[j].affinity);
     }
+    // Update UI for army
+    io.sockets.emit('updateUI', updateArmyData(socket));
   }
 }
 
@@ -879,21 +899,7 @@ function eventLoadGame(game, num) {
   } else if (num == 2) {
     loadScenario1();
 
-    var thing = game.newRandomThing();
-    // remove from cup
-    game.removeFromCup(thing);
-    // push to rack
-    game.armies[0].rack.push(thing);
-
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
-    // game.armies[0].thingInHand = game.newRandomThing();
+    recruitNumOfThingsToRack(10, 0); // recruit 10 things to rack
 
     game.currentPhase = 3;
     game.totalTurn = 5;
