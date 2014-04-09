@@ -96,11 +96,7 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.getStackOnHex = function(hexId) {
-    for (var stack in this.stacks) {
-      if (this.stacks[stack].currentHexId == hexId)
-        return this.stacks[stack];
-    }
-    return false;
+    return this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
   };
 
   this.removeFromRack = function(thing) {

@@ -200,6 +200,7 @@ io.sockets.on('connection', function(socket) {
 
   // Stack listener
   socket.on('stackClicked', function(defenderName, hexId) {
+    eventStackMovePhase(socket, defenderName, hexId);
     if (game.currentPhase == MOVEMENT_PHASE) {
       eventStackMovePhase(socket, defenderName, hexId);
     }
@@ -582,16 +583,17 @@ function eventDefenderMovePhase(socket, defenderName, hexId) {
 }
 
 // Clicking on a stack that's on the board to move him TODO
-function eventStackMovePhase(socket, stackName) {
+function eventStackMovePhase(socket, defenderName, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   // Find the selected stack in the current armies stacks
-  currentArmy.thingInHand = currentArmy.findstackInStacks(stackName);
+  currentArmy.thingInHand = currentArmy.getStackOnHex(hexId);
 
-  if (!currentArmy.thingInHand)
-    socket.emit('error', 'Choose a stack on the board only!');
-
-  socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
+  if (!currentArmy.thingInHand) {
+    socket.emit('error', 'Choose a valid stack!');
+    socket.emit('updateSelectedIcon', 'DustDevilImage');
+  } else
+    socket.emit('updateSelectedIcon', 'DesertBatImage');
 }
 
 function eventClickedOnHexMovePhase(socket, hexId) {
