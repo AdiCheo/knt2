@@ -144,6 +144,10 @@ function initConnection() {
       highlightMovement();
     });
 
+    iosocket.on('updateSelectedIcon', function(thing) {
+      updateSelectedIcon(thing);
+    });
+
     iosocket.on('allowDefenderPlacement', function() {
       console.log("Place your defender on a hex you own");
     });
@@ -226,6 +230,14 @@ function allowMarkerPlacement() {
   highlightHex(boardLayer.get("#2,1")[0]);
 }
 
+function updateSelectedIcon(thing) { //updateSelectedIcon
+  console.log("Selected " + thing);
+  highlightHex(boardLayer.get("#" + thing)[0]);
+  if (thing.slice(0, 5) == "stack")
+    boardLayer.get('#selected')[0].setImage(StackIconArray[localAffinity]);
+  else
+    boardLayer.get('#selected')[0].setImage(thingImagesArray[thing + "Image"]);
+}
 
 function highlightMovement() {
   removeRadius(game.armies.color, boardLayer); //Remove movement radius
@@ -235,7 +247,11 @@ function highlightMovement() {
 function updateStackAll(hexId, affinity) {
   // place stack icon for particular army on hexId
   console.log("Army " + affinity + " placing stack at " + hexId);
-  boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+  if (affinity !== -1) {
+    boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+  } else {
+    boardLayer.get('#' + hexId)[0].setStackIcon(null);
+  }
   iosocket.emit('updateUI');
 
 }

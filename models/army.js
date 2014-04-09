@@ -68,8 +68,9 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.addDefenderToStack = function(defender, hexId) {
-    // No existing stack
     var stack = this.getStackOnHex(hexId);
+
+    // No existing stack
     if (!stack) {
       stack = new Stack(hexId, this.affinity);
       this.stacks.push(stack);
@@ -109,11 +110,7 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.getStackOnHex = function(hexId) {
-    for (var stack in this.stacks) {
-      if (this.stacks[stack].currentHexId == hexId)
-        return this.stacks[stack];
-    }
-    return false;
+    return this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
   };
 
   this.removeFromRack = function(thing) {
@@ -272,6 +269,7 @@ function Army(affinity, name, income, gold, id) {
         return i;
       }
     }
+    console.log("NOT FOUND: " + value + " in " + key);
     return null;
   }
 

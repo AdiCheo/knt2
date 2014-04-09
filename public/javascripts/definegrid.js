@@ -249,14 +249,13 @@ boardLayer.on('click tap', function(e) {
     iosocket.emit('rackClicked');
 
   } else if (shape.getName() == "stack" + localAffinity) {
-    // clicked twice same stack
-    console.log("List " + shape.getId());
     hex = shape.hex;
-    console.log(hex);
+    console.log("Stack " + shape.getId() + " on " + hex.getId());
 
     console.log("emit:stackClicked, " + hex.getId());
     iosocket.emit('stackClicked', hex.getId());
 
+    // clicked twice same stack
     if (!hex.defendersVisible) {
       console.log("Showing defenders " + shape.getId());
       hex.showDefenders();
