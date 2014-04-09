@@ -646,20 +646,25 @@ function eventClickedOnHexMovePhase(socket, hexId) {
         socket.emit('error', "No more movement points!");
       }
     } else if (currentArmy.thingInHand.type == "stack") {
+      // oldHexId = currentArmy.thingInHand.currentHexId;
 
-    }
-    // Else it is owned by another army!
-    else {
+      currentArmy.thingInHand.moveStack(hexId);
 
+      // // Remove old stack
+      // socket.emit('updateStack', oldHexId, 0, -1);
+      // io.sockets.emit('updateStackAll', oldHexId, -1);
+
+      // send update socket
+      io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
+      io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+
+      // // empty hand
+      // currentArmy.thingInHand = false;
+      // socket.emit('updateHand', null);
+    } else {
+      socket.emit('error', "You cannot move this thing.");
     }
   }
-} else {
-  socket.emit('error', "No more movement points!");
-}
-} else {
-  socket.emit('error', "You cannot move this thing.");
-}
-}
 }
 
 /*********** CONSTRUCTION_PHASE ***********/

@@ -247,7 +247,11 @@ function highlightMovement() {
 function updateStackAll(hexId, affinity) {
   // place stack icon for particular army on hexId
   console.log("Army " + affinity + " placing stack at " + hexId);
-  boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+  if (affinity !== -1) {
+    boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+  } else {
+    boardLayer.get('#' + hexId)[0].setStackIcon(null);
+  }
   iosocket.emit('updateUI');
 
 }

@@ -8,13 +8,14 @@ function Stack(hexId, affinity) {
   this.requiredRolls = 0;
   this.currentHexId = hexId;
 
-
   this.moveStack = function(newHexId) {
     this.id = newHexId;
     this.currentHexId = newHexId;
 
+    for (var each in this.containedDefenders) {
+      this.containedDefenders[each].currentHexId = newHexId;
+    }
   };
-
 }
 
 module.exports = Stack;
