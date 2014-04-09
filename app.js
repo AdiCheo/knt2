@@ -1,5 +1,9 @@
 /* Globals */
 
+//TODO:
+//Figure out ending turn permissions
+
+
 var SETUP_PHASE = -1;
 var SETUP_RECRUITMENT_PHASE = 0;
 var GOLD_COLLECTION_PHASE = 1;
@@ -219,12 +223,18 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
-  socket.on('buildFortButton', function(hexId) {
+  socket.on('hexClicked', function(hexId) {
     if (game.currentPhase == CONSTRUCTION_PHASE) {
       eventbuyFort(socket, hexId);
     }
   });
 
+  // Build fort button listener
+  socket.on('buildFortButton', function() {
+    if (game.currentPhase == CONSTRUCTION_PHASE) {
+      eventBuildFortButton(socket);
+    }
+  });
   /*** SPECIAL_POWERS_PHASE - 8 ***/
 
   /*** CHANGE_ORDER_PHASE - 9 ***/
@@ -287,7 +297,7 @@ function eventBuildFortButton(socket) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  if (currentArmy.ownedHexes.length == 3) {
+  if (currentArmy.ownedHexes.length >= 3) {
     currentArmy.canBuildFort = true;
     socket.emit('allowFortPlacement');
   } else {
@@ -295,6 +305,8 @@ function eventBuildFortButton(socket) {
     socket.emit('error', "You need to own 3 hexes first");
   }
 }
+
+
 
 function eventClickedOnHexSetupPhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -396,8 +408,8 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
           if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
 
             // Update the view for all players
-            io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-            socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
+            // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+            io.sockets.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
 
 
             if (currentArmy.freeThings > 0)
@@ -427,8 +439,8 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
 
           // Update the view for all players
-          io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-          socket.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
+          // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+          io.sockets.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
 
         } else if (currentArmy.thingInHand.type == "specialIncome") {
           // TODO: If a special income thing, place somewhere on the hex
@@ -593,7 +605,8 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  currentHex = game.getHexById(hexId);
+  var oldHexId = currentArmy.thingInHand.currentHexId;
+  var currentHex = game.getHexById(hexId);
 
   // Remove the defender in hand from the stack on his old hex,
   // Place the defender on the new indicated hex
@@ -616,16 +629,23 @@ function eventClickedOnHexMovePhase(socket, hexId) {
           if (indexById(currentArmy.ownedHexes, hexId) !== null) {
 
             if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
-              // Remove the defender in hand from it's current stack
-              removeFromThingsArray(currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId), currentArmy.thingInHand);
+              currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
-              io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId).containedDefenders, currentArmy.affinity);
-              io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+              // Remove the defender in hand from it's current stack
+              console.log("Old Hex Id: " + oldHexId);
+              console.log("Old Stack: " + currentArmy.getStackOnHex(oldHexId));
+
+              for (var defender in currentArmy.getStackOnHex(oldHexId).containedDefenders) {
+                console.log("Defender Contained: " + currentArmy.getStackOnHex(oldHexId).containedDefenders[defender].name);
+              }
+              console.log("Thing in hand: " + currentArmy.thingInHand.name);
+
+              currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
+
+              io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
 
               // send update socket
-              // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
-              socket.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
-              io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
+              io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
 
               // empty hand
               socket.emit('updateHand', null);
@@ -704,6 +724,75 @@ function eventUpgradeFort(socket, hexId) {
   } else {
     socket.emit('error', "This is not your fort!");
   }
+}
+
+
+//TODO: Fix the fort gold for UI
+function eventbuyFort(socket, hexId) {
+  // console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canPlay(game, socket)) return;
+  console.log("current army can build a fort" + currentArmy.canBuildFort); {
+
+    if (currentArmy.canBuildFort) {
+      if (currentArmy.buildFort(hexId, 1)) {
+        if (currentArmy.gold >= 5) {
+          console.log("It got here!");
+          io.sockets.emit('updateForts', hexId, currentArmy.affinity);
+          currentArmy.canBuildFort = false;
+          currentArmy.gold -= 5;
+          io.sockets.emit('updateUI', updateArmyData(socket));
+        } else {
+          socket.emit('error', "You do not have enough gold!");
+        }
+      } else {
+        socket.emit('error', "Cannot build fort here!");
+      }
+    }
+  }
+}
+
+function eventEndTurnClicked(socket) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (game.currentPlayerTurn != currentArmy.affinity) {
+    socket.emit('error', "It is not your turn yet!");
+    return;
+  }
+
+  if (currentArmy.thingInHand) {
+    socket.emit('error', "You have a thing in hand, place it first!");
+    return;
+  }
+
+  if (!currentArmy.mustEndTurn && !currentArmy.canEndTurn) {
+    socket.emit('error', "You cannot end your turn yet!");
+    return;
+  }
+
+  game.nextPlayerTurn(currentArmy);
+  currentArmy.mustEndTurn = false;
+  currentArmy.canEndTurn = false;
+  currentArmy.thingsPurchased = 0;
+
+  //reset the fort upgrade flags to false
+  for (var i in currentArmy.forts) {
+    currentArmy.forts[i].hasBeenUpgraded = false;
+  }
+
+  // Send message to all clients that a player turn ended
+  io.sockets.emit('nextPlayerTurn', nextTurnData());
+
+  // Send message to current player that he ended his turn
+  socket.emit('endedTurn');
+}
+
+function nextTurnData() {
+  return {
+    currentPhase: game.currentPhase,
+    currentPlayerTurn: game.currentPlayerTurn
+  };
 }
 
 function fortUpgradeData(affinity, fortValue, gold, hexId) {
@@ -970,42 +1059,7 @@ function updateClients(socket) {
   io.sockets.emit('updateUsers', game.users);
 }
 
-function eventEndTurnClicked(socket) {
-  currentArmy = game.armies[indexById(game.armies, socket.id)];
 
-  if (game.currentPlayerTurn != currentArmy.affinity) {
-    socket.emit('error', "It is not your turn yet!");
-    return;
-  }
-
-  if (currentArmy.thingInHand) {
-    socket.emit('error', "You have a thing in hand, place it first!");
-    return;
-  }
-
-  game.nextPlayerTurn(currentArmy);
-  currentArmy.mustEndTurn = false;
-  currentArmy.canEndTurn = false;
-  currentArmy.thingsPurchased = 0;
-
-  //reset the fort upgrade flags to false
-  for (var i in currentArmy.forts) {
-    currentArmy.forts[i].hasBeenUpgraded = false;
-  }
-
-  // Send message to all clients that a player turn ended
-  io.sockets.emit('nextPlayerTurn', nextTurnData());
-
-  // Send message to current player that he ended his turn
-  socket.emit('endedTurn');
-}
-
-function nextTurnData() {
-  return {
-    currentPhase: game.currentPhase,
-    currentPlayerTurn: game.currentPlayerTurn
-  };
-}
 
 //function for collecting the gold
 // function eventCollectGoldButton(socket) {
@@ -1229,17 +1283,4 @@ function indexByKey(array, key, value) {
 
 function indexById(array, value) {
   return indexByKey(array, "id", value);
-}
-
-function removeFromThingsArray(array, name) {
-  for (var i in array) {
-    if (array[i] == name) {
-      console.log("Removing " + name + " in array");
-      array.splice(i, 1);
-      // delete array[i]; // TODO big issues with deleting from arrays.. WHYYYYY
-      return true;
-    }
-  }
-  console.log("Could not find " + name + " in array. (Remove)");
-  return false;
 }
