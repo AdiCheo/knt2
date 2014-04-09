@@ -12,7 +12,7 @@ function Army(affinity, name, income, gold, id) {
   this.freeThings = 10;
 
   this.mustEndTurn = false;
-  this.canEndTurn = true;
+  this.canEndTurn = false;
   this.canChooseHex = false;
   this.canBuildFort = false;
   this.thingInHand = false;

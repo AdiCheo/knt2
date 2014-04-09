@@ -422,6 +422,8 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
         // remove that thing from the cup
         game.removeFromCup(currentArmy.thingInHand);
 
+        io.sockets.emit('updateUI', updateArmyData(socket));
+
         // empty hand
         socket.emit('updateHand', null);
 
@@ -465,6 +467,8 @@ function eventClickedOnRack(socket) {
     // remove that thing from the cup
     game.removeFromCup(currentArmy.thingInHand);
 
+    io.sockets.emit('updateUI', updateArmyData(socket));
+
     // empty hand
     socket.emit('updateHand', null);
 
@@ -500,6 +504,9 @@ function eventRecruitThings(socket) {
       } else {
         socket.emit('error', 'You cannot afford it anymore!');
       }
+
+      io.sockets.emit('updateUI', updateArmyData(socket));
+
     } else {
       currentArmy.mustEndTurn = true;
       socket.emit('error', 'No more things for free or to buy this turn!');
@@ -532,6 +539,7 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
         currentArmy.selectedSecondTrade = null;
 
         socket.emit('updateRack', currentArmy.rack);
+        io.sockets.emit('updateUI', updateArmyData(socket));
 
       } else {
         socket.emit('error', 'You clicked on the same defender!');
@@ -671,7 +679,7 @@ function fortUpgradeData(affinity, fortValue, gold, hexId) {
 }
 
 function updateArmyData(socket) {
-  currentArmy = game.armies[indexById(game.armies, socket)];
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   currentArmy.updateIncome();
 
@@ -942,6 +950,7 @@ function eventEndTurnClicked(socket) {
 
   game.nextPlayerTurn(currentArmy);
   currentArmy.mustEndTurn = false;
+  currentArmy.canEndTurn = false;
 
   //reset the fort upgrade flags to false
   for (var i in currentArmy.forts) {
