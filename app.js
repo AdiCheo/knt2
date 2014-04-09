@@ -1,5 +1,9 @@
 /* Globals */
 
+//TODO: 
+//Figure out ending turn permissions
+
+
 var SETUP_PHASE = -1;
 var SETUP_RECRUITMENT_PHASE = 0;
 var GOLD_COLLECTION_PHASE = 1;
@@ -225,12 +229,18 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
-  socket.on('buildFortButton', function(hexId) {
+  socket.on('hexClicked', function(hexId) {
     if (game.currentPhase == CONSTRUCTION_PHASE) {
       eventbuyFort(socket, hexId);
     }
   });
 
+  // Build fort button listener
+  socket.on('buildFortButton', function() {
+    if (game.currentPhase == CONSTRUCTION_PHASE) {
+      eventBuildFortButton(socket);
+    }
+  });
   /*** SPECIAL_POWERS_PHASE - 8 ***/
 
   /*** CHANGE_ORDER_PHASE - 9 ***/
@@ -293,7 +303,7 @@ function eventBuildFortButton(socket) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  if (currentArmy.ownedHexes.length == 3) {
+  if (currentArmy.ownedHexes.length >= 3) {
     currentArmy.canBuildFort = true;
     socket.emit('allowFortPlacement');
   } else {
@@ -301,6 +311,8 @@ function eventBuildFortButton(socket) {
     socket.emit('error', "You need to own 3 hexes first");
   }
 }
+
+
 
 function eventClickedOnHexSetupPhase(socket, hexId) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -586,7 +598,7 @@ function eventStackMovePhase(socket, stackName) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   // Find the selected stack in the current armies stacks
-  // currentArmy.thingInHand = currentArmy.findstackInStacks(stackName);
+  // currentArmy.thingInHand = currentArmy.findstackInStacks(stackName); //this breaks the code
 
   if (!currentArmy.thingInHand)
     socket.emit('error', 'Choose a stack on the board only!');
@@ -701,6 +713,33 @@ function eventUpgradeFort(socket, hexId) {
     }
   } else {
     socket.emit('error', "This is not your fort!");
+  }
+}
+
+
+//TODO: Fix the fort gold for UI 
+function eventbuyFort(socket, hexId) {
+  // console.log(game.armies);
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canPlay(game, socket)) return;
+  console.log("current army can build a fort" + currentArmy.canBuildFort); {
+
+    if (currentArmy.canBuildFort) {
+      if (currentArmy.buildFort(hexId, 1)) {
+        if (currentArmy.gold >= 5) {
+          console.log("It got here!");
+          io.sockets.emit('updateForts', hexId, currentArmy.affinity);
+          currentArmy.canBuildFort = false;
+          currentArmy.gold -= 5;
+          io.sockets.emit('updateUI', updateArmyData(socket));
+        } else {
+          socket.emit('error', "You do not have enough gold!");
+        }
+      } else {
+        socket.emit('error', "Cannot build fort here!");
+      }
+    }
   }
 }
 
