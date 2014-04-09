@@ -781,6 +781,14 @@ function eventEndTurnClicked(socket) {
     currentArmy.forts[i].hasBeenUpgraded = false;
   }
 
+  if (game.currentPhase == 1) {
+    currentArmy.gold += currentArmy.income;
+    currentArmy.mustEndTurn = true;
+
+    currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
+
+  }
+
   // Send message to all clients that a player turn ended
   io.sockets.emit('nextPlayerTurn', nextTurnData());
 
@@ -809,14 +817,7 @@ function updateArmyData(socket) {
 
   currentArmy.updateIncome();
 
-  if (game.currentPhase == 1) {
-    currentArmy.gold += currentArmy.income;
-    currentArmy.mustEndTurn = true;
-
-    currentArmy.freeThings = Math.ceil(currentArmy.ownedHexes.length / 2);
-
-    io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));
-  }
+  io.sockets.emit('updateGold', updatedGoldData(currentArmy.affinity, currentArmy.gold));
 
   return {
     armies: game.armies
