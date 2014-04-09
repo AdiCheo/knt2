@@ -108,14 +108,6 @@ function Army(affinity, name, income, gold, id) {
 
   this.findDefenderInStacks = function(defenderName) {
     return findThing(this.getStackOnHex(defender.currentHexId), defenderName);
-
-    // for (var i in this.stacks) {
-    //   var defender = this.findThing(this.stacks[i], defenderName);
-    //   if (defender)
-    //     return defender;
-    // }
-
-    // return false;
   };
 
   this.findDefenderInRack = function(defenderName) {

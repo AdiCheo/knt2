@@ -521,12 +521,14 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  if (currentArmy.findDefenderInRack(defenderName)) {
+  var defenderObj = currentArmy.findDefenderInRack(defenderName);
+
+  if (defenderObj) {
     if (!currentArmy.selectedFirstTrade) {
-      currentArmy.selectedFirstTrade = defenderName;
+      currentArmy.selectedFirstTrade = defenderObj;
     } else {
-      if (currentArmy.selectedFirstTrade != defenderName) {
-        currentArmy.selectedSecondTrade = defenderName;
+      if (currentArmy.selectedFirstTrade != defenderObj) {
+        currentArmy.selectedSecondTrade = defenderObj;
 
         game.cup.push(currentArmy.selectedFirstTrade);
         game.cup.push(currentArmy.selectedSecondTrade);
