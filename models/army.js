@@ -10,6 +10,7 @@ function Army(affinity, name, income, gold, id) {
   this.currentGameTurn = affinity;
   this.id = id;
   this.freeThings = 10;
+  this.thingsPurchased = 0;
 
   this.mustEndTurn = false;
   this.canEndTurn = false;
@@ -80,6 +81,16 @@ function Army(affinity, name, income, gold, id) {
       return false;
     } else {
       stack.containedDefenders.push(defender);
+    }
+    return true;
+  };
+
+  this.addThingToRack = function(defender) {
+    if (currentArmy.rack.length == 10) {
+      return false;
+    } else {
+      // push to rack
+      currentArmy.rack.push(currentArmy.thingInHand);
     }
     return true;
   };
