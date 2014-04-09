@@ -901,7 +901,7 @@ function eventLoadGame(game, num) {
 
     recruitNumOfThingsToRack(10, 0); // recruit 10 things to rack
 
-    game.currentPhase = 3;
+    game.currentPhase = RECRUIT_THINGS_PHASE;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
@@ -988,12 +988,6 @@ function nextTurnData() {
   };
 }
 
-
-
-
-
-
-
 //function for collecting the gold
 // function eventCollectGoldButton(socket) {
 //   currentArmy = game.armies[indexById(game.armies, socket.id)];
@@ -1026,14 +1020,6 @@ function updatedGoldData(affinity, gold) {
 //   }
 // }
 
-
-
-
-
-
-
-
-
 // if (!currentArmy.canPlay(game, socket)) return;
 
 // Each player collects 10 defenders in this faze
@@ -1056,14 +1042,12 @@ function updatedGoldData(affinity, gold) {
 // empty hand
 // socket.emit('updateHand', null);
 
-
 //   } else {
 //     socket.emit('error', "You do not own this hex!");
 //   }
 // } else {
 //   socket.emit('error', "You need to pick from the cup!");
 // }
-
 
 // TODO
 // else if (currentArmy.canBuildFort &&
