@@ -625,81 +625,106 @@ function eventClickedOnHexMovePhase(socket, hexId) {
   // Place the defender on the new indicated hex
 
   // Check if the thing in hand is an defender object
-  if (currentArmy.thingInHand) {
+  if (!currentArmy.thingInHand) {
+    return;
+  }
 
-    var oldHexId = currentArmy.thingInHand.currentHexId;
-    var currentHex = game.getHexById(hexId);
-    if (currentArmy.thingInHand.type == "defender") {
+  var oldHexId = currentArmy.thingInHand.currentHexId;
+  var currentHex = game.getHexById(hexId);
 
-      // If Defender has enough movement points for the move
-      if (currentArmy.calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
+  if (currentArmy.thingInHand.type == "defender") {
 
-        // check if hex is unexplored
-        if (!currentHex.isExplored) {
-          // The hex is not explored, the dice needs to be rolled
-          // army[currentPlayer].mustRollDice = true;
-          currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+    // If Defender has enough movement points for the move
+    if (currentArmy.calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
 
-        } else {
-          // If the current army already explored and owned the hex
-          if (indexById(currentArmy.ownedHexes, hexId) !== null) {
+      // check if hex is unexplored
+      if (!currentHex.isExplored) {
+        // The hex is not explored, the dice needs to be rolled
+        // army[currentPlayer].mustRollDice = true;
+        currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
-            if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
-              currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+      } else {
+        // If the current army already explored and owned the hex
+        if (indexById(currentArmy.ownedHexes, hexId) !== null) {
 
-              // Remove the defender in hand from it's current stack
-              console.log("Old Hex Id: " + oldHexId);
-              console.log("Old Stack: " + currentArmy.getStackOnHex(oldHexId));
+          if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
+            currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
-              for (var defender in currentArmy.getStackOnHex(oldHexId).containedDefenders) {
-                console.log("Defender Contained: " + currentArmy.getStackOnHex(oldHexId).containedDefenders[defender].name);
-              }
-              console.log("Thing in hand: " + currentArmy.thingInHand.name);
+            // Remove the defender in hand from it's current stack
+            console.log("Old Hex Id: " + oldHexId);
+            console.log("Old Stack: " + currentArmy.getStackOnHex(oldHexId));
 
-              currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
-
-              io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
-
-              // send update socket
-              io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
-
-              // empty hand
-              socket.emit('updateHand', null);
-
-              currentArmy.thingInHand = false;
-              // currentArmy.canPlaceThing = false;
-
-            } else {
-              socket.emit('error', "Cannot place more than 10 defenders per stack.");
+            for (var defender in currentArmy.getStackOnHex(oldHexId).containedDefenders) {
+              console.log("Defender Contained: " + currentArmy.getStackOnHex(oldHexId).containedDefenders[defender].name);
             }
-          }
-          // Else it is owned by another army!
-          else {
+            console.log("Thing in hand: " + currentArmy.thingInHand.name);
 
+            currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
+
+            io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
+
+            // send update socket
+            io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
+
+            // empty hand
+            socket.emit('updateHand', null);
+
+            currentArmy.thingInHand = false;
+            // currentArmy.canPlaceThing = false;
+
+          } else {
+            socket.emit('error', "Cannot place more than 10 defenders per stack.");
           }
         }
-      } else {
-        socket.emit('error', "No more movement points!");
+        // Else it is owned by another army!
+        else {
+
+        }
       }
-    } else if (currentArmy.thingInHand.type == "stack") {
-
-      oldHexId = currentArmy.thingInHand.currentHexId;
-      currentArmy.thingInHand.moveStack(hexId);
-
-      // Remove old stack
-      io.sockets.emit('removeStackAll', oldHexId);
-
-      // send update socket
-      io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
-      io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
-
-      // // empty hand
-      // currentArmy.thingInHand = false;
-      // socket.emit('updateHand', null);
     } else {
-      socket.emit('error', "You cannot move this thing.");
+      socket.emit('error', "No more movement points!");
     }
+  } else if (currentArmy.thingInHand.type == "stack") {
+    // If hexID has an opponent's stack
+    if (currentHex.isExplored && currentHex.affinity != currentArmy.affinity) {
+      moveStackBattle(socket, currentArmy, oldHexId, hexId);
+    } else {
+      moveStack(socket, currentArmy, oldHexId, hexId);
+    }
+  } else {
+    socket.emit('error', "You cannot move this thing.");
   }
+}
+
+function moveStackBattle(socket, currentArmy, oldHexId, newHexId) {
+  currentArmy.thingInHand.moveStack(newHexId);
+
+  // Remove old stack
+  io.sockets.emit('removeStackAll', oldHexId);
+
+  // send update socket
+  io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
+  io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+
+  // empty hand
+  currentArmy.thingInHand = null;
+  socket.emit('updateHand', null);
+  socket.emit('updateSelectedIcon', null);
+}
+
+function moveStack(socket, currentArmy, oldHexId, newHexId) {
+  currentArmy.thingInHand.moveStack(newHexId);
+
+  // Remove old stack
+  io.sockets.emit('removeStackAll', oldHexId);
+
+  // send update socket
+  io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
+  io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+
+  // empty hand
+  currentArmy.thingInHand = null;
+  socket.emit('updateHand', null);
 }
 
 /*********** CONSTRUCTION_PHASE ***********/
