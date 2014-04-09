@@ -197,7 +197,7 @@ function updateUI(armyData) {
 }
 
 // function collectGoldButton() {
-//   iosocket.emit('updateUI');
+//
 // }
 
 function updateUsers(users) {
@@ -247,7 +247,7 @@ function allowMarkerPlacement() {
 
 function updateSelectedIcon(thing) { //updateSelectedIcon
   console.log("Selected " + thing);
-  highlightHex(boardLayer.get("#" + thing)[0]);
+  // highlightHex(boardLayer.get("#" + thing)[0]);
   if (thing.slice(0, 5) == "stack")
     boardLayer.get('#selected')[0].setImage(StackIconArray[localAffinity]);
   else if (thing.slice(0, 8) == "question")
@@ -269,7 +269,14 @@ function updateStackAll(hexId, affinity) {
   if (affinity !== localAffinity) {
     boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
   }
-  iosocket.emit('updateUI');
+}
+
+function removeStackAll(hexId) {
+  // place stack icon for particular army on hexId
+  console.log("Removing stack at " + hexId);
+  if (boardLayer.get('#stack' + hexId)[0])
+    boardLayer.get('#' + hexId)[0].removeStack();
+
 }
 
 function updateStack(hexId, stackThings, affinity) {
@@ -279,159 +286,162 @@ function updateStack(hexId, stackThings, affinity) {
   if (stackThings.length === 0) {
     console.log("Stack is empty!");
     boardLayer.get('#stack' + hexId)[0].remove();
+
   } else {
     console.log("Stack is not Empty!");
     boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
 
+
+    if (boardLayer.get('#stack' + hexId)[0]) {
+      boardLayer.get('#' + hexId)[0].removeStack();
+    }
+
+    boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+
+    if (localAffinity == affinity)
+      boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
+
+    // if (!boardLayer.get('#stack' + hexId)[0]) {
+    //   updateStackAll(hexId, 0);
+    // }
+    //
+
+
+    // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);
+
+    // // Update rack
+    // boardLayer.get('#rack')[0].updateIcons(currentArmy.rack);
+
+    // Update stacks
+    // boardLayer.get('#' + hexId)[0].updateIcons(stackThings, 0);
+    // boardLayer.get('#' + hexId)[0].setStackView(stackThings);
   }
-  if (localAffinity == affinity)
-    boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
-
-  // if (!boardLayer.get('#stack' + hexId)[0]) {
-  //   updateStackAll(hexId, 0);
-  // }
-  // iosocket.emit('updateUI');
 
 
-  // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);
-
-  // // Update rack
-  // boardLayer.get('#rack')[0].updateIcons(currentArmy.rack);
-
-  // Update stacks
-  // boardLayer.get('#' + hexId)[0].updateIcons(stackThings, 0);
-  // boardLayer.get('#' + hexId)[0].setStackView(stackThings);
-}
-
-
-function updateStackAllBattle(hexId, affinity, affinityAttack) {
-  // place stack icon for particular army on hexId
-  console.log("Army " + affinity + " placing stack at " + hexId);
-  if (affinity !== localAffinity && affinityAttack !== localAffinity) {
-    boardLayer.get('#' + hexId)[0].removeStack();
-    // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
-    // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
-  }
-  boardLayer.get('#' + hexId)[0].setBattleIcon();
-  iosocket.emit('updateUI');
-}
-
-function updateStackBattle(hexId, defendersThings, defAffinity, attackersThings, attAffinity) {
-
-  console.log("Defenders Things length: " + defendersThings.length);
-  console.log("Attackers Things length: " + attackersThings.length);
-
-  // update stack icons
-  if (defendersThings.length === 0 || attackersThings.length === 0) {
-    // Should never happen
-    console.log("Stack is empty!");
-    boardLayer.get('#stack' + hexId)[0].remove();
-
-  } else {
-    console.log("Stack is not Empty!");
-    boardLayer.get('#' + hexId)[0].setDefenderStackIcon(defendersThings, defAffinity);
-    boardLayer.get('#' + hexId)[0].setAttackerStackIcon(attackersThings, attAffinity);
-
-  }
-  if (localAffinity == affinity)
-    boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
-}
-
-function removeStackAll(hexId) {
-  // place stack icon for particular army on hexId
-  console.log("Removing stack at " + hexId);
-  boardLayer.get('#' + hexId)[0].removeStack();
-  iosocket.emit('updateUI');
-}
-
-function createHexes(hexes) {
-  for (var i in hexes) {
-    boardLayer.get("#" + hexes[i].id)[0].setFillPatternImage(hexTiles[hexes[i].terrainType]);
-  }
-}
-
-function updateAllHexes(hexes) {
-  for (var i in hexes) {
-    boardLayer.get('#' + hexes[i].id)[0].setOwnerIcon(hexes[i].affinity);
-  }
-}
-
-function updateHex(hexId, affinity) {
-  console.log("Army " + affinity + " owning " + hexId);
-  boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
-}
-
-function updateForts(hexId, affinity) {
-  console.log("Army " + affinity + " owning " + hexId);
-  boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
-  iosocket.emit('updateUI');
-}
-
-function updateAllForts(forts) {
-  for (var i in forts) {
-    boardLayer.get('#' + forts[i].currentHexId)[0].setFortIcon(forts[i].affinity, forts[i].fortValue);
-  }
-}
-
-function fortUpgraded(fortUpgradeData) {
-  boardLayer.get('#fort' + fortUpgradeData.hexId)[0].remove();
-  boardLayer.get('#' + fortUpgradeData.hexId)[0].setFortIcon(fortUpgradeData.affinity, fortUpgradeData.fortValue);
-
-  iosocket.emit('updateUI');
-}
-
-// function updateGold(updatedGoldData) {
-//   iosocket.emit('updateUI');
-// }
-
-function updateRack(rackThings) {
-  console.log(rackThings);
-  boardLayer.get('#rack')[0].updateIcons(rackThings);
-  iosocket.emit('updateUI');
-}
-
-function updateHand(thing) {
-  console.log("Thing in hand " + thing);
-  boardLayer.get('#cup')[0].updateIcons(thing);
-}
-
-function endedTurn() {
-  console.log('You have ended your turn');
-}
-
-function handleDiceResult(diceResult) {
-  console.log('Dice result:' + diceResult);
-}
-
-function nextPlayerTurn(gameData) {
-  //output the current phase the game is in
-  document.getElementById("phasetext").innerHTML = "Current Phase: " + gameData.currentPhase;
-
-  //output the current player turn
-  var turn = gameData.currentPlayerTurn + 1;
-  document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + turn;
-
-  console.log(playerId);
-  if (localAffinity == gameData.currentPlayerTurn) {
+  function updateStackAllBattle(hexId, affinity, affinityAttack) {
+    // place stack icon for particular army on hexId
+    console.log("Army " + affinity + " placing stack at " + hexId);
+    if (affinity !== localAffinity && affinityAttack !== localAffinity) {
+      boardLayer.get('#' + hexId)[0].removeStack();
+      // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
+      // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
+    }
+    boardLayer.get('#' + hexId)[0].setBattleIcon();
     iosocket.emit('updateUI');
-    console.log("It is your turn to play now");
   }
-}
 
-function indexByKey(array, key, value) {
-  for (var i = 0; i < array.length; i++) {
-    if (array[i][key] == value) {
-      return i;
+  function updateStackBattle(hexId, defendersThings, defAffinity, attackersThings, attAffinity) {
+
+    console.log("Defenders Things length: " + defendersThings.length);
+    console.log("Attackers Things length: " + attackersThings.length);
+
+    // update stack icons
+    if (defendersThings.length === 0 || attackersThings.length === 0) {
+      // Should never happen
+      console.log("Stack is empty!");
+      boardLayer.get('#stack' + hexId)[0].remove();
+
+    } else {
+      console.log("Stack is not Empty!");
+      boardLayer.get('#' + hexId)[0].setDefenderStackIcon(defendersThings, defAffinity);
+      boardLayer.get('#' + hexId)[0].setAttackerStackIcon(attackersThings, attAffinity);
+
+    }
+    if (localAffinity == affinity)
+      boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
+  }
+
+  function removeStackAll(hexId) {
+    // place stack icon for particular army on hexId
+    console.log("Removing stack at " + hexId);
+    boardLayer.get('#' + hexId)[0].removeStack();
+    iosocket.emit('updateUI');
+  }
+
+  function createHexes(hexes) {
+    for (var i in hexes) {
+      boardLayer.get("#" + hexes[i].id)[0].setFillPatternImage(hexTiles[hexes[i].terrainType]);
     }
   }
-  return null;
-}
 
-function indexById(array, value) {
-  return indexByKey(array, "id", value);
-}
+  function updateAllHexes(hexes) {
+    for (var i in hexes) {
+      boardLayer.get('#' + hexes[i].id)[0].setOwnerIcon(hexes[i].affinity);
+    }
+  }
 
-function randomName() {
-  var names = ["Sung", "Kiley", "Sherryl", "Michel", "Tyrell", "Madie", "Annika", "Katharine", "Jess", "Thi", "Kelvin", "Kristina", "Danae", "Marjory", "Elijah", "Wilber", "Mary", "Yen", "Stan", "Sima", "Wendell", "Porfirio", "Efrain", "Carly", "Kazuko", "King", "Homer", "Enid", "Kum", "Royal", "Mika", "Collette", "Louis", "Raye", "Rhoda", "Sal", "Marquis", "Hershel", "Alisa", "Wade"];
-  return names[Math.floor(Math.random() * names.length)];
-}
+  function updateHex(hexId, affinity) {
+    console.log("Army " + affinity + " owning " + hexId);
+    boardLayer.get('#' + hexId)[0].setOwnerIcon(affinity);
+  }
+
+  function updateForts(hexId, affinity) {
+    console.log("Army " + affinity + " owning " + hexId);
+    boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
+
+  }
+
+  function updateAllForts(forts) {
+    for (var i in forts) {
+      boardLayer.get('#' + forts[i].currentHexId)[0].setFortIcon(forts[i].affinity, forts[i].fortValue);
+    }
+  }
+
+  function fortUpgraded(fortUpgradeData) {
+    boardLayer.get('#fort' + fortUpgradeData.hexId)[0].remove();
+    boardLayer.get('#' + fortUpgradeData.hexId)[0].setFortIcon(fortUpgradeData.affinity, fortUpgradeData.fortValue);
+
+
+  }
+
+  function updateRack(rackThings) {
+    console.log(rackThings);
+    boardLayer.get('#rack')[0].updateIcons(rackThings);
+
+  }
+
+  function updateHand(thing) {
+    console.log("Thing in hand " + thing);
+    boardLayer.get('#cup')[0].updateIcons(thing);
+  }
+
+  function endedTurn() {
+    console.log('You have ended your turn');
+  }
+
+  function handleDiceResult(diceResult) {
+    console.log('Dice result:' + diceResult);
+  }
+
+  function nextPlayerTurn(gameData) {
+    //output the current phase the game is in
+    document.getElementById("phasetext").innerHTML = "Current Phase: " + gameData.currentPhase;
+
+    //output the current player turn
+    var turn = gameData.currentPlayerTurn + 1;
+    document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + turn;
+
+    console.log(playerId);
+    if (localAffinity == gameData.currentPlayerTurn) {
+      iosocket.emit('updateUI');
+      console.log("It is your turn to play now");
+    }
+  }
+
+  function indexByKey(array, key, value) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i][key] == value) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  function indexById(array, value) {
+    return indexByKey(array, "id", value);
+  }
+
+  function randomName() {
+    var names = ["Sung", "Kiley", "Sherryl", "Michel", "Tyrell", "Madie", "Annika", "Katharine", "Jess", "Thi", "Kelvin", "Kristina", "Danae", "Marjory", "Elijah", "Wilber", "Mary", "Yen", "Stan", "Sima", "Wendell", "Porfirio", "Efrain", "Carly", "Kazuko", "King", "Homer", "Enid", "Kum", "Royal", "Mika", "Collette", "Louis", "Raye", "Rhoda", "Sal", "Marquis", "Hershel", "Alisa", "Wade"];
+    return names[Math.floor(Math.random() * names.length)];
+  }

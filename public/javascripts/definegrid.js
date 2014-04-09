@@ -274,7 +274,14 @@ boardLayer.on('click tap', function(e) {
 
   } else if (shape.getName() == "defender") {
     console.log("emit:defenderClicked," + shape.getId());
-    iosocket.emit('defenderClicked', shape.getId(), shape.hexId.getId());
+    // If defender is on hex
+    if (shape.hexId) {
+      iosocket.emit('defenderClicked', shape.getId(), shape.hexId.getId());
+    }
+    // If defender is on rack
+    else {
+      iosocket.emit('defenderClicked', shape.getId());
+    }
 
   } else if (shape.getName() == "dicebutton") {
     console.log('Clicked ' + shape.getName() + ' ' + shape.diceValue);
