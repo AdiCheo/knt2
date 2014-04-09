@@ -271,7 +271,7 @@ boardLayer.on('click tap', function(e) {
 
   } else if (shape.getName() == "defender") {
     console.log("emit:defenderClicked," + shape.getId());
-    iosocket.emit('defenderClicked', shape.getId(), shape.hex);
+    iosocket.emit('defenderClicked', shape.getId(), shape.hexId.getId());
 
   } else if (shape.getName() == "dicebutton") {
     console.log('Clicked ' + shape.getName() + ' ' + shape.diceValue);

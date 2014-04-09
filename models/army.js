@@ -85,6 +85,19 @@ function Army(affinity, name, income, gold, id) {
     return true;
   };
 
+  this.removeFromArray = function(array, thing) {
+    for (var i in array) {
+      if (array[i].name == thing.name) {
+        console.log("Removing " + thing + " in array");
+        array.splice(i, 1);
+        // delete array[i]; // TODO big issues with deleting from arrays.. WHYYYYY
+        return true;
+      }
+    }
+    console.log("Could not find " + thing + " in array. (Remove)");
+    return false;
+  };
+
   this.addThingToRack = function(defender) {
     if (currentArmy.rack.length == 10) {
       return false;
@@ -124,17 +137,19 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.putDefenderInHand = function(defenderName, hexId) {
-    //
+    // Put the defender selected in the hand of the player
     this.thingInHand = this.findDefenderInStacks(defenderName, hexId);
   };
 
   this.findDefenderInStacks = function(defenderName, hexId) {
-    if (hexId) {
-      stack = this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
-      if (stack) {
-        return stack[indexByKey(this.stacks, "name", defenderName)];
-      }
+    var stack = this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
+
+    if (stack) {
+      var defender = this.findThing(stack.containedDefenders, defenderName);
+      if (defender)
+        return defender;
     }
+
     console.log("Defender " + defenderName + " not found in any stack belonging to this army");
     return null;
   };
@@ -228,7 +243,7 @@ function Army(affinity, name, income, gold, id) {
     if (target.name == "hex") {
       x1 = parseInt(target.id.split(",")[0], 10);
       y1 = parseInt(target.id.split(",")[1], 10);
-    } else if (target.id == "defender") {
+    } else if (target.type == "defender") {
       x1 = parseInt(target.containerId.split(",")[0], 10);
       y1 = parseInt(target.containerId.split(",")[1], 10);
     } else {

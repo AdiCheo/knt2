@@ -586,7 +586,7 @@ function eventStackMovePhase(socket, stackName) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
   // Find the selected stack in the current armies stacks
-  currentArmy.thingInHand = currentArmy.findstackInStacks(stackName);
+  // currentArmy.thingInHand = currentArmy.findstackInStacks(stackName);
 
   if (!currentArmy.thingInHand)
     socket.emit('error', 'Choose a stack on the board only!');
@@ -599,7 +599,8 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  currentHex = game.getHexById(hexId);
+  var oldHexId = currentArmy.thingInHand.currentHexId;
+  var currentHex = game.getHexById(hexId);
 
   // Remove the defender in hand from the stack on his old hex,
   // Place the defender on the new indicated hex
@@ -622,10 +623,20 @@ function eventClickedOnHexMovePhase(socket, hexId) {
           if (indexById(currentArmy.ownedHexes, hexId) !== null) {
 
             if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
-              // Remove the defender in hand from it's current stack
-              removeFromThingsArray(currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId), currentArmy.thingInHand);
+              currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
-              io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.getStackOnHex(currentArmy.thingInHand.currentHexId).containedDefenders, currentArmy.affinity);
+              // Remove the defender in hand from it's current stack
+              console.log("Old Hex Id: " + oldHexId);
+              console.log("Old Stack: " + currentArmy.getStackOnHex(oldHexId));
+
+              for (var defender in currentArmy.getStackOnHex(oldHexId).containedDefenders) {
+                console.log("Defender Contained: " + currentArmy.getStackOnHex(oldHexId).containedDefenders[defender].name);
+              }
+              console.log("Thing in hand: " + currentArmy.thingInHand.name);
+
+              currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
+
+              io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
 
               // send update socket
               io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
@@ -1227,17 +1238,4 @@ function indexByKey(array, key, value) {
 
 function indexById(array, value) {
   return indexByKey(array, "id", value);
-}
-
-function removeFromThingsArray(array, name) {
-  for (var i in array) {
-    if (array[i] == name) {
-      console.log("Removing " + name + " in array");
-      array.splice(i, 1);
-      // delete array[i]; // TODO big issues with deleting from arrays.. WHYYYYY
-      return true;
-    }
-  }
-  console.log("Could not find " + name + " in array. (Remove)");
-  return false;
 }

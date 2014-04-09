@@ -112,6 +112,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
       height: 50
     });
 
+    thing.hexId = hexagon;
     this.containDefenders.push(thing);
 
     boardLayer.add(thing);
@@ -120,7 +121,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     boardLayer.draw();
   };
 
-  hexagon.updateIcons = function(stackThings) {
+  hexagon.updateIcons = function(stackThings, hexId) {
     // Remove old icons
     for (var i in this.containDefenders) {
       this.containDefenders[i].remove();
@@ -130,7 +131,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
     // Update stack
     for (var i in stackThings) {
-      this.addThingIcon(stackThings[i].name, i);
+      this.addThingIcon(stackThings[i].name, i, hexId);
     }
   };
 
