@@ -153,7 +153,7 @@ function Army(affinity, name, income, gold, id) {
 
   this.findDefenderInRack = function(defenderName) {
     // returns null if not found
-    return this.rack[indexByKey(this.stacks, "name", defenderName)];
+    return this.rack[indexByKey(this.rack, "name", defenderName)];
   };
 
   this.removeDefenderFromStack = function(defender) {

@@ -187,7 +187,7 @@ function updateUI(armyData) {
 }
 
 // function collectGoldButton() {
-//   iosocket.emit('updateUI');
+//   
 // }
 
 function updateUsers(users) {
@@ -237,7 +237,7 @@ function allowMarkerPlacement() {
 
 function updateSelectedIcon(thing) { //updateSelectedIcon
   console.log("Selected " + thing);
-  highlightHex(boardLayer.get("#" + thing)[0]);
+  // highlightHex(boardLayer.get("#" + thing)[0]);
   if (thing.slice(0, 5) == "stack")
     boardLayer.get('#selected')[0].setImage(StackIconArray[localAffinity]);
   else if (thing)
@@ -252,40 +252,39 @@ function highlightMovement() {
 }
 
 function updateStackAll(hexId, affinity) {
+  if (boardLayer.get('#stack' + hexId)[0])
+    boardLayer.get('#' + hexId)[0].removeStack();
   // place stack icon for particular army on hexId
   console.log("Army " + affinity + " placing stack at " + hexId);
   if (affinity !== localAffinity) {
     boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
   }
-  iosocket.emit('updateUI');
+
 }
 
 function removeStackAll(hexId) {
   // place stack icon for particular army on hexId
   console.log("Removing stack at " + hexId);
   boardLayer.get('#' + hexId)[0].removeStack();
-  iosocket.emit('updateUI');
+
 }
 
 function updateStack(hexId, stackThings, affinity) {
-  console.log("Stack Tghing length: " + stackThings.length);
-  console.log(boardLayer.get('#stack' + hexId)[0]);
-  // update stack icons
-  if (stackThings.length === 0) {
-    console.log("Stack is empty!");
-    boardLayer.get('#stack' + hexId)[0].remove();
-  } else {
-    console.log("Stack is not Empty!");
-    boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+
+  if (boardLayer.get('#stack' + hexId)[0]) {
+    boardLayer.get('#' + hexId)[0].removeStack();
 
   }
+
+  boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+
   if (localAffinity == affinity)
     boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
 
   // if (!boardLayer.get('#stack' + hexId)[0]) {
   //   updateStackAll(hexId, 0);
   // }
-  // iosocket.emit('updateUI');
+  // 
 
 
   // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);
@@ -319,7 +318,7 @@ function updateHex(hexId, affinity) {
 function updateForts(hexId, affinity) {
   console.log("Army " + affinity + " owning " + hexId);
   boardLayer.get('#' + hexId)[0].setFortIcon(affinity);
-  iosocket.emit('updateUI');
+
 }
 
 function updateAllForts(forts) {
@@ -332,17 +331,13 @@ function fortUpgraded(fortUpgradeData) {
   boardLayer.get('#fort' + fortUpgradeData.hexId)[0].remove();
   boardLayer.get('#' + fortUpgradeData.hexId)[0].setFortIcon(fortUpgradeData.affinity, fortUpgradeData.fortValue);
 
-  iosocket.emit('updateUI');
-}
 
-// function updateGold(updatedGoldData) {
-//   iosocket.emit('updateUI');
-// }
+}
 
 function updateRack(rackThings) {
   console.log(rackThings);
   boardLayer.get('#rack')[0].updateIcons(rackThings);
-  iosocket.emit('updateUI');
+
 }
 
 function updateHand(thing) {
