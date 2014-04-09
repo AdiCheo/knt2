@@ -182,7 +182,6 @@ io.sockets.on('connection', function(socket) {
 
   //
   socket.on('defenderClicked', function(defenderName) {
-    // eventDefenderMovePhase(socket, defenderName); //testx Move
     if (game.currentPhase == RECRUIT_THINGS_PHASE) {
       eventClickedOnDefenderOnRack(socket, defenderName);
     }
@@ -194,7 +193,6 @@ io.sockets.on('connection', function(socket) {
   /*** MOVEMENT_PHASE - 5 ***/
   // Defender Listener
   socket.on('defenderClicked', function(defenderName, hexId) {
-    // eventDefenderMovePhase(socket, defenderName); //testx Move
     if (game.currentPhase == MOVEMENT_PHASE) {
       eventDefenderMovePhase(socket, defenderName, hexId);
     }
