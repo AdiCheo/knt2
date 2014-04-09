@@ -24,23 +24,21 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.defendersVisible = true;
 
   hexagon.setOwnerIcon = function(affinity) {
-
     //relative position within hex
     posx = 10;
     posy = -60;
 
-    var iconImg = markerIcons[affinity];
+    if (this.icon) {
+      this.icon.setImage(markerIcons[affinity]);
+    } else {
+      this.icon = createIcon(markerIcons[affinity], 25, "marker");
+      boardLayer.add(this.icon);
+    }
 
-    // TODO fix one icon limit
-    var icon = createIcon(iconImg, 25, "marker");
-    boardLayer.add(icon);
-
-    boardLayer.add(icon);
-
-    icon.setX(this.getX() + posx);
-    icon.setY(this.getY() + posy);
-    icon.moveToTop();
-    icon.show();
+    this.icon.setX(this.getX() + posx);
+    this.icon.setY(this.getY() + posy);
+    this.icon.moveToTop();
+    this.icon.show();
 
     currentHexId = boardLayer.get("#" + this.getId())[0];
     currentHexId.affinity = affinity;
@@ -80,8 +78,8 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   hexagon.setStackIcon = function(affinity) {
 
-    if (this.stackIcon) {
-      this.stackIcon.setImage(StackIconArray[affinity]);
+    if (this.stack) {
+      this.stack.setImage(StackIconArray[affinity]);
 
     } else {
       this.stack = new Kinetic.Image({
@@ -104,6 +102,64 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.stack.hex = hexagon;
   };
 
+  hexagon.setDefenderStackIcon = function(things, affinity) {
+
+    if (this.stack)
+      this.removeStack();
+
+    if (this.defStack) {
+      this.defStack.setImage(StackIconArray[affinity]);
+
+    } else {
+      this.defStack = new Kinetic.Image({
+        x: this.getX() - 45,
+        y: this.getY() - 20,
+        id: "stack" + this.getId(),
+        name: "stack" + affinity,
+        image: StackIconArray[affinity],
+        // draggable: true,
+        width: 40,
+        height: 40
+      });
+      boardLayer.add(this.defStack);
+    }
+
+    this.defStack.moveToTop();
+    this.defStack.show();
+    boardLayer.draw();
+
+    this.defStack.hex = hexagon;
+  };
+
+  hexagon.setAttackerStackIcon = function(things, affinity) {
+
+    if (this.stack)
+      this.removeStack();
+
+    if (this.attStack) {
+      this.attStack.setImage(StackIconArray[affinity]);
+
+    } else {
+      this.attStack = new Kinetic.Image({
+        x: this.getX() + 25,
+        y: this.getY() - 20,
+        id: "stack" + this.getId(),
+        name: "stack" + affinity,
+        image: StackIconArray[affinity],
+        // draggable: true,
+        width: 40,
+        height: 40
+      });
+      boardLayer.add(this.attStack);
+    }
+
+    this.attStack.moveToTop();
+    this.attStack.show();
+    boardLayer.draw();
+
+    this.attStack.hex = hexagon;
+  };
+
   hexagon.removeStack = function() {
     // Remove old icons
     for (var i in this.containDefenders) {
@@ -113,8 +169,10 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.containDefenders = [];
 
     // remove stack
-    this.stack.remove();
-    delete this.stack;
+    if (this.stack) {
+      this.stack.remove();
+      delete this.stack;
+    }
     boardLayer.draw();
   };
 

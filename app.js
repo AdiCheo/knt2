@@ -686,9 +686,42 @@ function eventClickedOnHexMovePhase(socket, hexId) {
     }
   } else if (currentArmy.thingInHand.type == "stack") {
     // If hexID has an opponent's stack
-    if (currentHex.isExplored && currentHex.affinity != currentArmy.affinity) {
-      moveStackBattle(socket, currentArmy, oldHexId, hexId);
+    if (currentHex.isExplored) {
+
+      conflictStack = checkBattleStack(socket,
+        hexId,
+        currentArmy.thingInHand.affinity);
+
+      conflictFort = checkBattleFort(
+        hexId,
+        currentArmy.thingInHand.affinity);
+
+      socket.emit('error', conflictStack);
+      socket.emit('error', conflictFort);
+
+      if (conflictStack)
+        moveStackBattle(socket, currentArmy, oldHexId, hexId, conflictStack);
+
+      else if (conflictFort)
+        moveStackBattleFort(socket, currentArmy, oldHexId, hexId, conflictFort);
+
+      else if (currentHex.affinity == currentArmy.affinity) {
+        // Explored with no conflict (you own it)
+        moveStack(socket, currentArmy, oldHexId, hexId);
+
+      } else {
+        // Explored you don't own it
+        // Own and move
+        // currentArmy.ownHex(hexId, game);
+        // io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
+        // moveStack(socket, currentArmy, oldHexId, hexId);
+        socket.emit('error', "TEST TODO SOmething went wrong."); // TODO
+        socket.emit('error', conflictStack); // TODO
+        socket.emit('error', conflictFort); // TODO
+      }
+
     } else {
+      // Not explored TODO
       moveStack(socket, currentArmy, oldHexId, hexId);
     }
   } else {
@@ -696,21 +729,56 @@ function eventClickedOnHexMovePhase(socket, hexId) {
   }
 }
 
-function moveStackBattle(socket, currentArmy, oldHexId, newHexId) {
+// TODO
+function moveStackBattleFort(socket, currentArmy, oldHexId, newHexId, contestedStack) {
   currentArmy.thingInHand.moveStack(newHexId);
 
-  // Remove old stack
+  // Remove both old stacks
   io.sockets.emit('removeStackAll', oldHexId);
+  io.sockets.emit('removeStackAll', newHexId);
+
+  // temps
+  currHexId = currentArmy.thingInHand.currentHexId;
+  defenders = currentArmy.thingInHand.containedDefenders;
+  attackers = contestedStack.containedDefenders;
 
   // send update socket
-  io.sockets.emit('updateStackBattle', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
-  io.sockets.emit('updateStackAllBattle', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
+  io.sockets.emit('updateStackBattle', currHexId,
+    defenders, currentArmy.affinity,
+    attackers, contestedStack.affinity);
+
+  io.sockets.emit('updateStackAllBattle', currHexId, currentArmy.affinity, contestedStack.affinity);
   io.sockets.emit('error', "Battle!");
 
   // empty hand
   currentArmy.thingInHand = null;
   socket.emit('updateHand', null);
-  socket.emit('updateSelectedIcon', null);
+  socket.emit('updateSelectedIcon', "question");
+}
+
+function moveStackBattle(socket, currentArmy, oldHexId, newHexId, contestedStack) {
+  currentArmy.thingInHand.moveStack(newHexId);
+
+  // Remove both old stacks
+  io.sockets.emit('removeStackAll', oldHexId);
+  io.sockets.emit('removeStackAll', newHexId);
+
+  // temps
+  currHexId = currentArmy.thingInHand.currentHexId;
+  defenders = contestedStack;
+  attackers = currentArmy.thingInHand;
+
+  // send update socket
+  io.sockets.emit('updateStackBattle', currHexId,
+    defenders, defenders.affinity,
+    attackers, attackers.affinity);
+
+  io.sockets.emit('error', "Battle!");
+
+  // empty hand
+  currentArmy.thingInHand = null;
+  socket.emit('updateHand', null);
+  socket.emit('updateSelectedIcon', "question");
 }
 
 function moveStack(socket, currentArmy, oldHexId, newHexId) {
@@ -1010,13 +1078,6 @@ function getStacksScenario1() {
   game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
 }
 
-function loadScenario1(num) {
-  ownHexesScenario1();
-  buildFortsScenario1();
-  getStacksScenario1();
-
-}
-
 function eventLoadUserData(socket, num) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
@@ -1038,7 +1099,10 @@ function eventLoadUserData(socket, num) {
 
 function eventLoadGame(game, num) {
   if (num == 1) {
-    loadScenario1();
+
+    ownHexesScenario1();
+    buildFortsScenario1();
+    getStacksScenario1();
 
     game.currentPhase = MOVEMENT_PHASE;
     game.totalTurn = 5;
@@ -1048,11 +1112,24 @@ function eventLoadGame(game, num) {
 
 
   } else if (num == 2) {
-    loadScenario1();
+
+    ownHexesScenario1();
+    buildFortsScenario1();
+    getStacksScenario1();
 
     recruitNumOfThingsToRack(10, 0); // recruit 10 things to rack
 
     game.currentPhase = RECRUIT_THINGS_PHASE;
+    game.totalTurn = 5;
+    game.currentPlayerTurn = 0;
+    // Send message to all clients that a player turn ended
+    io.sockets.emit('nextPlayerTurn', nextTurnData());
+
+  } else if (num == 3) {
+    ownHexesScenario1();
+    getStacksScenario1();
+
+    game.currentPhase = MOVEMENT_PHASE;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
@@ -1314,4 +1391,30 @@ function indexByKey(array, key, value) {
 
 function indexById(array, value) {
   return indexByKey(array, "id", value);
+}
+
+function checkBattleFort(stack) {
+  for (var player in game.armies) {
+    fortOnHex = indexByKey[game.armies[player].forts, "currentHexId", stack.currentHexId];
+    if (fortOnHex)
+      return fortOnHex;
+  }
+  return false;
+}
+
+function checkBattleStack(socket, hexId, affinity) {
+  socket.emit('error', 'stacks' + game.armies[0].stacks);
+  socket.emit('error', 'stacks' + game.armies[1].stacks);
+  socket.emit('error', 'stacks' + game.armies[2].stacks);
+  socket.emit('error', 'stacks' + game.armies[3].stacks);
+  for (var player in game.armies) {
+    contestedStack = game.armies[player].getStackOnHex(hexId);
+    socket.emit('error', "You " + contestedStack);
+
+
+    if (contestedStack && contestedStack.affinity != affinity) {
+      return contestedStack;
+    }
+  }
+  return true;
 }

@@ -157,14 +157,24 @@ function initConnection() {
       updateStackAll(hexId, affinity);
     });
 
-    iosocket.on('removeStackAll', function(hexId) {
-      console.log("Remove stack on hex " + hexId);
-      removeStackAll(hexId);
-    });
-
     iosocket.on('updateStack', function(hexId, stackThings, affinity) {
       console.log("updateStack" + stackThings);
       updateStack(hexId, stackThings, affinity);
+    });
+
+    iosocket.on('updateStackAllBattle', function(hexId, affinity, affinityAttack) {
+      console.log("Stack from army " + affinity + " attacked by  army " + affinityAttack);
+      updateStackAllBattle(hexId, affinity, affinityAttack);
+    });
+
+    iosocket.on('updateStackBattle', function(hexId, defenders, defAffinity, attackers, attAffinity) {
+      console.log("updateStack" + hexId);
+      updateStackBattle(hexId, defenders, defAffinity, attackers, attAffinity);
+    });
+
+    iosocket.on('removeStackAll', function(hexId) {
+      console.log("Remove stack on hex " + hexId);
+      removeStackAll(hexId);
     });
 
     iosocket.on('updateUI', function(armyData) {
@@ -240,6 +250,8 @@ function updateSelectedIcon(thing) { //updateSelectedIcon
   highlightHex(boardLayer.get("#" + thing)[0]);
   if (thing.slice(0, 5) == "stack")
     boardLayer.get('#selected')[0].setImage(StackIconArray[localAffinity]);
+  else if (thing.slice(0, 8) == "question")
+    boardLayer.get('#selected')[0].setImage(dice[0]);
   else if (thing)
     boardLayer.get('#selected')[0].setImage(thingImagesArray[thing + "Image"]);
   else
@@ -260,15 +272,8 @@ function updateStackAll(hexId, affinity) {
   iosocket.emit('updateUI');
 }
 
-function removeStackAll(hexId) {
-  // place stack icon for particular army on hexId
-  console.log("Removing stack at " + hexId);
-  boardLayer.get('#' + hexId)[0].removeStack();
-  iosocket.emit('updateUI');
-}
-
 function updateStack(hexId, stackThings, affinity) {
-  console.log("Stack Tghing length: " + stackThings.length);
+  console.log("Stack Thing length: " + stackThings.length);
   console.log(boardLayer.get('#stack' + hexId)[0]);
   // update stack icons
   if (stackThings.length === 0) {
@@ -296,7 +301,47 @@ function updateStack(hexId, stackThings, affinity) {
   // Update stacks
   // boardLayer.get('#' + hexId)[0].updateIcons(stackThings, 0);
   // boardLayer.get('#' + hexId)[0].setStackView(stackThings);
+}
 
+
+function updateStackAllBattle(hexId, affinity, affinityAttack) {
+  // place stack icon for particular army on hexId
+  console.log("Army " + affinity + " placing stack at " + hexId);
+  if (affinity !== localAffinity && affinityAttack !== localAffinity) {
+    boardLayer.get('#' + hexId)[0].removeStack();
+    // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
+    // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
+  }
+  boardLayer.get('#' + hexId)[0].setBattleIcon();
+  iosocket.emit('updateUI');
+}
+
+function updateStackBattle(hexId, defendersThings, defAffinity, attackersThings, attAffinity) {
+
+  console.log("Defenders Things length: " + defendersThings.length);
+  console.log("Attackers Things length: " + attackersThings.length);
+
+  // update stack icons
+  if (defendersThings.length === 0 || attackersThings.length === 0) {
+    // Should never happen
+    console.log("Stack is empty!");
+    boardLayer.get('#stack' + hexId)[0].remove();
+
+  } else {
+    console.log("Stack is not Empty!");
+    boardLayer.get('#' + hexId)[0].setDefenderStackIcon(defendersThings, defAffinity);
+    boardLayer.get('#' + hexId)[0].setAttackerStackIcon(attackersThings, attAffinity);
+
+  }
+  if (localAffinity == affinity)
+    boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
+}
+
+function removeStackAll(hexId) {
+  // place stack icon for particular army on hexId
+  console.log("Removing stack at " + hexId);
+  boardLayer.get('#' + hexId)[0].removeStack();
+  iosocket.emit('updateUI');
 }
 
 function createHexes(hexes) {
