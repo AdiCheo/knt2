@@ -121,19 +121,16 @@ function Army(affinity, name, income, gold, id) {
     if (hexId) {
       stack = this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
       if (stack) {
-        return stack[indexById(this.stacks, defenderName)];
+        return stack[indexByKey(this.stacks, "name", defenderName)];
       }
     }
-    console.log("defender not found");
+    console.log("Defender " + defenderName + " not found in any stack belonging to this army");
     return null;
   };
 
   this.findDefenderInRack = function(defenderName) {
-    for (var i in this.rack) {
-      if (this.rack[i].name == defenderName)
-        return this.rack[i];
-    }
-    return false;
+    // returns null if not found
+    return this.rack[indexByKey(this.stacks, "name", defenderName)];
   };
 
   this.removeDefenderFromStack = function(defender) {
