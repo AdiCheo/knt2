@@ -630,67 +630,64 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
   var oldHexId = currentArmy.thingInHand.currentHexId;
   var currentHex = game.getHexById(hexId);
+  var distanceTraveled = currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
   if (currentArmy.thingInHand.type == "defender") {
 
     // If Defender has enough movement points for the move
-    if (currentArmy.calculateDistance(currentArmy.thingInHand, currentHex) <= currentArmy.thingInHand.movementPoints) {
+    if (distanceTraveled <= currentArmy.thingInHand.movementPoints) {
+      // If the current army already explored and owned the hex
+      if (indexById(currentArmy.ownedHexes, hexId) !== null && currentHex.isExplored) {
 
-      // check if hex is unexplored
-      if (!currentHex.isExplored) {
-        currentHex.isExplored = true;
-        // The hex is not explored, the dice needs to be rolled
+        if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
+          currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
-        // player goes on unexplored hex, then they must roll. If they roll a 1 or 6 then own hex and add marker
-        //if the roll is anything else, it is defended, game picks this amount of defenders from the cup and places them on that hex
-        //during that battle, you can bribe the creatures by paying as much gold as their combat value 
-        //if you fight for at least one combat round, then you cannot bribe anymore 
-        //affinity = 4 and the army NPC 
-        currentArmy.mustRollDice = true;
-        // you need to roll the dice for the unexplored hex 
-        // socket.emit('needRollDice', randomDiceRoll());
-        game.currentPhase = "exploration";
+          // Remove the defender in hand from it's current stack
+          currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
 
-        currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+          // Remove old stack
+          io.sockets.emit('removeStackAll', oldHexId);
+          io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
 
-      } else {
-        // If the current army already explored and owned the hex
-        if (indexById(currentArmy.ownedHexes, hexId) !== null) {
+          // send update socket
+          io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
 
-          if (currentArmy.addDefenderToStack(currentArmy.thingInHand, hexId)) {
-            currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+          // empty hand
+          socket.emit('updateHand', null);
 
-            // Remove the defender in hand from it's current stack
-            currentArmy.removeFromArray(currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.thingInHand);
+          currentArmy.thingInHand = false;
+          // currentArmy.canPlaceThing = false;
 
-            // Remove old stack
-            io.sockets.emit('removeStackAll', oldHexId);
-            io.sockets.emit('updateStack', oldHexId, currentArmy.getStackOnHex(oldHexId).containedDefenders, currentArmy.affinity);
-
-            // send update socket
-            io.sockets.emit('updateStack', hexId, currentArmy.getStackOnHex(hexId).containedDefenders, currentArmy.affinity);
-
-            // empty hand
-            socket.emit('updateHand', null);
-
-            currentArmy.thingInHand = false;
-            // currentArmy.canPlaceThing = false;
-
-          } else {
-            socket.emit('error', "Cannot place more than 10 defenders per stack.");
-          }
-        }
-        // Else it is owned by another army!
-        else {
-
+        } else {
+          socket.emit('error', "Cannot place more than 10 defenders per stack.");
         }
       }
     } else {
       socket.emit('error', "No more movement points!");
     }
   } else if (currentArmy.thingInHand.type == "stack") {
+
+    // check if hex is unexplored
+    if (!currentHex.isExplored) {
+      currentHex.isExplored = true;
+      // The hex is not explored, the dice needs to be rolled
+
+      // player goes on unexplored hex, then they must roll. If they roll a 1 or 6 then own hex and add marker
+      //if the roll is anything else, it is defended, game picks this amount of defenders from the cup and places them on that hex
+      //during that battle, you can bribe the creatures by paying as much gold as their combat value 
+      //if you fight for at least one combat round, then you cannot bribe anymore 
+      //affinity = 4 and the army NPC 
+      currentArmy.mustRollDice = true;
+      // you need to roll the dice for the unexplored hex 
+      // socket.emit('needRollDice', randomDiceRoll());
+      game.currentPhase = "exploration";
+      moveStack(socket, currentArmy, oldHexId, hexId);
+
+      currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+
+    }
     // If hexID has an opponent's stack
-    if (currentHex.isExplored && currentHex.affinity != currentArmy.affinity) {
+    else if (currentHex.isExplored && currentHex.affinity != currentArmy.affinity) {
       moveStackBattle(socket, currentArmy, oldHexId, hexId);
     } else {
       moveStack(socket, currentArmy, oldHexId, hexId);
