@@ -605,14 +605,14 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  var oldHexId = currentArmy.thingInHand.currentHexId;
-  var currentHex = game.getHexById(hexId);
-
   // Remove the defender in hand from the stack on his old hex,
   // Place the defender on the new indicated hex
 
   // Check if the thing in hand is an defender object
   if (currentArmy.thingInHand) {
+
+    var oldHexId = currentArmy.thingInHand.currentHexId;
+    var currentHex = game.getHexById(hexId);
     if (currentArmy.thingInHand.type == "defender") {
 
       // If Defender has enough movement points for the move

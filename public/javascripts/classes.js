@@ -113,8 +113,6 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   };
 
   hexagon.addThingIcon = function(thingName, index) {
-    console.log(thingName + "Image");
-    console.log(thingImagesArray[thingName + "Image"]);
     var thing = new Kinetic.Image({
       x: this.getX() - 25, //500 + 300,
       y: this.getY() + 25 + index * 50, //500 + index * 50,

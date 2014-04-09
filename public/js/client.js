@@ -268,15 +268,16 @@ function removeStackAll(hexId) {
 }
 
 function updateStack(hexId, stackThings, affinity) {
-  console.log("Your stack at " + hexId + " has been updated with " + stackThings);
-  for (var i in stackThings) {
-    console.log(stackThings[i].name);
-  }
+  console.log("Stack Tghing length: " + stackThings.length);
+  console.log("The stack icon " + boardLayer.get('#stack' + hexId)[0]);
   // update stack icons
-  if (stackThings.length !== 0) {
-    boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+  if (stackThings.length === 0) {
+    console.log("Stack is empty!");
+    boardLayer.get('#stack' + hexId)[0].remove();
   } else {
-    boardLayer.get('#' + hexId)[0].setStackIcon(null);
+    console.log("Stack is not Empty!");
+    boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
+
   }
   if (localAffinity == affinity)
     boardLayer.get('#' + hexId)[0].updateIcons(stackThings);

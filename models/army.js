@@ -76,7 +76,7 @@ function Army(affinity, name, income, gold, id) {
       this.stacks.push(stack);
     }
 
-    defender.containerId = stack.currentHexId;
+    defender.currentHexId = stack.currentHexId;
 
     if (stack.containedDefenders.length == 10) {
       return false;
@@ -241,8 +241,8 @@ function Army(affinity, name, income, gold, id) {
       x1 = parseInt(target.id.split(",")[0], 10);
       y1 = parseInt(target.id.split(",")[1], 10);
     } else if (target.type == "defender") {
-      x1 = parseInt(target.containerId.split(",")[0], 10);
-      y1 = parseInt(target.containerId.split(",")[1], 10);
+      x1 = parseInt(target.currentHexId.split(",")[0], 10);
+      y1 = parseInt(target.currentHexId.split(",")[1], 10);
     } else {
       x1 = parseInt(target.split(",")[0], 10);
       y1 = parseInt(target.split(",")[1], 10);
