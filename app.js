@@ -575,10 +575,10 @@ function eventDefenderMovePhase(socket, defenderName, hexId) {
   // Find the selected defender in the current armies stacks
   currentArmy.putDefenderInHand(defenderName, hexId);
 
-  if (!currentArmy.thingInHand)
+  if (!currentArmy.thingInHand) {
     socket.emit('error', 'Choose a defender on the board only!');
-
-  socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
+  } else
+    socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
 }
 
 // Clicking on a stack that's on the board to move him TODO

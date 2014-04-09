@@ -123,7 +123,6 @@ function Army(affinity, name, income, gold, id) {
     return false;
   };
 
-
   this.putDefenderInHand = function(defenderName, hexId) {
     //
     this.thingInHand = this.findDefenderInStacks(defenderName, hexId);
