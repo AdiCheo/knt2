@@ -21,6 +21,8 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.logY = logicalY;
 
   hexagon.containDefenders = [];
+  hexagon.defDefenders = [];
+  hexagon.attDefenders = [];
   hexagon.defendersVisible = true;
 
   hexagon.setOwnerIcon = function(affinity) {
@@ -141,7 +143,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
     } else {
       this.attStack = new Kinetic.Image({
-        x: this.getX() + 25,
+        x: this.getX() + 5,
         y: this.getY() - 20,
         id: "stack" + this.getId(),
         name: "stack" + affinity,
@@ -176,9 +178,18 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     boardLayer.draw();
   };
 
-  hexagon.addThingIcon = function(thingName, index) {
+  hexagon.addThingIcon = function(thingName, index, pos) {
+
+    // Use for battle positioning
+    var xMod = 0;
+    if (pos == 1) {
+      xMod = -25;
+    } else if (pos == 2) {
+      xMod = 25;
+    }
+
     var thing = new Kinetic.Image({
-      x: this.getX() - 25, //500 + 300,
+      x: this.getX() - 25 + xMod, //500 + 300,
       y: this.getY() + 25 + index * 50, //500 + index * 50,
       id: thingName,
       name: "defender",
@@ -189,7 +200,13 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     });
 
     thing.hexId = hexagon;
+
     this.containDefenders.push(thing);
+    if (pos == 1) {
+      this.defDefenders.push(thing);
+    } else if (pos == 2) {
+      this.attDefenders.push(thing);
+    }
 
     boardLayer.add(thing);
     thing.moveToTop();
@@ -197,7 +214,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     boardLayer.draw();
   };
 
-  hexagon.updateIcons = function(stackThings, hexId) {
+  hexagon.updateIcons = function(stackThings, pos) {
     // Remove old icons
     for (var i in this.containDefenders) {
       this.containDefenders[i].remove();
@@ -207,8 +224,46 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
     // Update stack
     for (var i in stackThings) {
-      this.addThingIcon(stackThings[i].name, i, hexId);
+      this.addThingIcon(stackThings[i].name, i, pos);
     }
+  };
+
+  hexagon.showDefDefenders = function() {
+    var yO = 45;
+
+    for (var each in this.defDefenders) {
+      console.log(this.defDefenders[each]);
+      this.defDefenders[each].show();
+      this.defDefenders[each].moveToTop();
+      yO += 40;
+    }
+    this.defendersVisible = true;
+  };
+
+  hexagon.hideDefDefenders = function() {
+    for (var each in this.defDefenders) {
+      this.defDefenders[each].hide();
+    }
+    this.defendersVisible = false;
+  };
+
+  hexagon.showAttDefenders = function() {
+    var yO = 45;
+
+    for (var each in this.attDefenders) {
+      console.log(this.attDefenders[each]);
+      this.attDefenders[each].show();
+      this.attDefenders[each].moveToTop();
+      yO += 40;
+    }
+    this.defendersVisible = true;
+  };
+
+  hexagon.hideAttDefenders = function() {
+    for (var each in this.attDefenders) {
+      this.attDefenders[each].hide();
+    }
+    this.defendersVisible = false;
   };
 
   hexagon.showDefenders = function() {
@@ -216,8 +271,6 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
     for (var each in this.containDefenders) {
       console.log(this.containDefenders[each]);
-      // this.containDefenders[each].setX(this.getX() + 5);
-      // this.containDefenders[each].setY(this.getY() + yO);
       this.containDefenders[each].show();
       this.containDefenders[each].moveToTop();
       yO += 40;
