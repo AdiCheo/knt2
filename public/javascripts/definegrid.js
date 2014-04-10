@@ -276,7 +276,7 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:generateButtonClicked,");
     iosocket.emit('generateButtonClicked');
 
-  } else if (shape.thingType == "treasure") {
+  } else if (shape.getName() == "treasure") {
     console.log("emit:treasureClicked,");
     iosocket.emit('treasureClicked', shape.getId());
 

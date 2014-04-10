@@ -621,13 +621,22 @@ function eventClickedOnTreasureOnRack(socket, treasureName) {
 
   // Need to find the treasure by name in order to find the value
   var treasure = currentArmy.findThing(currentArmy.rack, treasureName);
+  console.log(treasure);
+  console.log(treasureName);
 
-  // Add to total gold of player
-  currentArmy.gold += treasure.incomeValue;
+  if (treasure.buildingType == "treasure") {
+    // Trade it for gold!
+    // Add to total gold of player
+    currentArmy.gold += treasure.incomeValue;
 
-  // Remove from rack and back to cup
-  currentArmy.removeFromRack(treasure);
-  game.cup.push(treasure);
+    // Remove from rack and back to cup
+    currentArmy.removeFromRack(treasure);
+    game.cup.push(treasure);
+
+  } else if (treasure.buildingType == "building") {
+    currentArmy.thingInHand = currentArmy.findThing(currentArmy.rack, treasureName);
+  }
+
 
   socket.emit('updateRack', currentArmy.rack);
   io.sockets.emit('updateUI', updateArmyData(socket));

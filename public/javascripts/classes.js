@@ -52,7 +52,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     var incomeCounter = new Kinetic.Image({
       x: this.getX() + 10,
       y: this.getY() + 10,
-      name: incomeCounter.name,
+      name: "treasure",
       id: incomeCounter.id,
       image: thingImagesArray[incomeCounter.name + "Image"],
       width: 40,
@@ -432,27 +432,27 @@ function initRack(realX, realY) {
 
     // Update Rack
     for (var i in rackThings) {
-      rack.addThingIcon(rackThings[i].name, i);
+      rack.addThingIcon(rackThings[i], i);
     }
   };
 
-  rack.addThingIcon = function(thingName, index) {
-    var thing = new Kinetic.Image({
+  rack.addThingIcon = function(thing, index) {
+    var thingIcon = new Kinetic.Image({
       x: this.getX() - 35,
       y: this.getY() + index * 50,
-      id: thingName,
-      name: "defender",
-      image: thingImagesArray[thingName + "Image"],
+      id: thing.name,
+      name: thing.buildingType,
+      image: thingImagesArray[thing.name + "Image"],
       draggable: true,
       width: 50,
       height: 50
     });
 
-    thingsArray.push(thing);
-    thingsInRack.push(thing);
-    boardLayer.add(thing);
-    thing.moveToTop();
-    thing.show();
+    // thingsArray.push(thing);
+    // thingsInRack.push(thing);
+    boardLayer.add(thingIcon);
+    thingIcon.moveToTop();
+    thingIcon.show();
     boardLayer.draw();
   };
 
