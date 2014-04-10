@@ -11,6 +11,7 @@ function Army(affinity, name, income, gold, id) {
   this.id = id;
   this.freeThings = 10;
   this.thingsPurchased = 0;
+  this.citadelsOwned = 0;
 
   this.mustEndTurn = false;
   this.canEndTurn = false;

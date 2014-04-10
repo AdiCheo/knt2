@@ -814,13 +814,14 @@ function eventUpgradeFort(socket, hexId) {
     if (currentArmy.gold >= 5) {
       if (!currentArmy.forts[index].hasBeenUpgraded) {
         if (currentArmy.forts[index].fortValue == 3) {
-          if (currentArmy.income >= 20) {
+          if (currentArmy.income >= 20 && currentArmy.citadelsOwned == 0) {
             currentArmy.forts[index].hasBeenUpgraded = true;
             currentArmy.forts[index].fortValue++;
             currentArmy.gold -= 5;
+            currentArmy.citadelsOwned++;
             io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].fortValue, currentArmy.gold, currentArmy.forts[index].id));
           } else {
-            socket.emit('error', "You need an income of at least 20 gold to upgrade to citadel.");
+            socket.emit('error', "You need an income of at least 20 gold to upgrade to citadel or you already have a citadel!");
           }
         } else if (currentArmy.forts[index].fortValue < 3) {
           currentArmy.forts[index].hasBeenUpgraded = true;

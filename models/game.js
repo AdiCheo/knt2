@@ -469,16 +469,32 @@ function Game() {
       if (this.currentPhase == 4)
         this.currentPhase = 5;
       if (this.currentPhase == 8) {
+        if (!this.hasEnded)
+          this.currentPhase = 9;
+
+        var citadels = [];
         for (var i in this.armies) {
           for (var j in this.armies[i].forts) {
             if (this.armies[i].forts[j].fortValue == 4) {
-              this.hasEnded = true;
-              this.winner = this.armies[i];
+              citadels.push(this.armies[i].forts[j]);
             }
           }
         }
-        if (!this.hasEnded)
-          this.currentPhase = 9;
+        if (citadels.length == 1) {
+          this.hasEnded = true;
+          this.winner = this.armies[indexByKey(this.armies, "affinity", citadels[0].affinity)];
+        } else if (citadels.length >= 2) {
+          for (var i in this.armies) {
+            if (this.armies[i].citadelsOwned > 1) {
+              this.hasEnded = true;
+              this.winner = this.armies[i];
+            } else {
+              this.hasEnded = false;
+              this.winner = null;
+            }
+          }
+        }
+
       }
       console.log("Moving to phase: " + this.currentPhase);
     }
@@ -488,6 +504,20 @@ function Game() {
   this.createDefenders();
   this.createSpecialIncomeThings();
   // this.createCupSpecialIncomeThings();
+
+  function indexByKey(array, key, value) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i][key] == value) {
+        return i;
+      }
+    }
+    console.log("NOT FOUND: " + value + " in " + key);
+    return null;
+  }
+
+  function indexById(array, value) {
+    return indexByKey(array, "id", value);
+  }
 }
 
 module.exports = Game;
