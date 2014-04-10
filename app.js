@@ -379,6 +379,7 @@ function eventGenerateClicked(socket) {
 
     // Socket message to update cup view
     socket.emit('updateHand', currentArmy.thingInHand.name);
+    socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
 
 
 
@@ -391,6 +392,7 @@ function eventGenerateClicked(socket) {
 
     // Socket message to update cup view
     socket.emit('updateHand', currentArmy.thingInHand.name);
+    socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
 
     currentArmy.canReplace = false;
   } else {
@@ -599,9 +601,7 @@ function eventRecruitThings(socket) {
     if (currentArmy.freeThings > 0) {
       currentArmy.thingInHand = game.newRandomThing();
       socket.emit('updateHand', currentArmy.thingInHand.name);
-      // currentArmy.canPlaceThing = true;
-      // currentArmy.canReplace = false;
-
+      socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
       io.sockets.emit('updateUI', updateArmyData(socket));
 
     } else if (currentArmy.thingsPurchased < 5) {
@@ -610,8 +610,8 @@ function eventRecruitThings(socket) {
         currentArmy.gold -= 5;
         currentArmy.thingsPurchased++;
         socket.emit('updateHand', currentArmy.thingInHand.name);
-        // currentArmy.canPlaceThing = true;
-        // currentArmy.canReplace = false;
+        socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
+
       } else {
         socket.emit('error', 'You cannot afford it anymore!');
       }
