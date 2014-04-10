@@ -150,13 +150,13 @@ var collectGoldButton = new Kinetic.Image({
 });
 
 var selectedThing = new Kinetic.Image({
-  x: 100,
-  y: 850,
+  x: 750,
+  y: 0,
   name: 'selectedThing',
   id: "selected",
-  fill: "grey",
-  width: 150,
-  height: 150
+  fill: "black",
+  width: 140,
+  height: 140
 });
 
 var endturnbutton = new Kinetic.Image({ //End turn button
