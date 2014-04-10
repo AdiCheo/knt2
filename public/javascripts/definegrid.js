@@ -263,9 +263,13 @@ boardLayer.on('click tap', function(e) {
     if (!hex.defendersVisible) {
       console.log("Showing defenders " + shape.getId());
       hex.showDefenders();
+      hex.showDefDefenders();
+      hex.showAttDefenders();
     } else {
       console.log("Hiding defenders " + shape.getId());
       hex.hideDefenders();
+      hex.hideDefDefenders();
+      hex.hideAttDefenders();
     }
 
   } else if (shape.getName() == "generate") {
