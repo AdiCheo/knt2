@@ -212,6 +212,15 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
+  /*** MOVEMENT_EXPLORATION_PHASE ***/
+
+  // Dice roll (random) listener
+  socket.on('diceRollPressed', function() {
+    if (game.currentPhase == "exploration") {
+      handleDice(socket);
+    }
+  });
+
   // Movment consequences: ownHex, moveStack/defender
 
   /*** COMBAT_PHASE - 6 ***/
@@ -943,14 +952,27 @@ function eventClickedOnHexMovePhase(socket, hexId) {
   function handleDice(socket) {
     currentArmy = game.armies[indexById(game.armies, socket.id)];
     // TODO reply with dice
-    if (true) {
+    if (currentArmy.mustRollDice) {
       // valid dice roll handle here
-      socket.emit('diceRollResult', randomDiceRoll());
+      result = randomDiceRoll();
+      socket.emit('diceRollResult', result);
+
+      if (game.currentPhase == "exploration") {
+        if (result == 1 || result == 6) {
+          // The army can own the hex it stepped on.
+        } else {
+          // We need to create a new stack of npc units and put them on the hex
+          // Then start a battle
+        }
+
+      }
+
       return;
+    } else {
+      // Dice roll is invalid
+      socket.emit('error', 'Dice roll invalid at this time!');
+      return false;
     }
-    // Dice roll is invalid
-    socket.emit('error', 'Dice roll invalid at this time!');
-    return false;
   }
 
   function randomDiceRoll() {

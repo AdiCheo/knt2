@@ -411,6 +411,7 @@ function updateStack(hexId, stackThings, affinity) {
 
   function handleDiceResult(diceResult) {
     console.log('Dice result:' + diceResult);
+    dice1button.setFillPatternImage(dice[diceResult]);
   }
 
   function nextPlayerTurn(gameData) {
