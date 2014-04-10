@@ -1117,7 +1117,6 @@ function handleDice(socket) {
       // The army can own the hex it stepped on.
       currentArmy.ownHex(currentArmy.contestedHex, game);
       io.sockets.emit('updateOwnedHex', currentArmy.contestedHex, currentArmy.affinity);
-      game.currentPhase = 5;
       currentArmy.mustRollDice = false
 
     }
