@@ -1194,17 +1194,18 @@ function buildIncomeCountersScenario2() {
 }
 
 function putThingsOnRackScenario2() {
-  game.armies[0].addThingToRack(game.cup[indexById(game.cup, "CopperMine")]);
+  game.armies[0].addThingToRack(game.cup[indexById(game.cup, "DiamondField")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "DiamondField")]);
+  game.armies[0].addThingToRack(game.cup[indexById(game.cup, "PeatBog")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "PeatBog")]);
+
+  game.armies[3].addThingToRack(game.cup[indexById(game.cup, "CopperMine")]);
   game.removeFromCup(game.cup[indexById(game.cup, "CopperMine")]);
-  game.armies[0].addThingToRack(game.cup[indexById(game.cup, "GoldMine")]);
+  game.armies[3].addThingToRack(game.cup[indexById(game.cup, "GoldMine")]);
   game.removeFromCup(game.cup[indexById(game.cup, "GoldMine")]);
-  game.armies[0].addThingToRack(game.cup[indexById(game.cup, "Pearl")]);
+  game.armies[3].addThingToRack(game.cup[indexById(game.cup, "Pearl")]);
   game.removeFromCup(game.cup[indexById(game.cup, "Pearl")]);
 
-  game.armies[3].addThingToRack(game.cup[indexById(game.cup, "DiamondField")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "DiamondField")]);
-  game.armies[3].addThingToRack(game.cup[indexById(game.cup, "PeatBog")]);
-  game.removeFromCup(game.cup[indexById(game.cup, "PeatBog")]);
 }
 
 function getStacksScenario1() {
