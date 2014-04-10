@@ -414,7 +414,7 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
       return;
     } else if (currentArmy.thingInHand.buildingType == "building") {
       if (indexById(currentArmy.ownedHexes, hexId) !== null) {
-        if (currentArmy.thingInHand.terrainType == currentArmy.ownedHexes(indexById(currentArmy.ownedHexes, hexId))) { // remove that thing from the cup
+        if (currentArmy.thingInHand.terrainType == currentArmy.ownedHexes[indexById(currentArmy.ownedHexes, hexId)].terrainType) { // remove that thing from the cup
           game.removeFromCup(currentArmy.thingInHand);
 
           if (currentArmy.freeThings > 0)
