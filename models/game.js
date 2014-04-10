@@ -468,7 +468,7 @@ function Game() {
         this.currentPhase = 3;
       if (this.currentPhase == 4)
         this.currentPhase = 5;
-      if (this.currentPhase == 7) {
+      if (this.currentPhase == 8) {
         for (var i in this.armies) {
           for (var j in this.armies[i].forts) {
             if (this.armies[i].forts[j].fortValue == 4) {
@@ -477,9 +477,9 @@ function Game() {
             }
           }
         }
+        if (!this.hasEnded)
+          this.currentPhase = 9;
       }
-      if (this.currentPhase == 8)
-        this.currentPhase = 9;
       console.log("Moving to phase: " + this.currentPhase);
     }
   };
