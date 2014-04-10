@@ -1669,5 +1669,5 @@ function checkBattleStack(socket, hexId, affinity) {
       return contestedStack;
     }
   }
-  return true;
+  return false;
 }
