@@ -193,6 +193,12 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
+  socket.on('buildingClicked', function(buildingName) {
+    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
+      eventClickedOnBuildingOnRack(socket, buildingName);
+    }
+  });
+
 
   /*** RANDOM_EVENTS_PHASE - 4 ***/
 
@@ -414,25 +420,37 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
       return;
     } else if (currentArmy.thingInHand.buildingType == "building" || currentArmy.thingInHand.buildingType == "town") {
       if (indexById(currentArmy.ownedHexes, hexId) !== null) {
-        if (currentArmy.thingInHand.terrainType == currentArmy.ownedHexes[indexById(currentArmy.ownedHexes, hexId)].terrainType) { // remove that thing from the cup
-          game.removeFromCup(currentArmy.thingInHand);
+        if (currentArmy.thingInHand.terrainType == currentArmy.ownedHexes[indexById(currentArmy.ownedHexes, hexId)].terrainType || currentArmy.thingInHand.buildingType == 0) { // remove that thing from the cup
 
-          if (currentArmy.freeThings > 0)
-            currentArmy.freeThings--; // decrement recruitable things
+          if (indexById(game.cup, currentArmy.thingInHand.id)) {
 
-          if (currentArmy.freeThings === 0)
-            currentArmy.canEndTurn = true;
+            game.removeFromCup(currentArmy.thingInHand);
 
-          // If placing last free element in phase 0, must end turn
-          if (game.currentPhase === 0 && !currentArmy.freeThings) {
-            currentArmy.mustEndTurn = true;
+            if (currentArmy.freeThings > 0)
+              currentArmy.freeThings--; // decrement recruitable things
+
+            if (currentArmy.freeThings === 0)
+              currentArmy.canEndTurn = true;
+
+            // If placing last free element in phase 0, must end turn
+            if (game.currentPhase === 0 && !currentArmy.freeThings) {
+              currentArmy.mustEndTurn = true;
+            }
+
+            // empty hand
+            socket.emit('updateHand', null);
+
+          } else if (indexById(currentArmy.rack, currentArmy.thingInHand.id)) {
+            currentArmy.removeFromRack(currentArmy.thingInHand);
+
+            socket.emit('updateRack', currentArmy.rack);
+
+            io.sockets.emit('updateUI', updateArmyData(socket));
           }
 
           currentArmy.buildIncomeCounter(hexId, currentArmy.thingInHand);
           io.sockets.emit('createIncomeCounter', currentArmy.thingInHand);
 
-          // empty hand
-          socket.emit('updateHand', null);
 
           currentArmy.thingInHand = false;
         } else {
@@ -624,13 +642,31 @@ function eventClickedOnTreasureOnRack(socket, treasureName) {
     game.cup.push(treasureObj);
     currentArmy.removeFromRack(treasureObj);
 
-  } else if (treasureObj.buildingType == "building") {
-    currentArmy.thingInHand = currentArmy.findThing(currentArmy.rack, treasureName);
   }
 
   socket.emit('updateRack', currentArmy.rack);
   io.sockets.emit('updateUI', updateArmyData(socket));
 
+}
+
+function eventClickedOnBuildingOnRack(socket, buildingName) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canPlay(game, socket)) return;
+
+  // Need to find the treasure by name in order to find the value
+  var buildingObj = currentArmy.findThingInRack(buildingName);
+
+
+
+  if (!currentArmy.thingInHand) {
+    if (buildingObj.buildingType == "building") {
+
+      currentArmy.thingInHand = game.newRandomThing();
+      socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
+      io.sockets.emit('updateUI', updateArmyData(socket));
+    }
+  }
 }
 
 function eventClickedOnDefenderOnRack(socket, defenderName) {
