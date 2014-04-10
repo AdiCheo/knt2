@@ -361,6 +361,7 @@ function updateStackBattle(hexId, defendersThings, defAffinity, attackersThings,
     console.log("Stack is not Empty!");
     boardLayer.get('#' + hexId)[0].setDefenderStackIcon(defendersThings, defAffinity);
     boardLayer.get('#' + hexId)[0].setAttackerStackIcon(attackersThings, attAffinity);
+    boardLayer.get('#' + hexId)[0].setBattleIcon();
 
   }
   if (localAffinity == defAffinity)

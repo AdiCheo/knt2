@@ -795,7 +795,6 @@ function eventClickedOnHexMovePhase(socket, hexId) {
       // currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
     }
-    // If hexID has an opponent's stack
     if (currentHex.isExplored) {
 
       conflictStack = checkBattleStack(socket,
@@ -809,14 +808,16 @@ function eventClickedOnHexMovePhase(socket, hexId) {
       socket.emit('error', "conflictStack" + conflictStack);
       socket.emit('error', "conflictFort" + conflictFort);
 
+      // If hexID has an opponent's stack
       if (conflictStack)
         moveStackBattle(socket, currentArmy, oldHexId, hexId, conflictStack);
 
+      // If hexID has an opponent's fort without a stack
       else if (conflictFort)
         moveStackBattleFort(socket, currentArmy, oldHexId, hexId, conflictFort);
 
+      // Explored with no conflict (you own it)
       else if (currentHex.affinity == currentArmy.affinity) {
-        // Explored with no conflict (you own it)
         moveStack(socket, currentArmy, oldHexId, hexId);
 
       } else if (currentHex.affinity != currentArmy.affinity) {

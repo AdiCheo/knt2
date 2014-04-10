@@ -48,6 +48,28 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   };
 
+  hexagon.setBattleIcon = function() {
+    //relative position within hex
+    posx = -12;
+    posy = 25;
+
+    if (this.battleIcon) {
+      this.battleIcon.setImage(markerIcons[affinity]);
+    } else {
+      this.battleIcon = createIcon(battleMarker, 25, "battleMarker");
+      boardLayer.add(this.battleIcon);
+    }
+
+    this.battleIcon.setX(this.getX() + posx);
+    this.battleIcon.setY(this.getY() + posy);
+    this.battleIcon.moveToTop();
+    this.battleIcon.show();
+
+    currentHexId = boardLayer.get("#" + this.getId())[0];
+    currentHexId.affinity = affinity;
+    boardLayer.draw();
+  };
+
   hexagon.buildIncomeCounter = function(incomeCounter) {
     var xMod = 0;
 
