@@ -45,10 +45,10 @@ function initConnection() {
       document.getElementById("armybg" + localAffinity).style.backgroundColor = coloursArray[localAffinity];
 
       //output the current phase the game is in
-      document.getElementById("phasetext").innerHTML = "Current Phase: -1";
+      document.getElementById("phasetext").innerHTML = "Current Phase: Setup Phase";
 
       //output the current player turn
-      document.getElementById("playerturntext").innerHTML = "Current Player Turn: 1";
+      document.getElementById("playerturntext").innerHTML = "Current Player Turn: Player 1";
     });
 
     iosocket.on('disconnect', function(gameData) {
@@ -465,7 +465,7 @@ function nextPlayerTurn(gameData) {
 
   //output the current player turn
   var turn = gameData.currentPlayerTurn + 1;
-  document.getElementById("playerturntext").innerHTML = "Current Player Turn: " + turn;
+  document.getElementById("playerturntext").innerHTML = "Current Player Turn: Player " + turn;
 
   console.log(playerId);
   if (localAffinity == gameData.currentPlayerTurn) {

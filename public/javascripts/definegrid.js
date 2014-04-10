@@ -422,9 +422,6 @@ boardLayer.add(bowlbutton);
 document.getElementById("phasetext").style.left = 260 + "px";
 document.getElementById("phasetext").style.top = 0 + "px";
 
-document.getElementById("racktext").style.left = 950 + "px";
-document.getElementById("racktext").style.top = 125 + "px";
-
 //current player turn
 document.getElementById("playerturntext").style.left = 100 + "px";
 document.getElementById("playerturntext").style.top = 15 + "px";
