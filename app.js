@@ -828,8 +828,8 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
       } else {
         socket.emit('error', "TEST TODO SOmething went wrong."); // TODO
-        socket.emit('error', conflictStack); // TODO
-        socket.emit('error', conflictFort); // TODO
+        socket.emit('error', "conflictStack" + conflictStack);
+        socket.emit('error', "conflictFort" + conflictFort);
       }
     }
   } else {
