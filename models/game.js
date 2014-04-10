@@ -343,10 +343,6 @@ function Game() {
 
       }
       console.log("Moving to phase: " + this.currentPhase);
-      if (this.currentPhase == 6) {
-        io.sockets.emit('combatPoll', "COMBAT poll");
-      };
-
     }
   };
 

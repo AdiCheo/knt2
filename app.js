@@ -863,7 +863,7 @@ function moveStackBattle(socket, currentArmy, oldHexId, newHexId, contestedStack
   var battle = [];
   battle.push(defenders);
   battle.push(attackers);
-  game.battles.push(battle);
+  game.battles[currHexId] = battle;
 
   // send update socket
   io.sockets.emit('updateStackBattle', currHexId,
