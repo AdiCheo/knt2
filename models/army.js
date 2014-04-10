@@ -158,9 +158,9 @@ function Army(affinity, name, income, gold, id) {
     return null;
   };
 
-  this.findDefenderInRack = function(defenderName) {
+  this.findThingInRack = function(ThingName) {
     // returns null if not found
-    return this.rack[indexByKey(this.rack, "name", defenderName)];
+    return this.rack[indexByKey(this.rack, "name", ThingName)];
   };
 
   this.removeDefenderFromStack = function(defender) {
@@ -174,6 +174,8 @@ function Army(affinity, name, income, gold, id) {
     for (var i in this.incomeCounters) {
       specialTotalIncome += this.incomeCounters[i].incomeValue;
     }
+
+    this.income += specialTotalIncome;
 
     // Income from total number of hexes
     this.income += this.ownedHexes.length;

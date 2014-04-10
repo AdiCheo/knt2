@@ -449,7 +449,7 @@ function initRack(realX, realY) {
     });
 
     // thingsArray.push(thing);
-    // thingsInRack.push(thing);
+    thingsInRack.push(thingIcon);
     boardLayer.add(thingIcon);
     thingIcon.moveToTop();
     thingIcon.show();

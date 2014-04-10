@@ -412,7 +412,7 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
     if (currentArmy.thingInHand.buildingType == "treasure") {
       socket.emit('error', "Cannot place treaure on game board, only on rack.");
       return;
-    } else if (currentArmy.thingInHand.buildingType == "building") {
+    } else if (currentArmy.thingInHand.buildingType == "building" || currentArmy.thingInHand.buildingType == "town") {
       if (indexById(currentArmy.ownedHexes, hexId) !== null) {
         if (currentArmy.thingInHand.terrainType == currentArmy.ownedHexes[indexById(currentArmy.ownedHexes, hexId)].terrainType) { // remove that thing from the cup
           game.removeFromCup(currentArmy.thingInHand);
@@ -499,7 +499,6 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
   }
 }
 
-
 // If the player wants to place the item in his rack for later
 // Player cannot put more than 10 items on rack
 function eventClickedOnRack(socket) {
@@ -583,12 +582,6 @@ function eventRecruitThings(socket) {
       // currentArmy.canPlaceThing = true;
       // currentArmy.canReplace = false;
 
-      if (currentArmy.freeThings > 0)
-        currentArmy.freeThings--; // decrement recruitable things
-
-      if (currentArmy.freeThings === 0)
-        currentArmy.canEndTurn = true;
-
       io.sockets.emit('updateUI', updateArmyData(socket));
 
     } else if (currentArmy.thingsPurchased < 5) {
@@ -620,23 +613,20 @@ function eventClickedOnTreasureOnRack(socket, treasureName) {
   if (!currentArmy.canPlay(game, socket)) return;
 
   // Need to find the treasure by name in order to find the value
-  var treasure = currentArmy.findThing(currentArmy.rack, treasureName);
-  console.log(treasure);
-  console.log(treasureName);
+  var treasureObj = currentArmy.findThingInRack(treasureName);
 
-  if (treasure.buildingType == "treasure") {
+  if (treasureObj.buildingType == "treasure") {
     // Trade it for gold!
     // Add to total gold of player
-    currentArmy.gold += treasure.incomeValue;
+    currentArmy.gold += treasureObj.incomeValue;
 
     // Remove from rack and back to cup
-    currentArmy.removeFromRack(treasure);
-    game.cup.push(treasure);
+    game.cup.push(treasureObj);
+    currentArmy.removeFromRack(treasureObj);
 
-  } else if (treasure.buildingType == "building") {
+  } else if (treasureObj.buildingType == "building") {
     currentArmy.thingInHand = currentArmy.findThing(currentArmy.rack, treasureName);
   }
-
 
   socket.emit('updateRack', currentArmy.rack);
   io.sockets.emit('updateUI', updateArmyData(socket));
@@ -648,7 +638,7 @@ function eventClickedOnDefenderOnRack(socket, defenderName) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  var defenderObj = currentArmy.findDefenderInRack(defenderName);
+  var defenderObj = currentArmy.findThingInRack(defenderName);
 
   if (defenderObj) {
     if (!currentArmy.selectedFirstTrade) {
