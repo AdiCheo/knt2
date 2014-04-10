@@ -276,6 +276,10 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:generateButtonClicked,");
     iosocket.emit('generateButtonClicked');
 
+  } else if (shape.thingType == "treasure") {
+    console.log("emit:treasureClicked,");
+    iosocket.emit('treasureClicked', shape.getId());
+
   } else if (shape.getName() == "defender") {
     console.log("emit:defenderClicked," + shape.getId());
     // If defender is on hex

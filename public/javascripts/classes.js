@@ -58,12 +58,13 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
       width: 40,
       height: 40
     });
+    incomeCounter.thingType = "treasure";
     incomeCounter.hexId = this.getId();
     boardLayer.add(incomeCounter);
     incomeCounter.moveToTop();
     incomeCounter.show();
     boardLayer.draw();
-  }
+  };
 
   hexagon.setFortIcon = function(affinity, fortValue) {
 

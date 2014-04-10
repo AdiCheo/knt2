@@ -107,11 +107,11 @@ function Army(affinity, name, income, gold, id) {
   };
 
   this.addThingToRack = function(defender) {
-    if (currentArmy.rack.length == 10) {
+    if (this.rack.length == 10) {
       return false;
     } else {
       // push to rack
-      currentArmy.rack.push(currentArmy.thingInHand);
+      this.rack.push(defender);
     }
     return true;
   };

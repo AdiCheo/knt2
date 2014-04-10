@@ -665,3 +665,39 @@ thingImagesArray["TreasureChestImage"] = TreasureChestImage;
 var TimberlandImage = new Image();
 TimberlandImage.src = 'images/Income/-n Timberland -t Forest -a 1.jpg';
 thingImagesArray["TimberlandImage"] = TimberlandImage;
+
+var VillageImage = new Image();
+VillageImage.src = 'images/Building/-n Village -a 1.jpg';
+thingImagesArray["Village1Image"] = VillageImage;
+thingImagesArray["Village2Image"] = VillageImage;
+thingImagesArray["Village3Image"] = VillageImage;
+thingImagesArray["Village4Image"] = VillageImage;
+thingImagesArray["Village5Image"] = VillageImage;
+thingImagesArray["Village6Image"] = VillageImage;
+thingImagesArray["Village7Image"] = VillageImage;
+thingImagesArray["Village8Image"] = VillageImage;
+
+var CityImage = new Image();
+CityImage.src = 'images/Building/-n City -a 2.jpg';
+thingImagesArray["City1Image"] = CityImage;
+thingImagesArray["City2Image"] = CityImage;
+thingImagesArray["City3Image"] = CityImage;
+thingImagesArray["City4Image"] = CityImage;
+
+var VillagedImage = new Image();
+VillagedImage.src = 'images/Building/-n Village -s Neutralised.jpg';
+thingImagesArray["Villaged1Image"] = VillagedImage;
+thingImagesArray["Villaged2Image"] = VillagedImage;
+thingImagesArray["Villaged3Image"] = VillagedImage;
+thingImagesArray["Villaged4Image"] = VillagedImage;
+thingImagesArray["Villaged5Image"] = VillagedImage;
+thingImagesArray["Villaged6Image"] = VillagedImage;
+thingImagesArray["Villaged7Image"] = VillagedImage;
+thingImagesArray["Villaged8Image"] = VillagedImage;
+
+var CitydImage = new Image();
+CitydImage.src = 'images/Building/-n City -s Neutralised.jpg';
+thingImagesArray["City1dImage"] = CitydImage;
+thingImagesArray["City2dImage"] = CitydImage;
+thingImagesArray["City1dImage"] = CitydImage;
+thingImagesArray["City2dImage"] = CitydImage;

@@ -215,6 +215,19 @@ function Game() {
     this.cup.push(new SpecialIncomeThing(-1, "Diamond", 0, "treasure", 5));
     this.cup.push(new SpecialIncomeThing(-1, "Emerald", 0, "treasure", 10));
     this.cup.push(new SpecialIncomeThing(-1, "TreasureChest", 0, "treasure", 20));
+
+    this.cup.push(new SpecialIncomeThing(-1, "Village1", 0, "town", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "Village2", 0, "town", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "Village3", 0, "town", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "Village4", 0, "town", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "Village5", 0, "town", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "Village6", 0, "town", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "Village7", 0, "town", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "Village8", 0, "town", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "City1", 0, "town", 2));
+    this.cup.push(new SpecialIncomeThing(-1, "City2", 0, "town", 2));
+    this.cup.push(new SpecialIncomeThing(-1, "City3", 0, "town", 2));
+    this.cup.push(new SpecialIncomeThing(-1, "City4", 0, "town", 2));
   };
 
   this.getHexById = function(hexId) {

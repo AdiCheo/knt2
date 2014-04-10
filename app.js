@@ -187,6 +187,12 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
+  socket.on('treasureClicked', function(treasureName) {
+    if (game.currentPhase == RECRUIT_THINGS_PHASE) {
+      eventClickedOnTreasureOnRack(socket, treasureName);
+    }
+  });
+
 
   /*** RANDOM_EVENTS_PHASE - 4 ***/
 
@@ -606,6 +612,26 @@ function eventRecruitThings(socket) {
   } else {
     socket.emit('error', 'Invalid bowlButton click');
   }
+}
+
+function eventClickedOnTreasureOnRack(socket, treasureName) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canPlay(game, socket)) return;
+
+  // Need to find the treasure by name in order to find the value
+  var treasure = currentArmy.findThing(currentArmy.rack, treasureName);
+
+  // Add to total gold of player
+  currentArmy.gold += treasure.incomeValue;
+
+  // Remove from rack and back to cup
+  currentArmy.removeFromRack(treasure);
+  game.cup.push(treasure);
+
+  socket.emit('updateRack', currentArmy.rack);
+  io.sockets.emit('updateUI', updateArmyData(socket));
+
 }
 
 function eventClickedOnDefenderOnRack(socket, defenderName) {
@@ -1122,6 +1148,66 @@ function buildFortsScenario1() {
   sendAllForts();
 }
 
+function buildFortsScenario2() {
+
+  game.armies[0].buildFort("3,-2", 2);
+  game.armies[0].buildFort("2,0", 2);
+  game.armies[0].buildFort("2,-1", 2);
+  game.armies[0].buildFort("1,1", 3);
+  game.armies[0].buildFort("1,0", 1);
+
+  game.armies[1].buildFort("-2,-1", 3);
+  game.armies[1].buildFort("-2,0", 1);
+  game.armies[1].buildFort("-3,0", 2);
+
+  game.armies[2].buildFort("-1,3", 2);
+
+  game.armies[3].buildFort("1,-2", 3);
+  game.armies[3].buildFort("3,-3", 3);
+  game.armies[3].buildFort("2,-2", 1);
+  game.armies[3].buildFort("1,-1", 1);
+  game.armies[3].buildFort("0,0", 2);
+
+  sendAllForts();
+}
+
+function buildIncomeCountersScenario2() {
+
+  console.log(game.cup[indexById(game.cup, "Village1")]);
+  game.armies[0].buildIncomeCounter("3,-1", game.cup[indexById(game.cup, "Village1")]);
+  io.sockets.emit('createIncomeCounter', game.cup[indexById(game.cup, "Village1")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Village1")]);
+
+  game.armies[1].buildIncomeCounter("-3,1", game.cup[indexById(game.cup, "Village2")]);
+  io.sockets.emit('createIncomeCounter', game.cup[indexById(game.cup, "Village2")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Village2")]);
+
+  game.armies[2].buildIncomeCounter("-2,3", game.cup[indexById(game.cup, "City1")]);
+  io.sockets.emit('createIncomeCounter', game.cup[indexById(game.cup, "City1")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "City1")]);
+
+  game.armies[3].buildIncomeCounter("1,-3", game.cup[indexById(game.cup, "Village3")]);
+  io.sockets.emit('createIncomeCounter', game.cup[indexById(game.cup, "Village3")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Village3")]);
+
+
+  sendAllForts();
+}
+
+function putThingsOnRackScenario2() {
+  game.armies[0].addThingToRack(game.cup[indexById(game.cup, "CopperMine")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "CopperMine")]);
+  game.armies[0].addThingToRack(game.cup[indexById(game.cup, "GoldMine")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "GoldMine")]);
+  game.armies[0].addThingToRack(game.cup[indexById(game.cup, "Pearl")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Pearl")]);
+
+  game.armies[3].addThingToRack(game.cup[indexById(game.cup, "DiamondField")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "DiamondField")]);
+  game.armies[3].addThingToRack(game.cup[indexById(game.cup, "PeatBog")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "PeatBog")]);
+}
+
 function getStacksScenario1() {
   var stack1 = new Stack("1,0", game.armies[0].affinity);
   game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Thing")], "1,0");
@@ -1160,6 +1246,54 @@ function getStacksScenario1() {
   game.removeFromCup(game.cup[indexById(game.cup, "WildCat")]);
 }
 
+function getStacksScenario2() {
+  var stack1 = new Stack("1,0", game.armies[0].affinity);
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Thing")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "GiantLizard1")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "SwampRat")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Unicorn")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Bears")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "CamelCorps")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Sandworm")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "BlackKnight")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Dervish1")], "1,0");
+  game.armies[0].addDefenderToStack(game.cup[indexById(game.cup, "Forester")], "1,0");
+
+  game.removeFromCup(game.cup[indexById(game.cup, "Thing")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "GiantLizard1")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "SwampRat")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Unicorn")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Bears")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "CamelCorps")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Sandworm")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "BlackKnight")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Dervish1")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Forester")]);
+
+  var stack2 = new Stack("1,-1", game.armies[3].affinity);
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Crocodiles")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "MountainMen1")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Nomads1")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "GiantSpider")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "KillerRacoon")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Farmers1")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "IceGiant")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "WhiteDragon")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "Mammoth")], "1,-1");
+  game.armies[3].addDefenderToStack(game.cup[indexById(game.cup, "HeadHunter")], "1,-1");
+
+  game.removeFromCup(game.cup[indexById(game.cup, "Crocodiles")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "MountainMen1")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Nomads1")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "GiantSpider")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "KillerRacoon")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Farmers1")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "IceGiant")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "WhiteDragon")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "Mammoth")]);
+  game.removeFromCup(game.cup[indexById(game.cup, "HeadHunter")]);
+}
+
 function eventLoadUserData(socket, num) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
 
@@ -1196,14 +1330,25 @@ function eventLoadGame(game, num) {
   } else if (num == 2) {
 
     ownHexesScenario1();
-    buildFortsScenario1();
-    getStacksScenario1();
+    buildFortsScenario2();
+    buildIncomeCountersScenario2();
+    getStacksScenario2();
+    putThingsOnRackScenario2();
 
-    recruitNumOfThingsToRack(10, 0); // recruit 10 things to rack
 
-    game.currentPhase = RECRUIT_THINGS_PHASE;
+    game.currentPhase = GOLD_COLLECTION_PHASE;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
+
+    // ownHexesScenario1();
+    // buildFortsScenario1();
+    // getStacksScenario1();
+
+    // recruitNumOfThingsToRack(10, 0); // recruit 10 things to rack
+
+    // game.currentPhase = RECRUIT_THINGS_PHASE;
+    // game.totalTurn = 5;
+    // game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
     io.sockets.emit('nextPlayerTurn', nextTurnData());
 
