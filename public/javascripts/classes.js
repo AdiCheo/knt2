@@ -42,13 +42,15 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.icon.moveToTop();
     this.icon.show();
 
+    this.icon.hex = hexagon;
+
     currentHexId = boardLayer.get("#" + this.getId())[0];
     currentHexId.affinity = affinity;
     boardLayer.draw();
 
   };
 
-  hexagon.setBattleIcon = function() {
+  hexagon.setBattleIcon = function(defAffinity, attAffinity) {
     //relative position within hex
     posx = -12;
     posy = 25;
@@ -65,8 +67,10 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.battleIcon.moveToTop();
     this.battleIcon.show();
 
-    currentHexId = boardLayer.get("#" + this.getId())[0];
-    currentHexId.affinity = affinity;
+    this.battleIcon.hex = hexagon;
+    this.battleIcon.defAffinity = defAffinity;
+    this.battleIcon.attAffinity = attAffinity;
+
     boardLayer.draw();
   };
 

@@ -221,6 +221,10 @@ window.addEventListener('keydown', function(e) {
     console.log("loadGame3()");
     loadGame3();
 
+  } else if (e.keyCode == 66) { //b
+    console.log("combatPoll");
+    iosocket.emit('combatPoll');
+
   }
 });
 
@@ -311,10 +315,16 @@ boardLayer.on('click tap', function(e) {
     console.log("emit:endTurnButton");
     iosocket.emit('endTurnClicked');
     highlightButtonOnClick(shape);
+
   } else if (shape.getName() == "collectGoldButton") {
     console.log("emit:collectGoldButton");
     iosocket.emit('collectGoldButtonClicked');
     highlightButtonOnClick(shape);
+
+  } else if (shape.getName() == "battleMarker") {
+    console.log("emit:combatPoll");
+    iosocket.emit('combatPoll', shape.defAffinity, shape.attAffinity, shape.hex.getId());
+
   }
 });
 

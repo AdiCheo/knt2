@@ -106,6 +106,11 @@ function initConnection() {
       endedTurn();
     });
 
+    iosocket.on('combatPoll', function() {
+      console.log("combatPoll");
+      iosocket.emit('combatPoll', 'a');
+    });
+
     iosocket.on('updateRack', function(rack) {
       updateRack(rack);
     });
@@ -342,7 +347,7 @@ function updateStackAllBattle(hexId, affinity, affinityAttack) {
     // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
     // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
   }
-  boardLayer.get('#' + hexId)[0].setBattleIcon();
+  boardLayer.get('#' + hexId)[0].setBattleIcon(affinity, affinityAttack);
   iosocket.emit('updateUI');
 }
 
@@ -361,7 +366,7 @@ function updateStackBattle(hexId, defendersThings, defAffinity, attackersThings,
     console.log("Stack is not Empty!");
     boardLayer.get('#' + hexId)[0].setDefenderStackIcon(defendersThings, defAffinity);
     boardLayer.get('#' + hexId)[0].setAttackerStackIcon(attackersThings, attAffinity);
-    boardLayer.get('#' + hexId)[0].setBattleIcon();
+    boardLayer.get('#' + hexId)[0].setBattleIcon(defAffinity, attAffinity);
 
   }
   if (localAffinity == defAffinity)

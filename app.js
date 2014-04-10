@@ -234,10 +234,9 @@ io.sockets.on('connection', function(socket) {
   // Movment consequences: ownHex, moveStack/defender
 
   /*** COMBAT_PHASE - 6 ***/
-  socket.on('combatPoll', function() {
-    if (game.currentPhase == COMBAT_PHASE) {
-      startCombat(socket);
-    }
+  socket.on('combatPoll', function(defA, attA, hexId) {
+    startCombat(socket, defA, attA, hexId);
+    if (game.currentPhase == COMBAT_PHASE) {}
   });
 
   /*** CONSTRUCTION_PHASE - 7 ***/
@@ -893,8 +892,9 @@ function moveStack(socket, currentArmy, oldHexId, newHexId) {
 }
 
 /*********** COMBAT_PHASE *****************/
-function startCombat(socket) {
-  io.sockets.emit('error', "COMBAT Phase");
+function startCombat(socket, defA, attA, hexId) {
+  io.sockets.emit('error', "COMBAT Phase" + defA + attA + hexId);
+
 }
 
 /*********** CONSTRUCTION_PHASE ***********/
