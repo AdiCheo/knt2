@@ -243,6 +243,9 @@ function Army(affinity, name, income, gold, id) {
     } else if (target.type == "defender") {
       x1 = parseInt(target.currentHexId.split(",")[0], 10);
       y1 = parseInt(target.currentHexId.split(",")[1], 10);
+    } else if (target.type == "stack") {
+      x1 = parseInt(target.currentHexId.split(",")[0], 10);
+      y1 = parseInt(target.currentHexId.split(",")[1], 10);
     } else {
       x1 = parseInt(target.split(",")[0], 10);
       y1 = parseInt(target.split(",")[1], 10);
