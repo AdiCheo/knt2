@@ -49,8 +49,16 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   };
 
   hexagon.buildIncomeCounter = function(incomeCounter) {
+    var xMod = 0;
+
+    if (incomeCounter.buildingType == "building") {
+      xMod = -60;
+    } else if (incomeCounter.buildingType == "town") {
+      xMod = -20;
+    }
     var incomeCounter = new Kinetic.Image({
-      x: this.getX() + 10,
+
+      x: this.getX() + xMod,
       y: this.getY() + 10,
       name: "treasure",
       id: incomeCounter.id,

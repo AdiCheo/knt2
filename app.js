@@ -662,7 +662,7 @@ function eventClickedOnBuildingOnRack(socket, buildingName) {
   if (!currentArmy.thingInHand) {
     if (buildingObj.buildingType == "building") {
 
-      currentArmy.thingInHand = game.newRandomThing();
+      currentArmy.thingInHand = buildingObj;
       socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
       io.sockets.emit('updateUI', updateArmyData(socket));
     }
