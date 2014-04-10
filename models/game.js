@@ -415,40 +415,72 @@ function Game() {
       console.log("Army 4 turn ended. Army 1 to move");
 
       console.log("The Total # of turns" + this.totalTurn);
-      // Handle phase transitions here
-      if ((this.currentPhase) % 9 === 0 && this.currentPhase !== 0) {
-        this.currentPhase = 1;
-        console.log("New phase cycle. Moving to phase: " + this.currentPhase);
-      } else if (this.totalTurn == 4) {
-        // this.currentPhase = 0;
-        this.currentPhase = 3;
-        console.log("Moving to phase: " + this.currentPhase);
-      } else {
-        this.currentPhase++;
-        // Skip Phase 2 (Hero Recruitment)
-        if (this.currentPhase === 0)
-          this.currentPhase = 1;
-        if (this.currentPhase == 1)
-          this.currentPhase = 2;
-        if (this.currentPhase == 2)
-          this.currentPhase = 3;
-        if (this.currentPhase == 4)
-          this.currentPhase = 5;
-        console.log("Moving to phase: " + this.currentPhase);
-      }
+      if (this.currentTurn === 0)
+        this.nextPhase();
 
     } else if (this.currentPlayerTurn == 2) {
       this.currentPlayerTurn = 3;
       this.totalTurn++;
+      if (this.currentTurn == 3)
+        this.nextPhase();
       console.log("Army 3 turn ended. Army 4 to move");
     } else if (this.currentPlayerTurn == 1) {
       this.currentPlayerTurn = 2;
       this.totalTurn++;
+      if (this.currentTurn == 2)
+        this.nextPhase();
       console.log("Army 2 turn ended. Army 3 to move");
     } else {
       this.currentPlayerTurn = 1;
       this.totalTurn++;
+      if (this.currentTurn == 1)
+        this.nextPhase();
+
       console.log("Army 1 turn ended. Army 2 to move");
+    }
+  };
+
+
+  this.nextPhase = function() {
+    // Handle phase transitions here
+    if ((this.currentPhase % 9) === 0 && this.currentPhase !== 0) {
+      this.currentPhase = 1;
+      this.currentPlayerTurn++;
+      if ((this.currentTurn % 3) === 0 && this.currentTurn !== 0)
+        this.currentTurn = 0;
+      else
+        this.currentTurn++;
+      console.log("New phase cycle. Moving to phase: " + this.currentPhase);
+    }
+    // else if (this.totalTurn == 4) {
+    //   // this.currentPhase = 0;
+    //   // this.currentPhase = 3;
+    //   console.log("Moving to phase: " + this.currentPhase);
+    // }
+    else {
+      this.currentPhase++;
+      // Skip Phase 2 (Hero Recruitment)
+      if (this.currentPhase === 0)
+        this.currentPhase = 1;
+      if (this.currentPhase == 1)
+        this.currentPhase = 2;
+      if (this.currentPhase == 2)
+        this.currentPhase = 3;
+      if (this.currentPhase == 4)
+        this.currentPhase = 5;
+      if (this.currentPhase == 7) {
+        for (var i in this.armies) {
+          for (var j in this.armies[i].forts) {
+            if (this.armies[i].forts[j].fortValue == 4) {
+              this.hasEnded = true;
+              this.winner = this.armies[i];
+            }
+          }
+        }
+      }
+      if (this.currentPhase == 8)
+        this.currentPhase = 9;
+      console.log("Moving to phase: " + this.currentPhase);
     }
   };
 

@@ -185,6 +185,14 @@ function initConnection() {
       console.log("A player disconnected. Game Over!");
       window.location.href = "about:blank";
     });
+
+    iosocket.on('gameEnded', function(affinity) {
+      if (localAffinity == affinity) {
+        alert("Player won!");
+      } else {
+        alert("You have lost the game!");
+      }
+    });
   });
 }
 

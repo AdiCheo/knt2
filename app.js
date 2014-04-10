@@ -929,6 +929,19 @@ function refreshData(socket) {
 
   if (game.currentPhase == 5)
     currentArmy.canEndTurn = true;
+  if (game.currentPhase == 6)
+    currentArmy.canEndTurn = true;
+  if (game.currentPhase == 7) {
+    if (game.hasEnded) {
+      io.sockets.emit('gameEnded', game.winner.affinity);
+    } else {
+      currentArmy.canEndTurn = true;
+    }
+  }
+  if (game.currentPhase == 8)
+    currentArmy.canEndTurn = true;
+  if (game.currentPhase == 9)
+    currentArmy.canEndTurn = true;
 
   io.sockets.emit('updateUI', updateArmyData(socket));
 }
