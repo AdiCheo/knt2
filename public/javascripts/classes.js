@@ -437,11 +437,21 @@ function initRack(realX, realY) {
   };
 
   rack.addThingIcon = function(thing, index) {
+
+    var thingName;
+
+    if (thing.type == "specialIncome")
+      thingName = thing.buildingType;
+    else if (thing.type == "defender")
+      thingName = "defender";
+    else
+      thingName = thing.id;
+
     var thingIcon = new Kinetic.Image({
       x: this.getX() - 35,
       y: this.getY() + index * 50,
       id: thing.name,
-      name: thing.buildingType,
+      name: thingName,
       image: thingImagesArray[thing.name + "Image"],
       draggable: true,
       width: 50,
