@@ -198,7 +198,6 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
-
   /*** RANDOM_EVENTS_PHASE - 4 ***/
 
   /*** MOVEMENT_PHASE - 5 ***/
@@ -459,10 +458,8 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
         } else {
           socket.emit('error', "You need to match the terrain type!");
         }
-
       }
     } else {
-
       // If the player has a thing in his hand that needs placing
       // if (currentArmy.thingInHand) {
       // If the player owns the hex he just clicked on
@@ -505,12 +502,7 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
           // io.sockets.emit('updateStackAll', hexId, currentArmy.affinity);
           io.sockets.emit('updateStack', hexId, currentArmy.stacks[indexById(currentArmy.stacks, hexId)].containedDefenders, currentArmy.affinity);
 
-        } else if (currentArmy.thingInHand.type == "specialIncome") {
-          // TODO: If a special income thing, place somewhere on the hex
-          // Add it to the armies special income counter to count as income
-          // Must match terrain type
         }
-
       } else {
         socket.emit('error', "You do not own this hex!");
       }
@@ -657,8 +649,6 @@ function eventClickedOnBuildingOnRack(socket, buildingName) {
 
   // Need to find the treasure by name in order to find the value
   var buildingObj = currentArmy.findThingInRack(buildingName);
-
-
 
   if (!currentArmy.thingInHand) {
     if (buildingObj.buildingType == "building") {
