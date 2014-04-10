@@ -8,7 +8,7 @@ function SpecialIncomeThing(hexId, name, terrainType, buildingType, incomeValue)
   this.buildingType = buildingType;
   this.incomeValue = incomeValue;
 
-  this.currentHex = hexId;
+  this.currentHexId = hexId;
 
   this.affinity = -1;
 }

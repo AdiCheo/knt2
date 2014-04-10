@@ -368,18 +368,8 @@ function eventGenerateClicked(socket) {
     // Socket message to update cup view
     socket.emit('updateHand', currentArmy.thingInHand.name);
 
-    if (currentArmy.freeThings > 0)
-      currentArmy.freeThings--; // decrement recruitable things
 
-    if (currentArmy.freeThings === 0)
-      currentArmy.canEndTurn = true;
 
-    // If placing last free element in phase 0, must end turn
-    if (game.currentPhase === 0 && !currentArmy.freeThings) {
-      currentArmy.mustEndTurn = true;
-    }
-
-    // currentArmy.canPlaceThing = true;
     currentArmy.canReplace = true;
 
   } else if (currentArmy.canReplace) {
@@ -411,13 +401,43 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
   if (!currentArmy.canPlay(game, socket)) return;
 
-  if (currentArmy.thingInHand.type == "treasure") {
-    socket.emit('error', "Cannot place treaure on game board, only on rack.");
-    return;
-  } else {
+  if (currentArmy.thingInHand) {
 
-    // If the player has a thing in his hand that needs placing
-    if (currentArmy.thingInHand) {
+    if (currentArmy.thingInHand.buildingType == "treasure") {
+      socket.emit('error', "Cannot place treaure on game board, only on rack.");
+      return;
+    } else if (currentArmy.thingInHand.buildingType == "building") {
+      if (indexById(currentArmy.ownedHexes, hexId) !== null) {
+        if (currentArmy.thingInHand.terrainType == currentArmy.ownedHexes(indexById(currentArmy.ownedHexes, hexId))) { // remove that thing from the cup
+          game.removeFromCup(currentArmy.thingInHand);
+
+          if (currentArmy.freeThings > 0)
+            currentArmy.freeThings--; // decrement recruitable things
+
+          if (currentArmy.freeThings === 0)
+            currentArmy.canEndTurn = true;
+
+          // If placing last free element in phase 0, must end turn
+          if (game.currentPhase === 0 && !currentArmy.freeThings) {
+            currentArmy.mustEndTurn = true;
+          }
+
+          currentArmy.buildIncomeCounter(hexId, currentArmy.thingInHand);
+          io.sockets.emit('createIncomeCounter', currentArmy.thingInHand);
+
+          // empty hand
+          socket.emit('updateHand', null);
+
+          currentArmy.thingInHand = false;
+        } else {
+          socket.emit('error', "You need to match the terrain type!");
+        }
+
+      }
+    } else {
+
+      // If the player has a thing in his hand that needs placing
+      // if (currentArmy.thingInHand) {
       // If the player owns the hex he just clicked on
       if (indexById(currentArmy.ownedHexes, hexId) !== null) {
 
@@ -431,6 +451,17 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
             // remove that thing from the cup
             game.removeFromCup(currentArmy.thingInHand);
+
+            if (currentArmy.freeThings > 0)
+              currentArmy.freeThings--; // decrement recruitable things
+
+            if (currentArmy.freeThings === 0)
+              currentArmy.canEndTurn = true;
+
+            // If placing last free element in phase 0, must end turn
+            if (game.currentPhase === 0 && !currentArmy.freeThings) {
+              currentArmy.mustEndTurn = true;
+            }
 
             // empty hand
             socket.emit('updateHand', null);
@@ -456,11 +487,12 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
       } else {
         socket.emit('error', "You do not own this hex!");
       }
-    } else {
-      socket.emit('error', "You need to pick from the cup!");
     }
+  } else {
+    socket.emit('error', "You need to pick from the cup!");
   }
 }
+
 
 // If the player wants to place the item in his rack for later
 // Player cannot put more than 10 items on rack
@@ -479,12 +511,28 @@ function eventClickedOnRack(socket) {
       // remove that thing from the cup
       game.removeFromCup(currentArmy.thingInHand);
 
+      if (currentArmy.freeThings > 0)
+        currentArmy.freeThings--; // decrement recruitable things
+
+      if (currentArmy.freeThings === 0)
+        currentArmy.canEndTurn = true;
+
+      // If placing last free element in phase 0, must end turn
+      if (game.currentPhase === 0 && !currentArmy.freeThings) {
+        currentArmy.mustEndTurn = true;
+      }
+
       io.sockets.emit('updateUI', updateArmyData(socket));
 
       // empty hand
       socket.emit('updateHand', null);
 
       currentArmy.thingInHand = false;
+
+      // If placing last free element in phase 0, must end turn
+      if (game.currentPhase === 0 && !currentArmy.freeThings) {
+        currentArmy.mustEndTurn = true;
+      }
     } else {
       socket.emit('error', "Cannot fit more than 10 things on rack.");
     }

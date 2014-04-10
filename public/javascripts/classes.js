@@ -48,6 +48,23 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   };
 
+  hexagon.buildIncomeCounter = function(incomeCounter) {
+    var incomeCounter = new Kinetic.Image({
+      x: this.getX() + 10,
+      y: this.getY() + 10,
+      name: incomeCounter.name,
+      id: incomeCounter.id,
+      image: thingImagesArray[incomeCounter.name + "Image"],
+      width: 40,
+      height: 40
+    });
+    incomeCounter.hexId = this.getId();
+    boardLayer.add(incomeCounter);
+    incomeCounter.moveToTop();
+    incomeCounter.show();
+    boardLayer.draw();
+  }
+
   hexagon.setFortIcon = function(affinity, fortValue) {
 
     fortImage = fortImages["tower"];

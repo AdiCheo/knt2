@@ -68,6 +68,12 @@ function Army(affinity, name, income, gold, id) {
     }
   };
 
+  this.buildIncomeCounter = function(hexId, incomeCounter) {
+    incomeCounter.affinity = this.affinity;
+    incomeCounter.currentHexId = hexId;
+    this.incomeCounters.push(incomeCounter);
+  };
+
   this.addDefenderToStack = function(defender, hexId) {
     var stack = this.getStackOnHex(hexId);
 
@@ -163,6 +169,11 @@ function Army(affinity, name, income, gold, id) {
 
   this.updateIncome = function() {
     this.income = 0;
+    var specialTotalIncome = 0;
+
+    for (var i in this.incomeCounters) {
+      specialTotalIncome += this.incomeCounters[i].incomeValue;
+    }
 
     // Income from total number of hexes
     this.income += this.ownedHexes.length;

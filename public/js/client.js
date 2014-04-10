@@ -77,6 +77,10 @@ function initConnection() {
       updateAllHexes(hexes);
     });
 
+    iosocket.on('createIncomeCounter', function(incomeCounter) {
+      createIncomeCounter(incomeCounter);
+    });
+
     iosocket.on('updateForts', function(hexId, affinity) {
       updateForts(hexId, affinity);
     });
@@ -269,6 +273,10 @@ function updateSelectedIcon(thing) { //updateSelectedIcon
 function highlightMovement() {
   removeRadius(game.armies.color, boardLayer); //Remove movement radius
   drawRadius(hexId, 4, game.armies.color, boardLayer);
+}
+
+function createIncomeCounter(incomeCounter) {
+  boardLayer.get('#' + incomeCounter.currentHexId)[0].buildIncomeCounter(incomeCounter);
 }
 
 function updateStackAll(hexId, affinity) {

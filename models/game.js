@@ -34,155 +34,6 @@ function Game() {
     }
   };
 
-
-  this.createCupDefenders = function() {
-    // this.cup.push("BabyDragon");
-    // this.cup.push("CamelCorps");
-    // this.cup.push("Dervish1");
-    // this.cup.push("Dervish2");
-    // this.cup.push("DesertBat");
-    // this.cup.push("DustDevil");
-    // this.cup.push("Genie");
-    // this.cup.push("GiantSpider");
-    // this.cup.push("GiantWasp1");
-    // this.cup.push("GiantWasp2");
-    // this.cup.push("Griffon");
-    // this.cup.push("Nomads1");
-    // this.cup.push("Nomads2");
-    // this.cup.push("OldDragon");
-    // this.cup.push("Sandworm");
-    // this.cup.push("Skletons1");
-    // this.cup.push("Skletons2");
-    // this.cup.push("Sphinx");
-    // this.cup.push("Vultures1");
-    // this.cup.push("Vultures2");
-    // this.cup.push("YellowKnight");
-    // this.cup.push("Bandits");
-    // this.cup.push("Bears");
-    // this.cup.push("BigFoot");
-    // this.cup.push("Druid");
-    // this.cup.push("Dryad");
-    // this.cup.push("ElfMage");
-    // this.cup.push("Elves0");
-    // this.cup.push("Elves1");
-    // this.cup.push("FlyingSquirrel0");
-    // this.cup.push("FlyingSquirrel1");
-    // this.cup.push("Forester");
-    // this.cup.push("GreatOwl");
-    // this.cup.push("GreenKnight");
-    // this.cup.push("KillerRacoon");
-    // this.cup.push("Pixies1");
-    // this.cup.push("Pixies2");
-    // this.cup.push("Unicorn");
-    // this.cup.push("WalkingTree");
-    // this.cup.push("WildCat");
-    // this.cup.push("Wyvern");
-    // this.cup.push("DragonRider");
-    // this.cup.push("ElkHerd");
-    // this.cup.push("Eskimos1");
-    // this.cup.push("Eskimos2");
-    // this.cup.push("Eskimos3");
-    // this.cup.push("Eskimos4");
-    // this.cup.push("IceBats");
-    // this.cup.push("IceGiant");
-    // this.cup.push("Iceworm");
-    // this.cup.push("KillerPenguins");
-    // this.cup.push("KillerPuffins");
-    // this.cup.push("Mammoth");
-    // this.cup.push("NorthWind");
-    // this.cup.push("Walrus");
-    // this.cup.push("WhiteBrea");
-    // this.cup.push("WhiteDragon");
-    // this.cup.push("Wolves");
-    // this.cup.push("BirdOfParadise");
-    // this.cup.push("CrawlingVines");
-    // this.cup.push("Crocodiles");
-    // this.cup.push("Dinasaur");
-    // this.cup.push("Elephant");
-    // this.cup.push("GiantApe1");
-    // this.cup.push("GiantApe2");
-    // this.cup.push("GiantSnake");
-    // this.cup.push("HeadHunter");
-    // this.cup.push("PterodactylWarriors");
-    // this.cup.push("Pygmies");
-    // this.cup.push("Tigers1");
-    // this.cup.push("Tigers2");
-    // this.cup.push("Watusi");
-    // this.cup.push("WitchDoctor");
-    // this.cup.push("BrownDragon");
-    // this.cup.push("BrownKnight");
-    // this.cup.push("Cyclops");
-    // this.cup.push("Dwarves1");
-    // this.cup.push("Dwarves2");
-    // this.cup.push("Dwarves3");
-    // this.cup.push("GaintRoc");
-    // this.cup.push("Giant");
-    // this.cup.push("GiantCondor");
-    // this.cup.push("Goblins1");
-    // this.cup.push("Goblins2");
-    // this.cup.push("Goblins3");
-    // this.cup.push("Goblins4");
-    // this.cup.push("GreatEagle");
-    // this.cup.push("GreatHawk");
-    // this.cup.push("LittleRoc");
-    // this.cup.push("MountainLion");
-    // this.cup.push("MountainMen1");
-    // this.cup.push("MountainMen2");
-    // this.cup.push("Ogre");
-    // this.cup.push("Troll");
-    // this.cup.push("BuffaloHerd1");
-    // this.cup.push("BuffaloHerd2");
-    // this.cup.push("Centaur");
-    // this.cup.push("Dragonfly");
-    // this.cup.push("Eagles");
-    // this.cup.push("Farmers1");
-    // this.cup.push("Farmers2");
-    // this.cup.push("Farmers3");
-    // this.cup.push("Farmers4");
-    // this.cup.push("FlyingBuffalo");
-    // this.cup.push("GiantBeetle");
-    // this.cup.push("GreatHawk");
-    // this.cup.push("Greathunter");
-    // this.cup.push("Gypsies1");
-    // this.cup.push("Gypsies2");
-    // this.cup.push("Hunter");
-    // this.cup.push("LionRide");
-    // this.cup.push("Pegasus");
-    // this.cup.push("Pterodactyl");
-    // this.cup.push("Tribesmen1");
-    // this.cup.push("Tribesmen2");
-    // this.cup.push("Villains");
-    // this.cup.push("WhiteKnight");
-    // this.cup.push("WolfPack");
-    // this.cup.push("Tribesmen3");
-    // this.cup.push("Basilisk");
-    // this.cup.push("BlackKnight");
-    // this.cup.push("Crocodiles");
-    // this.cup.push("DarkWizard");
-    // this.cup.push("Ghost1");
-    // this.cup.push("Ghost2");
-    // this.cup.push("Ghost3");
-    // this.cup.push("Ghost4");
-    // this.cup.push("GiantLizard1");
-    // this.cup.push("GiantLizard2");
-    // this.cup.push("GiantMosquito");
-    // this.cup.push("GiantSnake");
-    // this.cup.push("HugeLeech");
-    // this.cup.push("Pirates");
-    // this.cup.push("PoisonFrog");
-    // this.cup.push("Spirit");
-    // this.cup.push("Sprote");
-    // this.cup.push("SwampBeast");
-    // this.cup.push("SwampGas");
-    // this.cup.push("SwampRat");
-    // this.cup.push("Thing");
-    // this.cup.push("VampireBat");
-    // this.cup.push("Watersanke");
-    // this.cup.push("Will_O_Wisp");
-    // this.cup.push("WingedPirhana");
-
-  };
-
   this.createDefenders = function() {
 
     //desert creatures
@@ -346,44 +197,25 @@ function Game() {
   };
 
   //speical income
-  //function SpecialIncomeThing(hexId, name, terrainType, buildingType, combatValue, incomeValue) {
   this.createSpecialIncomeThings = function() {
-    // this.cup.push(new SpecialIncomeThing(-1, "PeatBog", "swamp", 0, 1));
-    // this.cup.push(new SpecialIncomeThing(-1, "CopperMine", "mountain", 0, 1));
-    // this.cup.push(new SpecialIncomeThing(-1, "ElephantsGraveyard", "jungle", 0, 3));
-    // this.cup.push(new SpecialIncomeThing(-1, "Farmlands", "plains", 0, 1));
-    // this.cup.push(new SpecialIncomeThing(-1, "GoldMine", "mountain", 0, 3));
-    // this.cup.push(new SpecialIncomeThing(-1, "OilField", "frozenWaste", 0, 3));
-    // this.cup.push(new SpecialIncomeThing(-1, "Timberland", "forest", 0, 1));
-    // this.cup.push(new SpecialIncomeThing(-1, "DiamondField", "desert", 0, 1));
-    // this.cup.push(new SpecialIncomeThing(-1, "SilverMine1", "mountain", 0, 2));
-    // this.cup.push(new SpecialIncomeThing(-1, "SilverMine2", "mountain", 0, 2));
+    this.cup.push(new SpecialIncomeThing(-1, "PeatBog", "swamp", "building", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "CopperMine", "mountain", "building", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "ElephantsGraveyard", "jungle", "building", 3));
+    this.cup.push(new SpecialIncomeThing(-1, "Farmlands", "plains", "building", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "GoldMine", "mountain", "building", 3));
+    this.cup.push(new SpecialIncomeThing(-1, "OilField", "frozenWaste", "building", 3));
+    this.cup.push(new SpecialIncomeThing(-1, "Timberland", "forest", "building", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "DiamondField", "desert", "building", 1));
+    this.cup.push(new SpecialIncomeThing(-1, "SilverMine1", "mountain", "building", 2));
+    this.cup.push(new SpecialIncomeThing(-1, "SilverMine2", "mountain", "building", 2));
 
-
-    // this.cup.push(new SpecialIncomeThing(-1, "Pearl", 0, "treasure", 5));
-    // this.cup.push(new SpecialIncomeThing(-1, "Ruby", 0, "treasure", 10));
-    // this.cup.push(new SpecialIncomeThing(-1, "Sapphire", 0, "treasure", 5));
-    // this.cup.push(new SpecialIncomeThing(-1, "Diamond", 0, "treasure", 5));
-    // this.cup.push(new SpecialIncomeThing(-1, "Emerald", 0, "treasure", 10));
-    // this.cup.push(new SpecialIncomeThing(-1, "TreasureChest", 0, "treasure", 20));
-
+    this.cup.push(new SpecialIncomeThing(-1, "Pearl", 0, "treasure", 5));
+    this.cup.push(new SpecialIncomeThing(-1, "Ruby", 0, "treasure", 10));
+    this.cup.push(new SpecialIncomeThing(-1, "Sapphire", 0, "treasure", 5));
+    this.cup.push(new SpecialIncomeThing(-1, "Diamond", 0, "treasure", 5));
+    this.cup.push(new SpecialIncomeThing(-1, "Emerald", 0, "treasure", 10));
+    this.cup.push(new SpecialIncomeThing(-1, "TreasureChest", 0, "treasure", 20));
   };
-
-  //special income for the cup
-  this.createCupSpecialIncomeThings = function() {
-    // this.cup.push("CopperMine");
-    // this.cup.push("Diamond");
-    // this.cup.push("ElephantsGraveyard");
-    // this.cup.push("Emerald");
-    // this.cup.push("Farmlands");
-    // this.cup.push("GoldMine");
-    // this.cup.push("OilField");
-    // this.cup.push("Pearl");
-    // this.cup.push("PeatBog");
-    // this.cup.push("Ruby");
-    // this.cup.push("Sapphire");
-  };
-
 
   this.getHexById = function(hexId) {
     for (var i in this.hexes) {
@@ -460,10 +292,10 @@ function Game() {
     else {
       this.currentPhase++;
       // Skip Phase 2 (Hero Recruitment)
-      if (this.currentPhase === 0)
-        this.currentPhase = 1;
-      if (this.currentPhase == 1)
-        this.currentPhase = 2;
+      // if (this.currentPhase === 0)
+      //   this.currentPhase = 1;
+      // if (this.currentPhase == 1)
+      //   this.currentPhase = 2;
       if (this.currentPhase == 2)
         this.currentPhase = 3;
       if (this.currentPhase == 4)
