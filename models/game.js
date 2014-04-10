@@ -11,6 +11,7 @@ function Game() {
   // this.defenders = [];
   // this.specialIncome = [];
   this.cup = [];
+  this.battles = [];
 
   this.currentPlayerTurn = 0;
   this.currentTurn = 0;
@@ -59,7 +60,7 @@ function Game() {
     this.cup.push(new Defender(-1, "Vultures2", 1, "desert", 0, 0, true, 0));
     this.cup.push(new Defender(-1, "YellowKnight", 3, "desert", true, 0, 0, 0));
 
-    //forest creatures 
+    //forest creatures
     this.cup.push(new Defender(-1, "Bandits", 2, "forest", 0, 0, 0, 0));
     this.cup.push(new Defender(-1, "Bears", 2, "forest", 0, 0, 0, 0));
     this.cup.push(new Defender(-1, "BigFoot", 5, "forest", 0, 0, 0, 0));
@@ -100,7 +101,7 @@ function Game() {
     this.cup.push(new Defender(-1, "WhiteDragon", 5, "frozenWaste", 0, 0, 0, true));
     this.cup.push(new Defender(-1, "Wolves", 3, "frozenWaste", 0, 0, 0, true));
 
-    //Jungle creatures 
+    //Jungle creatures
     this.cup.push(new Defender(-1, "BirdOfParadise", 1, "jungle", 0, 0, true, 0));
     this.cup.push(new Defender(-1, "CrawlingVines", 6, "jungle", 0, 0, 0, 0));
     this.cup.push(new Defender(-1, "Crocodiles", 2, "jungle", 0, 0, 0, 0));
@@ -117,7 +118,7 @@ function Game() {
     this.cup.push(new Defender(-1, "Watusi", 2, "jungle", 0, 0, 0, 0));
     this.cup.push(new Defender(-1, "WitchDoctor", 2, "jungle", 0, 0, 0, true));
 
-    //Mountain creatures 
+    //Mountain creatures
     this.cup.push(new Defender(-1, "BrownDragon", 3, "mountain", 0, 0, true, 0));
     this.cup.push(new Defender(-1, "BrownKnight", 4, "mountain", true, 0, 0, 0));
     this.cup.push(new Defender(-1, "Cyclops", 5, "mountain", 0, 0, 0, 0));
@@ -140,7 +141,7 @@ function Game() {
     this.cup.push(new Defender(-1, "Ogre", 2, "mountain", 0, 0, 0, 0));
     this.cup.push(new Defender(-1, "Troll", 4, "mountain", 0, 0, 0, 0));
 
-    //plains creatures 
+    //plains creatures
     this.cup.push(new Defender(-1, "BuffaloHerd1", 3, "plains", 0, 0, 0, 0));
     this.cup.push(new Defender(-1, "BuffaloHerd2", 4, "plains", 0, 0, 0, 0));
     this.cup.push(new Defender(-1, "Centaur", 2, "plains", 0, 0, 0, 0));
@@ -167,7 +168,7 @@ function Game() {
     this.cup.push(new Defender(-1, "WolfPack", 3, "plains", 0, 0, 0, 0));
     this.cup.push(new Defender(-1, "Tribesmen3", 1, "plains", 0, true, 0, 0));
 
-    //swamp creatures 
+    //swamp creatures
     this.cup.push(new Defender(-1, "Basilisk", 3, "swamp", 0, 0, 0, true));
     this.cup.push(new Defender(-1, "BlackKnight", 3, "swamp", true, 0, 0, 0));
     this.cup.push(new Defender(-1, "Crocodiles", 2, "jungle", 0, 0, 0, 0));
