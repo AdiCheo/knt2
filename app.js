@@ -749,9 +749,9 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
   var oldHexId = currentArmy.thingInHand.currentHexId;
   var currentHex = game.getHexById(hexId);
+  var distanceTraveled = currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
   if (currentArmy.thingInHand.type == "defender") {
-    var distanceTraveled = currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
 
     // If Defender has enough movement points for the move
     if (distanceTraveled <= currentArmy.thingInHand.movementPoints) {
@@ -816,8 +816,8 @@ function eventClickedOnHexMovePhase(socket, hexId) {
         hexId,
         currentArmy.thingInHand.affinity);
 
-      socket.emit('error', conflictStack);
-      socket.emit('error', conflictFort);
+      socket.emit('error', "conflictStack" + conflictStack);
+      socket.emit('error', "conflictFort" + conflictFort);
 
       if (conflictStack)
         moveStackBattle(socket, currentArmy, oldHexId, hexId, conflictStack);
