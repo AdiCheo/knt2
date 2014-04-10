@@ -420,9 +420,10 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
       return;
     } else if (currentArmy.thingInHand.buildingType == "building" || currentArmy.thingInHand.buildingType == "town") {
       if (indexById(currentArmy.ownedHexes, hexId) !== null) {
-        if (currentArmy.thingInHand.terrainType == currentArmy.ownedHexes[indexById(currentArmy.ownedHexes, hexId)].terrainType || currentArmy.thingInHand.buildingType == 0) { // remove that thing from the cup
 
-          if (indexById(game.cup, currentArmy.thingInHand.id)) {
+        if (currentArmy.thingInHand.terrainType == currentArmy.ownedHexes[indexById(currentArmy.ownedHexes, hexId)].terrainType || currentArmy.thingInHand.terrainType === 0) { // remove that thing from the cup
+
+          if (indexById(game.cup, currentArmy.thingInHand.id) !== null) {
 
             game.removeFromCup(currentArmy.thingInHand);
 
@@ -440,7 +441,9 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
             // empty hand
             socket.emit('updateHand', null);
 
-          } else if (indexById(currentArmy.rack, currentArmy.thingInHand.id)) {
+          } else if (indexById(currentArmy.rack, currentArmy.thingInHand.id) !== null) {
+            console.log("Let''s remove the thing form the rack");
+            socket.emit('error', 'Removing from rack');
             currentArmy.removeFromRack(currentArmy.thingInHand);
 
             socket.emit('updateRack', currentArmy.rack);
@@ -450,7 +453,6 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
 
           currentArmy.buildIncomeCounter(hexId, currentArmy.thingInHand);
           io.sockets.emit('createIncomeCounter', currentArmy.thingInHand);
-
 
           currentArmy.thingInHand = false;
         } else {
