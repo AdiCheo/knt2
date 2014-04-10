@@ -234,6 +234,11 @@ io.sockets.on('connection', function(socket) {
   // Movment consequences: ownHex, moveStack/defender
 
   /*** COMBAT_PHASE - 6 ***/
+  socket.on('combatPoll', function() {
+    if (game.currentPhase == COMBAT_PHASE) {
+      startCombat(socket);
+    }
+  });
 
   /*** CONSTRUCTION_PHASE - 7 ***/
   //fort clicked/upgraded listener
@@ -828,7 +833,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
         moveStack(socket, currentArmy, oldHexId, hexId);
 
       } else {
-        socket.emit('error', "TEST TODO SOmething went wrong."); // TODO
+        socket.emit('error', "TEST TODO Something went wrong."); // TODO
         socket.emit('error', "conflictStack" + conflictStack);
         socket.emit('error', "conflictFort" + conflictFort);
       }
@@ -840,29 +845,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
 
 // TODO
 function moveStackBattleFort(socket, currentArmy, oldHexId, newHexId, contestedStack) {
-  currentArmy.thingInHand.moveStack(newHexId);
 
-  // Remove both old stacks
-  io.sockets.emit('removeStackAll', oldHexId);
-  io.sockets.emit('removeStackAll', newHexId);
-
-  // temps
-  currHexId = currentArmy.thingInHand.currentHexId;
-  defenders = currentArmy.thingInHand.containedDefenders;
-  attackers = contestedStack.containedDefenders;
-
-  // send update socket
-  io.sockets.emit('updateStackBattle', currHexId,
-    defenders, currentArmy.affinity,
-    attackers, contestedStack.affinity);
-
-  io.sockets.emit('updateStackAllBattle', currHexId, currentArmy.affinity, contestedStack.affinity);
-  io.sockets.emit('error', "Battle!");
-
-  // empty hand
-  currentArmy.thingInHand = null;
-  socket.emit('updateHand', null);
-  socket.emit('updateSelectedIcon', "question");
 }
 
 function moveStackBattle(socket, currentArmy, oldHexId, newHexId, contestedStack) {
@@ -907,6 +890,11 @@ function moveStack(socket, currentArmy, oldHexId, newHexId) {
   // empty hand
   currentArmy.thingInHand = null;
   socket.emit('updateHand', null);
+}
+
+/*********** COMBAT_PHASE *****************/
+function startCombat(socket) {
+  io.sockets.emit('error', "COMBAT Phase");
 }
 
 /*********** CONSTRUCTION_PHASE ***********/
