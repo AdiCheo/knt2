@@ -93,9 +93,9 @@ function initConnection() {
       fortUpgraded(fortUpgradeData);
     });
 
-    iosocket.on('diceRollResult', function(diceValue) {
+    iosocket.on('diceRollResult', function(diceResult) {
       console.log('Dice result:' + diceResult);
-      handleDiceResult(diceValue);
+      handleDiceResult(diceResult);
     });
 
     iosocket.on('allowDefenderPlacement', function(game) {
@@ -441,7 +441,27 @@ function handleDiceResult(diceResult) {
 
 function nextPlayerTurn(gameData) {
   //output the current phase the game is in
-  document.getElementById("phasetext").innerHTML = "Current Phase: " + gameData.currentPhase;
+  if (gameData.currentPhase === 0) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Setup Recruitment - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 1) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Gold Collection - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 2) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Recruit Hero - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 3) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Recruit Things - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 4) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Random Events - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 5) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Movement Phase - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 6) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Combat Phase - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 7) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Construction - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 8) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Special Powers - " + gameData.currentPhase;
+  } else if (gameData.currentPhase == 9) {
+    document.getElementById("phasetext").innerHTML = "Current Phase: Change of Order - " + gameData.currentPhase;
+  }
 
   //output the current player turn
   var turn = gameData.currentPlayerTurn + 1;

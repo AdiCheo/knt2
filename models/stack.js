@@ -5,6 +5,7 @@ function Stack(hexId, affinity) {
   this.affinity = affinity;
 
   this.containedDefenders = [];
+  this.movementPoints = 4;
   this.requiredRolls = 0;
   this.currentHexId = hexId;
 
@@ -14,6 +15,13 @@ function Stack(hexId, affinity) {
 
     for (var each in this.containedDefenders) {
       this.containedDefenders[each].currentHexId = newHexId;
+    }
+  };
+
+  this.zeroMovementPoints = function() {
+    this.movementPoints = 0;
+    for (var i in this.containedDefenders) {
+      this.containedDefenders[i].movementPoints = 0;
     }
   };
 }

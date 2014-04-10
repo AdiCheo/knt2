@@ -28,6 +28,10 @@ function Army(affinity, name, income, gold, id) {
   this.rack = [];
 
   this.canPlay = function(game, socket) {
+
+    if (this.mustRollDice === true)
+      return true;
+
     if (game.currentPlayerTurn != this.affinity) {
       socket.emit('error', "It is not your turn yet!");
       return false;
@@ -83,11 +87,10 @@ function Army(affinity, name, income, gold, id) {
       this.stacks.push(stack);
     }
 
-    defender.currentHexId = stack.currentHexId;
-
     if (stack.containedDefenders.length == 10) {
       return false;
     } else {
+      defender.currentHexId = stack.currentHexId;
       stack.containedDefenders.push(defender);
     }
     return true;

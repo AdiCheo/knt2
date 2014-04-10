@@ -9,7 +9,7 @@ function Game() {
   this.armies = [];
   this.hexes = [];
   // this.defenders = [];
-  // this.specialIncome = [];
+  this.specialIncome = [];
   this.cup = [];
   this.battles = [];
 
@@ -31,6 +31,14 @@ function Game() {
       if (this.cup[i] == thingObj) {
         console.log("Removing " + thingObj + " from cup");
         this.cup.splice(i, 1);
+      }
+    }
+  };
+
+  this.findBattleOnHex = function(hexId) {
+    for (var i in this.battles) {
+      if (this.battles[i].currentHexId == hexId) {
+        return this.battles[i];
       }
     }
   };

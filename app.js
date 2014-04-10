@@ -32,6 +32,7 @@ var Stack = require('./models/stack.js');
 var Defender = require('./models/defender.js');
 var HexTile = require('./models/hextile.js');
 var SpecialIncomeThing = require('./models/special_income.js');
+var Battle = require('./models/battle.js');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -236,7 +237,9 @@ io.sockets.on('connection', function(socket) {
   /*** COMBAT_PHASE - 6 ***/
   socket.on('combatPoll', function(defA, attA, hexId) {
     startCombat(socket, defA, attA, hexId);
-    if (game.currentPhase == COMBAT_PHASE) {}
+    if (game.currentPhase == COMBAT_PHASE) {
+      // startCombat(socket, defA, attA, hexId);
+    }
   });
 
   /*** CONSTRUCTION_PHASE - 7 ***/
@@ -790,16 +793,19 @@ function eventClickedOnHexMovePhase(socket, hexId) {
       //during that battle, you can bribe the creatures by paying as much gold as their combat value
       //if you fight for at least one combat round, then you cannot bribe anymore
       //affinity = 4 and the army NPC
-      currentArmy.mustRollDice = true;
+      // currentArmy.mustRollDice = true;
       // you need to roll the dice for the unexplored hex
       // socket.emit('needRollDice', randomDiceRoll());
       game.currentPhase = "exploration";
+      currentArmy.mustRollDice = true;
+      currentArmy.contestedHex = hexId;
       moveStack(socket, currentArmy, oldHexId, hexId);
+      currentArmy.thingInHand.zeroMovementPoints();
 
-      // currentArmy.thingInHand.movementPoints -= currentArmy.calculateDistance(currentArmy.thingInHand, currentHex);
+      currentArmy.thingInHand = null;
+      socket.emit('updateHand', null);
 
-    }
-    if (currentHex.isExplored) {
+    } else if (currentHex.isExplored) {
 
       conflictStack = checkBattleStack(socket,
         hexId,
@@ -824,12 +830,18 @@ function eventClickedOnHexMovePhase(socket, hexId) {
       else if (currentHex.affinity == currentArmy.affinity) {
         moveStack(socket, currentArmy, oldHexId, hexId);
 
+        currentArmy.thingInHand = null;
+        socket.emit('updateHand', null);
+
       } else if (currentHex.affinity != currentArmy.affinity) {
         // Explored you don't own it
         // Own and move
         currentArmy.ownHex(hexId, game);
         io.sockets.emit('updateOwnedHex', hexId, currentArmy.affinity);
         moveStack(socket, currentArmy, oldHexId, hexId);
+
+        currentArmy.thingInHand = null;
+        socket.emit('updateHand', null);
 
       } else {
         socket.emit('error', "TEST TODO Something went wrong."); // TODO
@@ -860,10 +872,11 @@ function moveStackBattle(socket, currentArmy, oldHexId, newHexId, contestedStack
   attackers = currentArmy.thingInHand;
 
   // Update game
-  var battle = [];
-  battle.push(defenders);
-  battle.push(attackers);
-  game.battles[currHexId] = battle;
+  var battle = new Battle();
+  battle.defenders = defenders;
+  battle.attackers = attackers;
+  battle.currentHexId = currHexId;
+  game.battles.push(battle);
 
   // send update socket
   io.sockets.emit('updateStackBattle', currHexId,
@@ -887,13 +900,40 @@ function moveStack(socket, currentArmy, oldHexId, newHexId) {
   io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
 
   // empty hand
-  currentArmy.thingInHand = null;
-  socket.emit('updateHand', null);
+  // currentArmy.thingInHand = null;
+  // socket.emit('updateHand', null);
 }
 
 /*********** COMBAT_PHASE *****************/
-function startCombat(socket, defA, attA, hexId) {
-  io.sockets.emit('error', "COMBAT Phase" + defA + attA + hexId);
+function startCombat(socket, defAffinity, attAffinity, hexId) {
+  currentArmy = game.armies[indexById(game.armies, socket.id)];
+
+  if (!currentArmy.canPlay(game, socket)) return;
+
+  if (game.battles.length === 0) {
+    currentArmy.canEndTurn = true;
+    socket.emit('error', 'No battles exist end turn to move on.');
+  }
+
+  var battle = game.findBattleOnHex(hexId);
+
+  if (currentArmy.affinity == defAffinity || currentArmy.affinity == attAffinity) {
+    if (battle.defenders.affinity == currentArmy.affinity) {
+      currentArmy.currentStack = battle.defenders;
+      currentArmy.opposingStack = battle.attackers;
+    } else {
+      currentArmy.currentStack = battle.attackers;
+      currentArmy.opposingStack = battle.defenders;
+    }
+  } else {
+    socket.emit('error', 'This is not your battle!');
+  }
+
+  currentArmy.currentStack.requiredRolls = currentArmy.currentStack.containedDefenders.length;
+  currentArmy.currentStack.requiredRolls = currentArmy.opposingStack.containedDefenders.length;
+
+  currentArmy.mustRollDice = true;
+  game.armies[currentArmy.opposingStack.affinity].mustRollDice = true;
 
 }
 
@@ -914,6 +954,7 @@ function eventUpgradeFort(socket, hexId) {
             currentArmy.forts[index].fortValue++;
             currentArmy.gold -= 5;
             currentArmy.citadelsOwned++;
+            io.sockets.emit('updateUI', updateArmyData(socket));
             io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].fortValue, currentArmy.gold, currentArmy.forts[index].id));
           } else {
             socket.emit('error', "You need an income of at least 20 gold to upgrade to citadel or you already have a citadel!");
@@ -922,6 +963,7 @@ function eventUpgradeFort(socket, hexId) {
           currentArmy.forts[index].hasBeenUpgraded = true;
           currentArmy.forts[index].fortValue++;
           currentArmy.gold -= 5;
+          io.sockets.emit('updateUI', updateArmyData(socket));
           io.sockets.emit('fortUpgraded', fortUpgradeData(currentArmy.affinity, currentArmy.forts[index].fortValue, currentArmy.gold, currentArmy.forts[index].id));
         } else {
           socket.emit('error', "You cannot upgrade a citadel.");
@@ -949,7 +991,6 @@ function eventbuyFort(socket, hexId) {
     if (currentArmy.canBuildFort) {
       if (currentArmy.buildFort(hexId, 1)) {
         if (currentArmy.gold >= 5) {
-          console.log("It got here!");
           io.sockets.emit('updateForts', hexId, currentArmy.affinity);
           currentArmy.canBuildFort = false;
           currentArmy.gold -= 5;
@@ -1056,27 +1097,30 @@ function updateArmyData(socket) {
 
 function handleDice(socket) {
   currentArmy = game.armies[indexById(game.armies, socket.id)];
+
   // TODO reply with dice
   if (currentArmy.mustRollDice) {
     // valid dice roll handle here
-    result = randomDiceRoll();
-    socket.emit('diceRollResult', result);
 
     if (game.currentPhase == "exploration") {
-      if (result == 1 || result == 6) {
-        // The army can own the hex it stepped on.
-      } else {
-        // We need to create a new stack of npc units and put them on the hex
-        // Then start a battle
-      }
+      socket.emit('diceRollResult', 1);
+      // The army can own the hex it stepped on.
+      currentArmy.ownHex(currentArmy.contestedHex, game);
+      io.sockets.emit('updateOwnedHex', currentArmy.contestedHex, currentArmy.affinity);
+      game.currentPhase = 5;
+      currentArmy.mustRollDice = false;
+    } else {
+      diceResult = randomDiceRoll();
+      socket.emit('diceRollResult', diceResult);
+      // We need to create a new stack of npc units and put them on the hex
+      // Then start a battle
+      // The army can own the hex it stepped on.
+      currentArmy.ownHex(currentArmy.contestedHex, game);
+      io.sockets.emit('updateOwnedHex', currentArmy.contestedHex, currentArmy.affinity);
+      game.currentPhase = 5;
+      currentArmy.mustRollDice = false
 
     }
-
-    return;
-  } else {
-    // Dice roll is invalid
-    socket.emit('error', 'Dice roll invalid at this time!');
-    return false;
   }
 }
 

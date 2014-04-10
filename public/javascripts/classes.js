@@ -55,9 +55,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     posx = -12;
     posy = 25;
 
-    if (this.battleIcon) {
-      this.battleIcon.setImage(markerIcons[affinity]);
-    } else {
+    if (!this.battleIcon) {
       this.battleIcon = createIcon(battleMarker, 25, "battleMarker");
       boardLayer.add(this.battleIcon);
     }
