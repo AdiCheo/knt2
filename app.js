@@ -1663,10 +1663,9 @@ function checkBattleStack(socket, hexId, affinity) {
   socket.emit('error', 'stacksArmy3' + game.armies[3].stacks);
   for (var player in game.armies) {
     contestedStack = game.armies[player].getStackOnHex(hexId);
-    socket.emit('error', "You " + contestedStack);
-
 
     if (contestedStack && contestedStack.affinity != affinity) {
+      socket.emit('error', "contestedStack " + contestedStack.affinity + contestedStack.currentHexId);
       return contestedStack;
     }
   }
