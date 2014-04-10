@@ -1011,7 +1011,6 @@ function ownHexesScenario1() {
 
   game.armies[0].ownHex("2,1", game, true);
   game.armies[0].ownHex("2,0", game, true);
-  game.armies[0].ownHex("2,1", game, true);
   game.armies[0].ownHex("2,-1", game, true);
   game.armies[0].ownHex("3,-2", game, true);
   game.armies[0].ownHex("3,-1", game, true);
@@ -1022,8 +1021,6 @@ function ownHexesScenario1() {
   game.armies[0].ownHex("0,1", game, true);
 
   game.armies[1].ownHex("-2,-1", game, true);
-  game.armies[1].ownHex("-2,0", game, true);
-  game.armies[1].ownHex("-1,2", game, true);
   game.armies[1].ownHex("-3,0", game, true);
   game.armies[1].ownHex("-3,1", game, true);
   game.armies[1].ownHex("-3,2", game, true);
@@ -1062,7 +1059,7 @@ function buildFortsScenario1() {
   game.armies[1].buildFort("-2,-1", 3);
   game.armies[1].buildFort("-2,0", 1);
   game.armies[1].buildFort("-3,0", 2);
-  game.armies[1].buildFort("3,1", 2);
+  game.armies[1].buildFort("-3,1", 2);
 
   game.armies[2].buildFort("-2,3", 1);
   game.armies[2].buildFort("-1,3", 2);
