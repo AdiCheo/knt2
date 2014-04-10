@@ -1657,10 +1657,10 @@ function checkBattleFort(stack) {
 }
 
 function checkBattleStack(socket, hexId, affinity) {
-  socket.emit('error', 'stacks' + game.armies[0].stacks);
-  socket.emit('error', 'stacks' + game.armies[1].stacks);
-  socket.emit('error', 'stacks' + game.armies[2].stacks);
-  socket.emit('error', 'stacks' + game.armies[3].stacks);
+  socket.emit('error', 'stacksArmy0' + game.armies[0].stacks);
+  socket.emit('error', 'stacksArmy1' + game.armies[1].stacks);
+  socket.emit('error', 'stacksArmy2' + game.armies[2].stacks);
+  socket.emit('error', 'stacksArmy3' + game.armies[3].stacks);
   for (var player in game.armies) {
     contestedStack = game.armies[player].getStackOnHex(hexId);
     socket.emit('error', "You " + contestedStack);
