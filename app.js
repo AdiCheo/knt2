@@ -1386,7 +1386,7 @@ function eventLoadGame(game, num) {
     buildFortsScenario1();
     getStacksScenario1();
 
-    game.currentPhase = MOVEMENT_PHASE;
+    game.currentPhase = GOLD_COLLECTION_PHASE;
     game.totalTurn = 5;
     game.currentPlayerTurn = 0;
     // Send message to all clients that a player turn ended
