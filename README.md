@@ -30,13 +30,14 @@ How to connect clients
 ----------------------
 1. Open any modern browser (we recommend Google Chrome for best compatibility/performance)
 2. Open 4 tabs
-3. Point the first one to ```localhost:3000``` and wait for it to load, it should indicate you are player 1
+3. Point the first one to ```localhost:3000``` and wait for it to load, it should indicate you are player 1 (use the highlighted right hand menu color).
 4. Go to the second tab an open the same url for player 2, then follow suit for player 3 and 4.
 
 Warnings
 --------
 1. We have made it so if one player gets disconnected, all other players are pointed to a blank page.
-2. Simply hitting the back button on the browser should reconnect you as player 1 and so on.
+2. Please make sure you do not connect more than 4 players/tabs when testing (!important)
+3. Simply hitting the back button on the browser should reconnect you as player 1 and so on.
 
 How to play the Game
 ====================
