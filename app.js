@@ -1115,8 +1115,8 @@ function handleDice(socket) {
       // We need to create a new stack of npc units and put them on the hex
       // Then start a battle
       // The army can own the hex it stepped on.
-      currentArmy.ownHex(currentArmy.contestedHex, game);
-      io.sockets.emit('updateOwnedHex', currentArmy.contestedHex, currentArmy.affinity);
+      // currentArmy.ownHex(currentArmy.contestedHex, game);
+      // io.sockets.emit('updateOwnedHex', currentArmy.contestedHex, currentArmy.affinity);
       currentArmy.mustRollDice = false;
 
     }
