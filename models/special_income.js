@@ -1,3 +1,5 @@
+//model for special income  
+
 function SpecialIncomeThing(hexId, name, terrainType, buildingType, incomeValue) {
 
   this.id = name;

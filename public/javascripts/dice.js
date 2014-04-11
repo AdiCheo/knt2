@@ -1,3 +1,4 @@
+//used for the rolling the dice 
 function DiceControls() {
   this.diceCheatOn = false;
 

@@ -13,6 +13,7 @@ function Army(affinity, name, income, gold, id) {
   this.thingsPurchased = 0;
   this.citadelsOwned = 0;
 
+  //set the flags to be used later 
   this.mustEndTurn = false;
   this.canEndTurn = false;
   this.canChooseHex = false;
@@ -27,6 +28,7 @@ function Army(affinity, name, income, gold, id) {
   this.stacks = [];
   this.rack = [];
 
+  //function that checks if a player is allowed to play, checking if it is their turn or nott
   this.canPlay = function(game, socket) {
 
     if (this.mustRollDice === true)
@@ -45,12 +47,14 @@ function Army(affinity, name, income, gold, id) {
     return true;
   };
 
+  //checks to see if the anyone owns the hex and if the player could own it 
   this.ownHex = function(hexId, game, loadMode) {
     var index = indexById(game.hexes, hexId);
     var currentHex = game.hexes[index];
 
     if (!game.isHexOwned(hexId) && this.isHexLegalToOwn(hexId, game) || loadMode) {
       game.getHexById(hexId).affinity = this.affinity;
+      //Because a player is now on a hex, the hex is now consiered to be explored 
       game.getHexById(hexId).isExplored = true;
       this.ownedHexes.push(currentHex);
       return true;
@@ -59,10 +63,8 @@ function Army(affinity, name, income, gold, id) {
     }
   };
 
+  //make a fort on a hex that you own 
   this.buildFort = function(hexId, value) {
-    // var index = indexById(game.hexes, hexId);
-    // var currentHex = game.hexes[index];
-
     if (indexById(this.ownedHexes, hexId) !== null && indexById(this.forts, hexId) === null) {
       var fort = new Fort(hexId, this.affinity, value);
       this.forts.push(fort);
@@ -72,12 +74,14 @@ function Army(affinity, name, income, gold, id) {
     }
   };
 
+  //give gold 
   this.buildIncomeCounter = function(hexId, incomeCounter) {
     incomeCounter.affinity = this.affinity;
     incomeCounter.currentHexId = hexId;
     this.incomeCounters.push(incomeCounter);
   };
 
+  //add defenders to the stack 
   this.addDefenderToStack = function(defender, hexId) {
     var stack = this.getStackOnHex(hexId);
 
@@ -87,6 +91,7 @@ function Army(affinity, name, income, gold, id) {
       this.stacks.push(stack);
     }
 
+    //check to see how many defenders there are in the stack. Cannot place more than 10 defenders. 
     if (stack.containedDefenders.length == 10) {
       return false;
     } else {
@@ -96,20 +101,22 @@ function Army(affinity, name, income, gold, id) {
     return true;
   };
 
+  //remove things from the array 
   this.removeFromArray = function(array, thing) {
     for (var i in array) {
       if (array[i].name == thing.name) {
         console.log("Removing " + thing + " in array");
         array.splice(i, 1);
-        // delete array[i]; // TODO big issues with deleting from arrays.. WHYYYYY
         return true;
       }
     }
-    console.log("Could not find " + thing + " in array. (Remove)");
+    //the thing could not be found in the array 
     return false;
   };
 
+  //add the things to the rack 
   this.addThingToRack = function(defender) {
+    //limit of 10 things for the rack 
     if (this.rack.length == 10) {
       return false;
     } else {
@@ -119,35 +126,37 @@ function Army(affinity, name, income, gold, id) {
     return true;
   };
 
+  //get what the stack is on the hex 
   this.getStackOnHex = function(hexId) {
     return this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
   };
 
+  //remove the thing from the rack 
   this.removeFromRack = function(thing) {
     for (var i in this.rack) {
       if (this.rack[i].name == thing.name) {
-        console.log("Removing " + thing + " from rack");
+        //remove thing
         this.rack.splice(i, 1);
       }
     }
   };
 
+  //find out what the thing is 
   this.findThing = function(array, thingName) {
     for (var i in array) {
-      console.log("Thing Name: " + thingName + " " + array[i]);
       if (array[i].name == thingName) {
         return array[i];
       }
     }
-
     return false;
   };
 
+  // Put the defender selected in the hand of the player
   this.putDefenderInHand = function(defenderName, hexId) {
-    // Put the defender selected in the hand of the player
     this.thingInHand = this.findDefenderInStacks(defenderName, hexId);
   };
 
+  //find the defender in the stack 
   this.findDefenderInStacks = function(defenderName, hexId) {
     var stack = this.stacks[indexByKey(this.stacks, "currentHexId", hexId)];
 
@@ -156,20 +165,17 @@ function Army(affinity, name, income, gold, id) {
       if (defender)
         return defender;
     }
-
-    console.log("Defender " + defenderName + " not found in any stack belonging to this army");
+    //the defender could not be found in the stack 
     return null;
   };
 
+  //find the thing in the rack 
   this.findThingInRack = function(ThingName) {
     // returns null if not found
     return this.rack[indexByKey(this.rack, "name", ThingName)];
   };
 
-  this.removeDefenderFromStack = function(defender) {
-
-  };
-
+  //calculate and update the income for the player 
   this.updateIncome = function() {
     this.income = 0;
     var specialTotalIncome = 0;
@@ -177,7 +183,7 @@ function Army(affinity, name, income, gold, id) {
     for (var i in this.incomeCounters) {
       specialTotalIncome += this.incomeCounters[i].incomeValue;
     }
-
+    //add the income for the special things 
     this.income += specialTotalIncome;
 
     // Income from total number of hexes
@@ -188,26 +194,25 @@ function Army(affinity, name, income, gold, id) {
     for (var i in this.forts) {
       fortTotalValue += this.forts[i].fortValue;
     }
-
     this.income += fortTotalValue;
   };
 
+  //check if the hex is legal to own 
   this.isHexLegalToOwn = function(hex, game) {
     var index = indexById(game.hexes, hex);
     var currentHex = game.hexes[index];
 
+    //cannot own a hex that is of type sea
     if (currentHex.terrainType == "sea")
       return false;
 
+    //starting positions for the players 
     if (this.ownedHexes.length === 0) {
       if (hex == "-2,-1" || hex == "2,-3" || hex == "-2,3" || hex == "2,1" &&
         (currentHex.affinity == this.affinity || currentHex.affinity == -1))
         return true;
       else {
-        console.log("Illegal hex");
-        console.log(
-          "Current player affinity: " + this.affinity +
-          "\nhex affinity: " + currentHex.affinity);
+        //the hex is not legal 
         return false;
       }
     } else if (
@@ -215,19 +220,17 @@ function Army(affinity, name, income, gold, id) {
       (currentHex.affinity == this.affinity || currentHex.affinity == -1)) {
       return true;
     } else {
-      console.log("Illegal hex");
-      console.log(
-        "Current player affinity: " + this.affinity +
-        "\nhex affinity: " + currentHex.affinity);
+      //hex is not legal 
       return false;
     }
   };
 
-  //return true if hex is in range
+  //check if selected hex is one hex away 
   this.isOneHexAway = function(targetArray, destination) {
     console.log(targetArray);
     for (var i in targetArray) {
       console.log(targetArray[i]);
+      //return true if hex is in range
       if (this.calculateDistance(targetArray[i], destination) == 1)
         return true;
     }
@@ -246,11 +249,10 @@ function Army(affinity, name, income, gold, id) {
     if (this.isOneHexAway(opponentHexes, target)) {
       return true;
     }
-
     return false;
   };
 
-  //calculates distance between two hex tiles (NOT NEEDED, METHOD IS ADDED TO THE TILES)
+  //calculates distance between two hex tiles
   this.calculateDistance = function(target, destination) {
     var x1, y1, x2, y2;
 
@@ -283,16 +285,18 @@ function Army(affinity, name, income, gold, id) {
     return Math.max(Math.abs((x2 - x1)), Math.abs((y2 - y1)), Math.abs((z2 - z1)));
   };
 
+  //get the index of items such as things 
   function indexByKey(array, key, value) {
     for (var i = 0; i < array.length; i++) {
       if (array[i][key] == value) {
         return i;
       }
     }
-    console.log("NOT FOUND: " + value + " in " + key);
+    //could not find 
     return null;
   }
 
+  //get the index by the id of the particular items 
   function indexById(array, value) {
     return indexByKey(array, "id", value);
   }

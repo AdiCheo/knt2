@@ -1,3 +1,4 @@
+//model for fort 
 function Fort(hexId, affinity, fortValue) {
   this.id = hexId;
   this.name = "fort" + affinity;
