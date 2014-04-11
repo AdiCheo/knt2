@@ -1,3 +1,4 @@
+//cup that things are taken out of 
 function Bowl() {
   var bowl = new Kinetic.Image({
     x: 200,
@@ -9,16 +10,17 @@ function Bowl() {
     height: 128
   });
 
+  //update the icons in the cup 
   bowl.updateIcons = function(thing) {
     // Remove old icon
     if (bowlbutton.oldThing)
       bowlbutton.oldThing.remove();
-
     // Update bowlbutton
     if (thing)
       bowlbutton.addThingIcon(thing);
   };
 
+  //add the icons of particular things
   bowl.addThingIcon = function(thingName) {
     console.log(thingName + "Image");
     console.log(thingImagesArray[thingName + "Image"]);

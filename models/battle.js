@@ -1,3 +1,4 @@
+//model for battle 
 function Battle() {
 
   this.defendersStack = [];

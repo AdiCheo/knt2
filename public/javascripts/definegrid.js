@@ -13,13 +13,12 @@ var thingsInRack = [];
 
 //dice1 button
 var dice1button = new Kinetic.Rect({
-  x: 15, //stage.getWidth() - 350
+  x: 15,
   y: 15,
   name: "dicebutton",
   id: "control",
   width: 75,
   height: 75,
-  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 4, 1 / 4],
   strokeWidth: 0
@@ -34,7 +33,6 @@ var cheatDice1 = new Kinetic.Rect({
   id: "control",
   width: 37.5,
   height: 37.5,
-  // draggable: true,
   fillPatternOffset: [-8, -8],
   fillPatternScale: [1 / 8, 1 / 8],
   strokeWidth: 0
@@ -111,6 +109,7 @@ var cheatDice6 = new Kinetic.Rect({
 });
 cheatDice6.diceValue = 6;
 
+//marker button 
 var placeMarkerButton = new Kinetic.Image({
   x: 5,
   y: 275,
@@ -124,6 +123,7 @@ var placeMarkerButton = new Kinetic.Image({
   strokeWidth: 5
 });
 
+//fort button 
 var buildFortButton = new Kinetic.Image({
   name: "buildFortButton",
   image: fortImages["tower"],
@@ -136,6 +136,7 @@ var buildFortButton = new Kinetic.Image({
   strokeWidth: 5
 });
 
+//collect button 
 var collectGoldButton = new Kinetic.Image({
   x: 5,
   y: 350,
@@ -149,6 +150,7 @@ var collectGoldButton = new Kinetic.Image({
   strokeWidth: 5
 });
 
+//thing selected 
 var selectedThing = new Kinetic.Image({
   x: 750,
   y: 0,
@@ -159,6 +161,7 @@ var selectedThing = new Kinetic.Image({
   height: 140
 });
 
+//button ends turn 
 var endturnbutton = new Kinetic.Image({ //End turn button
   x: 5,
   y: 125,
@@ -176,7 +179,6 @@ var boardLayer = new Kinetic.Layer();
 
 createBoardLayer();
 
-// TODO WTF is going on here
 generateFort(boardLayer.get("#-2,-1")[0], fortImages["tower"], 0, boardLayer);
 
 var selectedObject;
@@ -328,6 +330,7 @@ boardLayer.on('click tap', function(e) {
   }
 });
 
+//create the board 
 function createBoardLayer(rows, cols) {
   var rows = rows || 8;
   var cols = cols || 7;
@@ -418,6 +421,8 @@ boardLayer.add(collectGoldButton);
 boardLayer.add(buildFortButton);
 boardLayer.add(selectedThing);
 boardLayer.add(bowlbutton);
+
+//UI items
 
 document.getElementById("phasetext").style.left = 260 + "px";
 document.getElementById("phasetext").style.top = 0 + "px";

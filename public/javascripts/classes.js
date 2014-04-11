@@ -1,5 +1,3 @@
-/* CONTAINS ALL CLASS DEFINITIONS NEEDED FOR THE GAME*/
-
 //initialize a regular hexagon with all additional parameters and methods
 function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   var hexagon = new Kinetic.RegularPolygon({
@@ -25,11 +23,13 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
   hexagon.attDefenders = [];
   hexagon.defendersVisible = true;
 
+  //set the marker icons for players to put on hexes when they own them
   hexagon.setOwnerIcon = function(affinity) {
     //relative position within hex
     posx = 10;
     posy = -60;
 
+    //add an icon if it does no exist already 
     if (this.icon) {
       this.icon.setImage(markerIcons[affinity]);
     } else {
@@ -50,11 +50,13 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   };
 
+  //put the icon needed to indicate that a battle is occuring 
   hexagon.setBattleIcon = function(defAffinity, attAffinity) {
     //relative position within hex
     posx = -12;
     posy = 25;
 
+    //create a battle icon if it does not exist 
     if (!this.battleIcon) {
       this.battleIcon = createIcon(battleMarker, 25, "battleMarker");
       boardLayer.add(this.battleIcon);
@@ -72,6 +74,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     boardLayer.draw();
   };
 
+  //create the icons needed for special income character
   hexagon.buildIncomeCounter = function(incomeCounter) {
     var xMod = 0;
 
@@ -98,10 +101,12 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     boardLayer.draw();
   };
 
+  //create the icons for the forts
   hexagon.setFortIcon = function(affinity, fortValue) {
 
     fortImage = fortImages["tower"];
 
+    //set type of fort that needs to be placed depending on the fort's value 
     if (fortValue == 2) {
       fortImage = fortImages["keep"];
     } else if (fortValue == 3) {
@@ -128,6 +133,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
 
   };
 
+  //set the stack icon 
   hexagon.setStackIcon = function(affinity) {
 
     if (this.stack) {
@@ -154,6 +160,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.stack.hex = hexagon;
   };
 
+  //set the images for the defenders in the stack 
   hexagon.setDefenderStackIcon = function(things, affinity) {
 
     if (this.stack)
@@ -183,6 +190,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.defStack.hex = hexagon;
   };
 
+  //set the images for the defenders of the player attacking in a stack 
   hexagon.setAttackerStackIcon = function(things, affinity) {
 
     if (this.stack)
@@ -212,6 +220,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.attStack.hex = hexagon;
   };
 
+  //remove the stack - this is used for the movement 
   hexagon.removeStack = function() {
     // Remove old icons
     for (var i in this.containDefenders) {
@@ -228,6 +237,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     boardLayer.draw();
   };
 
+  //add the image of the things such as defenders etc. 
   hexagon.addThingIcon = function(thingName, index, pos) {
 
     // Use for battle positioning
@@ -239,12 +249,11 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     }
 
     var thing = new Kinetic.Image({
-      x: this.getX() - 25 + xMod, //500 + 300,
-      y: this.getY() + 25 + index * 50, //500 + index * 50,
+      x: this.getX() - 25 + xMod,
+      y: this.getY() + 25 + index * 50,
       id: thingName,
       name: "defender",
       image: thingImagesArray[thingName + "Image"],
-      // draggable: true, //testing
       width: 50,
       height: 50
     });
@@ -264,6 +273,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     boardLayer.draw();
   };
 
+  //update the icons 
   hexagon.updateIcons = function(stackThings, pos) {
     // Remove old icons
     for (var i in this.containDefenders) {
@@ -278,6 +288,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     }
   };
 
+  //show the defenders Defending - used when you click on them 
   hexagon.showDefDefenders = function() {
     var yO = 45;
 
@@ -290,6 +301,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.defendersVisible = true;
   };
 
+  //hide the defenders that are Defending- used when you click on them again
   hexagon.hideDefDefenders = function() {
     for (var each in this.defDefenders) {
       this.defDefenders[each].hide();
@@ -297,6 +309,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.defendersVisible = false;
   };
 
+  //show the defenders that are attacking- used when you click on them 
   hexagon.showAttDefenders = function() {
     var yO = 45;
 
@@ -309,6 +322,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.defendersVisible = true;
   };
 
+  //hide the defenders that are attacking  - used when you click on them again
   hexagon.hideAttDefenders = function() {
     for (var each in this.attDefenders) {
       this.attDefenders[each].hide();
@@ -316,6 +330,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.defendersVisible = false;
   };
 
+  //show the defenders- used when you click on them 
   hexagon.showDefenders = function() {
     var yO = 45;
 
@@ -328,6 +343,7 @@ function HexTile(realX, realY, hexRadius, strokeColor, logicalX, logicalY) {
     this.defendersVisible = true;
   };
 
+  //hide the defenders- used when you click on them again
   hexagon.hideDefenders = function() {
     for (var each in this.containDefenders) {
       this.containDefenders[each].hide();
@@ -425,19 +441,13 @@ function Defender(source, defenderName, combatValue, canCharge, terrainType, isR
     height: 40,
     draggable: true
   });
-
-  // defender.currentHexId = hex.getId();
-  // defender.affinity = affinity;
-
-  // defender.hide();
-  // defender.combatValue = combatValue;
   boardLayer.add(defender);
-  // defender.moveToBottom();
 
   return defender;
 }
 
 
+//initialize the rack element
 function initRack(realX, realY) {
   var rack = new Kinetic.Image({
     x: realX,
@@ -452,8 +462,7 @@ function initRack(realX, realY) {
     id: "rack"
   });
 
-  // rack.rearrange = function(rack.containedThings) {}
-
+  //update images on the rack 
   rack.updateIcons = function(rackThings) {
     // Remove old icons
     for (var i in thingsInRack) {
@@ -468,6 +477,7 @@ function initRack(realX, realY) {
     }
   };
 
+  //add the things 
   rack.addThingIcon = function(thing, index) {
 
     var thingName;
@@ -490,7 +500,6 @@ function initRack(realX, realY) {
       height: 50
     });
 
-    // thingsArray.push(thing);
     thingsInRack.push(thingIcon);
     boardLayer.add(thingIcon);
     thingIcon.moveToTop();
@@ -513,23 +522,11 @@ function Game() {
     return this.currentTurn % 4;
   };
 
+  //increment the turns
   this.incrementTurn = function(currentArmy) {
 
     currentArmy.freeDefenders = Math.ceil(currentArmy.getNumOfHexes() / 2);
     currentArmy.defendersPurchased = 0;
-
-    // Catch reasons for not able to end turn
-    // if (!currentArmy.canEndTurn) {
-    //     if (this.currentPhase == -1) {
-    //         alert("Choose start location");
-    //     } else
-    //         alert("Cannont End turn!");
-    //     return false;
-    // }
-    // debug only
-    console.log("Current state: (forts & hexes)");
-    console.log(currentArmy.getNumOfFortHexes());
-    console.log(currentArmy.getNumOfHexes());
 
     if (currentArmy.getNumOfFortHexes() === 0 &&
       currentArmy.getNumOfHexes() == 3 &&
@@ -546,8 +543,8 @@ function Game() {
 
     if (this.currentTurn == 3) {
       this.currentTurn = 0;
+      //Army 4 turn ended. Army 1 to move
       this.totalTurn++;
-      console.log("Army 4 turn ended. Army 1 to move");
 
       // Handle phase transitions here
       if ((this.currentPhase) % 9 === 0 && this.currentPhase !== 0) {
@@ -560,8 +557,6 @@ function Game() {
       else if (this.totalTurn > 16) {
         this.currentPhase++;
       }
-
-      // document.getElementById("phasetext").value = "Current Phase: " + this.currentPhase;
       console.log("Moving to phase: " + this.currentPhase);
 
     } else if (this.currentTurn == 2) {
@@ -571,16 +566,13 @@ function Game() {
 
     } else if (this.currentTurn == 1) {
       this.currentTurn = 2;
+      // Army 2 turn ended. Army 3 to move
       this.totalTurn++;
-      console.log("Army 2 turn ended. Army 3 to move");
-
     } else {
       this.currentTurn = 1;
+      //Army 1 turn ended. Army 2 to move
       this.totalTurn++;
-      console.log("Army 1 turn ended. Army 2 to move");
     }
-    // alert("Player " + (this.getCurrentPlayer() + 1) + " turn");
-    console.log("Player " + (this.getCurrentPlayer() + 1) + " turn");
   }
 
 }
@@ -595,35 +587,9 @@ function initThing(shape, imageObj, boardLayer, hex) {
     name: "icon",
     image: imageObj
   });
-
-  // //Set unit affinity (1 or 0)
-  // soldier.affinity = currentTurn;
-  // soldier.AP = 3;
-  // soldier.HP = 100;
-  // imageObj.name = getName(5, 10); //name and setName are different things!
-  // imageObj.setName("sol"); //name and setName are different things!
-  imageObj.currentHexId = boardLayer.get("#" + hex)[0]; //Which hex does soldier belong to
-
-  // imageObj.bar = new APBar(soldier.getX(), soldier.getY(), soldier.AP, boardLayer);
-
-  //create soldier methods for handling AP bar
-  // soldier.showAPBar = function() {
-  //     this.bar.showBar(this.getX(), this.getY(), this.AP);
-  // };
-  // soldier.hideAPBar = function() {
-  //     this.bar.hideBar();
-  // };
-
-  // console.log("Created: " + soldier.name + " at " + soldier.getX() + " : " + soldier.getY());
-  // console.log(soldier.name + "current location within grid set as " + soldier.currentHexId);
+  !
+    imageObj.currentHexId = boardLayer.get("#" + hex)[0]; //Which hex does soldier belong to
 
   // add the shape to the layer
   boardLayer.add(imageObj);
-
-  // soldier.bar.initBar(boardLayer);
-
-  // add the layer to the stage
-  // stage.add(boardLayer);
 }
-
-//define a sprite with all additional parameters and methods (TO BE IMPLEMENTED)

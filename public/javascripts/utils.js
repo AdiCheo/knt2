@@ -2,7 +2,7 @@
 
 var dbl = 0;
 
-// isHexLegalToOwn() //TODO return boolean for choosing initial legal hexes
+// checks if you can own the hex 
 function isHexLegalToOwn(hex, currentArmy) {
   currentHexId = hex;
   if (currentArmy.getNumOfHexes() == 0) {
@@ -13,10 +13,7 @@ function isHexLegalToOwn(hex, currentArmy) {
       (currentHexId.affinity == currentArmy.affinity || currentHexId.affinity == 4))
       return true;
     else {
-      console.log("Illegal hex");
-      console.log(
-        "Current player affinity: " + currentArmy.affinity +
-        "\nhex affinity: " + currentHexId.affinity);
+      //hex is not legal to own 
       return false;
     }
 
@@ -25,14 +22,12 @@ function isHexLegalToOwn(hex, currentArmy) {
     (currentHexId.affinity == currentArmy.affinity || currentHexId.affinity == 4)) {
     return true;
   } else {
-    console.log("Illegal hex");
-    console.log(
-      "Current player affinity: " + currentArmy.affinity +
-      "\nhex affinity: " + currentHexId.affinity);
+    //hex is not legal to own 
     return false;
   }
 }
 
+//load images 
 function loadImages(array, sources) {
   for (var src in sources) {
     array[src] = new Image();
@@ -40,6 +35,7 @@ function loadImages(array, sources) {
   }
 }
 
+//create the icons 
 function createIcon(imagesrc, size, itemName) {
   var icon = new Kinetic.Image({
     name: itemName,
@@ -80,7 +76,7 @@ function findInThingsArray(array, name) {
     if (array[i].getName() == name)
       return array[i];
   }
-  console.log("Could not find [" + name + "] in array. (Find)");
+  //could not find the thing in the array 
   return false;
 }
 
@@ -91,7 +87,7 @@ function removeFromThingsArray(array, name) {
       return true;
     }
   }
-  console.log("Could not find " + name + " in array. (Remove)");
+  //could not remove the thing from the array 
   return false;
 }
 
@@ -105,15 +101,13 @@ function cleanArray(actual) {
   return newArray;
 }
 
+//random dice roll
 function rolldice() {
   //rolldice example from
   //http://stackoverflow.com/questions/20701586/dice-roll-in-javascript
   var x = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
   var y = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
   return [x, y];
-  // var dicetotal = x + y;
-  // $('.dice1').attr('id', "dice" + x);
-  // $('.dice2').attr('id', "dice" + y);
 };
 
 //generates random number between the given constraints
@@ -121,6 +115,7 @@ function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+///checks staks in the battle 
 function checkBattle(army, stack) {
   for (var player in army) {
     var stacks = army[player].getStacks();
@@ -134,6 +129,7 @@ function checkBattle(army, stack) {
   return false;
 }
 
+//not functioning 
 function resolveBattle(currentPlayer, battleIcon) {
   //     while(battleIcon.stack_1.length > 0 && battleIcon.stack_2.length > 0){
   //         for(var defender in battleIcon.stack_1){
@@ -145,33 +141,28 @@ function resolveBattle(currentPlayer, battleIcon) {
   //     }
 }
 
-// function rollForDefender(defender){
-//     console.log("Roll the dice");
-
-//     var
-// }
-
+//occurs when the battle is resolved 
 function resolveBattle(battleIcon, dice) {
   if (battleIcon.stack_1.getFirstDefender().combatValue > dice) {
-    console.log("It is alive");
+
   } else {
 
   }
 }
 
+//calculate the hits you took 
 function calculateHits(rolls, currentStack, army) {
   console.log(rolls);
   console.log(currentStack);
   console.log(army);
   for (var i = 0; i < rolls.length; i++) {
     if (rolls[i] <= currentStack.containedDefenders[i].combatValue) {
-      console.log("Successfull hit");
       army[currentStack.affinity].hits++;
     }
   };
 }
 
-
+//get the battle after this one is done 
 function getNextBattle(currentPlayer, battles) {
   for (var battle in battles) {
     if (battles[battle].stack_1.affinity == currentPlayer) {
@@ -182,23 +173,17 @@ function getNextBattle(currentPlayer, battles) {
   }
 }
 
-function rollForDefender(defender) {
-  console.log("Roll the dice");
-
-  // var
-}
+//not implemented 
+function rollForDefender(defender) {}
 
 //executes attack
 function attack(current_soldier, target, animation, damage, boardLayer) {
   boardLayer.setListening(false);
-  console.log("Starting attack animation for " + current_soldier.name);
   current_soldier.setAnimation(animation);
   current_soldier.start();
 
   var dmgTaken = damage + getRandom(0, 10); //Damage is slightly random
   target.HP = target.HP - dmgTaken;
-  console.log("Target " + target.name + " has taken " + dmgTaken + " damage");
-  console.log(target.name + " has " + target.HP + " HP left");
 
   setTimeout(function() {
     current_soldier.stop();
@@ -208,8 +193,6 @@ function attack(current_soldier, target, animation, damage, boardLayer) {
   boardLayer.setListening(true);
 
   if (target.HP < 1) {
-    console.log(target.name + " has been killed.");
-
     if (target.getName() == "sol") {
       target.bar.remove();
     }
@@ -254,8 +237,6 @@ function calculateDistance(target, destination) {
 
 //creates moving animation
 function createUnitAnimation(shape, current_soldier, boardLayer) {
-  console.log("Defining animation for " + current_soldier.name);
-  console.log(current_soldier.name + " current location within grid set as " + shape.getId());
 
   var x = Math.round(shape.getAbsolutePosition().x - 25);
   var y = Math.round(shape.getAbsolutePosition().y - 25);
@@ -349,7 +330,6 @@ function drawRadius(currentHexId, unitAP, color, boardLayer) {
     var shape = neighborHex[i];
     if (neighborHex[i] != undefined) {
       shape.setStroke(color);
-      //shape.moveToBottom();
       drawRadius(shape.getId(), unitAP - 1, color, boardLayer);
     }
   }

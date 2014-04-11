@@ -267,38 +267,12 @@ io.sockets.on('connection', function(socket) {
   /*** CHANGE_ORDER_PHASE - 9 ***/
 
 
-
-  // socket.on('defenderClicked', function(defenderName) {
-  // TODO Phase IF
-  // eventDefenderClicked(socket);
-  // });
-
   // Dice roll (random) listener
   socket.on('diceRollPressed', function() {
     if (game.currentPhase == COMBAT_PHASE) {
       handleDice(socket);
     }
   });
-
-  // Hex click listener
-  // socket.on('hexClicked', function(hexId) {
-  //   eventClickedOnHex(socket, hexId);
-  // });
-
-  // Defender click listener
-  // socket.on('defenderClicked', function(defenderName) {
-  //   eventDefenderClicked(socket, defenderName);
-  // });
-
-  // Dice roll (random) listener
-  // socket.on('diceRollPressed', function() {
-  //   handleDice(socket, randomDiceRoll());
-  // });
-
-  // Dice roll (preset) listener
-  // socket.on('diceRollDefined', function(diceValue) {
-  //   handleDice(socket, diceValue);
-  // });
 });
 
 /***************** SETUP_PHASE *****************/
@@ -385,8 +359,6 @@ function eventGenerateClicked(socket) {
     // Socket message to update cup view
     socket.emit('updateHand', currentArmy.thingInHand.name);
     socket.emit('updateSelectedIcon', currentArmy.thingInHand.name);
-
-
 
     currentArmy.canReplace = true;
 
@@ -854,7 +826,7 @@ function eventClickedOnHexMovePhase(socket, hexId) {
   }
 }
 
-// TODO
+// not implemented yet 
 function moveStackBattleFort(socket, currentArmy, oldHexId, newHexId, contestedStack) {
 
 }
@@ -898,10 +870,6 @@ function moveStack(socket, currentArmy, oldHexId, newHexId) {
   // send update socket
   io.sockets.emit('updateStack', currentArmy.thingInHand.currentHexId, currentArmy.thingInHand.containedDefenders, currentArmy.affinity);
   io.sockets.emit('updateStackAll', currentArmy.thingInHand.currentHexId, currentArmy.affinity);
-
-  // empty hand
-  // currentArmy.thingInHand = null;
-  // socket.emit('updateHand', null);
 }
 
 /*********** COMBAT_PHASE *****************/
@@ -1517,7 +1485,6 @@ function createHexTiles() {
         continue;
 
       //compute x coordinate of hex tile
-      //I did my best to reduce the magic numbers ;)
       x = hexRadius + rowIdx * hexRadius * 2 - hexRadius / 8;
       if (rowIdx !== 0) {
         x = x - rowIdx * hexRadius / 2;

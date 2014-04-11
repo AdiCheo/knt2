@@ -28,6 +28,7 @@ function register() {
   });
 }
 
+//setup 
 function initConnection() {
 
   iosocket = io.connect();
@@ -123,16 +124,6 @@ function initConnection() {
       replaceThingInRack(thing, prevThing);
     });
 
-    //update the gold
-    // iosocket.on('collectGoldButton', function(game) {
-    //   collectGoldButton();
-    // });
-
-    // iosocket.on('updateGold', function(updatedGoldData) {
-    //   updateGold(updatedGoldData);
-    //   console.log("Update the gold to all players.");
-    // });
-
     iosocket.on('nextPlayerTurn', function(gameData) {
       nextPlayerTurn(gameData);
     });
@@ -205,6 +196,7 @@ function initConnection() {
   });
 }
 
+//update the GUI 
 function updateUI(armyData) {
   for (var i = armyData.armies.length - 1; i >= 0; i--) {
     document.getElementById("gold_" + armyData.armies[i].color).innerHTML = "Gold: " + armyData.armies[i].gold;
@@ -213,10 +205,7 @@ function updateUI(armyData) {
   }
 }
 
-// function collectGoldButton() {
-//
-// }
-
+//update the current user 
 function updateUsers(users) {
   userList = users;
   $('#user').empty();
@@ -253,18 +242,17 @@ function loadGame7() {
   iosocket.emit('loadGame', 7);
 }
 
+//setup where you must place starting position, highlights the places where you must place marker
 function allowMarkerPlacement() {
-  console.log("Place your marker on a hex");
-
   highlightHex(boardLayer.get("#-2,-1")[0]);
   highlightHex(boardLayer.get("#2,-3")[0]);
   highlightHex(boardLayer.get("#-2,3")[0]);
   highlightHex(boardLayer.get("#2,1")[0]);
 }
 
-function updateSelectedIcon(thing) { //updateSelectedIcon
+//updateSelectedIcon
+function updateSelectedIcon(thing) {
   console.log("Selected " + thing);
-  // highlightHex(boardLayer.get("#" + thing)[0]);
   if (thing.slice(0, 5) == "stack")
     boardLayer.get('#selected')[0].setImage(StackIconArray[localAffinity]);
   else if (thing.slice(0, 8) == "question")
@@ -275,6 +263,7 @@ function updateSelectedIcon(thing) { //updateSelectedIcon
     boardLayer.get('#selected')[0].hide();
 }
 
+//highlight where you can come 
 function highlightMovement() {
   removeRadius(game.armies.color, boardLayer); //Remove movement radius
   drawRadius(hexId, 4, game.armies.color, boardLayer);
@@ -286,7 +275,6 @@ function createIncomeCounter(incomeCounter) {
 
 function updateStackAll(hexId, affinity) {
   // place stack icon for particular army on hexId
-  console.log("Army " + affinity + " placing stack at " + hexId);
   if (affinity !== localAffinity) {
     boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
   }
@@ -294,24 +282,21 @@ function updateStackAll(hexId, affinity) {
 
 function removeStackAll(hexId) {
   // place stack icon for particular army on hexId
-  console.log("Removing stack at " + hexId);
   if (boardLayer.get('#stack' + hexId)[0])
     boardLayer.get('#' + hexId)[0].removeStack();
 
 }
 
+//update the stack 
 function updateStack(hexId, stackThings, affinity) {
-  console.log("Stack Thing length: " + stackThings.length);
-  console.log(boardLayer.get('#stack' + hexId)[0]);
   // update stack icons
   if (stackThings.length === 0) {
-    console.log("Stack is empty!");
+    //stack is empty 
     boardLayer.get('#stack' + hexId)[0].remove();
 
   } else {
-    console.log("Stack is not Empty!");
+    //stack isn't empty 
     boardLayer.get('#' + hexId)[0].setStackIcon(affinity);
-
 
     if (boardLayer.get('#stack' + hexId)[0]) {
       boardLayer.get('#' + hexId)[0].removeStack();
@@ -321,41 +306,19 @@ function updateStack(hexId, stackThings, affinity) {
 
     if (localAffinity == affinity)
       boardLayer.get('#' + hexId)[0].updateIcons(stackThings);
-
-    // if (!boardLayer.get('#stack' + hexId)[0]) {
-    //   updateStackAll(hexId, 0);
-    // }
-    //
-
-
-    // boardLayer.get('#stack' + hexId)[0].updateIcons(rackThings);
-
-    // // Update rack
-    // boardLayer.get('#rack')[0].updateIcons(currentArmy.rack);
-
-    // Update stacks
-    // boardLayer.get('#' + hexId)[0].updateIcons(stackThings, 0);
-    // boardLayer.get('#' + hexId)[0].setStackView(stackThings);
   }
 }
 
 function updateStackAllBattle(hexId, affinity, affinityAttack) {
   // place stack icon for particular army on hexId
-  console.log("Army " + affinity + " placing stack at " + hexId);
   if (affinity !== localAffinity && affinityAttack !== localAffinity) {
     boardLayer.get('#' + hexId)[0].removeStack();
-    // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
-    // boardLayer.get('#' + hexId)[0].setBattleStackIcon1(affinity);
   }
   boardLayer.get('#' + hexId)[0].setBattleIcon(affinity, affinityAttack);
   iosocket.emit('updateUI');
 }
 
 function updateStackBattle(hexId, defendersThings, defAffinity, attackersThings, attAffinity) {
-
-  console.log("Defenders Things length: " + defendersThings.length);
-  console.log("Attackers Things length: " + attackersThings.length);
-
   // update stack icons
   if (defendersThings.length === 0 || attackersThings.length === 0) {
     // Should never happen
@@ -470,7 +433,6 @@ function nextPlayerTurn(gameData) {
   console.log(playerId);
   if (localAffinity == gameData.currentPlayerTurn) {
     iosocket.emit('updateUI');
-    console.log("It is your turn to play now");
   }
 }
 

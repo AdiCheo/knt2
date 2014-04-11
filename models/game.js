@@ -1,3 +1,5 @@
+//model for game 
+
 var Defender = require('./defender.js');
 var SpecialIncomeThing = require('./special_income.js');
 
@@ -8,11 +10,11 @@ function Game() {
   this.users = [];
   this.armies = [];
   this.hexes = [];
-  // this.defenders = [];
   this.specialIncome = [];
   this.cup = [];
   this.battles = [];
 
+  //variables to be used to check turns 
   this.currentPlayerTurn = 0;
   this.currentTurn = 0;
   this.currentPhase = -1;
@@ -20,21 +22,23 @@ function Game() {
 
   this.defendersPurchased = 0;
 
-  // functions
+  // get a new thing randomly 
   this.newRandomThing = function() {
     i = Math.floor(Math.random() * this.cup.length);
     return this.cup[i];
   };
 
+  //remove the thing from the cup 
   this.removeFromCup = function(thingObj) {
     for (var i in this.cup) {
       if (this.cup[i] == thingObj) {
-        console.log("Removing " + thingObj + " from cup");
+        //removes from cup 
         this.cup.splice(i, 1);
       }
     }
   };
 
+  //get if there is a battle on the hex 
   this.findBattleOnHex = function(hexId) {
     for (var i in this.battles) {
       if (this.battles[i].currentHexId == hexId) {
@@ -43,6 +47,7 @@ function Game() {
     }
   };
 
+  //creat the creatures 
   this.createDefenders = function() {
 
     //desert creatures
@@ -205,7 +210,7 @@ function Game() {
 
   };
 
-  //speical income
+  //create the speical income
   this.createSpecialIncomeThings = function() {
     this.cup.push(new SpecialIncomeThing(-1, "PeatBog", "swamp", "building", 1));
     this.cup.push(new SpecialIncomeThing(-1, "CopperMine", "mountain", "building", 1));
@@ -239,6 +244,7 @@ function Game() {
     this.cup.push(new SpecialIncomeThing(-1, "City4", 0, "town", 2));
   };
 
+  //get the hex by its id 
   this.getHexById = function(hexId) {
     for (var i in this.hexes) {
       console.log(this.hexes[i].id);
@@ -250,6 +256,7 @@ function Game() {
     return false;
   };
 
+  //check if teh hex is owned 
   this.isHexOwned = function(hexId) {
     hex = this.getHexById(hexId);
 
@@ -260,15 +267,13 @@ function Game() {
     return true;
   };
 
+  //calculate the player turns 
   this.nextPlayerTurn = function(currentArmy) {
-
-    console.log("The Total # of turns" + this.totalTurn);
     if (this.currentPlayerTurn == 3) {
       this.currentPlayerTurn = 0;
       this.totalTurn++;
-      console.log("Army 4 turn ended. Army 1 to move");
+      //Army 4 turn ended. Army 1 to move
 
-      console.log("The Total # of turns" + this.totalTurn);
       if (this.currentTurn === 0)
         this.nextPhase();
 
@@ -276,25 +281,24 @@ function Game() {
       this.currentPlayerTurn = 3;
       this.totalTurn++;
       if (this.currentTurn == 3)
+      // Army 3 turn ended. Army 4 to move
         this.nextPhase();
-      console.log("Army 3 turn ended. Army 4 to move");
     } else if (this.currentPlayerTurn == 1) {
       this.currentPlayerTurn = 2;
       this.totalTurn++;
       if (this.currentTurn == 2)
+      //Army 2 turn ended. Army 3 to move
         this.nextPhase();
-      console.log("Army 2 turn ended. Army 3 to move");
     } else {
       this.currentPlayerTurn = 1;
       this.totalTurn++;
       if (this.currentTurn == 1)
+      //Army 1 turn ended. Army 2 to move
         this.nextPhase();
-
-      console.log("Army 1 turn ended. Army 2 to move");
     }
   };
 
-
+  //calculate the next phase 
   this.nextPhase = function() {
     // Handle phase transitions here
     if ((this.currentPhase % 9) === 0 && this.currentPhase !== 0) {
@@ -303,21 +307,11 @@ function Game() {
       if ((this.currentTurn % 3) === 0 && this.currentTurn !== 0)
         this.currentTurn = 0;
       else
+      //moving to new phase cycle 
         this.currentTurn++;
-      console.log("New phase cycle. Moving to phase: " + this.currentPhase);
-    }
-    // else if (this.totalTurn == 4) {
-    //   // this.currentPhase = 0;
-    //   // this.currentPhase = 3;
-    //   console.log("Moving to phase: " + this.currentPhase);
-    // }
-    else {
+    } else {
       this.currentPhase++;
-      // Skip Phase 2 (Hero Recruitment)
-      // if (this.currentPhase === 0)
-      //   this.currentPhase = 1;
-      // if (this.currentPhase == 1)
-      //   this.currentPhase = 2;
+      //increment phases 
       if (this.currentPhase == 2)
         this.currentPhase = 3;
       if (this.currentPhase == 4)
@@ -325,7 +319,7 @@ function Game() {
       if (this.currentPhase == 8) {
         if (!this.hasEnded)
           this.currentPhase = 9;
-
+        //check for players who own citadels 
         var citadels = [];
         for (var i in this.armies) {
           for (var j in this.armies[i].forts) {
@@ -334,10 +328,12 @@ function Game() {
             }
           }
         }
+        //if a owns a citedel until phase 9 next turn, then get the winner 
         if (citadels.length == 1) {
           this.hasEnded = true;
           this.winner = this.armies[indexByKey(this.armies, "affinity", citadels[0].affinity)];
         } else if (citadels.length >= 2) {
+          //if there are more than 1 citadels built, can only win with combat 
           for (var i in this.armies) {
             if (this.armies[i].citadelsOwned > 1) {
               this.hasEnded = true;
@@ -350,25 +346,23 @@ function Game() {
         }
 
       }
-      console.log("Moving to phase: " + this.currentPhase);
     }
   };
 
-  // this.createCupDefenders();
   this.createDefenders();
   this.createSpecialIncomeThings();
-  // this.createCupSpecialIncomeThings();
 
+  //get the index by the key 
   function indexByKey(array, key, value) {
     for (var i = 0; i < array.length; i++) {
       if (array[i][key] == value) {
         return i;
       }
     }
-    console.log("NOT FOUND: " + value + " in " + key);
     return null;
   }
 
+  //get the index by the id of the item 
   function indexById(array, value) {
     return indexByKey(array, "id", value);
   }
