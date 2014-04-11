@@ -510,74 +510,6 @@ function initRack(realX, realY) {
   return rack;
 }
 
-function Game() {
-  this.totalTurn = 0;
-
-  this.battles = new Array();
-
-  this.currentTurn = 0;
-  this.currentPhase = -1;
-
-  this.getCurrentPlayer = function() {
-    return this.currentTurn % 4;
-  };
-
-  //increment the turns
-  this.incrementTurn = function(currentArmy) {
-
-    currentArmy.freeDefenders = Math.ceil(currentArmy.getNumOfHexes() / 2);
-    currentArmy.defendersPurchased = 0;
-
-    if (currentArmy.getNumOfFortHexes() === 0 &&
-      currentArmy.getNumOfHexes() == 3 &&
-      this.totalTurn > 12 &&
-      this.currentPhase == -1) {
-
-      alert("Need to place a fort!");
-      return false;
-    }
-
-    // reset variables for next turn
-    this.isThingSelected = false;
-    currentArmy.canEndTurn = false;
-
-    if (this.currentTurn == 3) {
-      this.currentTurn = 0;
-      //Army 4 turn ended. Army 1 to move
-      this.totalTurn++;
-
-      // Handle phase transitions here
-      if ((this.currentPhase) % 9 === 0 && this.currentPhase !== 0) {
-        this.currentPhase = 1;
-        console.log("New phase cycle. Moving to phase: " + this.currentPhase);
-
-      } else if (this.totalTurn == 16)
-        this.currentPhase++;
-
-      else if (this.totalTurn > 16) {
-        this.currentPhase++;
-      }
-      console.log("Moving to phase: " + this.currentPhase);
-
-    } else if (this.currentTurn == 2) {
-      this.currentTurn = 3;
-      this.totalTurn++;
-      console.log("Army 3 turn ended. Army 4 to move");
-
-    } else if (this.currentTurn == 1) {
-      this.currentTurn = 2;
-      // Army 2 turn ended. Army 3 to move
-      this.totalTurn++;
-    } else {
-      this.currentTurn = 1;
-      //Army 1 turn ended. Army 2 to move
-      this.totalTurn++;
-    }
-  }
-
-}
-
-
 //generate unit
 function initThing(shape, imageObj, boardLayer, hex) {
   console.log("A thing has been picked from the cup");
@@ -587,8 +519,8 @@ function initThing(shape, imageObj, boardLayer, hex) {
     name: "icon",
     image: imageObj
   });
-  !
-    imageObj.currentHexId = boardLayer.get("#" + hex)[0]; //Which hex does soldier belong to
+
+  imageObj.currentHexId = boardLayer.get("#" + hex)[0]; //Which hex does soldier belong to
 
   // add the shape to the layer
   boardLayer.add(imageObj);

@@ -436,6 +436,13 @@ function eventClickedOnHexPlaceThing(socket, hexId) {
           currentArmy.thingInHand = false;
         } else {
           socket.emit('error', "You need to match the terrain type!");
+
+          if (game.currentPhase == 3) {
+            // empty hand
+            socket.emit('updateHand', null);
+
+            currentArmy.thingInHand = false;
+          }
         }
       }
     } else {

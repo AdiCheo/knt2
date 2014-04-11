@@ -5,5 +5,3 @@ Multiplayer Kings'n Things
 - Express
 - Socket.io
 - HTML5 (KineticJS)
-
-Made by Awesome People!
